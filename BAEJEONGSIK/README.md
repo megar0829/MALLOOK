@@ -11,3 +11,11 @@
 - Notion을 통해 아이디어 회의 진행
 
 ![alt text](image.png)
+
+
+### 2024-02-27 화요일
+
+프로젝트 기능 명세 완료
+화면 명세서 제작 (Figma)
+
+![alt text](image-1.png)
