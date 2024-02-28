@@ -19,3 +19,16 @@
 화면 명세서 제작 (Figma)
 
 ![alt text](image-1.png)
+
+
+### 2024-02-28 수요일
+
+- 프로젝트 기능 명세서 작성
+![alt text](image-2.png)
+
+- ERD Cloud 제작
+![alt text](<월드컵 쇼핑몰.png>)
+
+- 화면 설계서 (Figma) 작성
+![alt text](<image (1).png>)
+
