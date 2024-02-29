@@ -10,11 +10,17 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="product")
+@Table(name="style_product")
 public class StyleProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-//    Style styleId;
-//    Product productId;
+
+    @ManyToOne
+            @JoinColumn(name = "style_id")
+    Style styleId;
+
+    @ManyToOne
+            @JoinColumn(name = "product_id")
+    Product productId;
 }

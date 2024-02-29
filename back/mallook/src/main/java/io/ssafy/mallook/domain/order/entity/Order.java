@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.order.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
@@ -12,8 +11,14 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name="product")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private Long totalPrice;
-    private Long totalFee;
-    private Long totalCount;
+
+    private Integer totalFee;
+
+    private Integer totalCount;
 }

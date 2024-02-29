@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="product")
+@Table(name="shopping_mall")
 public class Shoppingmall {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
