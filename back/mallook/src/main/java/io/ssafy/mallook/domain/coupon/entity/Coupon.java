@@ -23,6 +23,7 @@ public class Coupon extends BaseEntity {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private CouponType type;
 
     private String amount;

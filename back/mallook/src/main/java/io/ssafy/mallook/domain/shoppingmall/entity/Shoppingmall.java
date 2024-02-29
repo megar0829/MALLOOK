@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.shoppingmall.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -18,5 +19,6 @@ public class Shoppingmall extends BaseEntity {
 
     String name;
 
+    @Size(max = 800)
     String url;
 }
