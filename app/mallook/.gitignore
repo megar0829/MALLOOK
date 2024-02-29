@@ -111,12 +111,12 @@ lib/generated_plugin_registrant.dart
 .idea/**/contentModel.xml
 
 # Sensitive or high-churn files
+.idea/**
 .idea/**/dataSources/
 .idea/**/dataSources.ids
 .idea/**/dataSources.local.xml
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
-.idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
 
 # Gradle
@@ -521,3 +521,4 @@ obj/
 !/gradle/wrapper/gradle-wrapper.jar
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,androidstudio,java,kotlin,swift,intellij+all,gradle,maven,flutter,dart
+/.idea/codeStyles/codeStyleConfig.xml
