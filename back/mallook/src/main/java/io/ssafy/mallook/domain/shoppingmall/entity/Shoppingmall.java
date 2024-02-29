@@ -19,6 +19,6 @@ public class Shoppingmall extends BaseEntity {
 
     String name;
 
-    @Size(max = 800)
+    @Column(length = 1000)
     String url;
 }
