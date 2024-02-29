@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.product.entity;
 
+import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.shoppingmall.entity.Shoppingmall;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +12,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="product")
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

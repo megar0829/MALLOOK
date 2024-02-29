@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.order.entity;
 
+import io.ssafy.mallook.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,8 +10,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="product")
-public class Order {
+@Table(name="order")
+public class Order extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,4 +1,4 @@
-package io.ssafy.mallook.domain.Keyword.entity;
+package io.ssafy.mallook.domain.keyword.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.product.entity.Product;
