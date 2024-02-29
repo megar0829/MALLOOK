@@ -15,10 +15,10 @@ import lombok.*;
 public class Shoppingmall extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String name;
+    private String name;
 
-    @Column(length = 1000)
-    String url;
+    @Column(length = 2_083)
+    private String url;
 }
