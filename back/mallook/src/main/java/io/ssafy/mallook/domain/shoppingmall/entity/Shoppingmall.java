@@ -14,7 +14,6 @@ import lombok.*;
 public class Shoppingmall extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     Long id;
 
     String name;
