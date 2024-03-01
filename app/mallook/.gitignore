@@ -522,3 +522,4 @@ obj/
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,androidstudio,java,kotlin,swift,intellij+all,gradle,maven,flutter,dart
 /.idea/codeStyles/codeStyleConfig.xml
+/.idea/
