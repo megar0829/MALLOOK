@@ -5,11 +5,13 @@ import lombok.Builder;
 
 @Builder
 public record ScriptListDto(
+        Long id,
         String name,
         Integer heartCount) {
 
     public static ScriptListDto toDto(Script script) {
         return ScriptListDto.builder()
+                .id(script.getId())
                 .name(script.getName())
                 .heartCount(script.getHeartCount())
                 .build();
