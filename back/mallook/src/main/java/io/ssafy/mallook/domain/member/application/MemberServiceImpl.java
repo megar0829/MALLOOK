@@ -5,8 +5,6 @@ import io.ssafy.mallook.domain.member.dto.request.MemberAdditionalInfoReq;
 import io.ssafy.mallook.domain.member.entity.Address;
 import io.ssafy.mallook.domain.member.entity.Gender;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.global.common.code.ErrorCode;
-import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,7 @@ public class MemberServiceImpl implements MemberService{
         Member member = Member.builder()
                         .id(memberId)
                         .nickname(memberAdditionalInfoReq.nickname())
-                        .gender(Gender.valueOf(memberAdditionalInfoReq.gender()))
+                        .gender(Gender.valueOf(Gender.class, memberAdditionalInfoReq.gender()))
                         .birth(sdf.parse(memberAdditionalInfoReq.birth()))
                         .phone(memberAdditionalInfoReq.phone())
                         .address(new Address(memberAdditionalInfoReq.city(),
