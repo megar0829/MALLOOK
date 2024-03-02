@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.order.api;
 
 import io.ssafy.mallook.domain.order.application.OrderService;
 import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
@@ -43,7 +44,8 @@ public class OrderController {
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    public void deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal) {
-        UUID id = principal.getId();
+    public void deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                            @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
+        orderService.deletedOrder(orderDeleteDto);
     }
 }

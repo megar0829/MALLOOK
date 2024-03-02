@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.order.dao.OrderRepository;
 import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,5 +35,11 @@ public class OrderServiceImpl implements OrderService {
     public void createOrder(UUID id, OrderCreateDto createDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         orderRepository.save(createDto.toEntity(proxyMember));
+    }
+
+    @Override
+    @Transactional
+    public void deletedOrder(OrderDeleteDto orderDeleteDto) {
+        orderRepository.deleteOrder(orderDeleteDto.deleteList());
     }
 }
