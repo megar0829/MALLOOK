@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.api;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
+import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
@@ -37,6 +38,14 @@ public class ScriptController {
         return scriptService.getScriptList(id, pageable);
     }
 
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@authService.authorizeToReadScriptDetail(#principal.getId(), #id)")
+    public ScriptDetailDto getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
+                                           @PathVariable Long id) {
+        return scriptService.getScriptDetail(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void createScript(@AuthenticationPrincipal UserSecurityDTO principal,
@@ -50,9 +59,8 @@ public class ScriptController {
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToDeleteScript(#principal.getId(), #scriptDeleteListDto)")
     public void deleteScript(@AuthenticationPrincipal UserSecurityDTO principal,
-                             @RequestBody ScriptDeleteListDto scriptDeleteListDto) {
+                             @RequestBody @Valid ScriptDeleteListDto scriptDeleteListDto) {
         log.info("삭제 시작");
-        UUID id = principal.getId();
-        scriptService.deleteScript(scriptDeleteListDto, id);
+        scriptService.deleteScript(scriptDeleteListDto);
     }
 }

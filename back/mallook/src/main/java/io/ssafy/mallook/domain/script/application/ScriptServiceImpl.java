@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
+import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,13 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Override
+    public ScriptDetailDto getScriptDetail(Long scriptId) {
+        return scriptRepository.findByIdAndStatusTrue(scriptId)
+                .map(ScriptDetailDto::toDto)
+                .orElseThrow();
+    }
+
+    @Override
     @Transactional
     public void createScript(ScriptCreatDto scriptCreateDto, UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
@@ -42,7 +50,7 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Transactional
-    public void deleteScript(ScriptDeleteListDto scriptDeleteListDto, UUID id) {
+    public void deleteScript(ScriptDeleteListDto scriptDeleteListDto) {
         log.info(scriptDeleteListDto.toString());
         scriptRepository.deleteScript(scriptDeleteListDto.toDeleteList());
     }

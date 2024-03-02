@@ -18,6 +18,12 @@ public class AuthService {
 
     private final ScriptRepository scriptRepository;
 
+    public boolean authorizeToReadScriptDetail(UUID memberId, Long scriptId) {
+        log.info("내가 쓴 글인지 확인 시작");
+        return scriptRepository.findByIdAndStatusTrue(scriptId)
+                .orElseThrow().isWrittenByTargetMember(memberId);
+    }
+
     public boolean authorizeToDeleteScript(UUID memberId, ScriptDeleteListDto scriptDeleteListDto) {
         log.info("내가 쓴 글인지 확인 시작");
         List<Long> scriptIdList = scriptDeleteListDto.toDeleteList();
