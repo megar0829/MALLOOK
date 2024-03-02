@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,7 +24,8 @@ public class Member extends BaseEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "member_id")
     private UUID id;
-    private String name;
+    private String nickname;
+    private Date birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(unique = true)
