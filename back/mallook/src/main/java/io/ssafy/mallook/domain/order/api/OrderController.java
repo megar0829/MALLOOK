@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.order.api;
 import io.ssafy.mallook.domain.order.application.OrderService;
 import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
@@ -33,6 +34,14 @@ public class OrderController {
                                                    direction = Sort.Direction.DESC) Pageable pageable) {
         UUID id = principal.getId();
         return orderService.getOrderList(id, pageable);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("@authService.authorizeToReadOrderDetail(#principal.getId(), #id)")
+    public OrderDetailDto getOrderDetail(@AuthenticationPrincipal UserSecurityDTO principal,
+                                         @PathVariable Long id) {
+        return orderService.getOrderDetail(id);
     }
 
     @PostMapping

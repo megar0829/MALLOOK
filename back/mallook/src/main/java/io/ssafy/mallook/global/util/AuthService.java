@@ -27,6 +27,11 @@ public class AuthService {
                 .orElseThrow().isWrittenByTargetMember(memberId);
     }
 
+    public boolean authorizeToReadOrderDetail(UUID memberId, Long orderId) {
+        return orderRepository.findByIdAndStatusTrue(orderId)
+                .orElseThrow().isCreateByTargetMember(memberId);
+    }
+
     public boolean authorizeToDeleteScript(UUID memberId, ScriptDeleteListDto scriptDeleteListDto) {
         log.info("내가 쓴 글인지 확인 시작");
         List<Long> scriptIdList = scriptDeleteListDto.toDeleteList();

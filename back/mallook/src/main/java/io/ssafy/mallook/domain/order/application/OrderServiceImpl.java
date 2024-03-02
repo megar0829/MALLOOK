@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.order.dao.OrderRepository;
 import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,13 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.findAllByMemberIdAndStatusTrue(proxyMember, pageable)
                 .map(OrderListDto::toDto);
+    }
+
+    @Override
+    public OrderDetailDto getOrderDetail(Long id) {
+        return orderRepository.findByIdAndStatusTrue(id)
+                .map(OrderDetailDto::toDto)
+                .orElseThrow();
     }
 
     @Override
