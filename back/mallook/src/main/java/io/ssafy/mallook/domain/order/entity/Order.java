@@ -5,6 +5,8 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity
@@ -20,11 +22,15 @@ public class Order extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
 
     private Long totalPrice;
 
     private Long totalFee;
 
     private Long totalCount;
+
+    public boolean isCreateByTargetMember(UUID memberId) {
+        return this.member.getId().equals(memberId);
+    }
 }

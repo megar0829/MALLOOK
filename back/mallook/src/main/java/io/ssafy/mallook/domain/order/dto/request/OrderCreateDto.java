@@ -19,7 +19,7 @@ public record OrderCreateDto(
 
     public Order toEntity(Member member) {
         return Order.builder()
-                .memberId(member)
+                .member(member)
                 .totalPrice(this.price * this.quantity)
                 .totalCount(quantity)
                 .totalFee(fee)
