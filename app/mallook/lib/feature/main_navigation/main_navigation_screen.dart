@@ -34,25 +34,49 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _visit = 0;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: const Center(
+        title: Center(
           child: Text(
             "MALLOOK",
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size24,
-              color: Colors.black87,
+              color: Theme.of(context).colorScheme.primary,
             ),
           ),
         ),
       ),
-      body: const Center(
-        child: FaIcon(FontAwesomeIcons.magnifyingGlass),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Offstage(
+              offstage: _selectedIndex != 0,
+              child: const Scaffold(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 1,
+              child: const Scaffold(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 2,
+              child: const Scaffold(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 3,
+              child: const Scaffold(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 3,
+              child: const Scaffold(),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         clipBehavior: Clip.hardEdge,
@@ -66,15 +90,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         )),
         child: BottomBarDefault(
-          color: Colors.white,
-          colorSelected: Colors.deepPurpleAccent,
-          backgroundColor: Colors.black,
-          indexSelected: _visit,
+          colorSelected: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.onPrimary,
+          backgroundColor: Theme.of(context).colorScheme.onBackground,
+          indexSelected: _selectedIndex,
           items: items,
           paddingVertical: Sizes.size12,
           onTap: (index) => setState(() {
-            _visit = index;
-            print(_visit);
+            _selectedIndex = index;
           }),
         ),
       ),
