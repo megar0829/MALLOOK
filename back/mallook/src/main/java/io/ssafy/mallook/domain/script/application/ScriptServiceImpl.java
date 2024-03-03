@@ -49,6 +49,7 @@ public class ScriptServiceImpl implements ScriptService {
         scriptRepository.save(scriptCreateDto.toEntity(proxyMember));
     }
 
+    @Override
     @Transactional
     public void deleteScript(ScriptDeleteListDto scriptDeleteListDto) {
         log.info(scriptDeleteListDto.toString());
