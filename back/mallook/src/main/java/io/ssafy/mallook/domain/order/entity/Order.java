@@ -19,7 +19,7 @@ public class Order extends BaseEntity {
 
     private Long totalPrice;
 
-    private Integer totalFee;
+    private Long  totalFee;
 
-    private Integer totalCount;
+    private Long  totalCount;
 }

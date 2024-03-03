@@ -13,10 +13,14 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name="style")
 public class Style extends BaseEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    private Member memberId;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     private String name;
 
