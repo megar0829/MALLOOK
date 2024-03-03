@@ -1,15 +1,13 @@
 package io.ssafy.mallook.domain.member.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -44,6 +42,8 @@ public class Member extends BaseEntity {
     @CollectionTable(name = "member_role",
             joinColumns = @JoinColumn(name = "member_id"))
     private Set<MemberRole> role = new HashSet<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberCoupon> myCouponList = new ArrayList<>();
 
     public void changeNickname(String nickname) {
         this.nickname = nickname;

@@ -7,6 +7,9 @@ import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -22,16 +25,18 @@ import java.text.ParseException;
 public class MemberController {
 
     private final MemberService memberService;
+    @Operation(summary = "회원 정보 저장")
     @PostMapping
     public ResponseEntity<BaseResponse<String>> saveMemberDetail(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody MemberDetailReq memberDetailReq) throws ParseException {
+            @Valid @RequestBody MemberDetailReq memberDetailReq) throws ParseException {
         memberService.saveMemberDetail(userSecurityDTO.getId(), memberDetailReq );
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "추가 정보 저장 성공"
         );
     }
+    @Operation(summary = "회원 정보 조회")
     @GetMapping
     public ResponseEntity<BaseResponse<MemberDetailRes>> findMemberDetail(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
@@ -41,10 +46,11 @@ public class MemberController {
                 result
         );
     }
+    @Operation(summary = "닉네임 변경")
     @PatchMapping("/nickname")
     public ResponseEntity<BaseResponse<String>> updateNickname(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody String nickname) {
+            @Valid @NotNull @RequestBody String nickname) {
         memberService.updateNickname(userSecurityDTO.getId(), nickname);
         return BaseResponse.success(
                 SuccessCode.UPDATE_SUCCESS,

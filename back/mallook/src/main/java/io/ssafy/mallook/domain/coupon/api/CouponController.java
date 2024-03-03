@@ -7,6 +7,9 @@ import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,7 @@ import java.util.List;
 public class CouponController {
     private final CouponService couponService;
     private final MemberCouponService memberCouponService;
+    @Operation(summary = "내 쿠폰 리스트 조회")
     @GetMapping
     public ResponseEntity<BaseResponse<List<CouponRes>>> findMyCouponList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
@@ -31,19 +35,21 @@ public class CouponController {
                 result
         );
     }
+    @Operation(summary = "내 쿠폰 등록")
     @PostMapping
     public ResponseEntity<BaseResponse<String>> saveMyCoupon(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody Long couponId){
+            @Valid @NotNull @RequestBody Long couponId){
         memberCouponService.saveMyCoupon(userSecurityDTO.getId(), couponId);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "쿠폰 등록 완료"
         );
     }
+    @Operation(summary = "내 쿠폰 삭제")
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteMyCoupon(
-            @RequestBody Long memberCouponId){
+            @Valid @NotNull @RequestBody Long memberCouponId){
         memberCouponService.deleteMyCoupon(memberCouponId);
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,

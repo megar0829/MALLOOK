@@ -1,10 +1,13 @@
 package io.ssafy.mallook.domain.coupon.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,7 +31,13 @@ public class Coupon extends BaseEntity {
 
     @Column(name = "expired_time")
     private LocalDateTime expiredTime;
+
+    @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
+    private List<MemberCoupon> memberCouponList = new ArrayList<>();
+
     public Coupon(Long id) {
         this.id = id;
     }
+
+
 }
