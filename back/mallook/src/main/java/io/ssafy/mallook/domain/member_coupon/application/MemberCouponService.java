@@ -4,4 +4,5 @@ import java.util.UUID;
 
 public interface MemberCouponService {
     void saveMyCoupon(UUID memberId, Long couponId);
+    void deleteMyCoupon(Long memberCouponId);
 }

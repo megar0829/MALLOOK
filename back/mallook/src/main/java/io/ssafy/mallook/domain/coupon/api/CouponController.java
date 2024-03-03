@@ -41,5 +41,14 @@ public class CouponController {
                 "쿠폰 등록 완료"
         );
     }
+    @DeleteMapping
+    public ResponseEntity<BaseResponse<String>> deleteMyCoupon(
+            @RequestBody Long memberCouponId){
+        memberCouponService.deleteMyCoupon(memberCouponId);
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "쿠폰 삭제 완료"
+        );
+    }
 
 }

@@ -64,5 +64,4 @@ public class MemberServiceImpl implements MemberService{
         member.changeNickname(nickname);
         memberRepository.save(member);
     }
-
 }

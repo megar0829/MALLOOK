@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,11 +12,11 @@ import java.util.UUID;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("""
         SELECT new io.ssafy.mallook.domain.coupon.dto.response.CouponRes(
-            c.name, c.type, c.amount, c.expiredTime
-        )
-        FROM Coupon c
-        JOIN MemberCoupon mc
-        ON mc.member = :memberId
+                mc.id, c.name, c.type, c.amount, c.expiredTime
+            )
+            FROM MemberCoupon mc
+            JOIN mc.coupon c
+            WHERE mc.member.id = :memberId
     """)
-    List<CouponRes> findAllByMemberId(UUID memberId);
+    List<CouponRes> findAllByMemberId(@Param("memberId") UUID memberId);
 }
