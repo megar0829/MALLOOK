@@ -2,14 +2,12 @@ package io.ssafy.mallook.domain.coupon.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Getter
+@Setter
 @Builder
 @Entity
 @Table(name = "coupon")
@@ -29,4 +27,7 @@ public class Coupon extends BaseEntity {
 
     @Column(name = "expired_time")
     private LocalDateTime expiredTime;
+    public Coupon(Long id) {
+        this.id = id;
+    }
 }

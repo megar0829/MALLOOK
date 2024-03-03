@@ -44,6 +44,13 @@ public class Member extends BaseEntity {
     @CollectionTable(name = "member_role",
             joinColumns = @JoinColumn(name = "member_id"))
     private Set<MemberRole> role = new HashSet<>();
+
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public Member(UUID id) {
+        this.id = id;
+    }
 }
 
 

@@ -61,7 +61,7 @@ public class MemberServiceImpl implements MemberService{
     public void updateNickname(UUID memberId, String nickname) {
         var member = memberRepository.findById(memberId)
                 .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        member.setNickname(nickname);
+        member.changeNickname(nickname);
         memberRepository.save(member);
     }
 

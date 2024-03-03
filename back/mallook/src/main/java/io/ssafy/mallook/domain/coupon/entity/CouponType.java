@@ -1,5 +1,9 @@
 package io.ssafy.mallook.domain.coupon.entity;
 
 public enum CouponType {
-    가격할인, 할인율할인
+    MONEY("정액할인"),
+    RATIO("정률할인"),
+    ;
+    final String korean;
+    CouponType(String korean) {this.korean = korean;}
 }
