@@ -3,7 +3,7 @@ package io.ssafy.mallook.domain.member.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema
-public record MemberAdditionalInfoReq(
+public record MemberDetailReq(
         String nickname,
         String gender,
         String birth,

@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.member.entity;
 import io.ssafy.mallook.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
@@ -30,6 +31,8 @@ public class Member extends BaseEntity {
     private Gender gender;
     @Column(unique = true)
     private String phone;
+    private Long point;
+    private Long exp;
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SocialMember> socialMembers = new HashSet<>();
