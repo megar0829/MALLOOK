@@ -10,6 +10,7 @@ import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class MemberController {
     @PatchMapping("/nickname")
     public ResponseEntity<BaseResponse<String>> updateNickname(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @NotNull @RequestBody String nickname) {
+            @Valid @NotNull @Size(min = 2, max = 16) @RequestBody String nickname) {
         memberService.updateNickname(userSecurityDTO.getId(), nickname);
         return BaseResponse.success(
                 SuccessCode.UPDATE_SUCCESS,
