@@ -183,12 +183,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: Sizes.size20,
-            horizontal: Sizes.size48,
-          ),
-          child: SafeArea(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: Sizes.size20,
+              horizontal: Sizes.size48,
+            ),
             child: SingleChildScrollView(
               child: Column(
                 children: [
@@ -302,7 +302,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         )
                     ],
                   ),
-                  Gaps.v24,
+                  Gaps.v16,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -319,10 +319,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Container(
-                            width: deviceWidth / 5,
+                            width: deviceWidth / 4,
                             padding: const EdgeInsets.symmetric(
                               vertical: Sizes.size8,
-                              horizontal: Sizes.size14,
+                              horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
                                 color: Theme.of(context)
@@ -359,10 +359,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           Container(
-                            width: deviceWidth / 6,
+                            width: deviceWidth / 7,
                             padding: const EdgeInsets.symmetric(
                               vertical: Sizes.size8,
-                              horizontal: Sizes.size14,
+                              horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
                                 color: Theme.of(context)
@@ -399,10 +399,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                           ),
                           Container(
-                            width: deviceWidth / 6,
+                            width: deviceWidth / 7,
                             padding: const EdgeInsets.symmetric(
                               vertical: Sizes.size8,
-                              horizontal: Sizes.size14,
+                              horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
                                 color: Theme.of(context)
@@ -438,28 +438,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ),
                             ),
                           ),
-                          ElevatedButton(
-                            onPressed: () => _selectDate(context),
-                            style: ElevatedButton.styleFrom(
-                              surfaceTintColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              elevation: 2,
+                          GestureDetector(
+                            onTap: () => _selectDate(context),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withOpacity(0.7),
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size12,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primary
+                                        .withOpacity(0.7),
+                                    spreadRadius: 0.1,
+                                    blurRadius: 2,
+                                    offset: const Offset(1, 3),
+                                  )
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: Sizes.size10,
+                                  horizontal: Sizes.size12,
+                                ),
+                                child: FaIcon(
+                                  FontAwesomeIcons.calendar,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: Sizes.size18,
+                                ),
+                              ),
                             ),
-                            child: FaIcon(
-                              FontAwesomeIcons.calendar,
-                              color: Theme.of(context).colorScheme.primary,
-                              size: Sizes.size18,
-                            ),
-                          )
+                          ),
                         ],
                       )
                     ],
                   ),
-                  Gaps.v24,
+                  Gaps.v16,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -492,7 +516,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                     ],
                   ),
-                  Gaps.v24,
+                  Gaps.v16,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -563,7 +587,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                     ],
                   ),
-                  Gaps.v24,
+                  Gaps.v16,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -654,7 +678,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       )
                     ],
                   ),
-                  Gaps.v24,
+                  Gaps.v16,
                   FormButton(
                     text: !_isSubmitAvailable() ? "입력해주세요" : "다음",
                     disabled: !_isSubmitAvailable(),
