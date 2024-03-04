@@ -16,7 +16,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             )
             FROM MemberCoupon mc
             JOIN mc.coupon c
-            WHERE mc.member.id = :memberId
+            WHERE mc.member.id = :memberId AND mc.status = true
     """)
     List<CouponRes> findAllByMemberId(@Param("memberId") UUID memberId);
 }

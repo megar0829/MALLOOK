@@ -1,5 +1,6 @@
 package io.ssafy.mallook.global.util;
 
+import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.UUID;
 public class AuthService {
 
     private final ScriptRepository scriptRepository;
+    private final MemberCouponRepository memberCouponRepository;
 
     public boolean authorizeToReadScriptDetail(UUID memberId, Long scriptId) {
         log.info("내가 쓴 글인지 확인 시작");
@@ -34,4 +36,12 @@ public class AuthService {
                         .filter(script -> script.isWrittenByTargetMember(memberId))
                         .isPresent());
     }
+
+    public boolean authorizeToDeleteMemberCoupon(UUID memberId, Long memberCouponId) {
+        log.info("나에게 등록된 쿠폰인지 확인 시작");
+        return memberCouponRepository.existsByIdAndMember_IdAndStatus(memberCouponId, memberId, true);
+
+    }
+
+
 }

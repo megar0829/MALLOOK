@@ -28,6 +28,6 @@ public class MemberCouponServiceImpl implements MemberCouponService{
     @Override
     @Transactional
     public void deleteMyCoupon(Long memberCouponId) {
-        memberCouponRepository.deleteById(memberCouponId);
+        memberCouponRepository.deleteMyCoupon(memberCouponId);
     }
 }

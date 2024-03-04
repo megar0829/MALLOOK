@@ -61,7 +61,9 @@ public class CouponController {
                     @ApiResponse(responseCode = "404", description = "쿠폰 삭제 실패")
             })
     @DeleteMapping
+    @PreAuthorize("@authService.authorizeToDeleteMemberCoupon(#userSecurityDTO.getId(), #memberCouponId)")
     public ResponseEntity<BaseResponse<String>> deleteMyCoupon(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @Valid @NotNull @RequestBody Long memberCouponId){
         memberCouponService.deleteMyCoupon(memberCouponId);
         return BaseResponse.success(

@@ -24,10 +24,8 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        Member member = null;
         try {
-            member = Member.builder()
+            Member member = Member.builder()
                         .id(memberId)
                         .nickname(memberDetailReq.nickname())
                         .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
@@ -40,10 +38,10 @@ public class MemberServiceImpl implements MemberService{
                                 memberDetailReq.address(),
                                 memberDetailReq.zipcode()))
                             .build();
+            memberRepository.save(member);
         } catch (ParseException e) {
             throw new BaseExceptionHandler(ErrorCode.INVALID_TYPE_VALUE);
         }
-        memberRepository.save(member);
     }
 
     @Transactional(readOnly= true)
