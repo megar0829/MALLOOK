@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Getter
 @Builder
 @Entity
@@ -20,7 +22,7 @@ public class Script extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -28,4 +30,8 @@ public class Script extends BaseEntity {
 
     @Column(name = "heart_count")
     private Integer heartCount;
+
+    public boolean isWrittenByTargetMember(UUID memberId) {
+        return this.member.getId().equals(memberId);
+    }
 }
