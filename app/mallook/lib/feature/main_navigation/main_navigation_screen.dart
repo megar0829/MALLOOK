@@ -1,7 +1,7 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:mallook/constants/sizes.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/constants/sizes.dart';
 
 const List<TabItem> items = [
   TabItem(
@@ -92,7 +92,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         child: BottomBarDefault(
           colorSelected: Theme.of(context).colorScheme.primary,
           color: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor: Theme.of(context).colorScheme.onBackground,
+          backgroundColor: Theme.of(context).colorScheme.shadow,
           indexSelected: _selectedIndex,
           items: items,
           paddingVertical: Sizes.size12,

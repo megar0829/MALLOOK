@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/gender.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/onboarding/interests_screen.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 import 'package:mallook/feature/sign_up/widgets/gender_radio_button.dart';
 import 'package:mallook/feature/sign_up/widgets/phone_input_formatter.dart';
@@ -155,7 +156,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _buildingName = model.buildingName!;
   }
 
-  void _onSubmit() {}
+  void _onSubmit() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const InterestsScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -531,6 +538,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       TextField(
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
+                        autocorrect: false,
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontSize: Sizes.size16,
@@ -604,6 +612,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: TextFormField(
                           enabled: false,
                           controller: _addressController,
+                          autocorrect: false,
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontSize: Sizes.size14,
