@@ -42,9 +42,10 @@ public class Member extends BaseEntity {
     @CollectionTable(name = "member_role",
             joinColumns = @JoinColumn(name = "member_id"))
     private Set<MemberRole> role = new HashSet<>();
+
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberCoupon> myCouponList = new ArrayList<>();
-
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }

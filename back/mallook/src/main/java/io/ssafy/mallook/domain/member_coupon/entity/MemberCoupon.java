@@ -21,7 +21,7 @@ public class MemberCoupon extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="member_id")
     Member member;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="coupon_id")
     Coupon coupon;
 }

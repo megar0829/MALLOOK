@@ -16,6 +16,7 @@ public class MemberCouponServiceImpl implements MemberCouponService{
     private final MemberCouponRepository memberCouponRepository;
 
     @Override
+    @Transactional
     public void saveMyCoupon(UUID memberId, Long couponId) {
         MemberCoupon myCoupon = MemberCoupon.builder()
                 .member(new Member(memberId))

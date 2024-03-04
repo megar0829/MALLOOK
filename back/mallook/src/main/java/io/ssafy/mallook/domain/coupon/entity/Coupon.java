@@ -33,6 +33,7 @@ public class Coupon extends BaseEntity {
     private LocalDateTime expiredTime;
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<MemberCoupon> memberCouponList = new ArrayList<>();
 
     public Coupon(Long id) {

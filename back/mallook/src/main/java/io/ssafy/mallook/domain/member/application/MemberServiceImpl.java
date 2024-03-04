@@ -8,9 +8,9 @@ import io.ssafy.mallook.domain.member.entity.Gender;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,24 +22,31 @@ public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
     @Transactional
     @Override
-    public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException {
+    public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Member member = Member.builder()
-                    .id(memberId)
-                    .nickname(memberDetailReq.nickname())
-                    .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
-                    .birth(sdf.parse(memberDetailReq.birth()))
-                    .phone(memberDetailReq.phone())
-                    .point(0L)
-                    .exp(0L)
-                    .address(new Address(memberDetailReq.city(),
-                            memberDetailReq.district(),
-                            memberDetailReq.address(),
-                            memberDetailReq.zipcode()))
-                        .build();
+
+        Member member = null;
+        try {
+            member = Member.builder()
+                        .id(memberId)
+                        .nickname(memberDetailReq.nickname())
+                        .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
+                        .birth(sdf.parse(memberDetailReq.birth()))
+                        .phone(memberDetailReq.phone())
+                        .point(0L)
+                        .exp(0L)
+                        .address(new Address(memberDetailReq.city(),
+                                memberDetailReq.district(),
+                                memberDetailReq.address(),
+                                memberDetailReq.zipcode()))
+                            .build();
+        } catch (ParseException e) {
+            throw new BaseExceptionHandler(ErrorCode.INVALID_TYPE_VALUE);
+        }
         memberRepository.save(member);
     }
 
+    @Transactional(readOnly= true)
     @Override
     public MemberDetailRes findMemberDetail(UUID memberId) {
         var memberDetail = memberRepository.findById(memberId)
@@ -57,6 +64,7 @@ public class MemberServiceImpl implements MemberService{
                 memberDetail.getAddress().getZipcode());
     }
 
+    @Transactional
     @Override
     public void updateNickname(UUID memberId, String nickname) {
         var member = memberRepository.findById(memberId)
