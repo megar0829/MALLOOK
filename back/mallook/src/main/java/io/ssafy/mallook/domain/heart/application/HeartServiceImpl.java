@@ -8,12 +8,15 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -39,6 +42,10 @@ public class HeartServiceImpl implements HeartService {
     public void likeScript(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
+        heartRepository.findByMemberAndScript(proxyMember, proxyScript)
+                .ifPresent(like -> {
+                    throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
+                });
         proxyScript.like();
         heartRepository.save(likeDto.toEntity(proxyMember, proxyScript));
     }
