@@ -1,9 +1,14 @@
 package io.ssafy.mallook.global.util;
 
+import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
+import io.ssafy.mallook.domain.order.dao.OrderRepository;
+import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
+import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
