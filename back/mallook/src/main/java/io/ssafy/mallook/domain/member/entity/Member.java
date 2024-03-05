@@ -1,13 +1,13 @@
 package io.ssafy.mallook.domain.member.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -23,11 +23,14 @@ public class Member extends BaseEntity {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(name = "member_id")
     private UUID id;
-    private String name;
+    private String nickname;
+    private Date birth;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(unique = true)
     private String phone;
+    private Long point;
+    private Long exp;
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SocialMember> socialMembers = new HashSet<>();
@@ -39,6 +42,16 @@ public class Member extends BaseEntity {
     @CollectionTable(name = "member_role",
             joinColumns = @JoinColumn(name = "member_id"))
     private Set<MemberRole> role = new HashSet<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<MemberCoupon> myCouponList = new ArrayList<>();
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public Member(UUID id) {
+        this.id = id;
+    }
 }
 
 
