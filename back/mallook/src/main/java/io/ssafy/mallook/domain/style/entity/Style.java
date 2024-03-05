@@ -20,7 +20,7 @@ public class Style extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id")
-    private Member memberId;
+    private Member member;
 
     private String name;
 
