@@ -1,6 +1,8 @@
+// import "../assets/scss/style.scss";
 import "../styles/global.css";
 import { Metadata } from "next";
 import Navigation from "../components/navigation"
+import { Providers } from "./providers";
 
 export const metadata :Metadata = {
   title: {
@@ -10,12 +12,19 @@ export const metadata :Metadata = {
   description: 'The clothing store',
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout(
+  { children, modal }
+  : 
+  { children: React.ReactNode, modal: React.ReactNode }
+  ) {
   return (
     <html lang="ko">
       <body>
-        <Navigation />
-        {children}
+        <Providers>
+          <Navigation />
+          {children}
+          {modal}
+        </Providers>
       </body>
     </html>
   )
