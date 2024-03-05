@@ -28,7 +28,7 @@ public class AuthService {
     }
 
     public boolean authorizeToReadOrderDetail(UUID memberId, Long orderId) {
-        return orderRepository.findByIdAndStatusTrue(orderId)
+        return orderRepository.findById(orderId)
                 .orElseThrow().isCreateByTargetMember(memberId);
     }
 
@@ -48,7 +48,7 @@ public class AuthService {
         List<Long> deleteList = orderDeleteDto.deleteList();
 
         return deleteList.stream()
-                .map(orderRepository::findByIdAndStatusTrue)
+                .map(orderRepository::findById)
                 .allMatch(orderOptional -> orderOptional
                         .filter(order -> order.isCreateByTargetMember(memberId))
                         .isPresent());
