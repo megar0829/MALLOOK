@@ -7,18 +7,22 @@ import io.ssafy.mallook.domain.member.entity.SocialMember;
 import io.ssafy.mallook.domain.member.entity.SocialType;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
+import io.ssafy.mallook.global.security.dto.KakaoAuthTokenRes;
+import io.ssafy.mallook.global.security.dto.SocialData;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+
+import static io.ssafy.mallook.global.security.user.UserSecurityDTO.getUserSecurityDTO;
 
 @Slf4j
 @Service
@@ -50,6 +54,41 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 소셜 플랫폼과 이메일로 회원 확인
         Optional<Member> member = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
+        return getSecurityDTO(member, stringObjectMap, phoneObj, socialType, socialId, email);
+    }
+
+    public UserSecurityDTO getMobileSecurityDto(SocialType socialType, Object social) {
+        SocialData socialData = null;
+        if (SocialType.KAKAO.equals(socialType)) {
+            KakaoAuthTokenRes kakaoAuthTokenRes = (KakaoAuthTokenRes) social;
+            socialData = new SocialData(
+                    socialType,
+                    kakaoAuthTokenRes.id().toString(),
+                    kakaoAuthTokenRes.kakaoAccount().email()
+            );
+        }
+        var member = memberRepository.findBySocialTypeAndSocialId(socialType, socialData.id());
+        // 존재한다면 로그인 처리
+        if (member.isPresent()) {
+            return getUserSecurityDTO(member.get());
+        }
+        Object phoneObj = null;
+        // 존재 하지 않으지만 휴대폰 번호는 존재하는 경우
+        // 핸드폰 번호가 있다면 핸드폰 번호를 이용해서 기존 회원 확인
+        if (Objects.nonNull(phoneObj)) {
+            Optional<Member> phoneMember = memberRepository.findByPhone((String) phoneObj);
+
+            // 핸드폰 정보에 해당하는 유저가 있다면 신규 소셜 로그인 플랫폼 등록
+            if (phoneMember.isPresent()) {
+                return updateSocialPlatform(phoneMember.get(), socialType, socialData.id());
+            }
+        }
+
+        // 비회원인 경우 회원 가입
+        return getUserSecurityDTO(registerMember(socialType, socialData.id(), socialData.email()));
+    }
+
+    private UserSecurityDTO getSecurityDTO(Optional<Member> member, Map<String, Object> stringObjectMap, Object phoneObj, SocialType socialType, String socialId, String email) {
         // 존재한다면 로그인 처리
         if (member.isPresent()) {
             return getUserSecurityDTO(member.get(), stringObjectMap);
@@ -68,15 +107,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         // 비회원인 경우 회원 가입
         return getUserSecurityDTO(registerMember(socialType, socialId, email), stringObjectMap);
-    }
-
-    private UserSecurityDTO getUserSecurityDTO(Member member, Map<String, Object> stringObjectMap) {
-        return UserSecurityDTO.fromSocial()
-                .username(member.getId().toString())
-                .password(UUID.randomUUID().toString())
-                .authorities(grantAuthorities(member))
-                .props(stringObjectMap)
-                .create();
     }
 
     // 신규 회원 등록
@@ -106,7 +136,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return getUserSecurityDTO(memberRepository.save(member), stringObjectMap);
     }
 
-    private Collection<? extends GrantedAuthority> grantAuthorities(Member member) {
-        return AuthorityUtils.createAuthorityList(member.getRole().stream().map(Enum::name).toList());
+    // 신규 소셜 플랫폼 등록
+    public UserSecurityDTO updateSocialPlatform(Member member, SocialType socialType, String socialId) {
+        SocialMember socialMember = SocialMember.builder()
+                .socialType(socialType)
+                .socialId(socialId)
+                .build();
+        socialMember.setMember(member);
+
+        return getUserSecurityDTO(memberRepository.save(member));
     }
 }

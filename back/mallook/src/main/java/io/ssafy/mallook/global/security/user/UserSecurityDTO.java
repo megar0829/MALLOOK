@@ -1,8 +1,10 @@
 package io.ssafy.mallook.global.security.user;
 
+import io.ssafy.mallook.domain.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -33,5 +35,23 @@ public class UserSecurityDTO extends User implements OAuth2User {
     @Override
     public String getName() {
         return super.getUsername();
+    }
+    public static UserSecurityDTO getUserSecurityDTO(Member member, Map<String, Object> stringObjectMap) {
+        return UserSecurityDTO.fromSocial()
+                .username(member.getId().toString())
+                .password(UUID.randomUUID().toString())
+                .authorities(grantAuthorities(member))
+                .props(stringObjectMap)
+                .create();
+    }
+    public static UserSecurityDTO getUserSecurityDTO(Member member) {
+        return UserSecurityDTO.fromSocial()
+                .username(member.getId().toString())
+                .password(UUID.randomUUID().toString())
+                .authorities(grantAuthorities(member))
+                .create();
+    }
+    private static Collection<? extends GrantedAuthority> grantAuthorities(Member member) {
+        return AuthorityUtils.createAuthorityList(member.getRole().stream().map(Enum::name).toList());
     }
 }

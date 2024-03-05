@@ -29,7 +29,8 @@ public class SecurityConfig {
     private static final String[] URL_WHITE_LIST = {
             "/error", "/login", "/favicon.ico",
             "/health", "/api-docs/**", "/swagger-ui/**",
-            "/swagger-resources/**", "/swagger-ui.html", "/api/token/**"
+            "/swagger-resources/**", "/swagger-ui.html", "/api/token/**",
+            "/api/auth/login/kakao"
     };
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SucceessHandler customOAuth2SuccessHandler;
@@ -61,7 +62,8 @@ public class SecurityConfig {
         final List<String> allowedHeaders = List.of("*");
         final List<String> allowedOriginPatterns = List.of(
                 "http://localhost:8080",
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://localhost:45476"
         );
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
