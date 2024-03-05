@@ -27,13 +27,13 @@ public class OrderServiceImpl implements OrderService {
     public Page<OrderListDto> getOrderList(UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return orderRepository.findAllByMemberIdAndStatusTrue(proxyMember, pageable)
+        return orderRepository.findAllByMember(proxyMember, pageable)
                 .map(OrderListDto::toDto);
     }
 
     @Override
     public OrderDetailDto getOrderDetail(Long id) {
-        return orderRepository.findByIdAndStatusTrue(id)
+        return orderRepository.findById(id)
                 .map(OrderDetailDto::toDto)
                 .orElseThrow();
     }
