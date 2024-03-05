@@ -5,6 +5,8 @@ import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
+import io.ssafy.mallook.global.common.BaseResponse;
+import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -28,35 +31,49 @@ public class OrderController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<OrderListDto> getOrderList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                           @PageableDefault(size = 2,
-                                                   sort = "createdAt",
-                                                   direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Page<OrderListDto>>> getOrderList(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                                         @PageableDefault(size = 2,
+                                                                                 sort = "createdAt",
+                                                                                 direction = Sort.Direction.DESC) Pageable pageable) {
         UUID id = principal.getId();
-        return orderService.getOrderList(id, pageable);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                orderService.getOrderList(id, pageable)
+        );
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToReadOrderDetail(#principal.getId(), #id)")
-    public OrderDetailDto getOrderDetail(@AuthenticationPrincipal UserSecurityDTO principal,
-                                         @PathVariable Long id) {
-        return orderService.getOrderDetail(id);
+    public ResponseEntity<BaseResponse<OrderDetailDto>> getOrderDetail(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                                       @PathVariable Long id) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                orderService.getOrderDetail(id)
+        );
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void createOrder(@AuthenticationPrincipal UserSecurityDTO principal,
-                            @RequestBody @Valid OrderCreateDto createDto) {
+    public ResponseEntity<BaseResponse<String>> createOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderCreateDto createDto) {
         UUID id = principal.getId();
         orderService.createOrder(id, createDto);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "성공적으로 주문되었습니다."
+        );
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
-    public void deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
-                            @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
+    public ResponseEntity<BaseResponse<String>> deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
         orderService.deletedOrder(orderDeleteDto);
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "성공적으로 삭제되었습니다."
+        );
     }
 }
