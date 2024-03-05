@@ -89,7 +89,12 @@ class _InterestsScreenState extends State<InterestsScreen> {
         title: AnimatedOpacity(
           opacity: _showTitle ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 300),
-          child: const Text('당신의 옷 취향은?'),
+          child: Text(
+            '당신의 옷 취향은?',
+            style: TextStyle(
+              color: Theme.of(context).primaryColorDark,
+            ),
+          ),
         ),
       ),
       body: Scrollbar(
@@ -109,7 +114,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 Text(
                   '당신의 옷 스타일은?',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).primaryColor,
                     fontSize: Sizes.size40,
                     fontWeight: FontWeight.bold,
                     height: 1.2,
@@ -119,7 +124,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                 Text(
                   '당신의 스타일로 추천 받아봐요!',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Colors.grey.shade600,
                     fontSize: Sizes.size20,
                   ),
                 ),

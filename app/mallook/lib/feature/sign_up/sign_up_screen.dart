@@ -186,7 +186,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: Text(
                       "회원가입",
                       style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w700,
                         fontSize: Sizes.size36,
                       ),
@@ -232,7 +232,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 focusColor: Colors.grey.shade500,
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Colors.grey.shade500,
+                                    color: Colors.grey.shade400,
                                   ),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
@@ -405,24 +405,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             onTap: () => _selectDate(context),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                                color: Theme.of(context).primaryColorLight,
                                 border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
                                   Sizes.size12,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
+                                    color: Theme.of(context).primaryColorLight,
                                     spreadRadius: 0.1,
                                     blurRadius: 2,
                                     offset: const Offset(1, 3),
@@ -436,7 +428,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 child: FaIcon(
                                   FontAwesomeIcons.calendar,
-                                  color: Theme.of(context).colorScheme.primary,
+                                  color: Theme.of(context).primaryColor,
                                   size: Sizes.size18,
                                 ),
                               ),
@@ -453,7 +445,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         '성별',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: Sizes.size18,
                         ),
@@ -486,7 +478,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         '전화번호',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: Sizes.size18,
                         ),
@@ -495,8 +487,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
                         autocorrect: false,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
+                        style: const TextStyle(
+                          color: Colors.black,
                           fontSize: Sizes.size16,
                         ),
                         onChanged: (value) => _isPhoneValid(),
@@ -507,14 +499,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ],
                         decoration: InputDecoration(
                           hintText: "전화번호를 입력해주세요.",
-                          focusColor: Theme.of(context).colorScheme.primary,
+                          focusColor: Theme.of(context).primaryColor,
                           isDense: false,
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
+                              color: Colors.grey.shade400,
                             ),
                           ),
                           focusedBorder: UnderlineInputBorder(
@@ -524,15 +513,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           hintStyle: TextStyle(
                             fontSize: Sizes.size14,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
+                            color: Colors.grey.shade500,
                           ),
                         ),
                       ),
@@ -541,11 +522,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           !_phoneStatus)
                         Container(
                           alignment: Alignment.centerRight,
-                          child: Text(
+                          child: const Text(
                             "올바르지 않은 전화번호 형식 입니다.",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
                               fontSize: Sizes.size12,
+                              color: Colors.red,
                             ),
                           ),
                         ),
@@ -558,7 +539,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         '주소',
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: Sizes.size18,
                         ),
@@ -569,19 +550,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           enabled: false,
                           controller: _addressController,
                           autocorrect: false,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
+                          style: const TextStyle(
+                            color: Colors.black,
                             fontSize: Sizes.size14,
                           ),
                           decoration: InputDecoration(
                             hintText: "주소 검색시 클릭!",
-                            focusColor: Theme.of(context).colorScheme.primary,
+                            focusColor: Theme.of(context).primaryColor,
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.5),
+                                color: Colors.grey.shade400,
                               ),
                             ),
                             focusedBorder: UnderlineInputBorder(
@@ -591,52 +569,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             ),
                             hintStyle: TextStyle(
                               fontSize: Sizes.size14,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.5),
-                              ),
+                              color: Colors.grey.shade500,
                             ),
                           ),
                         ),
                       ),
-                      TextField(
-                        enabled: _additionalAddressInputEnable,
-                        controller: _additionalAddressController,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: Sizes.size14,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "나머지 주소 입력",
-                          focusColor: Theme.of(context).colorScheme.primary,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
+                      Opacity(
+                        opacity: _additionalAddressInputEnable ? 1 : 0,
+                        child: TextField(
+                          enabled: _additionalAddressInputEnable,
+                          controller: _additionalAddressController,
+                          style: const TextStyle(
+                            color: Colors.black,
                             fontSize: Sizes.size14,
-                            color: Theme.of(context).colorScheme.secondary,
                           ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
+                          decoration: InputDecoration(
+                            hintText: "나머지 주소 입력",
+                            focusColor: Theme.of(context).primaryColor,
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade400,
+                              ),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            hintStyle: TextStyle(
+                              fontSize: Sizes.size14,
+                              color: Colors.grey.shade500,
                             ),
                           ),
                         ),

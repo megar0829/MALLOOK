@@ -27,15 +27,15 @@ class FormButton extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Sizes.size5),
             color: disabled
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.primaryContainer,
+                ? Colors.grey.shade300
+                : Theme.of(context).primaryColorLight,
           ),
           duration: const Duration(milliseconds: 300),
           child: AnimatedDefaultTextStyle(
             style: TextStyle(
               color: disabled
-                  ? Theme.of(context).colorScheme.onPrimary
-                  : Theme.of(context).colorScheme.primary,
+                  ? Colors.black87
+                  : Theme.of(context).primaryColorDark,
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
               letterSpacing: Sizes.size4,
