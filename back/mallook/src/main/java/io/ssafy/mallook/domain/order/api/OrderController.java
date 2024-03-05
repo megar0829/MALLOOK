@@ -30,7 +30,6 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse<Page<OrderListDto>>> getOrderList(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                          @PageableDefault(size = 2,
                                                                                  sort = "createdAt",
@@ -43,7 +42,6 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToReadOrderDetail(#principal.getId(), #id)")
     public ResponseEntity<BaseResponse<OrderDetailDto>> getOrderDetail(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                        @PathVariable Long id) {
@@ -54,7 +52,6 @@ public class OrderController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse<String>> createOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderCreateDto createDto) {
         UUID id = principal.getId();
@@ -66,7 +63,6 @@ public class OrderController {
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
     public ResponseEntity<BaseResponse<String>> deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
