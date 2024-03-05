@@ -5,6 +5,8 @@ import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.global.common.BaseResponse;
+import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,37 +33,50 @@ public class ScriptController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ScriptListDto> getScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                             @PageableDefault(size = 2,
+    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                                           @PageableDefault(size = 2,
                                                      sort = "createdAt",
                                                      direction = Sort.Direction.DESC) Pageable pageable) {
-        UUID id = principal.getId();
-        return scriptService.getScriptList(id, pageable);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getScriptList(principal.getId(), pageable)
+        );
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToReadScriptDetail(#principal.getId(), #id)")
-    public ScriptDetailDto getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
-                                           @PathVariable Long id) {
-        return scriptService.getScriptDetail(id);
+    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                                         @PathVariable Long id) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getScriptDetail(id)
+        );
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void createScript(@AuthenticationPrincipal UserSecurityDTO principal,
-                             @RequestBody @Valid ScriptCreatDto scriptCreateDto) {
+    public ResponseEntity<BaseResponse<String>> createScript(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                             @RequestBody @Valid ScriptCreatDto scriptCreateDto) {
         log.info("userPk: " + principal.getId().toString());
         UUID id = principal.getId();
         scriptService.createScript(scriptCreateDto, id);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "스크립트 생성 성공"
+        );
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToDeleteScript(#principal.getId(), #scriptDeleteListDto)")
-    public void deleteScript(@AuthenticationPrincipal UserSecurityDTO principal,
-                             @RequestBody @Valid ScriptDeleteListDto scriptDeleteListDto) {
+    public ResponseEntity<BaseResponse<String>> deleteScript(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                             @RequestBody @Valid ScriptDeleteListDto scriptDeleteListDto) {
         log.info("삭제 시작");
         scriptService.deleteScript(scriptDeleteListDto);
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "스크립트 삭제 성공"
+        );
     }
 }
