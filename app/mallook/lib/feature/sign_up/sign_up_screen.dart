@@ -38,8 +38,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _additionalAddressInputEnable = false;
 
   bool _isSubmitAvailable() {
-    print("IS AVAIALBELE");
-    print(_additionalAddress.isEmpty);
     if (!_nicknameStatus) return false;
     if (!_phoneStatus) return false;
     if (_gender == null) return false;
@@ -170,26 +168,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: AppBar(
-          surfaceTintColor: Theme.of(context).colorScheme.background,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          elevation: 3,
-          title: Container(
-            padding: const EdgeInsets.only(
-              top: Sizes.size40,
-              bottom: Sizes.size20,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              "회원가입",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w700,
-                fontSize: Sizes.size28,
-              ),
-            ),
-          ),
-        ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -199,6 +177,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: Sizes.size40,
+                      bottom: Sizes.size32,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "회원가입",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.w700,
+                        fontSize: Sizes.size36,
+                      ),
+                    ),
+                  ),
                   Gaps.v32,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -209,7 +202,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Text(
                             "닉네임",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
+                              color: Theme.of(context).primaryColor,
                               fontSize: Sizes.size18,
                               fontWeight: FontWeight.w600,
                             ),
@@ -217,7 +210,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Text(
                             "입력하지 않으면 자동으로 생성되요",
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Colors.grey.shade600,
                               fontSize: Sizes.size14,
                             ),
                           )
@@ -230,20 +223,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               controller: _nicknameController,
                               keyboardType: TextInputType.text,
                               autocorrect: false,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
+                              style: const TextStyle(
+                                color: Colors.black,
                                 fontSize: Sizes.size16,
                               ),
                               decoration: InputDecoration(
                                 hintText: "닉네임을 입력해주세요.",
-                                focusColor:
-                                    Theme.of(context).colorScheme.primary,
+                                focusColor: Colors.grey.shade500,
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary
-                                        .withOpacity(0.5),
+                                    color: Colors.grey.shade500,
                                   ),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
@@ -254,16 +243,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 hintStyle: TextStyle(
                                   fontSize: Sizes.size14,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                disabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary
-                                        .withOpacity(0.5),
-                                  ),
+                                  color: Colors.grey.shade500,
                                 ),
                               ),
                             ),
@@ -271,9 +251,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ElevatedButton(
                             onPressed: _isNicknameValid,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
+                              backgroundColor:
+                                  Theme.of(context).primaryColorLight,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(
                                   Sizes.size14,
@@ -286,7 +265,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Text(
                               "중복검사",
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).primaryColorDark,
                                 fontWeight: FontWeight.w500,
                                 fontSize: Sizes.size16,
                               ),
@@ -301,10 +280,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               ? "사용 가능한 닉네임입니다."
                               : "사용할 수 없는 닉네임 입니다.",
                           style: TextStyle(
-                            fontSize: Sizes.size12,
+                            fontSize: Sizes.size14,
                             color: _nicknameStatus
-                                ? Theme.of(context).colorScheme.tertiary
-                                : Theme.of(context).colorScheme.error,
+                                ? Theme.of(context).primaryColorDark
+                                : Colors.red.shade600,
+                            fontWeight: FontWeight.w500,
                           ),
                         )
                     ],
@@ -316,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Text(
                         "생년월일",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: Sizes.size18,
                         ),
@@ -332,24 +312,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                                color: Theme.of(context).primaryColorLight,
                                 border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
                                   Sizes.size12,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
+                                    color: Theme.of(context).primaryColorLight,
                                     spreadRadius: 0.1,
                                     blurRadius: 2,
                                     offset: const Offset(1, 3),
@@ -359,7 +331,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               '$_year년',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).primaryColor,
                                 fontSize: Sizes.size16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -372,24 +344,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                                color: Theme.of(context).primaryColorLight,
                                 border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
                                   Sizes.size12,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
+                                    color: Theme.of(context).primaryColorLight,
                                     spreadRadius: 0.1,
                                     blurRadius: 2,
                                     offset: const Offset(1, 3),
@@ -399,7 +363,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               '$_month월',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).primaryColor,
                                 fontSize: Sizes.size16,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -412,24 +376,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               horizontal: Sizes.size10,
                             ),
                             decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
+                                color: Theme.of(context).primaryColorLight,
                                 border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 borderRadius: BorderRadius.circular(
                                   Sizes.size12,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
+                                    color: Theme.of(context).primaryColorLight,
                                     spreadRadius: 0.1,
                                     blurRadius: 2,
                                     offset: const Offset(1, 3),
@@ -439,7 +395,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               '$_day일',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
+                                color: Theme.of(context).primaryColor,
                                 fontSize: Sizes.size16,
                                 fontWeight: FontWeight.w600,
                               ),

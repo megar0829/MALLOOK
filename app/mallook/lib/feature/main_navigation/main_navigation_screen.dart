@@ -47,7 +47,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size24,
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),
