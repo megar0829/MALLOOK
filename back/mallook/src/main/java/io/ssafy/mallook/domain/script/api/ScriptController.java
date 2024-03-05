@@ -32,7 +32,6 @@ public class ScriptController {
     private final ScriptService scriptService;
 
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                            @PageableDefault(size = 2,
                                                      sort = "createdAt",
@@ -44,7 +43,6 @@ public class ScriptController {
     }
 
     @GetMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToReadScriptDetail(#principal.getId(), #id)")
     public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                          @PathVariable Long id) {
@@ -55,7 +53,6 @@ public class ScriptController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<BaseResponse<String>> createScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                              @RequestBody @Valid ScriptCreatDto scriptCreateDto) {
         log.info("userPk: " + principal.getId().toString());
@@ -68,7 +65,6 @@ public class ScriptController {
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("@authService.authorizeToDeleteScript(#principal.getId(), #scriptDeleteListDto)")
     public ResponseEntity<BaseResponse<String>> deleteScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                              @RequestBody @Valid ScriptDeleteListDto scriptDeleteListDto) {
