@@ -7,8 +7,10 @@ import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 @Transactional(readOnly = true)
 public class ScriptServiceImpl implements ScriptService {
 
@@ -29,15 +31,15 @@ public class ScriptServiceImpl implements ScriptService {
     public Page<ScriptListDto> getScriptList(UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return scriptRepository.findAllByMemberAndStatusTrue(proxyMember, pageable)
+        return scriptRepository.findAllByMember(proxyMember, pageable)
                 .map(ScriptListDto::toDto);
     }
 
     @Override
     public ScriptDetailDto getScriptDetail(Long scriptId) {
-        return scriptRepository.findByIdAndStatusTrue(scriptId)
+        return scriptRepository.findById(scriptId)
                 .map(ScriptDetailDto::toDto)
-                .orElseThrow();
+                .orElseThrow(() ->new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT));
     }
 
     @Override
@@ -49,6 +51,7 @@ public class ScriptServiceImpl implements ScriptService {
         scriptRepository.save(scriptCreateDto.toEntity(proxyMember));
     }
 
+    @Override
     @Transactional
     public void deleteScript(ScriptDeleteListDto scriptDeleteListDto) {
         log.info(scriptDeleteListDto.toString());

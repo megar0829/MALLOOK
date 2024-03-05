@@ -76,6 +76,10 @@ public enum ErrorCode {
     // 유저가 존재하지 않음
     NOT_FOUND_USER(404, "B200", "존재하지 않는 유저입니다."),
     NOT_FOUND_S3FILE(701, "B701", "S3 파일이 존재하지 않습니다"),
+
+    // 스크립트 에러(CODE: 300)
+    // 스크립트가 존재하지 않음
+    NOT_FOUND_SCRIPT(404, "B300", "존재하지 않는 스크립트입니다."),
     ; // End
 
     /**
