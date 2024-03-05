@@ -5,5 +5,8 @@ import io.ssafy.mallook.domain.heart.dto.request.LikeDto;
 import java.util.UUID;
 
 public interface HeartService {
+
     void likeScript(UUID id, LikeDto likeDto);
+
+    void unlikeScript(UUID id, LikeDto likeDto);
 }

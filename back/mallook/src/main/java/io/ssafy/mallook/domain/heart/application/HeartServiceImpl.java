@@ -28,4 +28,12 @@ public class HeartServiceImpl implements HeartService {
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
         heartRepository.save(likeDto.toEntity(proxyMember, proxyScript));
     }
+
+    @Override
+    @Transactional
+    public void unlikeScript(UUID id, LikeDto likeDto) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
+        heartRepository.deleteByMemberAndScript(proxyMember, proxyScript);
+    }
 }
