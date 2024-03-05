@@ -8,7 +8,7 @@ import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +23,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/scripts")
-@Slf4j
+@Log4j2
 public class ScriptController {
 
     private final ScriptService scriptService;
