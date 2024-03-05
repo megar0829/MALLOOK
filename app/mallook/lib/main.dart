@@ -1,23 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:mallook/feature/sign_up/sign_up_screen.dart';
 
 void main() {
   runApp(const Mallook());
 }
 
+const seedColor = Color(0xff6750a4);
+
 class Mallook extends StatelessWidget {
   const Mallook({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Mallook',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: seedColor,
+          brightness: Brightness.light,
+        ),
+        // textTheme: GoogleFonts.nanumGothicTextTheme(),
+        textTheme: GoogleFonts.notoSansKrTextTheme(
+          Theme.of(context).textTheme,
+        ),
       ),
-      home: const MainNavigationScreen(),
+      // home: const SignUpScreen(),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ko', 'KR'),
+      ],
+      // home: const MainNavigationScreen(),
+      home: const SignUpScreen(),
     );
   }
 }
