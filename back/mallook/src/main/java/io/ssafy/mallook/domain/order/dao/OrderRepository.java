@@ -16,9 +16,7 @@ import java.util.Optional;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Page<Order> findAllByMemberIdAndStatusTrue(Member member, Pageable pageable);
-
-    Optional<Order> findByIdAndStatusTrue(Long id);
+    Page<Order> findAllByMember(Member member, Pageable pageable);
 
     @Modifying
     @Query("update Order o set o.status = false where o.id in :deleteList and o.status = true ")
