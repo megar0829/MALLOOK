@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mallook/feature/sign_up/sign_up_screen.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mallook/feature/login/LoginScreen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(
+    // nativeAppKey: 'a03e556f0284d3583b06a666cf4ff030',
+    javaScriptAppKey: '757d13b98af57f2095e328007111398a',
+  );
+
   runApp(const Mallook());
 }
 
@@ -36,7 +43,8 @@ class Mallook extends StatelessWidget {
         Locale('ko', 'KR'),
       ],
       // home: const MainNavigationScreen(),
-      home: const SignUpScreen(),
+      // home: const SignUpScreen(),
+      home: const LoginScreen(),
     );
   }
 }
