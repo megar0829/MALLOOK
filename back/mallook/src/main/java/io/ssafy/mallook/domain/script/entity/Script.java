@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Table(name = "script")
 @AllArgsConstructor
 @NoArgsConstructor
+@SQLRestriction("status = TRUE")
 public class Script extends BaseEntity {
 
     @Id

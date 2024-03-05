@@ -16,9 +16,7 @@ import java.util.Optional;
 @Repository
 public interface ScriptRepository extends JpaRepository<Script, Long> {
 
-    Optional<Script> findByIdAndStatusTrue(Long id);
-
-    Page<Script> findAllByMemberAndStatusTrue(Member member, Pageable pageable);
+    Page<Script> findAllByMember(Member member, Pageable pageable);
 
     @Modifying
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")

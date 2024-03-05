@@ -2,6 +2,8 @@ package io.ssafy.mallook.global.util;
 
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
+import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -20,8 +22,9 @@ public class AuthService {
 
     public boolean authorizeToReadScriptDetail(UUID memberId, Long scriptId) {
         log.info("내가 쓴 글인지 확인 시작");
-        return scriptRepository.findByIdAndStatusTrue(scriptId)
-                .orElseThrow().isWrittenByTargetMember(memberId);
+        return scriptRepository.findById(scriptId)
+                .orElseThrow(() ->new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT))
+                .isWrittenByTargetMember(memberId);
     }
 
     public boolean authorizeToDeleteScript(UUID memberId, ScriptDeleteListDto scriptDeleteListDto) {
@@ -29,7 +32,7 @@ public class AuthService {
         List<Long> scriptIdList = scriptDeleteListDto.toDeleteList();
 
         return scriptIdList.stream()
-                .map(scriptRepository::findByIdAndStatusTrue)
+                .map(scriptRepository::findById)
                 .allMatch(scriptOptional -> scriptOptional
                         .filter(script -> script.isWrittenByTargetMember(memberId))
                         .isPresent());
