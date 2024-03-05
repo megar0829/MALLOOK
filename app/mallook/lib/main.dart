@@ -7,8 +7,7 @@ import 'package:mallook/feature/login/LoginScreen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
-    // nativeAppKey: 'a03e556f0284d3583b06a666cf4ff030',
-    javaScriptAppKey: '757d13b98af57f2095e328007111398a',
+    nativeAppKey: 'a03e556f0284d3583b06a666cf4ff030',
   );
 
   runApp(const Mallook());
