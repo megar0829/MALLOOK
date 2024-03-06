@@ -19,5 +19,4 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     Optional<Heart> findByMemberAndScript(Member member, Script script);
 
     Optional<Heart> findByMemberAndStyle(Member member, Style style);
-    void deleteByMemberAndScript(Member member, Script script);
 }
