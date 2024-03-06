@@ -22,20 +22,20 @@ class FormButton extends StatelessWidget {
         child: AnimatedContainer(
           // MEMO: Container의 변화에 애니메이션 효과 적용
           padding: const EdgeInsets.symmetric(
-            vertical: Sizes.size12,
+            vertical: Sizes.size16,
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Sizes.size5),
             color: disabled
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.primaryContainer,
+                ? Colors.grey.shade300
+                : Theme.of(context).primaryColorLight,
           ),
           duration: const Duration(milliseconds: 300),
           child: AnimatedDefaultTextStyle(
             style: TextStyle(
               color: disabled
-                  ? Theme.of(context).colorScheme.onPrimary
-                  : Theme.of(context).colorScheme.primary,
+                  ? Colors.black87
+                  : Theme.of(context).primaryColorDark,
               fontWeight: FontWeight.w600,
               fontSize: Sizes.size16,
               letterSpacing: Sizes.size4,
@@ -44,6 +44,12 @@ class FormButton extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
+              style: TextStyle(
+                color: disabled
+                    ? Colors.black
+                    : Theme.of(context).primaryColorDark,
+                fontSize: Sizes.size18,
+              ),
             ),
           ),
         ),

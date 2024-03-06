@@ -37,9 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _additionalAddress = "";
   bool _additionalAddressInputEnable = false;
 
-  bool _isSubmitAvailable() {
-    print("IS AVAIALBELE");
-    print(_additionalAddress.isEmpty);
+  bool _isAvailable() {
     if (!_nicknameStatus) return false;
     if (!_phoneStatus) return false;
     if (_gender == null) return false;
@@ -170,26 +168,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return GestureDetector(
       onTap: _onScaffoldTap,
       child: Scaffold(
-        appBar: AppBar(
-          surfaceTintColor: Theme.of(context).colorScheme.background,
-          backgroundColor: Theme.of(context).colorScheme.background,
-          elevation: 3,
-          title: Container(
-            padding: const EdgeInsets.only(
-              top: Sizes.size40,
-              bottom: Sizes.size20,
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              "회원가입",
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w700,
-                fontSize: Sizes.size28,
-              ),
-            ),
-          ),
-        ),
+        backgroundColor: Colors.white,
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -199,506 +178,477 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                      top: Sizes.size40,
+                      bottom: Sizes.size32,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      "회원가입",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w700,
+                        fontSize: Sizes.size36,
+                      ),
+                    ),
+                  ),
                   Gaps.v32,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "닉네임",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: Sizes.size18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            "입력하지 않으면 자동으로 생성되요",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: Sizes.size14,
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              controller: _nicknameController,
-                              keyboardType: TextInputType.text,
-                              autocorrect: false,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: Sizes.size16,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: "닉네임을 입력해주세요.",
-                                focusColor:
-                                    Theme.of(context).colorScheme.primary,
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary
-                                        .withOpacity(0.5),
-                                  ),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .primaryColor, // 포커스가 될 때 보라색으로 변경될 테두리 색상
-                                  ),
-                                ),
-                                hintStyle: TextStyle(
-                                  fontSize: Sizes.size14,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
-                                disabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary
-                                        .withOpacity(0.5),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          ElevatedButton(
-                            onPressed: _isNicknameValid,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size14,
-                                ),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: Sizes.size14,
-                              ),
-                            ),
-                            child: Text(
-                              "중복검사",
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w500,
-                                fontSize: Sizes.size16,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Gaps.v3,
-                      if (_nickname.isNotEmpty && !_nicknameStatus)
-                        Text(
-                          _nicknameStatus
-                              ? "사용 가능한 닉네임입니다."
-                              : "사용할 수 없는 닉네임 입니다.",
-                          style: TextStyle(
-                            fontSize: Sizes.size12,
-                            color: _nicknameStatus
-                                ? Theme.of(context).colorScheme.tertiary
-                                : Theme.of(context).colorScheme.error,
-                          ),
-                        )
-                    ],
-                  ),
+                  nicknameBox(context),
                   Gaps.v16,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "생년월일",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Sizes.size18,
-                        ),
-                      ),
-                      Gaps.v8,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Container(
-                            width: deviceWidth / 4,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Sizes.size8,
-                              horizontal: Sizes.size10,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size12,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
-                                    spreadRadius: 0.1,
-                                    blurRadius: 2,
-                                    offset: const Offset(1, 3),
-                                  )
-                                ]),
-                            child: Text(
-                              '$_year년',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: Sizes.size16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: deviceWidth / 7,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Sizes.size8,
-                              horizontal: Sizes.size10,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size12,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
-                                    spreadRadius: 0.1,
-                                    blurRadius: 2,
-                                    offset: const Offset(1, 3),
-                                  )
-                                ]),
-                            child: Text(
-                              '$_month월',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: Sizes.size16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: deviceWidth / 7,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: Sizes.size8,
-                              horizontal: Sizes.size10,
-                            ),
-                            decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size12,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
-                                    spreadRadius: 0.1,
-                                    blurRadius: 2,
-                                    offset: const Offset(1, 3),
-                                  )
-                                ]),
-                            child: Text(
-                              '$_day일',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontSize: Sizes.size16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => _selectDate(context),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.7),
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size12,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .primary
-                                        .withOpacity(0.7),
-                                    spreadRadius: 0.1,
-                                    blurRadius: 2,
-                                    offset: const Offset(1, 3),
-                                  )
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: Sizes.size10,
-                                  horizontal: Sizes.size12,
-                                ),
-                                child: FaIcon(
-                                  FontAwesomeIcons.calendar,
-                                  color: Theme.of(context).colorScheme.primary,
-                                  size: Sizes.size18,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                  birthdayBox(context, deviceWidth),
                   Gaps.v16,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '성별',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Sizes.size18,
-                        ),
-                      ),
-                      Gaps.v10,
-                      Center(
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GenderRadioButton(
-                              text: '남자',
-                              isSelected: Gender.man == _gender,
-                              onTap: () => _setGender(Gender.man),
-                            ),
-                            Gaps.h12,
-                            GenderRadioButton(
-                              text: '여자',
-                              isSelected: Gender.woman == _gender,
-                              onTap: () => _setGender(Gender.woman),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                  genderBox(context),
                   Gaps.v16,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '전화번호',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Sizes.size18,
-                        ),
-                      ),
-                      TextField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.number,
-                        autocorrect: false,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: Sizes.size16,
-                        ),
-                        onChanged: (value) => _isPhoneValid(),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(11),
-                          PhoneInputFormatter(),
-                        ],
-                        decoration: InputDecoration(
-                          hintText: "전화번호를 입력해주세요.",
-                          focusColor: Theme.of(context).colorScheme.primary,
-                          isDense: false,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                            fontSize: Sizes.size14,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                      ),
-                      if (_phone.isNotEmpty &&
-                          _phone.length != 4 &&
-                          !_phoneStatus)
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "올바르지 않은 전화번호 형식 입니다.",
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.error,
-                              fontSize: Sizes.size12,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
+                  phoneBox(context),
                   Gaps.v16,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '주소',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                          fontSize: Sizes.size18,
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => _addressAPI(),
-                        child: TextFormField(
-                          enabled: false,
-                          controller: _addressController,
-                          autocorrect: false,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: Sizes.size14,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "주소 검색시 클릭!",
-                            focusColor: Theme.of(context).colorScheme.primary,
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.5),
-                              ),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context).primaryColor,
-                              ),
-                            ),
-                            hintStyle: TextStyle(
-                              fontSize: Sizes.size14,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            disabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .secondary
-                                    .withOpacity(0.5),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      TextField(
-                        enabled: _additionalAddressInputEnable,
-                        controller: _additionalAddressController,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface,
-                          fontSize: Sizes.size14,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "나머지 주소 입력",
-                          focusColor: Theme.of(context).colorScheme.primary,
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                          ),
-                          hintStyle: TextStyle(
-                            fontSize: Sizes.size14,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          disabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.5),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Gaps.v16,
-                  FormButton(
-                    text: !_isSubmitAvailable() ? "입력해주세요" : "다음",
-                    disabled: !_isSubmitAvailable(),
-                    onTap: _onSubmit,
-                  )
+                  addressBox(context),
                 ],
               ),
             ),
           ),
         ),
+        bottomNavigationBar: BottomAppBar(
+          height: Sizes.size96 + Sizes.size18,
+          color: Colors.white,
+          shadowColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              top: Sizes.size6,
+              left: Sizes.size24,
+              right: Sizes.size24,
+              bottom: Sizes.size20,
+            ),
+            child: Center(
+              child: FormButton(
+                text: !_isAvailable() ? "입력해주세요" : "다음",
+                disabled: !_isAvailable(),
+                onTap: _onSubmit,
+              ),
+            ),
+          ),
+        ),
       ),
+    );
+  }
+
+  Column addressBox(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '주소',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.size18,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => _addressAPI(),
+          child: TextFormField(
+            enabled: false,
+            controller: _addressController,
+            autocorrect: false,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: Sizes.size14,
+            ),
+            decoration: InputDecoration(
+              hintText: "주소 검색시 클릭!",
+              focusColor: Theme.of(context).primaryColor,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade400,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              hintStyle: TextStyle(
+                fontSize: Sizes.size14,
+                color: Colors.grey.shade500,
+              ),
+            ),
+          ),
+        ),
+        Opacity(
+          opacity: _additionalAddressInputEnable ? 1 : 0,
+          child: TextField(
+            enabled: _additionalAddressInputEnable,
+            controller: _additionalAddressController,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: Sizes.size14,
+            ),
+            decoration: InputDecoration(
+              hintText: "나머지 주소 입력",
+              focusColor: Theme.of(context).primaryColor,
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey.shade400,
+                ),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              hintStyle: TextStyle(
+                fontSize: Sizes.size14,
+                color: Colors.grey.shade500,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Column phoneBox(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '전화번호',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.size18,
+          ),
+        ),
+        TextField(
+          controller: _phoneController,
+          keyboardType: TextInputType.number,
+          autocorrect: false,
+          style: const TextStyle(
+            color: Colors.black,
+            fontSize: Sizes.size16,
+          ),
+          onChanged: (value) => _isPhoneValid(),
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+            LengthLimitingTextInputFormatter(11),
+            PhoneInputFormatter(),
+          ],
+          decoration: InputDecoration(
+            hintText: "전화번호를 입력해주세요.",
+            focusColor: Theme.of(context).primaryColor,
+            isDense: false,
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Colors.grey.shade400,
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            hintStyle: TextStyle(
+              fontSize: Sizes.size14,
+              color: Colors.grey.shade500,
+            ),
+          ),
+        ),
+        if (_phone.isNotEmpty && _phone.length != 4 && !_phoneStatus)
+          Container(
+            alignment: Alignment.centerRight,
+            child: const Text(
+              "올바르지 않은 전화번호 형식 입니다.",
+              style: TextStyle(
+                fontSize: Sizes.size12,
+                color: Colors.red,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  Column genderBox(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '성별',
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.size18,
+          ),
+        ),
+        Gaps.v10,
+        Center(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GenderRadioButton(
+                text: '남자',
+                isSelected: Gender.man == _gender,
+                onTap: () => _setGender(Gender.man),
+              ),
+              Gaps.h12,
+              GenderRadioButton(
+                text: '여자',
+                isSelected: Gender.woman == _gender,
+                onTap: () => _setGender(Gender.woman),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Column birthdayBox(BuildContext context, double deviceWidth) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "생년월일",
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.size18,
+          ),
+        ),
+        Gaps.v8,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            Container(
+              width: deviceWidth / 4,
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size8,
+                horizontal: Sizes.size10,
+              ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size12,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColorLight,
+                      spreadRadius: 0.1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    )
+                  ]),
+              child: Text(
+                '$_year년',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: Sizes.size16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Container(
+              width: deviceWidth / 7,
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size8,
+                horizontal: Sizes.size10,
+              ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size12,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColorLight,
+                      spreadRadius: 0.1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    )
+                  ]),
+              child: Text(
+                '$_month월',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: Sizes.size16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Container(
+              width: deviceWidth / 7,
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size8,
+                horizontal: Sizes.size10,
+              ),
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size12,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColorLight,
+                      spreadRadius: 0.1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    )
+                  ]),
+              child: Text(
+                '$_day일',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: Sizes.size16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => _selectDate(context),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight,
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size12,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Theme.of(context).primaryColorLight,
+                      spreadRadius: 0.1,
+                      blurRadius: 2,
+                      offset: const Offset(1, 3),
+                    )
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size10,
+                    horizontal: Sizes.size12,
+                  ),
+                  child: FaIcon(
+                    FontAwesomeIcons.calendar,
+                    color: Theme.of(context).primaryColor,
+                    size: Sizes.size18,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        )
+      ],
+    );
+  }
+
+  Column nicknameBox(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "닉네임",
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: Sizes.size18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              "입력하지 않으면 자동으로 생성되요",
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: Sizes.size14,
+              ),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: _nicknameController,
+                keyboardType: TextInputType.text,
+                autocorrect: false,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: Sizes.size16,
+                ),
+                decoration: InputDecoration(
+                  hintText: "닉네임을 입력해주세요.",
+                  focusColor: Colors.grey.shade500,
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.grey.shade400,
+                    ),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Theme.of(context)
+                          .primaryColor, // 포커스가 될 때 보라색으로 변경될 테두리 색상
+                    ),
+                  ),
+                  hintStyle: TextStyle(
+                    fontSize: Sizes.size14,
+                    color: Colors.grey.shade500,
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _isNicknameValid,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).primaryColorLight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size14,
+                  ),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Sizes.size14,
+                ),
+              ),
+              child: Text(
+                "중복검사",
+                style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.w500,
+                  fontSize: Sizes.size16,
+                ),
+              ),
+            )
+          ],
+        ),
+        Gaps.v3,
+        if (_nickname.isNotEmpty && !_nicknameStatus)
+          Text(
+            _nicknameStatus ? "사용 가능한 닉네임입니다." : "사용할 수 없는 닉네임 입니다.",
+            style: TextStyle(
+              fontSize: Sizes.size14,
+              color: _nicknameStatus
+                  ? Theme.of(context).primaryColorDark
+                  : Colors.red.shade600,
+              fontWeight: FontWeight.w500,
+            ),
+          )
+      ],
     );
   }
 }
