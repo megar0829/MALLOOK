@@ -17,14 +17,6 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query(
             """
-            select c from Cart c
-            where c.status = true and c.member.id = :memberId
-            """
-    )
-    Optional<Cart> findMyCartByMember(@Param("memberId") UUID memberId);
-
-    @Query(
-            """
             select new io.ssafy.mallook.domain.cart.dto.response.CartDetailRes(
                 c.id, cp.id, cp.product.id, cp.productPrice, cp.productCount, cp.productName, cp.productImage, cp.productSize, cp.productColor, cp.productFee
             )
@@ -35,6 +27,14 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             """
     )
     Page<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId);
+    @Query(
+            """
+            select c from Cart c
+            where c.status = true and c.member.id = :memberId
+            """
+    )
+    Optional<Cart> findMyCartByMember(@Param("memberId") UUID memberId);
+
 
 
 }

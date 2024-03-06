@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface StyleProductRepository extends JpaRepository<StyleProduct, Long> {
-    List<StyleProduct> findAllByStyle_Id(Long id);
     @Modifying
     @Query(value = """
         update StyleProduct s

@@ -11,12 +11,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
-    @Modifying
-    @Query("""
-        update CartProduct cp set cp.status = false
-        where cp.id = :cartProductId and cp.status = true
-    """)
-    void deleteCartProduct(@Param("cartProductId") Long cartProductId);
     @Query(
             """
             select COALESCE(sum(cp.productCount), 0)
@@ -27,4 +21,10 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
             """
     )
     Long CountSameProductInCart( @Param("productId") Long productId);
+    @Modifying
+    @Query("""
+        update CartProduct cp set cp.status = false
+        where cp.id = :cartProductId and cp.status = true
+    """)
+    void deleteCartProduct(@Param("cartProductId") Long cartProductId);
 }

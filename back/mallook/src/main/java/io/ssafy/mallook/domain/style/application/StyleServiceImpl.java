@@ -27,22 +27,6 @@ import java.util.List;
 public class StyleServiceImpl implements StyleService{
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
-    @Override
-    @Transactional
-    public void saveStyle(UUID memberId, StyleInsertReq styleInsertRes) {
-        Style style = new Style().builder()
-                .name(styleInsertRes.name())
-                .heartCount(0L)
-                .member(new Member(memberId))
-                .build();
-        var st = styleRepository.save(style);
-        styleInsertRes.productIdList().forEach(ele ->
-                styleProductRepository.save(
-                        new StyleProduct().builder()
-                                .style(st)
-                                .product(new Product().builder().id(ele).build())
-                                .build()));
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -72,6 +56,22 @@ public class StyleServiceImpl implements StyleService{
         );
     }
 
+    @Override
+    @Transactional
+    public void saveStyle(UUID memberId, StyleInsertReq styleInsertRes) {
+        Style style = new Style().builder()
+                .name(styleInsertRes.name())
+                .heartCount(0L)
+                .member(new Member(memberId))
+                .build();
+        var st = styleRepository.save(style);
+        styleInsertRes.productIdList().forEach(ele ->
+                styleProductRepository.save(
+                        new StyleProduct().builder()
+                                .style(st)
+                                .product(new Product().builder().id(ele).build())
+                                .build()));
+    }
     @Transactional
     @Override
     public void DeleteStyle(UUID memberId, Long styleId) {

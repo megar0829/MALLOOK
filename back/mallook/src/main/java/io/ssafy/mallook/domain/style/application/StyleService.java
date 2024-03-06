@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.UUID;
 import java.util.List;
 public interface StyleService {
-    void saveStyle(UUID memberId, StyleInsertReq styleInsertRes);
     StylePageRes findStyleList(Pageable pageable);
     StyleDetailRes findStyleDetail(Long id);
+    void saveStyle(UUID memberId, StyleInsertReq styleInsertRes);
     void DeleteStyle(UUID memberId, Long styleId);
 }
