@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -46,6 +45,7 @@ public class HeartServiceImpl implements HeartService {
                 .ifPresent(like -> {
                     throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
                 });
+
         proxyScript.like();
         heartRepository.save(likeDto.toEntity(proxyMember, proxyScript));
     }
@@ -55,7 +55,10 @@ public class HeartServiceImpl implements HeartService {
     public void unlikeScript(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
+        Heart heart = heartRepository.findByMemberAndScript(proxyMember, proxyScript)
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
+
         proxyScript.unlike();
-        heartRepository.deleteByMemberAndScript(proxyMember, proxyScript);
+        heartRepository.deleteById(heart.getId());
     }
 }

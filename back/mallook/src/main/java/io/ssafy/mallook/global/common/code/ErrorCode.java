@@ -83,7 +83,8 @@ public enum ErrorCode {
 
     // 좋아요 에러(CODE: 400)
     // 좋아요 중복
-    DUPLICATE_LIKE(400,"B400", "이미 좋아요 한 스크립트입니다.")
+    DUPLICATE_LIKE(400, "B400", "이미 좋아요 한 스크립트입니다."),
+    NOT_FOUND_LIKE(404, "B400", "좋아요 취소를 할 수 없습니다.")
     ; // End
 
     /**
