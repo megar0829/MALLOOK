@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mallook/feature/onboarding/interests_screen.dart';
+import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 
 void main() {
   runApp(const Mallook());
@@ -34,8 +34,8 @@ class Mallook extends StatelessWidget {
       supportedLocales: const [
         Locale('ko', 'KR'),
       ],
-      // home: const MainNavigationScreen(),
-      home: const InterestsScreen(),
+      home: const MainNavigationScreen(),
+      // home: const LoginScreen(),
     );
   }
 }
