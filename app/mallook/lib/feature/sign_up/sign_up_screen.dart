@@ -276,8 +276,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-        Opacity(
+        AnimatedOpacity(
           opacity: _additionalAddressInputEnable ? 1 : 0,
+          duration: const Duration(milliseconds: 300),
           child: TextField(
             enabled: _additionalAddressInputEnable,
             controller: _additionalAddressController,
