@@ -1,9 +1,12 @@
 package io.ssafy.mallook.domain.product.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.shoppingmall.entity.Shoppingmall;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,5 +35,4 @@ public class Product extends BaseEntity {
     private String image;
     private String code;
     private String url;
-
 }

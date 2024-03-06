@@ -20,9 +20,9 @@ public class StyleProduct extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "style_id")
-    Style styleId;
+    Style style;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    Product productId;
+    Product product;
 }

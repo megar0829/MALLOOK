@@ -12,6 +12,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -33,8 +36,9 @@ public class CouponController {
             })
     @GetMapping
     public ResponseEntity<BaseResponse<List<CouponRes>>> findMyCouponList(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
-        var result = couponService.findMyCouponList(userSecurityDTO.getId());
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
+        var result = couponService.findMyCouponList(pageable, userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
