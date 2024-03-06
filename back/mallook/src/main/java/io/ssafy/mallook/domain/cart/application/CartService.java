@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface CartService {
-    void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq);
     CartPageRes findProductsInCart(Pageable pageable, UUID memberId);
+    void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq);
     void deleteProductInCart(Long productId);
 }

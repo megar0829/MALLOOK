@@ -7,6 +7,7 @@ import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
+import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.global.common.code.ErrorCode;
@@ -27,31 +28,6 @@ public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
     private  final CartProductRepository cartProductRepository;
     private final ProductRepository productRepository;
-    @Transactional
-    @Override
-    public void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq) {
-        var product = productRepository.findById(cartInsertReq.productId()).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        var cartProduct = cartRepository.findProductDetailInCart(memberId, cartInsertReq.productId());
-        Long cnt = 0L;
-        if (Objects.nonNull(cartProduct)) {
-            cnt = cartProduct.productCount();
-        }
-        // 수량 및 색상 확인
-        if (product.getQuantity()< cnt + cartInsertReq.productCount() || ! product.getColor().equals(cartInsertReq.productColor()) ) {
-            throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
-        }
-        CartProduct cp = new CartProduct().builder()
-                .productCount(cnt + cartInsertReq.productCount())
-                .productPrice(product.getPrice())
-                .productName(product.getName())
-                .productImage(product.getImage())
-                .productSize(cartInsertReq.productSize())
-                .productColor(cartInsertReq.productColor())
-                .productFee(cartInsertReq.productFee())
-                .build();
-        cartProductRepository.save(cp);
-    }
-
     @Override
     @Transactional(readOnly = true)
     public CartPageRes findProductsInCart(Pageable pageable, UUID memberId) {
@@ -59,6 +35,41 @@ public class CartServiceImpl implements CartService{
         return new CartPageRes(result.getContent(), result.getTotalPages(), result.getNumber());
     }
 
+    @Transactional
+    @Override
+    public void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq) {
+        var product = productRepository.findById(cartInsertReq.productId()).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        var cart = cartRepository.findMyCartByMember(memberId).orElse(new Cart());
+
+        // 수량 및 색상 확인
+        var cnt = cartProductRepository.CountSameProductInCart(memberId, cartInsertReq.productId());
+        Long sameProductCnt = cnt ==null?0: cnt;
+        if (product.getQuantity()< sameProductCnt + cartInsertReq.productCount() || ! product.getColor().equals(cartInsertReq.productColor()) ) {
+            throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
+        }
+        CartProduct cartProduct = new CartProduct().builder()
+                .productCount(sameProductCnt + cartInsertReq.productCount())
+                .productPrice(product.getPrice())
+                .productName(product.getName())
+                .productImage(product.getImage())
+                .productSize(cartInsertReq.productSize())
+                .productColor(cartInsertReq.productColor())
+                .productFee(cartInsertReq.productFee())
+                .build();
+        List<CartProduct> cpList = cart.getCartProductList();
+        cpList.add(cartProduct);
+        cart.setCartProductList(cpList);
+        cart.setMember(new Member(memberId));
+        if (cart.getTotalFee() == null) {
+            cart.setTotalFee(cartInsertReq.productFee() + cartInsertReq.productCount() *product.getPrice());
+            cart.setTotalPrice(cartInsertReq.productCount() * product.getPrice());
+        } else {
+            cart.setTotalFee(cart.getTotalFee() + cartInsertReq.productCount() * product.getPrice());
+            cart.setTotalPrice(cart.getTotalPrice() + cartInsertReq.productCount() * product.getPrice());
+        }
+        cartProductRepository.save(cartProduct);
+        cartRepository.save(cart);
+    }
     @Override
     @Transactional
     public void deleteProductInCart(Long cartProductId) {

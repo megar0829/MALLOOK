@@ -32,8 +32,4 @@ public class Product extends BaseEntity {
     private String image;
     private String code;
     private String url;
-
-    public Product(Long id) {
-        this.id = id;
-    }
 }

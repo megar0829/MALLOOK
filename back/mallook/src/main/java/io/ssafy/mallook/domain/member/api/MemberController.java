@@ -31,6 +31,20 @@ import java.util.Objects;
 public class MemberController {
 
     private final MemberService memberService;
+    @Operation(summary = "회원 정보 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "회원 정보 조회 실패")
+            })
+    @GetMapping
+    public ResponseEntity<BaseResponse<MemberDetailRes>> findMemberDetail(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
+        var result = memberService.findMemberDetail(userSecurityDTO.getId());
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                result
+        );
+    }
     @Operation(
             summary = "회원 정보 저장",
             responses = {
@@ -48,20 +62,7 @@ public class MemberController {
                 "추가 정보 저장 성공"
         );
     }
-    @Operation(summary = "회원 정보 조회",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
-                    @ApiResponse(responseCode = "404", description = "회원 정보 조회 실패")
-            })
-    @GetMapping
-    public ResponseEntity<BaseResponse<MemberDetailRes>> findMemberDetail(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
-        var result = memberService.findMemberDetail(userSecurityDTO.getId());
-        return BaseResponse.success(
-                SuccessCode.SELECT_SUCCESS,
-                result
-        );
-    }
+
     @Operation(summary = "닉네임 변경",
             responses = {
                     @ApiResponse(responseCode = "200", description = "닉네임 변경 성공"),
