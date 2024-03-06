@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="order")
+@Table(name="orders")
 public class Order extends BaseEntity {
 
     @Id

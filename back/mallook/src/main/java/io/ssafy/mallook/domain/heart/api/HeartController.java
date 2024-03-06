@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.heart.api;
 import io.ssafy.mallook.domain.heart.application.HeartService;
 import io.ssafy.mallook.domain.heart.dto.request.LikeDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -35,6 +36,19 @@ public class HeartController {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 heartService.getLikeScriptList(id, pageable)
+        );
+    }
+
+    @GetMapping("/styles")
+    public ResponseEntity<BaseResponse<Page<StyleListRes>>> getLikeStyleList(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                                             @PageableDefault(size = 20,
+                                                                             sort = "createdAt",
+                                                                             direction = Sort.Direction.DESC) Pageable pageable) {
+        UUID id = principal.getId();
+
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                heartService.getLikeStyleList(id, pageable)
         );
     }
 

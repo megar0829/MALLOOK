@@ -9,6 +9,7 @@ import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
+import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
@@ -37,6 +38,15 @@ public class HeartServiceImpl implements HeartService {
         return heartRepository.findAllByMember(proxyMember, pageable)
                 .map(Heart::getScript)
                 .map(ScriptListDto::toDto);
+    }
+
+    @Override
+    public Page<StyleListRes> getLikeStyleList(UUID id, Pageable pageable) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+
+        return heartRepository.findAllByMember(proxyMember, pageable)
+                .map(Heart::getStyle)
+                .map(StyleListRes::toDto);
     }
 
     @Override
