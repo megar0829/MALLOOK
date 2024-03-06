@@ -22,7 +22,7 @@ class FormButton extends StatelessWidget {
         child: AnimatedContainer(
           // MEMO: Container의 변화에 애니메이션 효과 적용
           padding: const EdgeInsets.symmetric(
-            vertical: Sizes.size12,
+            vertical: Sizes.size16,
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Sizes.size5),
@@ -44,6 +44,12 @@ class FormButton extends StatelessWidget {
             child: Text(
               text,
               textAlign: TextAlign.center,
+              style: TextStyle(
+                color: disabled
+                    ? Colors.black
+                    : Theme.of(context).primaryColorDark,
+                fontSize: Sizes.size18,
+              ),
             ),
           ),
         ),

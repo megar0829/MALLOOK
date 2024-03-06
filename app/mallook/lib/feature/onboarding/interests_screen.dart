@@ -3,6 +3,7 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/onboarding/tutorial_screen.dart';
 import 'package:mallook/feature/onboarding/widgets/interest_button.dart';
+import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 
 const interests = [
   "트렌디한",
@@ -47,6 +48,8 @@ class InterestsScreen extends StatefulWidget {
 class _InterestsScreenState extends State<InterestsScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
+  bool _isAvailable = false;
+  final Set<String> _selectedInterests = {};
 
   void _onScroll() {
     if (_scrollController.offset >= 120) {
@@ -82,10 +85,27 @@ class _InterestsScreenState extends State<InterestsScreen> {
     );
   }
 
+  void _addInterest(String interest) {
+    setState(() {
+      _selectedInterests.add(interest);
+      _isAvailable = true;
+    });
+  }
+
+  void _removeInterest(String interest) {
+    setState(() {
+      _selectedInterests.remove(interest);
+      if (_selectedInterests.isEmpty) _isAvailable = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         title: AnimatedOpacity(
           opacity: _showTitle ? 1.0 : 0.0,
           duration: const Duration(milliseconds: 300),
@@ -134,7 +154,11 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   runSpacing: 15,
                   children: [
                     for (var interest in interests)
-                      InterestButton(interest: interest)
+                      InterestButton(
+                        interest: interest,
+                        add: _addInterest,
+                        remove: _removeInterest,
+                      )
                   ],
                 ),
               ],
@@ -143,44 +167,23 @@ class _InterestsScreenState extends State<InterestsScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        height: Sizes.size96 + Sizes.size32,
-        color: Theme.of(context).colorScheme.background,
-        shadowColor: Theme.of(context).colorScheme.background,
-        surfaceTintColor: Theme.of(context).colorScheme.background,
+        height: Sizes.size96 + Sizes.size18,
+        color: Colors.white,
+        shadowColor: Colors.white,
+        surfaceTintColor: Colors.white,
         elevation: 5,
         child: Padding(
           padding: const EdgeInsets.only(
-            bottom: Sizes.size32,
-            top: Sizes.size16,
+            top: Sizes.size6,
             left: Sizes.size24,
             right: Sizes.size24,
+            bottom: Sizes.size20,
           ),
-          // MEMO: Another option: CupertinoButton
-          child: GestureDetector(
-            onTap: _onNextTap,
-            child: Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size16,
-              ),
-              decoration: BoxDecoration(
-                color: Theme.of(context)
-                    .colorScheme
-                    .onPrimaryContainer
-                    .withOpacity(0.7),
-                borderRadius: BorderRadius.circular(
-                  Sizes.size12,
-                ),
-              ),
-              child: Text(
-                'Next',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: Sizes.size18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+          child: Center(
+            child: FormButton(
+              text: !_isAvailable ? "선택해주세요" : "다음",
+              disabled: !_isAvailable,
+              onTap: _onNextTap,
             ),
           ),
         ),

@@ -5,9 +5,21 @@ class InterestButton extends StatefulWidget {
   const InterestButton({
     super.key,
     required this.interest,
+    required this.add,
+    required this.remove,
   });
 
   final String interest;
+  final Function add;
+  final Function remove;
+
+  void addInterest() {
+    add(interest);
+  }
+
+  void removeInterest() {
+    remove(interest);
+  }
 
   @override
   State<InterestButton> createState() => _InterestButtonState();
@@ -18,6 +30,12 @@ class _InterestButtonState extends State<InterestButton> {
 
   void _onTap() {
     setState(() {
+      // 선택되지 않았던 경우
+      if (!_isSelected) {
+        widget.addInterest();
+      } else {
+        widget.removeInterest();
+      }
       _isSelected = !_isSelected;
     });
   }

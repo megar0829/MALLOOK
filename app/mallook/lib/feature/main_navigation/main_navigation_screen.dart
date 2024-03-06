@@ -2,6 +2,11 @@ import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/category/category_screen.dart';
+import 'package:mallook/feature/home/home_screen.dart';
+import 'package:mallook/feature/style/style_screen.dart';
+import 'package:mallook/feature/user/user_screen.dart';
+import 'package:mallook/feature/worldcup/wordcup_screen.dart';
 
 const List<TabItem> items = [
   TabItem(
@@ -39,8 +44,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
         title: Center(
           child: Text(
             "MALLOOK",
@@ -52,54 +60,49 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
         ),
       ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Offstage(
-              offstage: _selectedIndex != 0,
-              child: const Scaffold(),
-            ),
-            Offstage(
-              offstage: _selectedIndex != 1,
-              child: const Scaffold(),
-            ),
-            Offstage(
-              offstage: _selectedIndex != 2,
-              child: const Scaffold(),
-            ),
-            Offstage(
-              offstage: _selectedIndex != 3,
-              child: const Scaffold(),
-            ),
-            Offstage(
-              offstage: _selectedIndex != 3,
-              child: const Scaffold(),
-            ),
-          ],
-        ),
+      body: Stack(
+        children: [
+          Offstage(
+            offstage: _selectedIndex != 0,
+            child: const HomeScreen(),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 1,
+            child: const CategoryScreen(),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 2,
+            child: const StyleScreen(),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 3,
+            child: const WorldCupScreen(),
+          ),
+          Offstage(
+            offstage: _selectedIndex != 4,
+            child: const UserScreen(),
+          ),
+        ],
       ),
-      bottomNavigationBar: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
+      bottomNavigationBar: BottomBarDefault(
+        colorSelected: Theme.of(context).primaryColor,
+        color: Colors.white,
+        backgroundColor: Colors.black87,
+        indexSelected: _selectedIndex,
+        items: items,
+        paddingVertical: Sizes.size12,
+        iconSize: Sizes.size20,
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(
             Sizes.size24,
           ),
           topRight: Radius.circular(
             Sizes.size24,
           ),
-        )),
-        child: BottomBarDefault(
-          colorSelected: Theme.of(context).colorScheme.primary,
-          color: Theme.of(context).colorScheme.onPrimary,
-          backgroundColor: Theme.of(context).colorScheme.shadow,
-          indexSelected: _selectedIndex,
-          items: items,
-          paddingVertical: Sizes.size12,
-          onTap: (index) => setState(() {
-            _selectedIndex = index;
-          }),
         ),
+        onTap: (index) => setState(() {
+          _selectedIndex = index;
+        }),
       ),
     );
   }
