@@ -4,6 +4,7 @@ package io.ssafy.mallook.domain.heart.dao;
 import io.ssafy.mallook.domain.heart.entity.Heart;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.domain.style.entity.Style;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +17,7 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
 
     Page<Heart> findAllByMember(Member member, Pageable pageable);
     Optional<Heart> findByMemberAndScript(Member member, Script script);
+
+    Optional<Heart> findByMemberAndStyle(Member member, Style style);
     void deleteByMemberAndScript(Member member, Script script);
 }

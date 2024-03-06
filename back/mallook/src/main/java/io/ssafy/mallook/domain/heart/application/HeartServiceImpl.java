@@ -8,6 +8,8 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.domain.style.dao.StyleRepository;
+import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class HeartServiceImpl implements HeartService {
     private final HeartRepository heartRepository;
     private final MemberRepository memberRepository;
     private final ScriptRepository scriptRepository;
+    private final StyleRepository styleRepository;
 
     @Override
     public Page<ScriptListDto> getLikeScriptList(UUID id, Pageable pageable) {
@@ -52,6 +55,19 @@ public class HeartServiceImpl implements HeartService {
 
     @Override
     @Transactional
+    public void likeStyle(UUID id, LikeDto likeDto) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        Style proxyStyle = styleRepository.getReferenceById(likeDto.targetId());
+        heartRepository.findByMemberAndStyle(proxyMember, proxyStyle)
+                .ifPresent(style -> {
+                    throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
+                });
+
+        heartRepository.save(likeDto.toEntity(proxyMember, proxyStyle));
+    }
+
+    @Override
+    @Transactional
     public void unlikeScript(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
@@ -59,6 +75,16 @@ public class HeartServiceImpl implements HeartService {
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
         proxyScript.unlike();
+        heartRepository.deleteById(heart.getId());
+    }
+
+    @Override
+    public void unlikeStyle(UUID id, LikeDto likeDto) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        Style proxyStyle = styleRepository.getReferenceById(likeDto.targetId());
+        Heart heart = heartRepository.findByMemberAndStyle(proxyMember, proxyStyle)
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
+
         heartRepository.deleteById(heart.getId());
     }
 }

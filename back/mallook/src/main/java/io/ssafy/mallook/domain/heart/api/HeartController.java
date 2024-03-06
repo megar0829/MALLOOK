@@ -38,7 +38,7 @@ public class HeartController {
         );
     }
 
-    @PostMapping("/script")
+    @PostMapping("/scripts")
     public ResponseEntity<BaseResponse<String>> likeScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                            @RequestBody @Valid LikeDto likeDto) {
         UUID id = principal.getId();
@@ -50,11 +50,35 @@ public class HeartController {
         );
     }
 
-    @DeleteMapping("/script")
+    @PostMapping("/styles")
+    public ResponseEntity<BaseResponse<String>> likeStyle(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                          @RequestBody @Valid LikeDto likeDto) {
+        UUID id = principal.getId();
+        heartService.likeStyle(id , likeDto);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "좋아요를 눌렀습니다."
+        );
+    }
+
+
+    @DeleteMapping("/scripts")
     public ResponseEntity<BaseResponse<String>> unlikeScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                              @RequestBody @Valid LikeDto likeDto) {
         UUID id = principal.getId();
         heartService.unlikeScript(id, likeDto);
+
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "좋아요를 취소했습니다."
+        );
+    }
+
+    @DeleteMapping("/styles")
+    public ResponseEntity<BaseResponse<String>> unlikeStyle(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid LikeDto likeDto) {
+        UUID id = principal.getId();
+        heartService.unlikeStyle(id, likeDto);
 
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,

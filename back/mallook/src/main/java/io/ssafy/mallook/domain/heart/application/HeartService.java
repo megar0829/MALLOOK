@@ -13,5 +13,9 @@ public interface HeartService {
 
     void likeScript(UUID id, LikeDto likeDto);
 
+    void likeStyle(UUID id, LikeDto likeDto);
+
     void unlikeScript(UUID id, LikeDto likeDto);
+
+    void unlikeStyle(UUID id, LikeDto likeDto);
 }
