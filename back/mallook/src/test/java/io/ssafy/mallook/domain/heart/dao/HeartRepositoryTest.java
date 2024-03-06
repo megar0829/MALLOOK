@@ -60,7 +60,7 @@ class HeartRepositoryTest {
                 .style(style)
                 .build();
         heartRepository.save(heart);
-        Page<Heart> page = heartRepository.findAllByMember(member, pageable);
+        Page<Heart> page = heartRepository.findAllByMemberAndStyleIsNotNull(member, pageable);
         assertThat(page).isNotNull();
         assertThat(page.getContent()).contains(heart);
     }

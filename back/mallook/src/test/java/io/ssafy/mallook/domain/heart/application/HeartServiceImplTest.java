@@ -75,10 +75,10 @@ class HeartServiceImplTest {
         Member proxyMember = memberRepository.getReferenceById(id);
         // when
         Page<Heart> emptyPage = new PageImpl<>(Collections.emptyList());
-        Mockito.when(heartRepository.findAllByMember(proxyMember, pageable)).thenReturn(emptyPage);
+        Mockito.when(heartRepository.findAllByMemberAndStyleIsNotNull(proxyMember, pageable)).thenReturn(emptyPage);
         Page<StyleListRes> result = heartService.getLikeStyleList(id, pageable);
         // then
-        Mockito.verify(heartRepository, Mockito.times(1)).findAllByMember(proxyMember, pageable);
+        Mockito.verify(heartRepository, Mockito.times(1)).findAllByMemberAndStyleIsNotNull(proxyMember, pageable);
         Mockito.verify(memberRepository, Mockito.times(2)).getReferenceById(id);
     }
 

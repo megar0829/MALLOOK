@@ -15,7 +15,10 @@ import java.util.Optional;
 @Repository
 public interface HeartRepository extends JpaRepository<Heart, Long> {
 
-    Page<Heart> findAllByMember(Member member, Pageable pageable);
+    Page<Heart> findAllByMemberAndScriptIsNotNull(Member member, Pageable pageable);
+
+    Page<Heart> findAllByMemberAndStyleIsNotNull(Member member, Pageable pageable);
+
     Optional<Heart> findByMemberAndScript(Member member, Script script);
 
     Optional<Heart> findByMemberAndStyle(Member member, Style style);

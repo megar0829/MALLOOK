@@ -35,7 +35,7 @@ public class HeartServiceImpl implements HeartService {
     public Page<ScriptListDto> getLikeScriptList(UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMember(proxyMember, pageable)
+        return heartRepository.findAllByMemberAndScriptIsNotNull(proxyMember, pageable)
                 .map(Heart::getScript)
                 .map(ScriptListDto::toDto);
     }
@@ -44,7 +44,7 @@ public class HeartServiceImpl implements HeartService {
     public Page<StyleListRes> getLikeStyleList(UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMember(proxyMember, pageable)
+        return heartRepository.findAllByMemberAndStyleIsNotNull(proxyMember, pageable)
                 .map(Heart::getStyle)
                 .map(StyleListRes::toDto);
     }
