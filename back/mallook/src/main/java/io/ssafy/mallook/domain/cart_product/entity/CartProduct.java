@@ -54,8 +54,5 @@ public class CartProduct extends BaseEntity {
     //쇼핑몰 id
 //    private Long shopMallId;
 
-    public CartProduct(Long id) {
-        this.id = id;
-    }
 
 }

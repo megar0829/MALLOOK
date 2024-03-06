@@ -1,6 +1,8 @@
 package io.ssafy.mallook.domain.style.application;
 
+import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
@@ -25,21 +27,21 @@ import java.util.List;
 public class StyleServiceImpl implements StyleService{
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
-    private final ProductRepository productRepository;
     @Override
     @Transactional
     public void saveStyle(UUID memberId, StyleInsertReq styleInsertRes) {
         Style style = new Style().builder()
                 .name(styleInsertRes.name())
                 .heartCount(0L)
+                .member(new Member(memberId))
                 .build();
         var st = styleRepository.save(style);
-        List<Long> products = styleInsertRes.productIdList();
-        products.stream()
-                .map(ele-> styleProductRepository.save(new StyleProduct().builder()
-                        .style(st)
-                        .product(productRepository.findById(ele).orElseThrow(()->new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)))
-                        .build()));
+        styleInsertRes.productIdList().forEach(ele ->
+                styleProductRepository.save(
+                        new StyleProduct().builder()
+                                .style(st)
+                                .product(new Product().builder().id(ele).build())
+                                .build()));
     }
 
     @Override
@@ -54,7 +56,7 @@ public class StyleServiceImpl implements StyleService{
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public StyleDetailRes findStyleDetail(Long id) {
         var style = styleRepository.findById(id).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         return new StyleDetailRes(
@@ -70,9 +72,10 @@ public class StyleServiceImpl implements StyleService{
         );
     }
 
+    @Transactional
     @Override
     public void DeleteStyle(UUID memberId, Long styleId) {
+        styleProductRepository.deleteMyStyleProduct(styleId);
         styleRepository.deleteMyStyle(memberId, styleId);
     }
-
 }

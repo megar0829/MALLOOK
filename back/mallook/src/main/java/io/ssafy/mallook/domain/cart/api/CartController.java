@@ -34,7 +34,7 @@ public class CartController {
     @GetMapping
     public ResponseEntity<BaseResponse<CartPageRes>> findProductsInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable
+            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page=0) Pageable pageable
         ){
         var result = cartService.findProductsInCart(pageable, userSecurityDTO.getId());
         return BaseResponse.success(

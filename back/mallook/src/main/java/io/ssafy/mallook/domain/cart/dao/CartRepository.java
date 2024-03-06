@@ -26,11 +26,12 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query(
             """
             select new io.ssafy.mallook.domain.cart.dto.response.CartDetailRes(
-                c.id, cp.id, cp.productPrice, cp.productCount, cp.productName, cp.productImage, cp.productSize, cp.productColor, cp.productFee
-            ) 
-            from Cart c 
-            join CartProduct cp 
-            where c.id = cp.cart.id and c.member.id = :memberId and c.status = true
+                c.id, cp.id, cp.product.id, cp.productPrice, cp.productCount, cp.productName, cp.productImage, cp.productSize, cp.productColor, cp.productFee
+            )
+            from Cart c
+            join CartProduct cp on cp.cart.id = c.id
+            where c.member.id = :memberId and c.status = true and cp.status = true
+            order by cp.id
             """
     )
     Page<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId);

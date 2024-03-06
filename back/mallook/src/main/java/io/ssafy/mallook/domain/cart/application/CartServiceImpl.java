@@ -42,8 +42,7 @@ public class CartServiceImpl implements CartService{
         var cart = cartRepository.findMyCartByMember(memberId).orElse(new Cart());
 
         // 수량 및 색상 확인
-        var cnt = cartProductRepository.CountSameProductInCart(memberId, cartInsertReq.productId());
-        Long sameProductCnt = cnt ==null?0: cnt;
+        var sameProductCnt = cartProductRepository.CountSameProductInCart(cartInsertReq.productId());
         if (product.getQuantity()< sameProductCnt + cartInsertReq.productCount() || ! product.getColor().equals(cartInsertReq.productColor()) ) {
             throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }

@@ -14,17 +14,17 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
     @Modifying
     @Query("""
         update CartProduct cp set cp.status = false
-        where cp.id = :id and cp.status = true
+        where cp.id = :cartProductId and cp.status = true
     """)
-    void deleteCartProduct(@Param("id") Long id);
+    void deleteCartProduct(@Param("cartProductId") Long cartProductId);
     @Query(
             """
-            select sum(cp.productCount)
+            select COALESCE(sum(cp.productCount), 0)
             from CartProduct cp
             join cp.cart c
-            where c.member.id = :memberId and c.status = true
+            where c.status = true
             and cp.product.id = :productId and cp.status = true
             """
     )
-    Long CountSameProductInCart(@Param("memberId") UUID memberId, @Param("productId") Long productId);
+    Long CountSameProductInCart( @Param("productId") Long productId);
 }
