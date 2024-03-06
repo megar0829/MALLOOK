@@ -1,0 +1,79 @@
+.container {
+  width: 500px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+}
+
+.textDiv {
+  width: 400px;
+  height: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+.span1 {
+  font-size: 35px;
+  font-weight: 800;
+}
+.span2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: grey;
+}
+
+.keywordListDiv {
+  width: 400px;
+  height: 400px;
+  margin-bottom: 20px;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+/* 스크롤바 자체 영역 */
+.keywordListDiv::-webkit-scrollbar {
+    width: 10px;
+}
+/* 실제 움직이는 스크롤 영역 */
+.keywordListDiv::-webkit-scrollbar-thumb {
+  background-color: #c9c9ca;
+  border-radius: 10px;
+  background-clip: padding-box;
+  border: 2px solid transparent;
+}
+/* 스크롤바 배경 영역 */
+.keywordListDiv::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.keywordDiv {
+  height: 40px;
+  border-radius: 8px;
+  margin: 10px 8px;
+  box-shadow: 1px 1px 5px gray;
+  padding: 5px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.keyword {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgb(104, 103, 103);
+}
+
+.button {
+  width: 250px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+  background-color: #23BD33;
+  margin-right: 5px;
+  box-shadow: 1px 1px 5px gray;
+}
