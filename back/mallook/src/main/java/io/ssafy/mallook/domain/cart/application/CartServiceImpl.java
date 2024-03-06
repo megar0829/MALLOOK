@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.cart.application;
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
+import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
@@ -12,6 +13,7 @@ import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.tool.schema.spi.ExceptionHandler;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,8 +54,9 @@ public class CartServiceImpl implements CartService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<CartDetailRes> findProductsInCart(UUID memberId) {
-        return cartRepository.findProductsInCart(memberId);
+    public CartPageRes findProductsInCart(Pageable pageable, UUID memberId) {
+        var result = cartRepository.findProductsInCart(pageable, memberId);
+        return new CartPageRes(result.getContent(), result.getTotalPages(), result.getNumber());
     }
 
     @Override
