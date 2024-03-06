@@ -40,12 +40,12 @@ public class CartServiceImpl implements CartService{
     public void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq) {
         var product = productRepository.findById(cartInsertReq.productId()).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         var cart = cartRepository.findMyCartByMember(memberId).orElse(new Cart());
-
         // 수량 및 색상 확인
         var sameProductCnt = cartProductRepository.CountSameProductInCart(cartInsertReq.productId());
         if (product.getQuantity()< sameProductCnt + cartInsertReq.productCount() || ! product.getColor().equals(cartInsertReq.productColor()) ) {
             throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }
+
         CartProduct cartProduct = new CartProduct().builder()
                 .productCount(sameProductCnt + cartInsertReq.productCount())
                 .productPrice(product.getPrice())
@@ -55,6 +55,8 @@ public class CartServiceImpl implements CartService{
                 .productColor(cartInsertReq.productColor())
                 .productFee(cartInsertReq.productFee())
                 .build();
+        cartProductRepository.save(cartProduct);
+
         List<CartProduct> cpList = cart.getCartProductList();
         cpList.add(cartProduct);
         cart.setCartProductList(cpList);
@@ -66,7 +68,6 @@ public class CartServiceImpl implements CartService{
             cart.setTotalFee(cart.getTotalFee() + cartInsertReq.productCount() * product.getPrice());
             cart.setTotalPrice(cart.getTotalPrice() + cartInsertReq.productCount() * product.getPrice());
         }
-        cartProductRepository.save(cartProduct);
         cartRepository.save(cart);
     }
     @Override
