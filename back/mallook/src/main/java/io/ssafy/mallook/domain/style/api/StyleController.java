@@ -22,8 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.text.ParseException;
 
 @RestController
 @RequestMapping("/api/styles")
@@ -65,10 +63,10 @@ public class StyleController {
                 result
         );
     }
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<StyleDetailRes>> findStyleDetail(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestParam(name="id") Long id){
+            @PathVariable("id") Long id){
         var result = styleService.findStyleDetail(id);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
