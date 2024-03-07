@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.cart.application;
 
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
+import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
@@ -68,8 +69,8 @@ public class CartServiceImpl implements CartService{
     }
     @Override
     @Transactional
-    public void deleteProductInCart(Long cartProductId) {
-        cartProductRepository.deleteCartProduct(cartProductId);
+    public void deleteProductInCart(CartDeleteReq cartDeleteReq) {
+        cartDeleteReq.cartProductList().forEach(cartProductRepository::deleteCartProduct);
     }
 
 

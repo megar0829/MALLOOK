@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.cart.api;
 
 import io.ssafy.mallook.domain.cart.application.CartService;
+import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -63,8 +64,8 @@ public class CartController {
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteProductInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody Long cartProductId){
-        cartService.deleteProductInCart(cartProductId);
+            @RequestBody CartDeleteReq cartDeleteReq){
+        cartService.deleteProductInCart(cartDeleteReq);
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,
                 "장바구니 내 상품 삭제 성공"
