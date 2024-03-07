@@ -36,4 +36,12 @@ public class Script extends BaseEntity {
     public boolean isWrittenByTargetMember(UUID memberId) {
         return this.member.getId().equals(memberId);
     }
+
+    public void like() {
+        this.heartCount++;
+    }
+
+    public void unlike() {
+        this.heartCount--;
+    }
 }
