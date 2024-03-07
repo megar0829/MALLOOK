@@ -25,9 +25,9 @@ public class Product extends BaseEntity {
     private Long price;
     private Long quantity;
     private String brandName;
-    private Long size;
+    private String size;
     private String color;
-    private Long fee;
+    private Integer fee;
     private String image;
     private String code;
     private String url;
