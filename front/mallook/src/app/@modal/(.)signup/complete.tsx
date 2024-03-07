@@ -20,7 +20,6 @@ export default function Complete() {
   };
 
   const goKeyword = async () => {
-    onClose();
     router.push("/choose-keyword");
   }
 
