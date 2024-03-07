@@ -36,7 +36,7 @@ public class StyleController {
     @GetMapping
     public ResponseEntity<BaseResponse<StylePageRes>> findStyleList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
+            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
         var result = styleService.findStyleList(pageable);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

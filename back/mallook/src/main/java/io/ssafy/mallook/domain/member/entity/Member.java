@@ -4,7 +4,6 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.*;

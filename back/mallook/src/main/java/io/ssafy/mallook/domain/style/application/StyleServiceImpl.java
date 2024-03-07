@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.style.application;
 
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
@@ -15,13 +14,11 @@ import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StyleServiceImpl implements StyleService{
