@@ -1,12 +1,8 @@
 package io.ssafy.mallook.domain.product.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
-import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
-import io.ssafy.mallook.domain.shoppingmall.entity.Shoppingmall;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter

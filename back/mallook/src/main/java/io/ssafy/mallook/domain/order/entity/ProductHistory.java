@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.order.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
-import io.ssafy.mallook.domain.shoppingmall.entity.Shoppingmall;
 import jakarta.persistence.*;
 import lombok.*;
 

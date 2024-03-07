@@ -8,7 +8,6 @@ public record ShoppingMallListDto(
         String name,
         String url
 ) {
-
     public static ShoppingMallListDto toDto(ShoppingMall shoppingMall) {
         return ShoppingMallListDto.builder()
                 .name(shoppingMall.getName())

@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class ShoppingMallServiceImpl implements  ShoppingMallService{
+public class ShoppingMallServiceImpl implements ShoppingMallService {
 
     private final ShoppingMallRepository shoppingMallRepository;
 
