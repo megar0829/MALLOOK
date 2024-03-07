@@ -22,10 +22,10 @@ public class ProductServiceImpl implements ProductService {
     private final ProductCustomRepository productCustomRepository;
 
     @Override
-    public Page<ProductListDto> getProductList(Pageable pageable) {
-        List<ProductListDto> list = productCustomRepository.findAllProduct()
+    public List<ProductListDto> getProductList(Pageable pageable) {
+        return productCustomRepository.findAllProduct()
                 .stream()
                 .map(ProductListDto::toDto)
                 .toList();
-        return new PageImpl<>(list, pageable, productPage.getTotalElements());    }
+    }
 }
