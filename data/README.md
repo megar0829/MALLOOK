@@ -5,3 +5,8 @@
 ## 하둡 클러스터 생성 및 복제
 - 하둡 클러스터 생성 학습
 - [Apache hadoop, spark 자체 클러스터 구축](https://www.youtube.com/watch?v=qiEQ7gnYRfk)
+
+## 상품 카테고리 상세 분류 및 Hiver, W컨셉 쇼핑몰 API 확인
+- 상세 분류 내용 회의록에 정리
+- 포스트맨을 이용하여 요청 가능
+- 상세한 내용은 크롤링 생각해보기
