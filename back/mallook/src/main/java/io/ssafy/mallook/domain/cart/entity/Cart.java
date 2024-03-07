@@ -4,10 +4,14 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
-
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
+import lombok.*;
+
 
 @Getter
 @Setter

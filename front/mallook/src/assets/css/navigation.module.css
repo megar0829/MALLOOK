@@ -1,0 +1,42 @@
+.container {
+  width: inherit;
+  height: 85px;
+  background-color: black;
+  margin-top: 0px;
+  padding-left: 15px;
+  padding-right: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leftContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: inherit;
+  width: 500px; 
+}
+
+.leftContainerUl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: inherit;
+  padding-left: 0px;
+  width: 300px; 
+}
+
+.leftContainerUl a {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.rightContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: inherit;
+  padding-left: 0px;
+  width: 150px; 
+}

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
-import styles from "../styles/navigation.module.css";
+import styles from "../assets/css/navigation.module.css";
 
 import imgLogo from "../../public/images/logo.png";
 import iconSearch from "../../public/images/search.png";
@@ -48,7 +48,7 @@ export default function Navigation() {
 
         <ul className={styles.rightContainer}>
           <li>
-            <Link href="/">
+            <Link href="/signup">
               <Image 
                 src={iconSearch} 
                 alt="Logo Image" 
@@ -72,7 +72,7 @@ export default function Navigation() {
             </Link>
           </li>
           <li>
-            <Link href="/my-page">
+            <Link href="/login">
               <Image 
                 src={iconProfile} 
                 alt="Logo Image" 
