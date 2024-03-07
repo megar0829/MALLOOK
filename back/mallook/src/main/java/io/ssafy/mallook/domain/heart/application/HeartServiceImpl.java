@@ -89,6 +89,7 @@ public class HeartServiceImpl implements HeartService {
     }
 
     @Override
+    @Transactional
     public void unlikeStyle(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Style proxyStyle = styleRepository.getReferenceById(likeDto.targetId());
