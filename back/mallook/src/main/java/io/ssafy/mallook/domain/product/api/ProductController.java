@@ -12,6 +12,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,10 +29,11 @@ public class ProductController {
             size = 20,
             sort = "name",
             direction = Sort.Direction.ASC
-    ) Pageable pageable) {
+    ) Pageable pageable, @RequestParam(required = false) String mainCategory, @RequestParam(required = false) String subCategory
+    ) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getProductList(pageable)
+                productService.getProductList(pageable, mainCategory, subCategory)
         );
     }
 }
