@@ -112,8 +112,11 @@ public class JwtService {
         UserSecurityDTO userSecurityDTO = userDetailsService.loadUserByUsername(id);
         String newAccessToken = createAccessToken(userSecurityDTO);
         String newRefreshToken = createRefreshToken(userSecurityDTO);
-        return new TokenDto(newAccessToken, newRefreshToken,
-                userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+        return new TokenDto(
+                newAccessToken,
+                newRefreshToken,
+                userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
+        );
     }
 
     public Claims verifyJwtToken(String token) {

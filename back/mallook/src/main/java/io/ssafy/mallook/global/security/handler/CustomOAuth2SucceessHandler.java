@@ -34,7 +34,6 @@ public class CustomOAuth2SucceessHandler implements AuthenticationSuccessHandler
                                         Authentication authentication) throws IOException {
 
         UserSecurityDTO userSecurityDTO = (UserSecurityDTO) authentication.getPrincipal();
-        Collection<GrantedAuthority> authorities = userSecurityDTO.getAuthorities();
 
         String accessToken = jwtService.createAccessToken(userSecurityDTO);
         String refreshToken = jwtService.createRefreshToken(userSecurityDTO);
@@ -42,7 +41,7 @@ public class CustomOAuth2SucceessHandler implements AuthenticationSuccessHandler
         String redirectURI = UriComponentsBuilder.fromUriString(REDIRECT_URI_SUCCESS)
                 .queryParam("access-token", accessToken)
                 .queryParam("refresh-token", refreshToken)
-                .queryParam("roles", authorities)
+                .queryParam("roles", userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
                 .toUriString();
         response.sendRedirect(redirectURI);
     }

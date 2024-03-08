@@ -9,6 +9,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member.entity.MemberRole;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
+import io.ssafy.mallook.global.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
