@@ -74,7 +74,8 @@ public class JwtService {
         String token = request.getHeader(ACCESS_HEADER_AUTHORIZATION);
         // access token is null
         if (Objects.isNull(token)) {
-            throw new AccessTokenException(AccessTokenException.ACCESS_TOKEN_ERROR.UN_ACCEPT);
+//            throw new AccessTokenException(AccessTokenException.ACCESS_TOKEN_ERROR.UN_ACCEPT);
+            return null;
         }
         // token type not defined
         String[] separatedToken = token.split(" ");

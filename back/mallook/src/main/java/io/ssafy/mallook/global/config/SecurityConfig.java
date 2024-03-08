@@ -28,7 +28,7 @@ import java.util.List;
 public class SecurityConfig {
     private static final String[] URL_WHITE_LIST = {
             "/error", "/login", "/favicon.ico",
-            "/health", "/api-docs/**", "/swagger-ui/**",
+            "/actuator/**", "/actuator", "/api-docs/**", "/swagger-ui/**",
             "/swagger-resources/**", "/swagger-ui.html", "/api/token/**",
             "/api/auth/login/kakao"
     };
@@ -53,10 +53,12 @@ public class SecurityConfig {
 
         return http.build();
     }
+
     @Bean
     public JwtAuthenticateFilter jwtAuthenticateFilter() {
         return new JwtAuthenticateFilter(jwtService, URL_WHITE_LIST);
     }
+
     // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {
         final List<String> allowedHeaders = List.of("*");

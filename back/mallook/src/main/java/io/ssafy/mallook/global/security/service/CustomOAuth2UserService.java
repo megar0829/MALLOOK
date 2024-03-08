@@ -56,28 +56,22 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Optional<Member> member = memberRepository.findBySocialTypeAndSocialId(socialType, socialId);
         return getSecurityDTO(member, stringObjectMap, phoneObj, socialType, socialId, email);
     }
-
+    // 유저 정보 로드 (모바일)
+    @Transactional
     public UserSecurityDTO getMobileSecurityDto(SocialType socialType, Object social) {
-        SocialData socialData = null;
-        if (SocialType.KAKAO.equals(socialType)) {
-            KakaoAuthTokenRes kakaoAuthTokenRes = (KakaoAuthTokenRes) social;
-            socialData = new SocialData(
-                    socialType,
-                    kakaoAuthTokenRes.id().toString(),
-                    kakaoAuthTokenRes.kakaoAccount().email()
-            );
-        }
-        var member = memberRepository.findBySocialTypeAndSocialId(socialType, socialData.id());
+        SocialData socialData = getSocialData(socialType, social);
+        var member = memberRepository.findBySocialTypeAndSocialId(socialType, Objects.requireNonNull(socialData).id());
         // 존재한다면 로그인 처리
         if (member.isPresent()) {
             return getUserSecurityDTO(member.get());
         }
-        // TODO: 전화번호 인증 로직 추가
-        Object phoneObj = null;
+
+        // 존재하지 않는 경우 회원가입 로직
+        // TODO: 전화번호 인증 로직 추가;
         // 존재 하지 않으지만 휴대폰 번호는 존재하는 경우
         // 핸드폰 번호가 있다면 핸드폰 번호를 이용해서 기존 회원 확인
-        if (Objects.nonNull(phoneObj)) {
-            Optional<Member> phoneMember = memberRepository.findByPhone((String) phoneObj);
+        if (Objects.nonNull(socialData.phone())) {
+            Optional<Member> phoneMember = memberRepository.findByPhone(socialData.phone());
 
             // 핸드폰 정보에 해당하는 유저가 있다면 신규 소셜 로그인 플랫폼 등록
             if (phoneMember.isPresent()) {
@@ -88,7 +82,25 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 비회원인 경우 회원 가입
         return getUserSecurityDTO(registerMember(socialType, socialData.id(), socialData.email()));
     }
-
+    // 모바일 소셜 타입 및 데이터 변환
+    private static SocialData getSocialData(SocialType socialType, Object social) {
+        return switch (socialType) {
+            case KAKAO -> {
+                if (social instanceof KakaoAuthTokenRes kakaoAuthTokenRes) {
+                    yield new SocialData(
+                            socialType,
+                            kakaoAuthTokenRes.id().toString(),
+                            kakaoAuthTokenRes.kakaoAccount().email(),
+                            null // TODO
+                    );
+                }
+                yield null;
+            }
+            case NAVER -> null;
+            case GOOGLE -> null;
+        };
+    }
+    // 유저 정보 로드 (웹)
     private UserSecurityDTO getSecurityDTO(Optional<Member> member, Map<String, Object> stringObjectMap, Object phoneObj, SocialType socialType, String socialId, String email) {
         // 존재한다면 로그인 처리
         if (member.isPresent()) {
@@ -121,12 +133,12 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member member = Member.builder()
                 .build();
-        member.getRole().add(MemberRole.USER); // 최초 권한 설정
+        member.getRole().add(MemberRole.BASIC_USER); // 최초 권한 설정
         socialMember.setMember(member);
         return memberRepository.save(member);
     }
 
-    // 신규 소셜 플랫폼 등록
+    // 신규 소셜(웹) 플랫폼 등록
     public UserSecurityDTO updateSocialPlatform(Member member, SocialType socialType, String socialId, Map<String, Object> stringObjectMap) {
         SocialMember socialMember = SocialMember.builder()
                 .socialType(socialType)
@@ -137,7 +149,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return getUserSecurityDTO(memberRepository.save(member), stringObjectMap);
     }
 
-    // 신규 소셜 플랫폼 등록
+    // 신규 소셜(모바일) 플랫폼 등록
     public UserSecurityDTO updateSocialPlatform(Member member, SocialType socialType, String socialId) {
         SocialMember socialMember = SocialMember.builder()
                 .socialType(socialType)

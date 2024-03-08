@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.member.entity;
 
 public enum MemberRole {
     ANONYMOUS("익명 사용자"),
+    BASIC_USER("추가 정보 미등록 유저"),
     USER("유저"),
     MANAGER("매니저"),
     ADMIN("관리자"),
