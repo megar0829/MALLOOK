@@ -39,13 +39,23 @@ public class JwtService {
      */
     public Authentication authenticateAccessToken(HttpServletRequest request) {
         String token = requestHeaderJwtParser(request); // access token 정보
-        Claims claims = verifyJwtToken(token);
 
-        UserSecurityDTO userSecurityDTO = UserSecurityDTO.fromSocial()
-                .username(claims.getSubject())
-                .password(UUID.randomUUID().toString())
-                .authorities(JwtClaimsParser.getMemberAuthorities(claims))
-                .create();
+        UserSecurityDTO userSecurityDTO;
+        if (Objects.isNull(token)) {
+            userSecurityDTO = UserSecurityDTO.fromSocial()
+                    .username(UUID.randomUUID().toString())
+                    .password(UUID.randomUUID().toString())
+                    .authorities(JwtClaimsParser.getAnonymousRole())
+                    .create();
+        } else {
+            Claims claims = verifyJwtToken(token);
+
+            userSecurityDTO = UserSecurityDTO.fromSocial()
+                    .username(claims.getSubject())
+                    .password(UUID.randomUUID().toString())
+                    .authorities(JwtClaimsParser.getMemberAuthorities(claims))
+                    .create();
+        }
 
         return new UsernamePasswordAuthenticationToken(
                 userSecurityDTO,

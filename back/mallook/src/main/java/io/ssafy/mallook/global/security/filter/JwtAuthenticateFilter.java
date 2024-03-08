@@ -32,12 +32,6 @@ public class JwtAuthenticateFilter extends OncePerRequestFilter {
         log.trace("Request Params: {}", request.getParameterMap());
         log.trace("Access-token: {}", request.getHeader("Authorization"));
 
-        // WHITE LIST의 패스에 대한 JWT 토큰 검증 패스
-        if (PatternMatchUtils.simpleMatch(URL_WHITE_LIST, request.getRequestURI())) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
         try {
             Authentication authentication = jwtService.authenticateAccessToken(request);
 

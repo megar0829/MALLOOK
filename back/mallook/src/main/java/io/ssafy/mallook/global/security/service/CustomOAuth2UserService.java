@@ -72,6 +72,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         if (member.isPresent()) {
             return getUserSecurityDTO(member.get());
         }
+        // TODO: 전화번호 인증 로직 추가
         Object phoneObj = null;
         // 존재 하지 않으지만 휴대폰 번호는 존재하는 경우
         // 핸드폰 번호가 있다면 핸드폰 번호를 이용해서 기존 회원 확인
