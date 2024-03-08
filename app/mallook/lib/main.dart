@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:mallook/feature/login/LoginScreen.dart';
+import 'package:mallook/feature/sign_up/sign_up_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +12,7 @@ void main() {
   runApp(const Mallook());
 }
 
-const seedColor = Color(0xff6750a4);
+const seedColor = Color(0xffddc8ff);
 
 class Mallook extends StatelessWidget {
   const Mallook({super.key});
@@ -23,10 +22,9 @@ class Mallook extends StatelessWidget {
     return MaterialApp(
       title: 'Mallook',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seedColor,
-          brightness: Brightness.light,
-        ),
+        primaryColor: const Color(0xff9452d5),
+        primaryColorLight: const Color(0xffe5d7ff),
+        primaryColorDark: const Color(0xff5a1ca6),
         // textTheme: GoogleFonts.nanumGothicTextTheme(),
         textTheme: GoogleFonts.notoSansKrTextTheme(
           Theme.of(context).textTheme,
