@@ -1,11 +1,8 @@
 package io.ssafy.mallook.domain.style.api;
 
-import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
 import io.ssafy.mallook.domain.style.application.StyleService;
-import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
-import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
 import io.ssafy.mallook.domain.style.dto.response.StylePageRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
@@ -30,6 +27,40 @@ import org.springframework.web.bind.annotation.*;
 public class StyleController {
     private final StyleService styleService;
     @Operation(
+            summary = "코디 목록 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "코디 목록 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "코디 목록 조회 실패")
+            }
+    )
+    @GetMapping
+    public ResponseEntity<BaseResponse<StylePageRes>> findStyleList(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
+        var result = styleService.findStyleList(pageable);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                result
+        );
+    }
+    @Operation(
+            summary = "코디 상세 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "코디 상세 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "코디 상세 조회 실패")
+            }
+    )
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<StyleDetailRes>> findStyleDetail(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @PathVariable("id") Long id){
+        var result = styleService.findStyleDetail(id);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                result
+        );
+    }
+    @Operation(
             summary = "코디 등록",
             responses = {
                     @ApiResponse(responseCode = "200", description = "코디 등록 성공"),
@@ -46,33 +77,14 @@ public class StyleController {
                 "코디 등록 성공"
         );
     }
+
     @Operation(
-            summary = "코디 목록 조회",
+            summary = "코디 삭제",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "코디 등록 성공"),
-                    @ApiResponse(responseCode = "404", description = "코디 등록 실패")
+                    @ApiResponse(responseCode = "200", description = "코디 삭제 성공"),
+                    @ApiResponse(responseCode = "404", description = "코디 삭제 실패")
             }
     )
-    @GetMapping
-    public ResponseEntity<BaseResponse<StylePageRes>> findStyleList(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
-        var result = styleService.findStyleList(pageable);
-        return BaseResponse.success(
-                SuccessCode.SELECT_SUCCESS,
-                result
-        );
-    }
-    @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<StyleDetailRes>> findStyleDetail(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PathVariable("id") Long id){
-        var result = styleService.findStyleDetail(id);
-        return BaseResponse.success(
-                SuccessCode.SELECT_SUCCESS,
-                result
-        );
-    }
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteMyStyle(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,

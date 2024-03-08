@@ -16,7 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SQLRestriction("status = true")
 @Table(name = "orders")
-public class Order extends BaseEntity {
+public class Orders extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

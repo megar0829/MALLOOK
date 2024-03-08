@@ -20,6 +20,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
+    @Transactional(readOnly= true)
+    @Override
+    public MemberDetailRes findMemberDetail(UUID memberId) {
+        var memberDetail = memberRepository.findById(memberId)
+                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return new MemberDetailRes(memberDetail.getNickname(),
+                sdf.format(memberDetail.getBirth()),
+                memberDetail.getGender().toString(),
+                memberDetail.getPhone(),
+                memberDetail.getPoint(),
+                memberDetail.getExp(),
+                memberDetail.getAddress().getCity(),
+                memberDetail.getAddress().getDistrict(),
+                memberDetail.getAddress().getAddress(),
+                memberDetail.getAddress().getZipcode());
+    }
+
     @Transactional
     @Override
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
@@ -44,23 +62,6 @@ public class MemberServiceImpl implements MemberService{
         }
     }
 
-    @Transactional(readOnly= true)
-    @Override
-    public MemberDetailRes findMemberDetail(UUID memberId) {
-        var memberDetail = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return new MemberDetailRes(memberDetail.getNickname(),
-                sdf.format(memberDetail.getBirth()),
-                memberDetail.getGender().toString(),
-                memberDetail.getPhone(),
-                memberDetail.getPoint(),
-                memberDetail.getExp(),
-                memberDetail.getAddress().getCity(),
-                memberDetail.getAddress().getDistrict(),
-                memberDetail.getAddress().getAddress(),
-                memberDetail.getAddress().getZipcode());
-    }
 
     @Transactional
     @Override
