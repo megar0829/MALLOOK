@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface ProductCustomRepository {
 
-    List<Product> findAllProduct();
+    List<Product> findAllProduct(String genderCategory,
+                                 String mainCategory,
+                                 String subCategory);
 }

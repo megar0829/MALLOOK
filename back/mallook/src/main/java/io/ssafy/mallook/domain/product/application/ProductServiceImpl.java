@@ -23,7 +23,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductListDto> getProductList(Pageable pageable) {
-        return productCustomRepository.findAllProduct()
+        String gender = new String();
+        String main =  new String();
+        String sub = new String();
+        return productCustomRepository.findAllProduct(gender, main, sub)
                 .stream()
                 .map(ProductListDto::toDto)
                 .toList();
