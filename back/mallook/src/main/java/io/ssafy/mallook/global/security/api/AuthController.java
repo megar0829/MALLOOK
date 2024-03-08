@@ -18,6 +18,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 @Log4j2
@@ -38,7 +39,8 @@ public class AuthController {
 
         TokenDto tokenDto = new TokenDto(
                 jwtService.createAccessToken(userSecurityDTO),
-                jwtService.createRefreshToken(userSecurityDTO)
+                jwtService.createRefreshToken(userSecurityDTO),
+                userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
         );
 
         return BaseResponse.success(

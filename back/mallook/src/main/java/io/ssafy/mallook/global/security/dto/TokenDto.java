@@ -1,7 +1,13 @@
 package io.ssafy.mallook.global.security.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.List;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public record TokenDto(
         String accessToken,
-        String refreshToken
+        String refreshToken,
+        List<String> roles
 ) {
 }

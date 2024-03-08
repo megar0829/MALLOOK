@@ -1,16 +1,21 @@
 package io.ssafy.mallook.global.security.service;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
+import io.ssafy.mallook.domain.member.entity.MemberRole;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -29,7 +34,13 @@ public class CustomUserDetailsService implements UserDetailsService {
         return UserSecurityDTO.fromSocial()
                 .username(member.getId().toString())
                 .password(UUID.randomUUID().toString())
-                .authorities(List.of())
+                .authorities(getMemberAuthorities(member.getRole()))
                 .create();
+    }
+
+    private Collection<GrantedAuthority> getMemberAuthorities(Set<MemberRole> role) {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        role.forEach(memberRole -> authorities.add(new SimpleGrantedAuthority("ROLE_" + memberRole)));
+        return authorities;
     }
 }
