@@ -35,12 +35,11 @@ class LoginScreen extends StatelessWidget {
 
   Future<AuthTokenModel> _kakaoLogin() async {
     bool talkInstalled = await isKakaoTalkInstalled();
+    // print("KAKAO SDK: ${await KakaoSdk.origin}");
     OAuthToken? token;
     if (talkInstalled) {
       try {
         token = await UserApi.instance.loginWithKakaoTalk();
-        // token = await AuthCodeClient.instance.authorizeWithTalk(
-        //     redirectUri: "http://localhost:8080/login/oauth2/code/kakao");
       } catch (error) {
         if (error is PlatformException && error.code == 'CANCELED') {
           throw Error();
@@ -48,28 +47,21 @@ class LoginScreen extends StatelessWidget {
 
         try {
           token = await UserApi.instance.loginWithKakaoAccount();
-          // token = await AuthCodeClient.instance.authorize(
-          //     redirectUri: "http://localhost:8080/login/oauth2/code/kakao");
         } catch (error) {
-          // print(await KakaoSdk.origin);
+          throw Error();
         }
       }
     } else {
       try {
         token = await UserApi.instance.loginWithKakaoAccount();
-        // token = await AuthCodeClient.instance.authorize(
-        //     redirectUri: "http://localhost:8080/login/oauth2/code/kakao");
       } catch (error) {
-        // print(await KakaoSdk.origin);
+        throw Error();
       }
-    }
-    if (token == null) {
-      throw Error();
     }
     AuthTokenModel tokenModel = await LoginApiService.getAuthToken(token);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("access-token", tokenModel.accessToken);
-    prefs.setString("refresh-token", tokenModel.refreshToken);
+    prefs.setString("access-token", tokenModel.accessToken!);
+    prefs.setString("refresh-token", tokenModel.refreshToken!);
     return tokenModel;
   }
 

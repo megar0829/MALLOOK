@@ -19,15 +19,14 @@ class LoginApiService {
       final int status = baseResponse['status'];
       final String message = baseResponse['message'];
       final result = baseResponse['result'];
+      print(result);
 
       if (!(status == HttpStatus.SELECT_SUCCESS ||
           status == HttpStatus.INSERT_SUCCESS)) {
         throw Error();
       }
-      return AuthTokenModel(
-        accessToken: result["accessToken"],
-        refreshToken: result["refreshToken"],
-      );
+
+      return AuthTokenModel.fromJson(result);
     }
     throw Error();
   }
