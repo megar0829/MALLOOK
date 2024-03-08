@@ -11,7 +11,7 @@ import io.ssafy.mallook.global.security.dto.KakaoAuthTokenRes;
 import io.ssafy.mallook.global.security.dto.SocialData;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -24,7 +24,7 @@ import java.util.Optional;
 
 import static io.ssafy.mallook.global.security.user.UserSecurityDTO.getUserSecurityDTO;
 
-@Slf4j
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {

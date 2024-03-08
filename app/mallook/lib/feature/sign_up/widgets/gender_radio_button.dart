@@ -24,12 +24,12 @@ class GenderRadioButton extends StatelessWidget {
         ),
         decoration: BoxDecoration(
             color: isSelected
-                ? Theme.of(context).colorScheme.tertiaryContainer
+                ? Theme.of(context).primaryColorLight
                 : Colors.grey.shade300,
             border: Border.all(
               color: isSelected
-                  ? Theme.of(context).colorScheme.tertiary.withOpacity(0.7)
-                  : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                  ? Theme.of(context).primaryColor
+                  : Colors.grey.shade500,
             ),
             borderRadius: BorderRadius.circular(
               Sizes.size12,
@@ -37,8 +37,8 @@ class GenderRadioButton extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: isSelected
-                    ? Theme.of(context).colorScheme.tertiary.withOpacity(0.7)
-                    : Theme.of(context).colorScheme.secondary.withOpacity(0.5),
+                    ? Theme.of(context).primaryColorLight
+                    : Colors.grey.shade200,
                 spreadRadius: 0.1,
                 blurRadius: 2,
                 offset: const Offset(1, 3),
@@ -49,8 +49,8 @@ class GenderRadioButton extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: isSelected
-                ? Theme.of(context).colorScheme.onSurface
-                : Theme.of(context).colorScheme.secondary,
+                ? Theme.of(context).primaryColorDark
+                : Colors.black54,
             fontSize: Sizes.size18,
             fontWeight: FontWeight.w600,
           ),
