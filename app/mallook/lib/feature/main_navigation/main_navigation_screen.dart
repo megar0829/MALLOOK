@@ -1,4 +1,5 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
@@ -43,12 +44,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
   int _cartItemCount = 6;
 
+  void increaseCartItemCount() {
+    _cartItemCount++;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        toolbarHeight: Sizes.size40,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         title: Row(
@@ -63,6 +70,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 child: Text(
                   "MALLOOK",
                   style: TextStyle(
+                    overflow: TextOverflow.visible,
                     fontWeight: FontWeight.w800,
                     fontSize: Sizes.size28,
                     color: Theme.of(context).primaryColorDark,
@@ -157,7 +165,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: BottomBarDefault(
         colorSelected: Theme.of(context).primaryColor,
         color: Colors.white,
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.black,
         indexSelected: _selectedIndex,
         items: items,
         paddingVertical: Sizes.size12,
