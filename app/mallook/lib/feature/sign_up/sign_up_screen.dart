@@ -23,6 +23,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _additionalAddressController =
       TextEditingController();
+  DateTime? _currentBackPressTime;
   String _nickname = "";
   bool _nicknameStatus = false;
   String _phone = "";
@@ -155,6 +156,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _onSubmit() {
+    if (!_isAvailable()) {
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const InterestsScreen(),
@@ -165,67 +169,100 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-    return GestureDetector(
-      onTap: _onScaffoldTap,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: Sizes.size20,
-              horizontal: Sizes.size48,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        DateTime now = DateTime.now();
+        if (_currentBackPressTime == null ||
+            now.difference(_currentBackPressTime!) >
+                const Duration(seconds: 2)) {
+          _currentBackPressTime = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              elevation: 0.0,
+              shape: const StadiumBorder(
+                side: BorderSide(
+                  style: BorderStyle.none,
+                ),
+              ),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.grey.shade100,
+              content: const Text(
+                '한번 더 누르면 앱이 종료됩니다.',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(
-                      top: Sizes.size40,
-                      bottom: Sizes.size32,
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "회원가입",
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w700,
-                        fontSize: Sizes.size36,
+          );
+          return;
+        }
+        SystemNavigator.pop();
+      },
+      child: GestureDetector(
+        onTap: _onScaffoldTap,
+        child: Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size20,
+                horizontal: Sizes.size48,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(
+                        top: Sizes.size40,
+                        bottom: Sizes.size32,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        "회원가입",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w700,
+                          fontSize: Sizes.size36,
+                        ),
                       ),
                     ),
-                  ),
-                  Gaps.v32,
-                  nicknameBox(context),
-                  Gaps.v16,
-                  birthdayBox(context, deviceWidth),
-                  Gaps.v16,
-                  genderBox(context),
-                  Gaps.v16,
-                  phoneBox(context),
-                  Gaps.v16,
-                  addressBox(context),
-                ],
+                    Gaps.v32,
+                    nicknameBox(context),
+                    Gaps.v16,
+                    birthdayBox(context, deviceWidth),
+                    Gaps.v16,
+                    genderBox(context),
+                    Gaps.v16,
+                    phoneBox(context),
+                    Gaps.v16,
+                    addressBox(context),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          height: Sizes.size96 + Sizes.size18,
-          color: Colors.white,
-          shadowColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.only(
-              top: Sizes.size6,
-              left: Sizes.size24,
-              right: Sizes.size24,
-              bottom: Sizes.size20,
-            ),
-            child: Center(
-              child: FormButton(
-                text: !_isAvailable() ? "입력해주세요" : "다음",
-                disabled: !_isAvailable(),
-                onTap: _onSubmit,
+          bottomNavigationBar: BottomAppBar(
+            height: Sizes.size96 + Sizes.size18,
+            color: Colors.white,
+            shadowColor: Colors.white,
+            surfaceTintColor: Colors.white,
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                top: Sizes.size6,
+                left: Sizes.size24,
+                right: Sizes.size24,
+                bottom: Sizes.size20,
+              ),
+              child: Center(
+                child: FormButton(
+                  text: !_isAvailable() ? "입력해주세요" : "다음",
+                  disabled: !_isAvailable(),
+                  onTap: _onSubmit,
+                ),
               ),
             ),
           ),
@@ -355,6 +392,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
+        if (_phone.isNotEmpty && _phone.length == 4)
+          Container(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "'-' 없이 전화번호만 입력해 주세요",
+              style: TextStyle(
+                fontSize: Sizes.size12,
+                color: Colors.grey.shade700,
+              ),
+            ),
+          ),
         if (_phone.isNotEmpty && _phone.length != 4 && !_phoneStatus)
           Container(
             alignment: Alignment.centerRight,

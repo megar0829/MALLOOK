@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.security.filter;
+package io.ssafy.mallook.global.security.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
