@@ -59,7 +59,6 @@ public class HeartServiceImpl implements HeartService {
                     throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
                 });
 
-        proxyScript.like();
         heartRepository.save(likeDto.toEntity(proxyMember, proxyScript));
     }
 
@@ -84,7 +83,6 @@ public class HeartServiceImpl implements HeartService {
         Heart heart = heartRepository.findByMemberAndScript(proxyMember, proxyScript)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
-        proxyScript.unlike();
         heartRepository.deleteById(heart.getId());
     }
 
