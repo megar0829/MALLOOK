@@ -28,12 +28,13 @@ public class ProductController {
             sort = "name",
             direction = Sort.Direction.ASC
     ) Pageable pageable
-            , @RequestParam(required = false) String mainCategory
-            , @RequestParam(required = false) String subCategory
+            , @RequestParam(name = "primary", required = false) String mainCategory
+            , @RequestParam(name = "secondary",required = false) String sumCategory
     ) {
+
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getProductList(pageable, mainCategory, subCategory)
+                productService.getProductList(pageable, mainCategory.toUpperCase(), sumCategory.toUpperCase())
         );
     }
 }
