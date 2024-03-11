@@ -12,6 +12,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "shopping_mall")
 public class ShoppingMall extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
