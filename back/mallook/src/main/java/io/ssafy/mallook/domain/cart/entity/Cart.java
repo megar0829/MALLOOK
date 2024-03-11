@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 import java.util.ArrayList;
 import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
 
 @Getter
@@ -20,6 +21,7 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "cart")
+@SQLRestriction("status=TRUE")
 public class Cart extends BaseEntity {
 
     @Id

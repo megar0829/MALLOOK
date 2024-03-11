@@ -70,8 +70,6 @@ public class CartServiceImpl implements CartService{
     @Override
     @Transactional
     public void deleteProductInCart(CartDeleteReq cartDeleteReq) {
-        cartDeleteReq.cartProductList().forEach(cartProductRepository::deleteCartProduct);
+        cartProductRepository.deleteCartProduct(cartDeleteReq.cartProductList());
     }
-
-
 }

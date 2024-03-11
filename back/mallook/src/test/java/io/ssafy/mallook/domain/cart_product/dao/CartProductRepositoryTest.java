@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +30,8 @@ class CartProductRepositoryTest {
     private CartRepository cartRepository;
     @Autowired
     private MemberRepository memberRepository;
-
+    @Autowired
+    private EntityManager entityManager;
     @BeforeEach
     void setUp() {
         Member member = Mockito.mock(Member.class);
@@ -58,10 +60,22 @@ class CartProductRepositoryTest {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
         Cart cart = Mockito.mock(Cart.class);
+        cartRepository.save(cart);
+        List<Long> deleteCartList = new ArrayList<>();
         for (int i = 0; i < 3; i ++) {
-            CartProduct cartProduct = buildCartProduct(cart, i*1000L, i*1L, i*100L);
-            cartProductRepository.save(cartProduct);
+            CartProduct cartProduct = buildCartProduct(cart, 1000L, 1L, 100L);
+            var rs = cartProductRepository.save(cartProduct);
+            deleteCartList.add(rs.getId());
         }
-        cartProductRepository.deleteCartProduct(2L);
+
+        cartProductRepository.deleteCartProduct(deleteCartList);
+
+        entityManager.flush();
+        entityManager.clear();
+
+        for (Long i : deleteCartList) {
+            Optional<CartProduct> cpr = cartProductRepository.findById(i);
+            assertThat(cpr.isPresent()).isFalse();
+        }
     }
 }

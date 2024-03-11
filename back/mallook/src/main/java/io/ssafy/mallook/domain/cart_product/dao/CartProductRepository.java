@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import java.util.List;
 
 public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
     @Query(
@@ -20,7 +21,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
     @Modifying
     @Query("""
         update CartProduct cp set cp.status = false
-        where cp.id = :cartProductId and cp.status = true
+        where cp.id in :cartProductIdList and cp.status = true
     """)
-    void deleteCartProduct(@Param("cartProductId") Long cartProductId);
+    void deleteCartProduct(@Param("cartProductIdList") List<Long> cartProductIdList);
 }
