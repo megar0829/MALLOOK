@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mallook/constants/member_role.dart';
 import 'package:mallook/feature/login/api/login_api_servcie.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+  final storage = const FlutterSecureStorage();
 
   void _onLoginSuccess(BuildContext context, AuthTokenModel token) {
     if (token.roles!.contains(MemberRole.basicUser)) {
@@ -93,9 +95,8 @@ class LoginScreen extends StatelessWidget {
       }
     }
     AuthTokenModel tokenModel = await LoginApiService.getAuthToken(token);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString("access-token", tokenModel.accessToken!);
-    prefs.setString("refresh-token", tokenModel.refreshToken!);
+    await storage.write(key: 'access-token', value: tokenModel.accessToken);
+    await storage.write(key: 'refresh-token', value: tokenModel.refreshToken);
     return tokenModel;
   }
 

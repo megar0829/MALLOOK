@@ -48,6 +48,7 @@ dependencies:
   url_launcher: ^6.2.5
   shared_preferences: ^2.2.2
   dio: ^5.4.1
+  flutter_secure_storage: ^4.2.1
 
 dev_dependencies:
   flutter_test:
