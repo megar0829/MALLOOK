@@ -22,6 +22,7 @@ build: # JOB 이름
     - ls
     - echo [INFO] spring-boot project build
     - cd ../../../.. # 프로젝트 폴더로 경로 이동
+    - ls
     - chmod +x gradlew # gradle 권한 부여
     - ./gradlew clean
     - ./gradlew build
