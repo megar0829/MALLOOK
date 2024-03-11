@@ -29,10 +29,7 @@ class ScriptRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
-    private EntityManager em;
-
+    
     private Script script;
 
     @BeforeEach
@@ -82,8 +79,6 @@ class ScriptRepositoryTest {
         }
 
         scriptRepository.deleteScript(deleteList);
-        em.flush();
-        em.clear();
 
         for (Long id : deleteList) {
             Optional<Script> optionalScript = scriptRepository.findById(id);

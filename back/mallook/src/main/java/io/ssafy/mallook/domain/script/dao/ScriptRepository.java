@@ -18,7 +18,7 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
 
     Page<Script> findAllByMember(Member member, Pageable pageable);
 
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")
     void deleteScript(@Param("deleteList") List<Long> deleteList);
 }
