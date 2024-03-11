@@ -18,7 +18,7 @@ public class ProductHistory extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order orderId;
+    private Orders orderId;
     private Long productCount;
     private Long productPrice;
     private String productName;

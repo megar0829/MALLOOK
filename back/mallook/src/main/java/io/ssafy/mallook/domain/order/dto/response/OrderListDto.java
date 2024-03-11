@@ -1,6 +1,6 @@
 package io.ssafy.mallook.domain.order.dto.response;
 
-import io.ssafy.mallook.domain.order.entity.Order;
+import io.ssafy.mallook.domain.order.entity.Orders;
 import lombok.Builder;
 
 @Builder
@@ -9,7 +9,7 @@ public record OrderListDto(
         Long price,
         Long quantity) {
 
-    public static OrderListDto toDto(Order order) {
+    public static OrderListDto toDto(Orders order) {
         return OrderListDto.builder()
                 .id(order.getId())
                 .price(order.getTotalPrice() / order.getTotalCount())

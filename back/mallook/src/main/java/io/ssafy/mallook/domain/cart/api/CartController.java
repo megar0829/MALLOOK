@@ -2,7 +2,6 @@ package io.ssafy.mallook.domain.cart.api;
 
 import io.ssafy.mallook.domain.cart.application.CartService;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
-import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
@@ -18,8 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class CartController {
     @GetMapping
     public ResponseEntity<BaseResponse<CartPageRes>> findProductsInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable
+            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page=0) Pageable pageable
         ){
         var result = cartService.findProductsInCart(pageable, userSecurityDTO.getId());
         return BaseResponse.success(

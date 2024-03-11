@@ -1,6 +1,7 @@
 package io.ssafy.mallook.global.config;
 
 import io.ssafy.mallook.global.security.filter.JwtAuthenticateFilter;
+import io.ssafy.mallook.global.security.handler.CustomAccessDeniedHandler;
 import io.ssafy.mallook.global.security.handler.CustomOAuth2FailHandler;
 import io.ssafy.mallook.global.security.handler.CustomOAuth2SucceessHandler;
 import io.ssafy.mallook.global.security.service.CustomOAuth2UserService;
@@ -28,12 +29,14 @@ import java.util.List;
 public class SecurityConfig {
     private static final String[] URL_WHITE_LIST = {
             "/error", "/login", "/favicon.ico",
-            "/health", "/api-docs/**", "/swagger-ui/**",
-            "/swagger-resources/**", "/swagger-ui.html", "/api/token/**"
+            "/actuator/**", "/actuator", "/api-docs/**", "/swagger-ui/**",
+            "/swagger-resources/**", "/swagger-ui.html", "/api/token/**",
+            "/api/auth/login/kakao"
     };
     private final CustomOAuth2UserService customOAuth2UserService;
     private final CustomOAuth2SucceessHandler customOAuth2SuccessHandler;
     private final CustomOAuth2FailHandler customOAuth2FailHandler;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JwtService jwtService;
 
     @Bean
@@ -48,20 +51,26 @@ public class SecurityConfig {
                 .oauth2Login(
                         oauth2 -> oauth2.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                                 .successHandler(customOAuth2SuccessHandler).failureHandler(customOAuth2FailHandler))
-                .addFilterBefore(jwtAuthenticateFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticateFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(handingConfigurer ->
+                        handingConfigurer.accessDeniedHandler(customAccessDeniedHandler)
+                );
 
         return http.build();
     }
+
     @Bean
     public JwtAuthenticateFilter jwtAuthenticateFilter() {
         return new JwtAuthenticateFilter(jwtService, URL_WHITE_LIST);
     }
+
     // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {
         final List<String> allowedHeaders = List.of("*");
         final List<String> allowedOriginPatterns = List.of(
                 "http://localhost:8080",
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://localhost:45476"
         );
         return request -> {
             CorsConfiguration config = new CorsConfiguration();

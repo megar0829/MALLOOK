@@ -6,8 +6,10 @@ import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
 import io.ssafy.mallook.domain.member.entity.Address;
 import io.ssafy.mallook.domain.member.entity.Gender;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.member.entity.MemberRole;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
+import io.ssafy.mallook.global.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,24 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
+    @Transactional(readOnly= true)
+    @Override
+    public MemberDetailRes findMemberDetail(UUID memberId) {
+        var memberDetail = memberRepository.findById(memberId)
+                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        return new MemberDetailRes(memberDetail.getNickname(),
+                sdf.format(memberDetail.getBirth()),
+                memberDetail.getGender().toString(),
+                memberDetail.getPhone(),
+                memberDetail.getPoint(),
+                memberDetail.getExp(),
+                memberDetail.getAddress().getCity(),
+                memberDetail.getAddress().getDistrict(),
+                memberDetail.getAddress().getAddress(),
+                memberDetail.getAddress().getZipcode());
+    }
+
     @Transactional
     @Override
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
@@ -38,29 +58,15 @@ public class MemberServiceImpl implements MemberService{
                                 memberDetailReq.address(),
                                 memberDetailReq.zipcode()))
                             .build();
+
+            // 최초 권한만 가진 유저에게 추가 권한 부여
+            member.getRole().remove(MemberRole.BASIC_USER);
             memberRepository.save(member);
         } catch (ParseException e) {
             throw new BaseExceptionHandler(ErrorCode.INVALID_TYPE_VALUE);
         }
     }
 
-    @Transactional(readOnly= true)
-    @Override
-    public MemberDetailRes findMemberDetail(UUID memberId) {
-        var memberDetail = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return new MemberDetailRes(memberDetail.getNickname(),
-                sdf.format(memberDetail.getBirth()),
-                memberDetail.getGender().toString(),
-                memberDetail.getPhone(),
-                memberDetail.getPoint(),
-                memberDetail.getExp(),
-                memberDetail.getAddress().getCity(),
-                memberDetail.getAddress().getDistrict(),
-                memberDetail.getAddress().getAddress(),
-                memberDetail.getAddress().getZipcode());
-    }
 
     @Transactional
     @Override

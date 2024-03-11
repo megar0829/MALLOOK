@@ -7,7 +7,7 @@ import java.text.ParseException;
 import java.util.UUID;
 
 public interface MemberService {
-   void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException;
    MemberDetailRes findMemberDetail(UUID memberId);
+   void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException;
    void updateNickname(UUID memberId, String nickname);
 }
