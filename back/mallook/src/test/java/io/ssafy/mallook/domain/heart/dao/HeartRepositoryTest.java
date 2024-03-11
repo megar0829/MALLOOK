@@ -3,8 +3,11 @@ package io.ssafy.mallook.domain.heart.dao;
 import io.ssafy.mallook.domain.heart.entity.Heart;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.script.dao.ScriptRepository;
+import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.entity.Style;
+import jakarta.persistence.EntityManager;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +36,13 @@ class HeartRepositoryTest {
     @Autowired
     private StyleRepository styleRepository;
 
+    @Autowired
+    private ScriptRepository scriptRepository;
+
+    @Autowired
+    private EntityManager entityManager;
+
+    private Script script;
     private Style style;
     private Member member;
 
@@ -42,6 +52,10 @@ class HeartRepositoryTest {
         memberRepository.save(member);
         style = buildStyle(member);
         styleRepository.save(style);
+        script = buildScript(member);
+        scriptRepository.save(script);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     private Style buildStyle(Member member) {
@@ -52,8 +66,29 @@ class HeartRepositoryTest {
                 .build();
     }
 
+    private Script buildScript(Member member) {
+        return Script.builder()
+                .name("테스트 스크립트")
+                .member(member)
+                .heartCount(0)
+                .build();
+    }
+
     @Test
-    void findAllByMember() {
+    void findAllByMemberAndScriptIsNotNull() {
+        PageRequest pageable = PageRequest.of(0, 2);
+        Heart heart = Heart.builder()
+                .member(member)
+                .script(script)
+                .build();
+        heartRepository.save(heart);
+        Page<Heart> page = heartRepository.findAllByMemberAndScriptIsNotNull(member, pageable);
+        assertThat(page).isNotNull();
+        assertThat(page.getContent()).contains(heart);
+    }
+
+    @Test
+    void findAllByMemberAndStyleIsNotNull() {
         PageRequest pageable = PageRequest.of(0, 2);
         Heart heart = Heart.builder()
                 .member(member)
@@ -63,11 +98,6 @@ class HeartRepositoryTest {
         Page<Heart> page = heartRepository.findAllByMemberAndStyleIsNotNull(member, pageable);
         assertThat(page).isNotNull();
         assertThat(page.getContent()).contains(heart);
-    }
-
-    @Test
-    void findByMemberAndScript() {
-
     }
 
     @Test
