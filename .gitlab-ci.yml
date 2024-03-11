@@ -38,6 +38,7 @@ build: # JOB 이름
     - master
     - release
     - develop
+    - feat/28-deploy-backend
 
 package:
   image: docker:latest
@@ -65,6 +66,7 @@ package:
     - master
     - release
     - develop
+    - feat/28-deploy-backend
 
 deploy: # JOB 이름
   image: docker:latest
@@ -91,3 +93,4 @@ deploy: # JOB 이름
     - master
     - release
     - develop
+    - feat/28-deploy-backend
