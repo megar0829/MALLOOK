@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -25,11 +23,13 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<BaseResponse<List<ProductListDto>>> getProductList(@PageableDefault(
+    public ResponseEntity<BaseResponse<Page<ProductListDto>>> getProductList(@PageableDefault(
             size = 20,
             sort = "name",
             direction = Sort.Direction.ASC
-    ) Pageable pageable, @RequestParam(required = false) String mainCategory, @RequestParam(required = false) String subCategory
+    ) Pageable pageable
+            , @RequestParam(required = false) String mainCategory
+            , @RequestParam(required = false) String subCategory
     ) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
