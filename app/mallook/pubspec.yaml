@@ -44,6 +44,10 @@ dependencies:
   google_fonts: 6.1.0
   remedi_kopo: ^0.0.2
   kakao_flutter_sdk_user: 1.8.0
+  http: ^1.2.1
+  url_launcher: ^6.2.5
+  shared_preferences: ^2.2.2
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:

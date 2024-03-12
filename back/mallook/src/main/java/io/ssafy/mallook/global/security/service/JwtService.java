@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -39,13 +40,23 @@ public class JwtService {
      */
     public Authentication authenticateAccessToken(HttpServletRequest request) {
         String token = requestHeaderJwtParser(request); // access token 정보
-        Claims claims = verifyJwtToken(token);
 
-        UserSecurityDTO userSecurityDTO = UserSecurityDTO.fromSocial()
-                .username(claims.getSubject())
-                .password(UUID.randomUUID().toString())
-                .authorities(JwtClaimsParser.getMemberAuthorities(claims))
-                .create();
+        UserSecurityDTO userSecurityDTO;
+        if (Objects.isNull(token)) {
+            userSecurityDTO = UserSecurityDTO.fromSocial()
+                    .username(UUID.randomUUID().toString())
+                    .password(UUID.randomUUID().toString())
+                    .authorities(JwtClaimsParser.getAnonymousRole())
+                    .create();
+        } else {
+            Claims claims = verifyJwtToken(token);
+
+            userSecurityDTO = UserSecurityDTO.fromSocial()
+                    .username(claims.getSubject())
+                    .password(UUID.randomUUID().toString())
+                    .authorities(JwtClaimsParser.getMemberAuthorities(claims))
+                    .create();
+        }
 
         return new UsernamePasswordAuthenticationToken(
                 userSecurityDTO,
@@ -64,7 +75,8 @@ public class JwtService {
         String token = request.getHeader(ACCESS_HEADER_AUTHORIZATION);
         // access token is null
         if (Objects.isNull(token)) {
-            throw new AccessTokenException(AccessTokenException.ACCESS_TOKEN_ERROR.UN_ACCEPT);
+//            throw new AccessTokenException(AccessTokenException.ACCESS_TOKEN_ERROR.UN_ACCEPT);
+            return null;
         }
         // token type not defined
         String[] separatedToken = token.split(" ");
@@ -100,7 +112,11 @@ public class JwtService {
         UserSecurityDTO userSecurityDTO = userDetailsService.loadUserByUsername(id);
         String newAccessToken = createAccessToken(userSecurityDTO);
         String newRefreshToken = createRefreshToken(userSecurityDTO);
-        return new TokenDto(newAccessToken, newRefreshToken);
+        return new TokenDto(
+                newAccessToken,
+                newRefreshToken,
+                userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
+        );
     }
 
     public Claims verifyJwtToken(String token) {

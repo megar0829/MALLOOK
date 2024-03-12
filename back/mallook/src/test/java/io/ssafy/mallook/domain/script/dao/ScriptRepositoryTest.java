@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.dao;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,8 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -29,6 +29,9 @@ class ScriptRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @Autowired
+    private EntityManager em;
 
     private Script script;
 
@@ -75,13 +78,16 @@ class ScriptRepositoryTest {
             Script script = buildScript(member);
             scriptRepository.save(script);
             deleteList.add(script.getId());
+            System.out.println(script.getId());
         }
 
         scriptRepository.deleteScript(deleteList);
+        em.flush();
+        em.clear();
 
         for (Long id : deleteList) {
             Optional<Script> optionalScript = scriptRepository.findById(id);
-            assertThat(optionalScript.isPresent()).isTrue(); // 저장되었는지 확인
+            assertThat(optionalScript.isPresent()).isFalse(); // 저장되었는지 확인
         }
     }
 }
