@@ -62,8 +62,8 @@ public class MemberController {
     }
     @Operation(summary = "랜덤 닉네임 생성",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "닉네임 중복검사 성공"),
-                    @ApiResponse(responseCode = "404", description = "닉네임 중복검사 실패")
+                    @ApiResponse(responseCode = "200", description = "랜덤 닉네임 생성 성공"),
+                    @ApiResponse(responseCode = "404", description = "랜덤 닉네임 생성 실패")
             })
     @GetMapping("/random")
     public ResponseEntity<BaseResponse<String>> getRandomNickname(
