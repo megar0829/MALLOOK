@@ -1,5 +1,6 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/category_screen.dart';
@@ -39,14 +40,8 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 0;
-  int _cartItemCount = 6;
-
-  void increaseCartItemCount() {
-    _cartItemCount++;
-    setState(() {});
-  }
   DateTime? _currentBackPressTime;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -85,90 +80,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          toolbarHeight: Sizes.size40,
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Container(),
-              ),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "MALLOOK",
-                    style: TextStyle(
-                      overflow: TextOverflow.visible,
-                      fontWeight: FontWeight.w800,
-                      fontSize: Sizes.size28,
-                      color: Theme.of(context).primaryColorDark,
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    right: Sizes.size4,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Icon(
-                        Icons.search_rounded,
-                        size: Sizes.size32,
-                      ),
-                      Gaps.h6,
-                      Stack(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(
-                              left: Sizes.size6,
-                              top: _cartItemCount == 0 ? 0 : Sizes.size2,
-                            ),
-                            child: Icon(
-                              Icons.shopping_bag_outlined,
-                              size: Sizes.size32,
-                              color: _cartItemCount == 0
-                                  ? Colors.black
-                                  : Colors.black87,
-                            ),
-                          ),
-                          if (_cartItemCount > 0)
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle, // 원 모양 설정
-                                border: Border.all(
-                                  color: Theme.of(context).primaryColor,
-                                  width: 0.5,
-                                ), // 테두리 설정
-                              ),
-                              width: 20,
-                              height: 20,
-                              child: Center(
-                                child: Text(
-                                  '$_cartItemCount',
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: Sizes.size14,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
         body: Stack(
           children: [
             Offstage(

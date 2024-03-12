@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/thumbnail_product.dart';
 import 'package:mallook/feature/home/widgets/option_selector.dart';
+import 'package:mallook/status/cart/cart_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CartModal extends StatefulWidget {
@@ -23,6 +23,7 @@ class CartModal extends StatefulWidget {
 }
 
 class _CartModalState extends State<CartModal> {
+  final CartController cartController = Get.put(CartController());
   final PageController _imageController = PageController();
   final ScrollController _storeController = ScrollController();
   final int _pageLength = Random().nextInt(5) + 3;
@@ -51,6 +52,14 @@ class _CartModalState extends State<CartModal> {
     Navigator.of(context).pop();
   }
 
+  void _clickHeartIcon() {
+    cartController.addItem(
+      widget.product.name,
+      widget.product,
+      3,
+    );
+  }
+
   void _updateValue(String? newValue) {
     setState(() {
       selectedValue = newValue;
@@ -62,7 +71,7 @@ class _CartModalState extends State<CartModal> {
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     return Container(
-      height: deviceSize.height * 0.8,
+      height: deviceSize.height * 0.9,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
@@ -175,12 +184,15 @@ class _CartModalState extends State<CartModal> {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      FaIcon(
-                        FontAwesomeIcons.heart,
-                        size: Sizes.size24,
+                      GestureDetector(
+                        onTap: _clickHeartIcon,
+                        child: const FaIcon(
+                          FontAwesomeIcons.heart,
+                          size: Sizes.size24,
+                        ),
                       )
                     ],
                   ),

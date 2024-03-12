@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
 
-class CartButton extends StatelessWidget {
-  const CartButton({super.key});
+class ItemButton extends StatelessWidget {
+  final IconData icon;
+
+  const ItemButton({super.key, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -15,15 +17,15 @@ class CartButton extends StatelessWidget {
           width: 0.5,
         ),
       ),
-      child: const Padding(
-        padding: EdgeInsets.only(
+      child: Padding(
+        padding: const EdgeInsets.only(
           top: Sizes.size6,
           bottom: Sizes.size2,
           left: Sizes.size4,
           right: Sizes.size4,
         ),
         child: Icon(
-          Icons.add_shopping_cart_rounded,
+          icon,
           size: Sizes.size24,
         ),
       ),

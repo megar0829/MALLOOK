@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/widgets/cart_button.dart';
+import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/home/models/thumbnail_product.dart';
 import 'package:mallook/feature/home/widgets/cart_modal.dart';
 import 'package:mallook/feature/home/widgets/my-script-box.dart';
-import 'package:mallook/feature/home/models/thumbnail_product.dart';
-import 'package:mallook/feature/home/models/script.dart';
 
 class HomeMyScreen extends StatefulWidget {
   const HomeMyScreen({super.key});
@@ -64,7 +62,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
     }
   }
 
-  void _onCartBtnTap(ThumbnailProduct product) async {
+  void _onProductTap(ThumbnailProduct product) async {
     await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -122,26 +120,17 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                         ),
                       ),
                       clipBehavior: Clip.hardEdge,
-                      child: Stack(
-                        children: [
-                          AspectRatio(
-                            aspectRatio: 1,
-                            child: FadeInImage.assetNetwork(
-                              placeholder: "assets/images/script_default.png",
-                              image: _products[index].image,
-                              fit: BoxFit.fitHeight,
-                              filterQuality: FilterQuality.low,
-                            ),
+                      child: GestureDetector(
+                        onTap: () => _onProductTap(_products[index]),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: FadeInImage.assetNetwork(
+                            placeholder: "assets/images/script_default.png",
+                            image: _products[index].image,
+                            fit: BoxFit.fitHeight,
+                            filterQuality: FilterQuality.low,
                           ),
-                          Positioned(
-                            bottom: Sizes.size6,
-                            right: Sizes.size6,
-                            child: GestureDetector(
-                              onTap: () => _onCartBtnTap(_products[index]),
-                              child: const CartButton(),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
                     Padding(
