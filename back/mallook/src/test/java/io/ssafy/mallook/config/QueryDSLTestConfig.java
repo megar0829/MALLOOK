@@ -1,4 +1,4 @@
-package config;
+package io.ssafy.mallook.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
