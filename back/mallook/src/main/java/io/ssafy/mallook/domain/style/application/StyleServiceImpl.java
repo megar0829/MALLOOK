@@ -14,6 +14,7 @@ import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,8 +74,7 @@ public class StyleServiceImpl implements StyleService{
     }
     @Transactional
     @Override
-    public void DeleteStyle(UUID memberId, Long styleId) {
-        styleProductRepository.deleteMyStyleProduct(styleId);
-        styleRepository.deleteMyStyle(memberId, styleId);
+    public void DeleteStyle(UUID memberId, List<Long> styleIdList) {
+        styleRepository.deleteMyStyle(memberId, styleIdList);
     }
 }
