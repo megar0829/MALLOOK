@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.order.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
-import io.ssafy.mallook.domain.shoppingmall.entity.Shoppingmall;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +18,7 @@ public class ProductHistory extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private Order orderId;
+    private Orders orderId;
     private Long productCount;
     private Long productPrice;
     private String productName;

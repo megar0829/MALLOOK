@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mallook/feature/login/LoginScreen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  KakaoSdk.init(
+    nativeAppKey: 'a03e556f0284d3583b06a666cf4ff030',
+  );
+
   runApp(const Mallook());
 }
 
@@ -14,7 +21,7 @@ class Mallook extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Mallook',
       theme: ThemeData(
         primaryColor: const Color(0xff9452d5),
@@ -34,8 +41,9 @@ class Mallook extends StatelessWidget {
       supportedLocales: const [
         Locale('ko', 'KR'),
       ],
-      home: const MainNavigationScreen(),
-      // home: const LoginScreen(),
+      // home: const MainNavigationScreen(),
+      // home: const SignUpScreen(),
+      home: const LoginScreen(),
     );
   }
 }

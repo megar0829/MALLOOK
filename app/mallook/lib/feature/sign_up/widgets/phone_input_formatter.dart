@@ -21,17 +21,17 @@ class PhoneInputFormatter extends TextInputFormatter {
     value = _cleanPhoneNumber(value);
 
     if (value.length == 1) {
-//값이 없을 때 010-최초값 포멧
+      //값이 없을 때 010-최초값 포멧
       value = kPhoneNumberPrefix + value.substring(0, value.length);
     } else if (value.length < 4) {
-// 010- 을 지우지 못하도록 010- 유지
+      // 010- 을 지우지 못하도록 010- 유지
       value = kPhoneNumberPrefix;
     } else if (value.length >= 8 && value.length < 12) {
-// 010-xxxx-xxxx 포멧
+      // 010-xxxx-xxxx 포멧
       value =
           '$kPhoneNumberPrefix${value.substring(3, 7)}-${value.substring(7, value.length)}';
     } else {
-// 010-xxxx 포멧 (자릿수 제한은 inputformatters 로 구현)
+      // 010-xxxx 포멧 (자릿수 제한은 inputformatters 로 구현)
       value = kPhoneNumberPrefix + value.substring(3, value.length);
     }
 

@@ -1,0 +1,213 @@
+.container {
+  width: 500px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  border-radius: 20px;
+  background-color: #f0f0f0;
+}
+
+.topDiv {
+  height: 50px;
+  margin-bottom: 30px;
+}
+.topText {
+  font-size: 35px;
+  font-weight: 800;
+  padding: 0;
+}
+
+.nicknameDiv {
+  width: 400px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.nicknameLabelDiv {
+  width: 400px;
+  height: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.nicknameLabel {
+  font-size: 18px;
+  font-weight: 700;
+}
+.nicknameSpan {
+  font-size: 16px;
+  color: lightgray;
+  margin-right: 30px;
+}
+.nicknameInputDiv {
+  width: 400px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.nicknameInput {
+  width: 290px;
+  height: 45px;
+  border: 1px gray solid;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-left: 10px;
+}
+.nicknameButton {
+  width: 100px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+  background-color: #23BD33;
+  margin-right: 5px;
+  box-shadow: 1px 1px 5px gray;
+}
+
+.birthGenderDiv {
+  width: 400px;
+  height: 80px;
+  display: flex;
+  margin-bottom: 10px;
+}
+.birthDiv {
+  width: 200px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+.birthLabel {
+  font-size: 18px;
+  font-weight: 700;
+}
+.birthInput {
+  width: 180px;
+  height: 45px;
+  border: 1px gray solid;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.genderDiv {
+  width: 200px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+}
+.genderLabel {
+  font-size: 18px;
+  font-weight: 700;
+}
+.genderChooseDiv {
+  display: flex;
+  width: 200px;
+  height: 45px;
+}
+.genderInputDiv {
+  width: 100px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+.genderInput {
+  
+}
+.genderRadioLabel {
+  margin-left: 10px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.phoneDiv {
+  width: 400px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.phoneLabel {
+  font-size: 18px;
+  font-weight: 700;
+}
+.phoneInput {
+  width: 395px;
+  height: 45px;
+  border: 1px gray solid;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-left: 10px;
+}
+
+.addressDiv {
+  width: 400px;
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+.addressLabel1 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.addressDiv1 {
+  width: 400px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+.addressInput1 {
+  width: 330px;
+  height: 45px;
+  border: 1px gray solid;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-left: 10px;
+}
+.addressButton {
+  width: 60px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+  background-color: #23BD33;
+  margin-right: 5px;
+  box-shadow: 1px 1px 5px gray;
+}
+/* .addressDiv2 {
+  
+}
+.addressLabel2 {
+  
+}
+.addressInput2 {
+  
+} */
+.addressDiv3 {
+  width: 400px;
+  height: 50px;
+}
+.addressInput3 {
+  width: 395px;
+  height: 45px;
+  border: 1px gray solid;
+  border-radius: 8px;
+  font-size: 16px;
+  padding-left: 10px;
+  
+}
+
+.signUpButton {
+  width: 250px;
+  height: 40px;
+  border-radius: 8px;
+  color: white;
+  background-color: #23BD33;
+  margin-right: 5px;
+  box-shadow: 1px 1px 5px gray;
+}

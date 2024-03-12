@@ -1,8 +1,6 @@
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/category_screen.dart';
 import 'package:mallook/feature/home/home_screen.dart';
@@ -48,140 +46,172 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     _cartItemCount++;
     setState(() {});
   }
+  DateTime? _currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        toolbarHeight: Sizes.size40,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Container(),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        DateTime now = DateTime.now();
+        if (_currentBackPressTime == null ||
+            now.difference(_currentBackPressTime!) >
+                const Duration(seconds: 2)) {
+          _currentBackPressTime = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              behavior: SnackBarBehavior.floating,
+              elevation: 0.0,
+              shape: const StadiumBorder(
+                side: BorderSide(
+                  style: BorderStyle.none,
+                ),
+              ),
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.grey.shade100,
+              content: const Text(
+                '한번 더 누르면 앱이 종료됩니다.',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            Expanded(
-              child: Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "MALLOOK",
-                  style: TextStyle(
-                    overflow: TextOverflow.visible,
-                    fontWeight: FontWeight.w800,
-                    fontSize: Sizes.size28,
-                    color: Theme.of(context).primaryColorDark,
+          );
+          return;
+        }
+        SystemNavigator.pop();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          toolbarHeight: Sizes.size40,
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Container(),
+              ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    "MALLOOK",
+                    style: TextStyle(
+                      overflow: TextOverflow.visible,
+                      fontWeight: FontWeight.w800,
+                      fontSize: Sizes.size28,
+                      color: Theme.of(context).primaryColorDark,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  right: Sizes.size4,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    const Icon(
-                      Icons.search_rounded,
-                      size: Sizes.size32,
-                    ),
-                    Gaps.h6,
-                    Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: Sizes.size6,
-                            top: _cartItemCount == 0 ? 0 : Sizes.size2,
-                          ),
-                          child: Icon(
-                            Icons.shopping_bag_outlined,
-                            size: Sizes.size32,
-                            color: _cartItemCount == 0
-                                ? Colors.black
-                                : Colors.black87,
-                          ),
-                        ),
-                        if (_cartItemCount > 0)
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle, // 원 모양 설정
-                              border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: 0.5,
-                              ), // 테두리 설정
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    right: Sizes.size4,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Icon(
+                        Icons.search_rounded,
+                        size: Sizes.size32,
+                      ),
+                      Gaps.h6,
+                      Stack(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              left: Sizes.size6,
+                              top: _cartItemCount == 0 ? 0 : Sizes.size2,
                             ),
-                            width: 20,
-                            height: 20,
-                            child: Center(
-                              child: Text(
-                                '$_cartItemCount',
-                                style: TextStyle(
+                            child: Icon(
+                              Icons.shopping_bag_outlined,
+                              size: Sizes.size32,
+                              color: _cartItemCount == 0
+                                  ? Colors.black
+                                  : Colors.black87,
+                            ),
+                          ),
+                          if (_cartItemCount > 0)
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle, // 원 모양 설정
+                                border: Border.all(
                                   color: Theme.of(context).primaryColor,
-                                  fontSize: Sizes.size14,
-                                  fontWeight: FontWeight.w800,
+                                  width: 0.5,
+                                ), // 테두리 설정
+                              ),
+                              width: 20,
+                              height: 20,
+                              child: Center(
+                                child: Text(
+                                  '$_cartItemCount',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: Sizes.size14,
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
+            ],
+          ),
+        ),
+        body: Stack(
+          children: [
+            Offstage(
+              offstage: _selectedIndex != 0,
+              child: const HomeScreen(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 1,
+              child: const CategoryScreen(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 2,
+              child: const StyleScreen(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 3,
+              child: const WorldCupScreen(),
+            ),
+            Offstage(
+              offstage: _selectedIndex != 4,
+              child: const UserScreen(),
             ),
           ],
         ),
-      ),
-      body: Stack(
-        children: [
-          Offstage(
-            offstage: _selectedIndex != 0,
-            child: const HomeScreen(),
+        bottomNavigationBar: BottomBarDefault(
+          colorSelected: Theme.of(context).primaryColor,
+          color: Colors.white,
+          backgroundColor: Colors.black87,
+          indexSelected: _selectedIndex,
+          items: items,
+          paddingVertical: Sizes.size12,
+          iconSize: Sizes.size20,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(
+              Sizes.size24,
+            ),
+            topRight: Radius.circular(
+              Sizes.size24,
+            ),
           ),
-          Offstage(
-            offstage: _selectedIndex != 1,
-            child: const CategoryScreen(),
-          ),
-          Offstage(
-            offstage: _selectedIndex != 2,
-            child: const StyleScreen(),
-          ),
-          Offstage(
-            offstage: _selectedIndex != 3,
-            child: const WorldCupScreen(),
-          ),
-          Offstage(
-            offstage: _selectedIndex != 4,
-            child: const UserScreen(),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomBarDefault(
-        colorSelected: Theme.of(context).primaryColor,
-        color: Colors.white,
-        backgroundColor: Colors.black,
-        indexSelected: _selectedIndex,
-        items: items,
-        paddingVertical: Sizes.size12,
-        iconSize: Sizes.size20,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(
-            Sizes.size24,
-          ),
-          topRight: Radius.circular(
-            Sizes.size24,
-          ),
-        ),
-        onTap: (index) => setState(
-          () {
+          onTap: (index) => setState(() {
             _selectedIndex = index;
-          },
+          }),
         ),
       ),
     );

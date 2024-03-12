@@ -48,7 +48,7 @@ export default function Navigation() {
 
         <ul className={styles.rightContainer}>
           <li>
-            <Link href="/">
+            <Link href="/signup">
               <Image 
                 src={iconSearch} 
                 alt="Logo Image" 

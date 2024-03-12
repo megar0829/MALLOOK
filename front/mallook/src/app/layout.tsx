@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import { Metadata } from "next";
 import Navigation from "../components/navigation"
-import { Providers } from "./providers";
+import Script from "next/script";
 
 export const metadata :Metadata = {
   title: {
@@ -19,12 +19,11 @@ export default function Layout(
   ) {
   return (
     <html lang="ko">
+      <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <body>
-        <Providers>
           <Navigation />
           {children}
           {modal}
-        </Providers>
       </body>
     </html>
   )

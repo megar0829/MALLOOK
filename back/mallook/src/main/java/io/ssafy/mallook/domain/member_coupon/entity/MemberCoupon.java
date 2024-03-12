@@ -4,7 +4,10 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
 @Getter
