@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static io.ssafy.mallook.domain.product.entity.QProduct.product;
+
+@Repository
 @RequiredArgsConstructor
 public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
