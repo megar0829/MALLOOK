@@ -7,6 +7,10 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.List;
+
 @Getter
 @Builder
 @AllArgsConstructor
@@ -54,5 +58,13 @@ public class CartProduct extends BaseEntity {
     //쇼핑몰 id
 //    private Long shopMallId;
 
+//    public void setCart(Cart cart) {
+//        if(Objects.isNull(cart.getCartProductList())
+//                || ! cart.getCartProductList().contains(this)){
+//            List<CartProduct> cpList = Objects.isNull(cart.getCartProductList())?new ArrayList<>(): cart.getCartProductList().add(this);
+//            cart.getCartProductList().add(this);
+//            cart.setCartProductList(cart.getCartProductList().add(this));
+//        }
+//    }
 
 }

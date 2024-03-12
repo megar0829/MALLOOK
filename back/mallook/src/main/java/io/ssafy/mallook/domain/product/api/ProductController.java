@@ -31,7 +31,6 @@ public class ProductController {
             , @RequestParam(name = "primary", required = false) String mainCategory
             , @RequestParam(name = "secondary",required = false) String sumCategory
     ) {
-
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(pageable, mainCategory.toUpperCase(), sumCategory.toUpperCase())

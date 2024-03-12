@@ -49,6 +49,7 @@ public class CartController {
     public ResponseEntity<BaseResponse<String>> insertProductInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @RequestBody CartInsertReq cartInsertReq){
+        System.out.println("######" + userSecurityDTO.getId());
         cartService.insertProductInCart(userSecurityDTO.getId(), cartInsertReq);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,

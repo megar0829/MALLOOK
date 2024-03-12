@@ -63,7 +63,7 @@ class CartRepositoryTest {
         Cart cart = buildCart(member, cartProductList);
         cartRepository.save(cart);
 
-        Optional<Cart> result = cartRepository.findMyCartByMember(member.getId());
+        Optional<Cart> result = cartRepository.findMyCartByMember_Id(member.getId());
         assertThat(result).isNotNull(); //  결과가 null인지 아닌지 확인
     }
 
