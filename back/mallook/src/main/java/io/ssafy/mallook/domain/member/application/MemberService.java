@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface MemberService {
    MemberDetailRes findMemberDetail(UUID memberId);
+   String makeRandomNickname();
+   boolean validateNickname(String nickname);
    void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException;
    void updateNickname(UUID memberId, String nickname);
 }
