@@ -40,6 +40,21 @@ public class MemberServiceImpl implements MemberService{
                 memberDetail.getAddress().getZipcode());
     }
 
+    @Override
+    public String makeRandomNickname() {
+        return "램덤닉네임" + Integer.toString ((int) (Math.random()*10000));
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public boolean validateNickname(String nickname) {
+        return memberRepository.existsByNickname(nickname);
+    }
+
+
+
+
+
     @Transactional
     @Override
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
@@ -76,4 +91,7 @@ public class MemberServiceImpl implements MemberService{
         member.changeNickname(nickname);
         memberRepository.save(member);
     }
+
+
+
 }
