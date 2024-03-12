@@ -49,7 +49,7 @@ public class CartProduct extends BaseEntity {
     private String productColor;
 
     @Column(name = "product_fee")
-    private Long productFee;
+    private Integer productFee;
 
     //쇼핑몰 id
 //    private Long shopMallId;

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface StyleRepository extends JpaRepository<Style, Long> {
     Page<Style> findAll(Pageable pageable);
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = """
         update Style s
         set s.status = false

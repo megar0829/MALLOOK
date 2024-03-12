@@ -18,6 +18,6 @@ public record CartInsertReq(
     @NotBlank(message = "상품 색상은 공백일 수 없습니다.")
     String productColor,
     @Schema(description="배송료")
-    Long productFee
+    Integer productFee
 ) {
 }

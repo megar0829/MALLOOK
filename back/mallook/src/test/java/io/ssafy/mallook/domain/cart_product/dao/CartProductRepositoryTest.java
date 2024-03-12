@@ -37,7 +37,7 @@ class CartProductRepositoryTest {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
     }
-    private CartProduct buildCartProduct(Cart cart, Long price, Long count, Long fee){
+    private CartProduct buildCartProduct(Cart cart, Long price, Long count, Integer fee){
         return CartProduct.builder()
                 .cart(cart)
                 .productColor("테스트용색")
@@ -63,16 +63,14 @@ class CartProductRepositoryTest {
         cartRepository.save(cart);
         List<Long> deleteCartList = new ArrayList<>();
         for (int i = 0; i < 3; i ++) {
-            CartProduct cartProduct = buildCartProduct(cart, 1000L, 1L, 100L);
+            CartProduct cartProduct = buildCartProduct(cart, 1000L, 1L, 100);
             var rs = cartProductRepository.save(cartProduct);
             deleteCartList.add(rs.getId());
         }
 
         cartProductRepository.deleteCartProduct(deleteCartList);
-
-        entityManager.flush();
-        entityManager.clear();
-
+//        entityManager.flush();
+//        entityManager.clear();
         for (Long i : deleteCartList) {
             Optional<CartProduct> cpr = cartProductRepository.findById(i);
             assertThat(cpr.isPresent()).isFalse();

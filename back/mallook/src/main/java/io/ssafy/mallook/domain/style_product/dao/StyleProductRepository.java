@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface StyleProductRepository extends JpaRepository<StyleProduct, Long> {
-    @Modifying
+    @Modifying(clearAutomatically = true)
     @Query(value = """
         update StyleProduct s
         set s.status = false
