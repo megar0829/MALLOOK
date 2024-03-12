@@ -33,7 +33,6 @@ class ShoppingMallControllerTest {
     @MockBean
     private ShoppingMallService shoppingMallService;
 
-
     private String url = "/api/shopping-mall";
 
     @Test
