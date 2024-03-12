@@ -81,7 +81,8 @@ class ScriptControllerTest {
     void getScriptDetail() throws Exception {
         Long scriptId = 1L;
         ScriptDetailDto mockScriptDetail = new ScriptDetailDto("test", 1);
-        Mockito.when(scriptService.getScriptDetail(scriptId)).thenReturn(mockScriptDetail);
+        Mockito.when(scriptService.getScriptDetail(scriptId))
+                .thenReturn(mockScriptDetail);
         mockMvc.perform(MockMvcRequestBuilders.get(url + "/{id}", scriptId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
