@@ -23,7 +23,7 @@ public record CartDetailRes(
         @Schema(description="상품색상")
         String productColor,
         @Schema(description="상품 배송료")
-        Long productFee
+        Integer productFee
 
 ) {
 }
