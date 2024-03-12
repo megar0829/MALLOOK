@@ -31,7 +31,7 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
     final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
-    if (token.accessToken == null) {
+    if (token.accessToken != null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const MainNavigationScreen(),
