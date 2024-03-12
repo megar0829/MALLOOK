@@ -1,23 +1,51 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
-import 'package:mallook/constants/member_role.dart';
 import 'package:mallook/feature/login/api/login_api_servcie.dart';
 import 'package:mallook/feature/login/models/auth_token_model.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/sign_up/sign_up_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final storage = const FlutterSecureStorage();
 
-  void _onLoginSuccess(BuildContext context, AuthTokenModel token) {
-    if (token.roles!.contains(MemberRole.basicUser)) {
-      _signUpUser(context);
+  @override
+  void initState() {
+    super.initState();
+    _checkTokenAndNavigate();
+  }
+
+  Future<void> _checkTokenAndNavigate() async {
+    final storageToken = await storage.read(key: "token");
+    if (storageToken == null) {
       return;
     }
+    final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
+    if (token.accessToken == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const MainNavigationScreen(),
+          ),
+          (route) => false);
+    }
+  }
+
+  void _onLoginSuccess(BuildContext context, AuthTokenModel token) {
+    // TODO: 유저 정보 불러오기
+    // if (token.roles!.contains(MemberRole.basicUser)) {
+    //   _signUpUser(context);
+    //   return;
+    // }
     _loginUser(context);
   }
 
@@ -95,8 +123,7 @@ class LoginScreen extends StatelessWidget {
       }
     }
     AuthTokenModel tokenModel = await LoginApiService.getAuthToken(token);
-    await storage.write(key: 'access-token', value: tokenModel.accessToken);
-    await storage.write(key: 'refresh-token', value: tokenModel.refreshToken);
+    await storage.write(key: 'token', value: jsonEncode(tokenModel.toJson()));
     return tokenModel;
   }
 

@@ -1,14 +1,17 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mallook/constants/http_status.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/feature/login/models/auth_token_model.dart';
 
 class DioService {
   Dio? _authDio;
+  final _requestQueue = Queue<RequestOptions>();
   static final DioService _instance = DioService._internal();
   final storage = const FlutterSecureStorage();
+
   factory DioService() {
     return _instance;
   }
@@ -23,47 +26,80 @@ class DioService {
     _authDio!.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final accessToken = await storage.read(key: 'access-token');
-          if (accessToken == null) {
+          final storageToken = await storage.read(key: "token");
+          if (storageToken == null) {
+            throw Error();
+          }
+          final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
+          if (token.accessToken == null) {
             options.headers["Authorization"] = "";
             return handler.next(options);
           }
 
-          options.headers['Authorization'] = 'Bearer $accessToken';
+          options.headers['Authorization'] = 'Bearer ${token.accessToken}';
           return handler.next(options);
         },
+        onResponse: (response, handler) async {
+          handler.next(response);
+        },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 404) {
-            final refreshToken = await storage.read(key: "refresh-token");
+          if (error.response?.statusCode == 401) {
+            _requestQueue.add(error.requestOptions);
 
-            if (refreshToken == null) {
-              return handler.next(error);
+            final storageToken = await storage.read(key: "token");
+            if (storageToken == null) {
+              return;
+            }
+            final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
+            // refresh token이 없으면 로그인 페이지로 이동
+            if (token.refreshToken == null) {
+              moveToLoginScreen();
+              return;
             }
 
-            var refreshDio = Dio();
-            final response = await refreshDio.post(
-              "/api/auth/token/refresh",
-              data: jsonEncode(<String, String>{'refresh-token': refreshToken}),
-            );
+            try {
+              var refreshDio =
+                  Dio(BaseOptions(baseUrl: "https://j10a606.p.ssafy.io"));
+              final response = await refreshDio.post(
+                "/api/auth/token/refresh",
+                data: jsonEncode(
+                    <String, String>{'refresh-token': token.refreshToken!}),
+              );
 
-            if (response.statusCode == HttpStatus.SELECT_SUCCESS) {
-              final AuthTokenModel newAuthTokenModel =
-                  AuthTokenModel.fromJson(response.data["result"]);
-              await storage.write(
-                  key: "access-token", value: newAuthTokenModel.accessToken);
-              await storage.write(
-                  key: "refresh-token", value: newAuthTokenModel.refreshToken);
+              if (response.statusCode == 200) {
+                final AuthTokenModel newAuthTokenModel =
+                    AuthTokenModel.fromJson(response.data["result"]);
+                await storage.write(
+                    key: 'token',
+                    value: jsonEncode(newAuthTokenModel.toJson()));
 
-              error.requestOptions.headers['Authorization'] =
-                  'Bearer ${newAuthTokenModel.accessToken}';
-              return handler.resolve(await authDio.fetch(error.requestOptions));
+                _processRequestQueue(
+                    newAuthTokenModel.accessToken!); // 저장된 요청 처리
+                return;
+              } else {
+                moveToLoginScreen();
+              }
+            } catch (error) {
+              moveToLoginScreen();
             }
           }
-          return handler.next(error);
         },
       ),
     );
   }
 
   Dio get authDio => _authDio!;
+
+  void _processRequestQueue(String accessToken) async {
+    while (_requestQueue.isNotEmpty) {
+      var requestOptions = _requestQueue.removeFirst();
+
+      requestOptions.headers['Authorization'] = 'Bearer $accessToken';
+      try {
+        await _authDio!.fetch(requestOptions); // 요청 재실행
+      } catch (e) {
+        print("Failed to reprocess request: $e");
+      }
+    }
+  }
 }

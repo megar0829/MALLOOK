@@ -7,7 +7,6 @@ import 'package:mallook/feature/login/models/auth_token_model.dart';
 
 class LoginApiService {
   static Future<AuthTokenModel> getAuthToken(OAuthToken oAuthToken) async {
-    // final Dio dio = DioService().dio;
     final Dio dio = Dio(BaseOptions(baseUrl: "https://j10a606.p.ssafy.io"));
     final response = await dio.post(
       "/api/auth/login/kakao",
