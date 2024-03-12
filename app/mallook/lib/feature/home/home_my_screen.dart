@@ -1,25 +1,26 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
+import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/models/thumbnail_product.dart';
 import 'package:mallook/feature/home/widgets/cart_modal.dart';
 import 'package:mallook/feature/home/widgets/my-script-box.dart';
 
-class HomeOthersScreen extends StatefulWidget {
-  const HomeOthersScreen({super.key});
+class HomeMyScreen extends StatefulWidget {
+  const HomeMyScreen({super.key});
 
   @override
-  State<HomeOthersScreen> createState() => _HomeOthersScreenState();
+  State<HomeMyScreen> createState() => _HomeMyScreenState();
 }
 
-class _HomeOthersScreenState extends State<HomeOthersScreen> {
+class _HomeMyScreenState extends State<HomeMyScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<ThumbnailProduct> _products = []; // Future를 List로 변경합니다.
+  final List<Product> _products = []; // Future를 List로 변경합니다.
   final Future<Script> _script = HomeApiService.getMySingleScript();
   final NumberFormat numberFormat = NumberFormat.currency(
     locale: 'ko_KR',
@@ -32,7 +33,6 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
   void initState() {
     super.initState();
 
-    _loadMoreProducts();
     _scrollController.addListener(() {
       if (_scrollController.offset >=
               (_scrollController.position.maxScrollExtent * 0.9) &&
@@ -40,6 +40,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
         _loadMoreProducts();
       }
     });
+    _loadMoreProducts();
   }
 
   @override
@@ -50,19 +51,23 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
 
   void _loadMoreProducts() async {
     if (!_isProductLoading) {
-      setState(() {
-        _isProductLoading = true;
-      });
+      if (mounted) {
+        setState(() {
+          _isProductLoading = true;
+        });
+      }
       var loadedProducts = await HomeApiService.getProducts(_productPage);
-      setState(() {
-        _products.addAll(loadedProducts); // 기존 _products List에 새로운 제품 추가
-        _productPage++;
-        _isProductLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _products.addAll(loadedProducts); // 기존 _products List에 새로운 제품 추가
+          _productPage++;
+          _isProductLoading = false;
+        });
+      }
     }
   }
 
-  void _onProductTap(ThumbnailProduct product) async {
+  void _onProductTap(Product product) async {
     await showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -126,7 +131,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
                           aspectRatio: 1,
                           child: FadeInImage.assetNetwork(
                             placeholder: "assets/images/script_default.png",
-                            image: _products[index].image,
+                            image: _products[index].image!,
                             fit: BoxFit.fitHeight,
                             filterQuality: FilterQuality.low,
                           ),
@@ -145,7 +150,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                "${_products[index].discountRatio}%",
+                                "${Random().nextInt(100)}%",
                                 style: const TextStyle(
                                   color: Color(0xfffc3e75),
                                   fontSize: Sizes.size14,
@@ -165,7 +170,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
                           ),
                           Gaps.v2,
                           Text(
-                            _products[index].name,
+                            _products[index].name!,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.black,
@@ -178,13 +183,13 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
                             children: [
                               CircleAvatar(
                                 radius: Sizes.size10,
-                                foregroundImage: NetworkImage(
-                                    _products[index].shoppingMallImgUrl),
+                                foregroundImage:
+                                    NetworkImage(_products[index].image!),
                                 child: Container(),
                               ),
                               Gaps.h10,
                               Text(
-                                _products[index].shoppingMall,
+                                _products[index].brandName!,
                                 overflow: TextOverflow.fade,
                                 style: const TextStyle(
                                   color: Colors.black,

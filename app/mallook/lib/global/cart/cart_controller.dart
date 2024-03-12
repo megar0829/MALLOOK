@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
-import 'package:mallook/feature/home/models/thumbnail_product.dart';
+import 'package:mallook/feature/home/models/product.dart';
 
 class CartItem {
-  final ThumbnailProduct product;
+  final Product product;
   final int price;
   final int quantity;
 
@@ -21,14 +21,14 @@ class CartController extends GetxController {
 
   RxInt get totalPrice => _totalPrice;
 
-  void addItem(String productId, ThumbnailProduct product, int quantity) {
+  void addItem(String productId, Product product, int quantity) {
     _items[productId] = CartItem(
       product: product,
-      price: product.price * quantity,
+      price: product.price! * quantity,
       quantity: quantity,
     );
     totalQuantity.value += 1;
-    totalPrice.value += product.price * quantity;
+    totalPrice.value += product.price! * quantity;
     update(); // 상태 업데이트
   }
 

@@ -5,13 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/thumbnail_product.dart';
+import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/widgets/option_selector.dart';
-import 'package:mallook/status/cart/cart_controller.dart';
+import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CartModal extends StatefulWidget {
-  final ThumbnailProduct product;
+  final Product product;
 
   const CartModal({
     super.key,
@@ -54,7 +54,7 @@ class _CartModalState extends State<CartModal> {
 
   void _clickHeartIcon() {
     cartController.addItem(
-      widget.product.name,
+      widget.product.name!,
       widget.product,
       3,
     );
@@ -92,7 +92,7 @@ class _CartModalState extends State<CartModal> {
             ),
             child: Center(
               child: Text(
-                widget.product.name,
+                widget.product.name!,
                 overflow: TextOverflow.fade,
                 style: const TextStyle(
                   color: Colors.black,
@@ -142,7 +142,7 @@ class _CartModalState extends State<CartModal> {
                       PageView.builder(
                         controller: _imageController,
                         itemBuilder: (context, index) => Image.network(
-                          widget.product.image,
+                          widget.product.image!,
                           fit: BoxFit.cover,
                         ),
                         itemCount: _pageLength,

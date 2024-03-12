@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/home-my-screen.dart';
-import 'package:mallook/feature/home/home-others-screen.dart';
-import 'package:mallook/status/cart/cart_controller.dart';
+import 'package:mallook/feature/home/home_my_screen.dart';
+import 'package:mallook/feature/home/home_others_screen.dart';
+import 'package:mallook/global/cart/cart_controller.dart';
 
 final tabs = ['my', 'others'];
 
