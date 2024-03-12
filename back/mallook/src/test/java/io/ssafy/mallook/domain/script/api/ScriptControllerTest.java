@@ -1,7 +1,10 @@
 package io.ssafy.mallook.domain.script.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ssafy.mallook.config.security.WithMockCustomUser;
 import io.ssafy.mallook.domain.script.application.ScriptService;
+import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
+import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -27,6 +30,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -34,12 +38,16 @@ import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(controllers = ScriptController.class,
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class)})
 class ScriptControllerTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -59,9 +67,10 @@ class ScriptControllerTest {
                 .thenReturn(page);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
+                        MockMvcRequestBuilders.get(url)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .with(csrf()))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));
@@ -71,11 +80,11 @@ class ScriptControllerTest {
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getScriptDetail() throws Exception {
         Long scriptId = 1L;
-        ScriptDetailDto mockScriptDetail = new ScriptDetailDto("test",1);
+        ScriptDetailDto mockScriptDetail = new ScriptDetailDto("test", 1);
         Mockito.when(scriptService.getScriptDetail(scriptId)).thenReturn(mockScriptDetail);
-        mockMvc.perform(MockMvcRequestBuilders.get(url+"/{id}", scriptId)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get(url + "/{id}", scriptId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.result").exists())
@@ -84,11 +93,28 @@ class ScriptControllerTest {
 
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void createScript() {
+    void createScript() throws Exception {
+        ScriptCreatDto scriptCreateDto = new ScriptCreatDto("테스트 스크립트입니다.");
+        mockMvc.perform(MockMvcRequestBuilders.post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(scriptCreateDto))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("INSERT SUCCESS")
+                );
     }
 
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void deleteScript() {
+    void deleteScript() throws Exception {
+        ScriptDeleteListDto scriptDeleteListDto = new ScriptDeleteListDto(new ArrayList<>());
+        mockMvc.perform(MockMvcRequestBuilders.delete(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(scriptDeleteListDto))
+                        .with(csrf()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("DELETE SUCCESS"));
     }
 }
