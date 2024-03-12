@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/script.dart';
 
-class MyScriptBox extends StatelessWidget {
+class RankScriptBox extends StatelessWidget {
   final Script script;
 
-  const MyScriptBox({super.key, required this.script});
+  const RankScriptBox({super.key, required this.script});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 160,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
@@ -48,19 +48,36 @@ class MyScriptBox extends StatelessWidget {
               horizontal: Sizes.size12,
               vertical: Sizes.size16,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  script.name!,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: Sizes.size28,
-                    fontWeight: FontWeight.w500,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size8,
+                horizontal: Sizes.size10,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Row(
+                    children: [
+                      Text(
+                        "sofnsfosnfo",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: Sizes.size18,
+                        ),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  Text(
+                    script.name!,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: Sizes.size24,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
             ),
           )
         ],

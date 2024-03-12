@@ -1,4 +1,4 @@
-class ThumbnailProduct {
+class TProduct {
   final int id;
   final String name;
   final int price;
@@ -8,7 +8,7 @@ class ThumbnailProduct {
 
   final String image;
 
-  ThumbnailProduct({
+  TProduct({
     required this.id,
     required this.name,
     required this.price,
