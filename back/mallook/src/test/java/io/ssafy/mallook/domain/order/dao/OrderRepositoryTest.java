@@ -48,14 +48,14 @@ class OrderRepositoryTest {
 
     }
 
-    private Orders buildOrders(Member member) {
-        return Orders.builder()
-                .totalPrice(1000L)
-                .totalFee(500L)
-                .totalCount(2L)
-                .member(member)
-                .build();
-    }
+        private Orders buildOrders(Member member) {
+            return Orders.builder()
+                    .totalPrice(1000L)
+                    .totalFee(500L)
+                    .totalCount(2L)
+                    .member(member)
+                    .build();
+        }
 
     @Test
     void findAllByMember() {
