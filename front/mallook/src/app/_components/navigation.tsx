@@ -4,16 +4,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
-import styles from "../assets/css/navigation.module.css";
+import styles from "./navigation.module.css";
 
-import imgLogo from "../../public/images/logo.png";
-import iconSearch from "../../public/images/search.png";
-import iconCart from "../../public/images/cart.png";
-import iconProfile from "../../public/images/profile.png";
+import imgLogo from "../../../public/images/logo.png";
+import iconSearch from "../../../public/images/search.png";
+import iconCart from "../../../public/images/cart.png";
+import iconProfile from "../../../public/images/profile.png";
 
 export default function Navigation() {
   const path = usePathname();
-
   const [count, setCount] = useState(0);
 
   console.log(path);
@@ -22,7 +21,7 @@ export default function Navigation() {
       <div className={styles.container}>
         <div className={styles.leftContainer}>
           <div>
-            <Link href="/">
+            <Link href="/public">
               <Image 
                 src={imgLogo} 
                 alt="Logo Image" 

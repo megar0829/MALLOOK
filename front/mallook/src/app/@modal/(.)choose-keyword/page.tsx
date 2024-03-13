@@ -1,9 +1,9 @@
 "use client";
 
-import Modal from "@/components/modal/modal";
+import Modal from "@/app/@modal/_components/modal";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import styles from "../../../styles/choose-keyword.module.css";
+import styles from "./choose-keyword.module.css";
 import Image from "next/image";
 
 const keywordList = [
@@ -40,7 +40,7 @@ export default function LoginModal() {
   }, [router]);
 
   const goRecommend = () => {
-    router.push("/recommend");
+    router.replace("/recommend");
   }
 
   return (

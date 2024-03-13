@@ -1,9 +1,9 @@
 "use client";
 
-import Modal from "@/components/modal/modal";
+import Modal from "@/app/@modal/_components/modal";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import styles from "../../../styles/signup.module.css";
+import styles from "./signup.module.css";
 import Image from "next/image";
 import Complete from "./complete";
 

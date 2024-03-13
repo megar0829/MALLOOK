@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 body {
+  width: 100dvw;
+  height: 100dvh;
+
   font-family: 
     system-ui, 
     -apple-system, 

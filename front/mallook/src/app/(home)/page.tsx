@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "../../assets/css/home.module.css";
+import styles from "./home.module.css";
 import Image from "next/image";
 
 import imgQr from "../../../public/images/qr.png";
