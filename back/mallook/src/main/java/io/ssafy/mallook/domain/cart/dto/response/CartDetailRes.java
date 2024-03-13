@@ -11,19 +11,14 @@ public record CartDetailRes(
         Long cartProductId,
         @Schema(description="상품id")
         Long productId,
-
         @Schema(description="상품 가격")
         Long price,
-
         @Schema(description="상품개수")
         Long count,
-
         @Schema(description="상품명")
         String name,
-
         @Schema(description="상품이미지")
         String image,
-
         @Schema(description="상품사이즈")
         String size,
         @Schema(description="상품색상")

@@ -45,20 +45,20 @@ public class CartServiceImpl implements CartService{
         if (product.getQuantity()< sameProductCnt|| ! product.getColor().equals(cartInsertReq.productColor()) ) {
             throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }
-        // 카트 내 총계 계산(totalFee , totalPrice)
+        // 카트 내 총계 계산 (totalFee , totalPrice)
         var totalPrice = cart.map(value -> value.getTotalPrice() + cartInsertReq.productCount() * product.getPrice()).orElseGet(() -> cartInsertReq.productCount() * product.getPrice());
         var totalFee = cart.map(value -> value.getTotalFee() + cartInsertReq.productFee()).orElseGet(cartInsertReq::productFee);
         var totalCnt = cart.map(value -> value.getTotalCount() + cartInsertReq.productCount()).orElseGet(cartInsertReq::productCount);
         Cart rs ;
         // 카트 생성
         if (cart.isEmpty()){
-            Cart cc = Cart.builder()
+            Cart ca = Cart.builder()
                     .totalFee(totalFee)
                     .totalCount(totalCnt)
                     .totalPrice(totalPrice)
                     .member(new Member(memberId))
                     .build();
-            rs = cartRepository.save(cc);
+            rs = cartRepository.save(ca);
         // 카트 수정
         } else {
             cart.get().setTotalPrice(totalPrice);
@@ -81,7 +81,16 @@ public class CartServiceImpl implements CartService{
     }
     @Override
     @Transactional
-    public void deleteProductInCart(CartDeleteReq cartDeleteReq) {
-        cartProductRepository.deleteCartProduct(cartDeleteReq.cartProductList());
+    public void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq) {
+        Cart cart = cartRepository.findMyCartByMember(new Member(memberId))
+                .orElseThrow(()->new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        CartProduct cartProduct = cartProductRepository.findById(cartDeleteReq.cartProductId())
+                .orElseThrow(()->new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        // 총계 계산
+        cart.setTotalCount(cart.getTotalCount() - cartProduct.getProductCount());
+        cart.setTotalFee(cart.getTotalFee() - cartProduct.getProductFee());
+        cart.setTotalPrice(cart.getTotalPrice() - cartProduct.getProductPrice());
+        cartRepository.save(cart);
+        cartProductRepository.deleteCartProduct(cartDeleteReq.cartProductId());
     }
 }

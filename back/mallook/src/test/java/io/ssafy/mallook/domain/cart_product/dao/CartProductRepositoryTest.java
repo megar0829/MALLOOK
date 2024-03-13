@@ -68,10 +68,8 @@ class CartProductRepositoryTest {
             deleteCartList.add(rs.getId());
         }
 
-        cartProductRepository.deleteCartProduct(deleteCartList);
-//        entityManager.flush();
-//        entityManager.clear();
         for (Long i : deleteCartList) {
+            cartProductRepository.deleteCartProduct(i);
             Optional<CartProduct> cpr = cartProductRepository.findById(i);
             assertThat(cpr.isPresent()).isFalse();
         }

@@ -10,5 +10,5 @@ import java.util.UUID;
 public interface CartService {
     CartPageRes findProductsInCart(Pageable pageable, UUID memberId);
     void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq);
-    void deleteProductInCart(CartDeleteReq cartDeleteReq);
+    void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq);
 }
