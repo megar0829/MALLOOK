@@ -49,6 +49,7 @@ class ProductCustomRepositoryTest {
 
     @BeforeEach
     void init() {
+        entityManager.clear();
         queryFactory = new JPAQueryFactory(entityManager);
         Product product = Product
                 .builder()
@@ -75,6 +76,6 @@ class ProductCustomRepositoryTest {
                 .collect(Collectors.toList());
         Page<ProductListDto> expectedPage = new PageImpl<>(expectedList, pageable, expectedList.size());
 
-        assertEquals(expectedPage, result);
+        assertEquals(result, expectedPage);
     }
 }
