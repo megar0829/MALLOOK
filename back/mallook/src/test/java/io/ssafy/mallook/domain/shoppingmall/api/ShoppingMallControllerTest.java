@@ -17,10 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@WebMvcTest(controllers = ShoppingMallController.class,
-        excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class)})
+@WebMvcTest(controllers = ShoppingMallController.class)
 class ShoppingMallControllerTest {
 
     @Autowired
