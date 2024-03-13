@@ -8,8 +8,8 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/cart_modal.dart';
 import 'package:mallook/feature/home/widgets/my-script-box.dart';
+import 'package:mallook/feature/product/product_screen.dart';
 
 class HomeMyScreen extends StatefulWidget {
   const HomeMyScreen({super.key});
@@ -67,13 +67,10 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
     }
   }
 
-  void _onProductTap(Product product) async {
-    await showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (context) => CartModal(
-        product: product,
+  void _moveToProductScreen(Product product) async {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ProductScreen(product: product),
       ),
     );
   }
@@ -103,13 +100,18 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                 },
               ),
               Gaps.v6,
+              Divider(
+                height: Sizes.size1,
+                color: Colors.grey.shade300,
+              ),
+              Gaps.v14,
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  crossAxisSpacing: Sizes.size10,
-                  mainAxisSpacing: Sizes.size5,
+                  crossAxisSpacing: Sizes.size16,
+                  mainAxisSpacing: Sizes.size10,
                   childAspectRatio: 0.73,
                 ),
                 itemBuilder: (context, index) => Column(
@@ -126,13 +128,13 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                       ),
                       clipBehavior: Clip.hardEdge,
                       child: GestureDetector(
-                        onTap: () => _onProductTap(_products[index]),
+                        onTap: () => _moveToProductScreen(_products[index]),
                         child: AspectRatio(
                           aspectRatio: 1,
                           child: FadeInImage.assetNetwork(
                             placeholder: "assets/images/script_default.png",
                             image: _products[index].image!,
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.fill,
                             filterQuality: FilterQuality.low,
                           ),
                         ),

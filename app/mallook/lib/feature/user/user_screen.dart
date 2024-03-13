@@ -16,13 +16,9 @@ class UserScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: _onLogoutBtnPressed,
-              child: const Text("my page"),
-            ),
-          ],
+        child: GestureDetector(
+          onTap: _onLogoutBtnPressed,
+          child: const Text("my page"),
         ),
       ),
     );

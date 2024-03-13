@@ -54,7 +54,7 @@ class Assets {
   static const String styleStyleScreen = 'lib/feature/style/style_screen.dart';
   static const String userUserScreen = 'lib/feature/user/user_screen.dart';
   static const String widgetsCartModal =
-      'lib/feature/home/widgets/cart_modal.dart';
+      'lib/feature/home/widgets/product_screen.dart';
   static const String widgetsFormButton =
       'lib/feature/sign_up/widgets/form_button.dart';
   static const String widgetsGenderRadioButton =

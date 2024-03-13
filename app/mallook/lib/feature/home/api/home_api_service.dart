@@ -26,7 +26,7 @@ class HomeApiService {
     for (int i = 0; i < 20; i++) {
       productInstances.add(
         Product(
-          name: "$i [5,000원 결제혜택] 워싱 스티치 데님자켓 (BLACK) $i",
+          name: "$i [5,000원 결제혜택] 워싱 스티치 데님자켓 (BLACK) sfsfsfsfsfsfsfsfsfsfsf$i",
           price: Random().nextInt(300000),
           image:
               'https://image.msscdn.net/images/goods_img/20240108/3781888/3781888_17067719220154_320.jpg',

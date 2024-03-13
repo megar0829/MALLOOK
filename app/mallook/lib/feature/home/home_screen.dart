@@ -150,7 +150,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       fontSize: Sizes.size16,
                       fontWeight: FontWeight.bold,
                     ),
-                    // indicator: BoxDecoration(),
                     indicatorColor: Colors.black,
                     indicatorWeight: 0.1,
                     tabs: [

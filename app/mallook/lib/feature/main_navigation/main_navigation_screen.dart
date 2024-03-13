@@ -8,23 +8,24 @@ import 'package:mallook/feature/home/home_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
 import 'package:mallook/feature/user/user_screen.dart';
 import 'package:mallook/feature/worldcup/wordcup_screen.dart';
+import 'package:mallook/global/cart/exit_snackbar.dart';
 
 const List<TabItem> items = [
   TabItem(
     icon: FontAwesomeIcons.houseChimney,
-    title: '홈',
+    title: '추천',
   ),
   TabItem(
     icon: FontAwesomeIcons.bars,
-    title: '카테고리',
+    title: '상품',
   ),
   TabItem(
     icon: FontAwesomeIcons.shirt,
-    title: '코디',
+    title: '스타일',
   ),
   TabItem(
     icon: FontAwesomeIcons.trophy,
-    title: '월드컵',
+    title: '검색',
   ),
   TabItem(
     icon: FontAwesomeIcons.solidUser,
@@ -54,24 +55,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              elevation: 0.0,
-              shape: const StadiumBorder(
-                side: BorderSide(
-                  style: BorderStyle.none,
-                ),
-              ),
-              duration: const Duration(seconds: 2),
-              backgroundColor: Colors.grey.shade100,
-              content: const Text(
-                '한번 더 누르면 앱이 종료됩니다.',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            exitSnackBar(),
           );
           return;
         }

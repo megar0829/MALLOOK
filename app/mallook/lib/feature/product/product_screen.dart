@@ -6,40 +6,49 @@ import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/home/widgets/option_selector.dart';
+import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
+import 'package:mallook/feature/product/widget/order_sheet.dart';
+import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class CartModal extends StatefulWidget {
+class ProductScreen extends StatefulWidget {
   final Product product;
 
-  const CartModal({
+  const ProductScreen({
     super.key,
     required this.product,
   });
 
   @override
-  State<CartModal> createState() => _CartModalState();
+  State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _CartModalState extends State<CartModal> {
+class _ProductScreenState extends State<ProductScreen> {
   final CartController cartController = Get.put(CartController());
   final PageController _imageController = PageController();
   final ScrollController _storeController = ScrollController();
   final int _pageLength = Random().nextInt(5) + 3;
   int _currentPageIndex = 0;
 
-  final List<String> items = [
+  final List<String> sizes = [
     'Item1',
     'Item2',
     'Item3',
     'Item4',
     'Item5',
-    'Item6',
+    'Item6 asfniasfnpasfjoasnfpsoajfposafnoasnfoanfasnpfonsofnowfnm',
     'Item7',
     'Item8',
   ];
-  String? selectedValue;
+
+  final List<String> colors = [
+    'red',
+    'yellow',
+    'blue',
+    'green',
+    'orange',
+  ];
 
   @override
   void dispose() {
@@ -60,58 +69,70 @@ class _CartModalState extends State<CartModal> {
     );
   }
 
-  void _updateValue(String? newValue) {
-    setState(() {
-      selectedValue = newValue;
-      print(selectedValue);
-    });
+  void _moveToHomeScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MainNavigationScreen(),
+      ),
+    );
+  }
+
+  void _moveToSearchScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SearchScreen(),
+      ),
+    );
+  }
+
+  void _showOrderBottomSheet() async {
+    await showModalBottomSheet(
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => OrderSheet(
+        title: widget.product.name,
+        sizes: sizes,
+        colors: colors,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Container(
-      height: deviceSize.height * 0.9,
-      clipBehavior: Clip.hardEdge,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(
-          Sizes.size14,
-        ),
-      ),
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
         backgroundColor: Colors.grey.shade50,
-        appBar: AppBar(
-          backgroundColor: Colors.grey.shade50,
-          surfaceTintColor: Colors.grey.shade50,
-          automaticallyImplyLeading: false,
-          elevation: 1,
-          shadowColor: Colors.grey.shade300,
-          title: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size16,
-            ),
-            child: Center(
-              child: Text(
-                widget.product.name!,
-                overflow: TextOverflow.fade,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: Sizes.size16,
-                ),
-              ),
+        surfaceTintColor: Colors.grey.shade50,
+        elevation: 1,
+        shadowColor: Colors.grey.shade300,
+        actions: [
+          IconButton(
+            onPressed: _moveToHomeScreen,
+            icon: const FaIcon(
+              Icons.home,
+              size: Sizes.size28,
             ),
           ),
-          actions: [
-            IconButton(
-              onPressed: _onClosePressed,
-              icon: const FaIcon(
-                FontAwesomeIcons.xmark,
-              ),
-            )
-          ],
-        ),
-        body: Column(
+          IconButton(
+            onPressed: _moveToSearchScreen,
+            icon: const FaIcon(
+              FontAwesomeIcons.magnifyingGlass,
+              size: Sizes.size24,
+            ),
+          ),
+          IconButton(
+            onPressed: _onClosePressed,
+            icon: const FaIcon(
+              FontAwesomeIcons.xmark,
+              size: Sizes.size28,
+            ),
+          )
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -176,6 +197,7 @@ class _CartModalState extends State<CartModal> {
                 ),
               ),
             ),
+            Gaps.v6,
             Container(
               height: Sizes.size24,
               padding: const EdgeInsets.symmetric(
@@ -210,42 +232,57 @@ class _CartModalState extends State<CartModal> {
                 ],
               ),
             ),
+            Gaps.v10,
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size8,
+                horizontal: Sizes.size32,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.product.name!,
+                    maxLines: 5,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        padding: const EdgeInsets.symmetric(
+            horizontal: Sizes.size32, vertical: Sizes.size10),
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 1,
+        child: Row(
+          children: [
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size6,
-                  horizontal: Sizes.size20,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).primaryColor,
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size12,
+                  ),
                 ),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 6,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      children: [
-                        Container(
-                          width: deviceSize.width / 3,
-                          height: Sizes.size48,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.grey.shade400,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text('$index'),
-                          ),
-                        ),
-                        Gaps.h10,
-                      ],
-                    );
-                  },
+                onPressed: _showOrderBottomSheet,
+                child: const Text(
+                  '구매하기',
+                  style: TextStyle(
+                    fontSize: Sizes.size20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-            OptionSelector(
-              items: items,
-              onChanged: _updateValue,
-              selectedItem: selectedValue,
-            )
           ],
         ),
       ),

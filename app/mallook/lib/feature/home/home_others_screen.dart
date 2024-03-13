@@ -1,17 +1,10 @@
-import 'dart:async';
-import 'dart:math';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/cart_modal.dart';
-import 'package:mallook/feature/home/widgets/my-script-box.dart';
 import 'package:mallook/feature/home/widgets/rank_script_box.dart';
+import 'package:mallook/feature/product/product_screen.dart';
 
 class HomeOthersScreen extends StatefulWidget {
   const HomeOthersScreen({super.key});
@@ -69,7 +62,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) => CartModal(
+      builder: (context) => ProductScreen(
         product: product,
       ),
     );
