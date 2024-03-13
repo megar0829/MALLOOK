@@ -2,12 +2,17 @@ import 'package:get/get.dart';
 import 'package:mallook/feature/home/models/product.dart';
 
 class CartItem {
-  final Product product;
-  final int price;
-  final int quantity;
+  Product product;
+  int quantity;
+  String size;
+  String color;
 
-  CartItem(
-      {required this.product, required this.price, required this.quantity});
+  CartItem({
+    required this.product,
+    required this.quantity,
+    required this.size,
+    required this.color,
+  });
 }
 
 class CartController extends GetxController {
@@ -21,14 +26,13 @@ class CartController extends GetxController {
 
   RxInt get totalPrice => _totalPrice;
 
-  void addItem(String productId, Product product, int quantity) {
-    _items[productId] = CartItem(
-      product: product,
-      price: product.price! * quantity,
-      quantity: quantity,
-    );
+  void addItem({
+    required String productId,
+    required CartItem cartItem,
+  }) {
+    _items[productId] = cartItem;
     totalQuantity.value += 1;
-    totalPrice.value += product.price! * quantity;
+    totalPrice.value += cartItem.product.price * cartItem.quantity;
     update(); // 상태 업데이트
   }
 
@@ -36,7 +40,7 @@ class CartController extends GetxController {
     var cartItem = _items.remove(productId);
     if (cartItem == null) return;
     totalQuantity.value -= 1;
-    totalPrice.value -= cartItem.price;
+    totalPrice.value -= cartItem.product.price * cartItem.quantity;
     update(); // 상태 업데이트
   }
 }
