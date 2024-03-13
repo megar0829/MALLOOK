@@ -3,7 +3,7 @@ import React, {
   useCallback, useRef,
 } from "react";
 import { useRouter } from "next/navigation";
-import styles from "../../styles/modal.module.css";
+import styles from "./modal.module.css";
 
 export interface ModalProps {
   children: React.ReactNode;

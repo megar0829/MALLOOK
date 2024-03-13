@@ -1,18 +1,28 @@
 "use client";
 
 import React, { useState } from 'react'
-import styles from "../../styles/product.module.css";
+import styles from "../product.module.css";
 
-import Image from 'next/image';
+import Image, {StaticImageData} from 'next/image';
 
-import iconDefault from "../../../public/images/default.png";
+import iconDefault from "../../../../public/images/default.png";
+
+import iconTop from "@/assets/img/category/top.jpg";
+import iconBottom from "@/assets/img/category/bottom.jpg";
+import iconOuter from "@/assets/img/category/outer.jpg";
+import iconOnepiece from "@/assets/img/category/onepiece.jpg";
+import iconHat from "@/assets/img/category/hat.jpg";
+import iconShoe from "@/assets/img/category/shoe.jpg";
+import iconBag from "@/assets/img/category/bag.jpg";
 
 const mainCategory = [
-  "상의", 
-  "하의", 
-  "신발", 
-  "모자", 
-  "가방"
+  ["상의", iconTop],
+  ["하의", iconBottom],
+  ["아우터", iconOuter],
+  ["원피스", iconOnepiece],
+  ["신발", iconShoe],
+  ["모자", iconHat],
+  ["가방", iconBag]
 ];
 
 const detailCategory = {
@@ -98,13 +108,13 @@ export default function Category() {
   const categoryList = () => {
     if (!isDetail) {
       return (
-        mainCategory.map((catogory, index) => {
+        mainCategory.map(([category, img], index) => {
           return (
-            <div>
-              <div>
-                <Image src={iconDefault} alt='카테고리 기본이미지' />
+            <div key={index} className={styles.category__categoryDiv}>
+              <div className={styles.category__imageDiv}>
+                <Image className={styles.category__image} src={img} alt='카테고리 이미지' />
               </div>
-              <span>{catogory}</span>
+              <span className={styles.category__spanDiv}>{category}</span>
             </div>
           );
         })
@@ -118,6 +128,12 @@ export default function Category() {
 
   return (
     <div className={styles.category__container}>
+      <div className={styles.category__categoryDiv}>
+        <div className={styles.category__imageDiv}>
+          <Image className={styles.category__image} src={iconDefault} alt='카테고리 기본이미지'/>
+        </div>
+        <span className={styles.category__spanDiv}>몰룩 랭킹</span>
+      </div>
       {categoryList()}
     </div>
   )

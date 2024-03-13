@@ -1,9 +1,9 @@
 "use client";
 
-import Modal from "@/components/modal/modal";
+import Modal from "@/app/@modal/_components/modal";
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
-import styles from "../../../styles/login.module.css";
+import styles from "./login.module.css";
 import Image from "next/image";
 
 import imgLogo from "../../../../public/images/logo.png";

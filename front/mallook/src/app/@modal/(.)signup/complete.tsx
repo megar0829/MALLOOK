@@ -1,9 +1,9 @@
 "use client";
 
-import Modal from "@/components/modal/modal";
+import Modal from "@/app/@modal/_components/modal";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
-import styles from "../../../styles/signup-complete.module.css";
+import styles from "./signup-complete.module.css";
 import Image from "next/image";
 import iconCheck from "../../../../public/images/check.png";
 
@@ -12,7 +12,7 @@ export default function Complete() {
   const router = useRouter();
   
   const goWorldcup = () => {
-    router.push("/worldcup")
+    router.replace("/worldcup")
   }
   
   const onClose = () => {
@@ -20,7 +20,7 @@ export default function Complete() {
   };
 
   const goKeyword = async () => {
-    router.push("/choose-keyword");
+    router.replace("/choose-keyword");
   }
 
   return (

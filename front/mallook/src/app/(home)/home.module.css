@@ -1,12 +1,13 @@
 .container {
-  width: inherit;
+  width: 100dvw;
+  height: 100dvh;
   background-color: black;
   display: flex;
 }
 
 .leftDiv {
   width: 40%;
-  height: 600px;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -60,7 +61,7 @@
 
 .rightDiv {
   width: 60%;
-  height: 700px;
+  height: 100dvh;
 }
 .phoneDiv {
   width: 100%;

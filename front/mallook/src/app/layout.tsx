@@ -1,7 +1,7 @@
 // import "../assets/scss/style.scss";
-import "../styles/global.css";
+import "../assets/css/global.css";
 import { Metadata } from "next";
-import Navigation from "../components/navigation"
+import Navigation from "@/app/_components/navigation";
 import Script from "next/script";
 
 export const metadata :Metadata = {
@@ -21,9 +21,9 @@ export default function Layout(
     <html lang="ko">
       <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
       <body>
-          <Navigation />
-          {children}
-          {modal}
+        <Navigation />
+        {children}
+        {modal}
       </body>
     </html>
   )
