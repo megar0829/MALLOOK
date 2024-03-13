@@ -1,9 +1,21 @@
 class Product {
+  final String? mainCategory;
+  final String? subCategory;
+  final String name;
+  final int price;
+  final int? quantity;
+  final String? brandName;
+  final String? size;
+  final int? fee;
+  final String? image;
+  final String? code;
+  final String? url;
+
   Product({
     this.mainCategory,
     this.subCategory,
-    this.name,
-    this.price,
+    required this.name,
+    required this.price,
     this.quantity,
     this.brandName,
     this.size,
@@ -13,30 +25,18 @@ class Product {
     this.url,
   });
 
-  Product.fromJson(dynamic json) {
-    mainCategory = json['mainCategory'];
-    subCategory = json['subCategory'];
-    name = json['name'];
-    price = json['price'];
-    quantity = json['quantity'];
-    brandName = json['brandName'];
-    size = json['size'];
-    fee = json['fee'];
-    image = json['image'];
-    code = json['code'];
-    url = json['url'];
-  }
-  String? mainCategory;
-  String? subCategory;
-  String? name;
-  int? price;
-  int? quantity;
-  String? brandName;
-  String? size;
-  int? fee;
-  String? image;
-  String? code;
-  String? url;
+  Product.fromJson(dynamic json)
+      : mainCategory = json['mainCategory'],
+        subCategory = json['subCategory'],
+        name = json['name'] ?? '',
+        price = json['price'] ?? 0,
+        quantity = json['quantity'],
+        brandName = json['brandName'],
+        size = json['size'],
+        fee = json['fee'],
+        image = json['image'],
+        code = json['code'],
+        url = json['url'];
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

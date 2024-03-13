@@ -25,7 +25,6 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  final CartController cartController = Get.put(CartController());
   final PageController _imageController = PageController();
   final ScrollController _storeController = ScrollController();
   final int _pageLength = Random().nextInt(5) + 3;
@@ -61,13 +60,7 @@ class _ProductScreenState extends State<ProductScreen> {
     Navigator.of(context).pop();
   }
 
-  void _clickHeartIcon() {
-    cartController.addItem(
-      widget.product.name!,
-      widget.product,
-      3,
-    );
-  }
+  void _clickHeartIcon() {}
 
   void _moveToHomeScreen() {
     Navigator.of(context).push(
@@ -91,6 +84,7 @@ class _ProductScreenState extends State<ProductScreen> {
       isScrollControlled: true,
       context: context,
       builder: (context) => OrderSheet(
+        product: widget.product,
         title: widget.product.name,
         sizes: sizes,
         colors: colors,

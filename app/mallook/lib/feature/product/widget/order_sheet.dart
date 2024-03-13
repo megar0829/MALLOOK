@@ -1,34 +1,76 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
+import 'package:mallook/global/cart/cart_controller.dart';
 
 class OrderSheet extends StatefulWidget {
+  final Product product; // TODO: API를 통해 상품 정보 로딩 필요
   final String? title;
   final List<String> sizes;
   final List<String> colors;
 
-  const OrderSheet(
-      {super.key, required this.sizes, required this.colors, this.title});
+  const OrderSheet({
+    super.key,
+    required this.sizes,
+    required this.colors,
+    this.title,
+    required this.product,
+  });
 
   @override
   State<OrderSheet> createState() => _OrderSheetState();
 }
 
 class _OrderSheetState extends State<OrderSheet> {
+  final CartController cartController = Get.put(CartController());
   String? _selectedSize;
-
   String? _selectedColor;
+  bool _isColorEnable = false;
+  final List<CartItem> _cartItems = [];
 
   void _updateSize(String? newValue) {
     setState(() {
       _selectedSize = newValue;
+      if (_selectedSize != null) {
+        _isColorEnable = true;
+      }
     });
   }
 
   void _updateColor(String? newValue) {
     setState(() {
       _selectedColor = newValue;
+
+      if (_selectedSize == null || _selectedColor == null) return;
+      CartItem cartItem = CartItem(
+        product: widget.product,
+        quantity: 1,
+        size: _selectedSize!,
+        color: _selectedColor!,
+      );
+      _cartItems.add(cartItem);
+      _selectedColor = null;
+      _selectedColor = null;
+    });
+  }
+
+  void _onCartBtnTap() {
+    // TODO: 장바구니 추가 로직
+  }
+
+  void addProductToCart() {
+    for (var cartItem in _cartItems) {
+      cartController.addItem(
+        productId: cartItem.product.name,
+        cartItem: cartItem,
+      );
+    }
+    setState(() {
+      _cartItems.clear();
     });
   }
 
@@ -138,8 +180,128 @@ class _OrderSheetState extends State<OrderSheet> {
                       hintText: "컬러 선택!",
                       onChanged: _updateColor,
                       selectedItem: _selectedColor,
+                      isEnable: _isColorEnable,
                     )
                   ],
+                ),
+              ),
+              Expanded(
+                child: ListView.separated(
+                  itemCount: _cartItems.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) => ListTile(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Text(
+                          _cartItems[index].size,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: Sizes.size16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          _cartItems[index].color,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: Sizes.size16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(
+                            Sizes.size6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(
+                              Sizes.size6,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              if (_cartItems[index].quantity > 0) {
+                                setState(() {
+                                  _cartItems[index].quantity -= 1;
+                                });
+                              }
+                            },
+                            child: const Icon(
+                              Icons.remove,
+                              size: Sizes.size18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: Sizes.size10,
+                            ), // Sizes.size12 대신 사용
+                            child: Text(
+                              '${_cartItems[index].quantity}',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: Sizes.size14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(
+                            Sizes.size6,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.3),
+                            borderRadius: BorderRadius.circular(
+                              Sizes.size6,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _cartItems[index].quantity += 1;
+                              });
+                            },
+                            child: const Icon(
+                              Icons.add,
+                              size: Sizes.size18,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(
+                            Sizes.size6,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              Sizes.size6,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                _cartItems.remove(_cartItems[index]);
+                              });
+                            },
+                            child: const Icon(
+                              Icons.close_rounded,
+                              size: Sizes.size16,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -186,7 +348,7 @@ class _OrderSheetState extends State<OrderSheet> {
                     vertical: Sizes.size12,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: _onCartBtnTap,
                 child: const Text(
                   '장바구니',
                   style: TextStyle(
