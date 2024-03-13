@@ -8,7 +8,7 @@ import 'package:mallook/feature/home/home_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
 import 'package:mallook/feature/user/user_screen.dart';
 import 'package:mallook/feature/worldcup/wordcup_screen.dart';
-import 'package:mallook/global/cart/exit_snackbar.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 
 const List<TabItem> items = [
   TabItem(
@@ -55,7 +55,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            exitSnackBar(),
+            mallookSnackBar('한번 더 누르면 앱이 종료됩니다.'),
           );
           return;
         }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-SnackBar exitSnackBar() {
+SnackBar mallookSnackBar(String title) {
   return SnackBar(
     behavior: SnackBarBehavior.floating,
     elevation: 0.0,
@@ -11,9 +11,9 @@ SnackBar exitSnackBar() {
     ),
     duration: const Duration(seconds: 2),
     backgroundColor: Colors.black54.withOpacity(0.6),
-    content: const Text(
-      '한번 더 누르면 앱이 종료됩니다.',
-      style: TextStyle(
+    content: Text(
+      title,
+      style: const TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.bold,
       ),

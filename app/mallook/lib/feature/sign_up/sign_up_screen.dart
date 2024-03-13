@@ -8,7 +8,7 @@ import 'package:mallook/feature/onboarding/interests_screen.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 import 'package:mallook/feature/sign_up/widgets/gender_radio_button.dart';
 import 'package:mallook/feature/sign_up/widgets/phone_input_formatter.dart';
-import 'package:mallook/global/cart/exit_snackbar.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -179,7 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            exitSnackBar(),
+            mallookSnackBar('한번 더 누르면 앱이 종료됩니다.'),
           );
           return;
         }
