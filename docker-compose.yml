@@ -1,0 +1,44 @@
+version: "3"
+services:
+  springboot:
+    container_name: mallook-api
+    image: duckbill413/mallook-docker-api:latest
+    ports:
+      - "8080:8080"
+    environment:
+      TZ: "Asia/Seoul"
+    networks:
+      - mallook_net
+    volumes:
+      - /home/ec2-user/logs:/logs
+
+  redis:
+    image: redis:alpine
+    container_name: mallook-redis
+    command: redis-server --port 6379
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - mallook_net
+    restart: always
+
+  nginx:
+    container_name: mallook-nginx
+    image: duckbill413/mallook-nginx:latest
+    build:
+      context: ./back/mallook/nginx
+      dockerfile: nginxDockerfile
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mallook_net
+    depends_on:
+      - springboot
+
+networks:
+  mallook_net:
+    driver: bridge

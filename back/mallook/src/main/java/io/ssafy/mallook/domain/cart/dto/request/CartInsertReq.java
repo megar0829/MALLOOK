@@ -5,19 +5,19 @@ import jakarta.validation.constraints.NotBlank;
 
 @Schema(description = "장바구니에 상품 추가 시 요청 DTO")
 public record CartInsertReq(
-    @Schema(name="상품 id")
+    @Schema(description="상품 id")
     @NotBlank(message = "상품 id는 공백일 수 없습니다.")
     Long productId,
-    @Schema(name="상품 개수")
+    @Schema(description="상품 개수")
     @NotBlank(message = "상품 개수는 공백일 수 없습니다.")
     Long productCount,
-    @Schema(name="상품 사이즈")
+    @Schema(description="상품 사이즈")
     @NotBlank(message = "상품 사이즈는 공백일 수 없습니다.")
     String productSize,
-    @Schema(name="상품 색상")
+    @Schema(description="상품 색상")
     @NotBlank(message = "상품 색상은 공백일 수 없습니다.")
     String productColor,
-    @Schema(name="배송료")
+    @Schema(description="배송료")
     Long productFee
 ) {
 }
