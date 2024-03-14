@@ -13,14 +13,19 @@ class CartItem {
     required this.size,
     required this.color,
   });
+
+  @override
+  String toString() {
+    return 'CartItem{product: $product, quantity: $quantity, size: $size, color: $color}';
+  }
 }
 
 class CartController extends GetxController {
-  final _items = <String, CartItem>{}.obs;
+  final _items = <CartItem>[].obs;
   final _totalPrice = 0.obs;
   final _totalCount = 0.obs;
 
-  Map<String, CartItem> get items => _items;
+  List<CartItem> get items => _items;
 
   RxInt get totalQuantity => _totalCount;
 
@@ -30,15 +35,14 @@ class CartController extends GetxController {
     required String productId,
     required CartItem cartItem,
   }) {
-    _items[productId] = cartItem;
+    _items.add(cartItem);
     totalQuantity.value += 1;
     totalPrice.value += cartItem.product.price * cartItem.quantity;
     update(); // 상태 업데이트
   }
 
-  void removeItem(String productId) {
-    var cartItem = _items.remove(productId);
-    if (cartItem == null) return;
+  void removeItem({required CartItem cartItem}) {
+    var removedCartItem = _items.remove(cartItem);
     totalQuantity.value -= 1;
     totalPrice.value -= cartItem.product.price * cartItem.quantity;
     update(); // 상태 업데이트

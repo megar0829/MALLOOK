@@ -143,7 +143,7 @@ class _OptionSelectorState extends State<OptionSelector> {
                 border: Border.all(
                   color: Colors.black26,
                 ),
-                color: Colors.black54.withOpacity(0.6),
+                color: Colors.black54.withOpacity(0.4),
               ),
             ),
           )

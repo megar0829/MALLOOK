@@ -1,11 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/order/order_screen.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 
 class OrderSheet extends StatefulWidget {
   final Product product; // TODO: API를 통해 상품 정보 로딩 필요
@@ -29,15 +31,11 @@ class _OrderSheetState extends State<OrderSheet> {
   final CartController cartController = Get.put(CartController());
   String? _selectedSize;
   String? _selectedColor;
-  bool _isColorEnable = false;
   final List<CartItem> _cartItems = [];
 
   void _updateSize(String? newValue) {
     setState(() {
       _selectedSize = newValue;
-      if (_selectedSize != null) {
-        _isColorEnable = true;
-      }
     });
   }
 
@@ -53,16 +51,40 @@ class _OrderSheetState extends State<OrderSheet> {
         color: _selectedColor!,
       );
       _cartItems.add(cartItem);
-      _selectedColor = null;
+      _selectedSize = null;
       _selectedColor = null;
     });
   }
 
-  void _onCartBtnTap() {
-    // TODO: 장바구니 추가 로직
+  void _onOrderBtnTap() {
+    if (_cartItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(
+          title: '담겨 있는 상품이 없습니다!',
+        ),
+      );
+
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OrderScreen(
+          carItem: _cartItems,
+        ),
+      ),
+    );
   }
 
-  void addProductToCart() {
+  void _onCartBtnTap() {
+    if (_cartItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(
+          title: '담겨 있는 상품이 없습니다!',
+        ),
+      );
+
+      return;
+    }
     for (var cartItem in _cartItems) {
       cartController.addItem(
         productId: cartItem.product.name,
@@ -72,6 +94,18 @@ class _OrderSheetState extends State<OrderSheet> {
     setState(() {
       _cartItems.clear();
     });
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      mallookSnackBar(
+        title: "상품이 장바구니에 담겼습니다.",
+        icon: FontAwesomeIcons.arrowRight,
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const OrderScreen(),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -180,7 +214,7 @@ class _OrderSheetState extends State<OrderSheet> {
                       hintText: "컬러 선택!",
                       onChanged: _updateColor,
                       selectedItem: _selectedColor,
-                      isEnable: _isColorEnable,
+                      isEnable: _selectedSize == null ? false : true,
                     )
                   ],
                 ),
@@ -226,9 +260,13 @@ class _OrderSheetState extends State<OrderSheet> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              if (_cartItems[index].quantity > 0) {
+                              if (_cartItems[index].quantity > 1) {
                                 setState(() {
                                   _cartItems[index].quantity -= 1;
+                                });
+                              } else {
+                                setState(() {
+                                  _cartItems.remove(_cartItems[index]);
                                 });
                               }
                             },
@@ -322,18 +360,20 @@ class _OrderSheetState extends State<OrderSheet> {
               OutlinedButton(
                 style: OutlinedButton.styleFrom(
                   side: BorderSide(
-                    color: Colors.grey.shade300,
+                    color: Colors.grey.shade400,
                   ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: Sizes.size32,
                     vertical: Sizes.size12,
                   ),
                 ),
-                onPressed: () {},
+                onPressed: _onOrderBtnTap,
                 child: Text(
                   '바로구매',
                   style: TextStyle(
-                    color: Theme.of(context).primaryColor,
+                    color: _cartItems.isEmpty
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).primaryColorDark,
                     fontSize: Sizes.size18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -342,7 +382,9 @@ class _OrderSheetState extends State<OrderSheet> {
               Gaps.h20,
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: _cartItems.isEmpty
+                      ? Theme.of(context).primaryColor
+                      : Theme.of(context).primaryColorDark,
                   padding: const EdgeInsets.symmetric(
                     horizontal: Sizes.size32,
                     vertical: Sizes.size12,

@@ -179,7 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            mallookSnackBar('한번 더 누르면 앱이 종료됩니다.'),
+            mallookSnackBar(title: '한번 더 누르면 앱이 종료됩니다.'),
           );
           return;
         }
