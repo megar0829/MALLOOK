@@ -10,14 +10,18 @@ public record CartInsertReq(
     Long productId,
     @Schema(description="상품 개수")
     @NotBlank(message = "상품 개수는 공백일 수 없습니다.")
-    Long productCount,
+    Long count,
     @Schema(description="상품 사이즈")
     @NotBlank(message = "상품 사이즈는 공백일 수 없습니다.")
-    String productSize,
+    String size,
+
+    @Schema(description = "상품 가격")
+    @NotBlank(message = "상품 가격은 공백일 수 없습니다.")
+    Long price,
     @Schema(description="상품 색상")
     @NotBlank(message = "상품 색상은 공백일 수 없습니다.")
-    String productColor,
+    String color,
     @Schema(description="배송료")
-    Integer productFee
+    Integer fee
 ) {
 }
