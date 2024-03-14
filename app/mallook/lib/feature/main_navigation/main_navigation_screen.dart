@@ -8,23 +8,24 @@ import 'package:mallook/feature/home/home_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
 import 'package:mallook/feature/user/user_screen.dart';
 import 'package:mallook/feature/worldcup/wordcup_screen.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 
 const List<TabItem> items = [
   TabItem(
     icon: FontAwesomeIcons.houseChimney,
-    title: '홈',
+    title: '추천',
   ),
   TabItem(
     icon: FontAwesomeIcons.bars,
-    title: '카테고리',
+    title: '상품',
   ),
   TabItem(
     icon: FontAwesomeIcons.shirt,
-    title: '코디',
+    title: '스타일',
   ),
   TabItem(
     icon: FontAwesomeIcons.trophy,
-    title: '월드컵',
+    title: '검색',
   ),
   TabItem(
     icon: FontAwesomeIcons.solidUser,
@@ -40,8 +41,8 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 0;
   DateTime? _currentBackPressTime;
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,24 +55,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              elevation: 0.0,
-              shape: const StadiumBorder(
-                side: BorderSide(
-                  style: BorderStyle.none,
-                ),
-              ),
-              duration: const Duration(seconds: 2),
-              backgroundColor: Colors.grey.shade100,
-              content: const Text(
-                '한번 더 누르면 앱이 종료됩니다.',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            mallookSnackBar(title: '한번 더 누르면 앱이 종료됩니다.'),
           );
           return;
         }
@@ -80,20 +64,6 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          title: Center(
-            child: Text(
-              "MALLOOK",
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: Sizes.size24,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-        ),
         body: Stack(
           children: [
             Offstage(
@@ -140,37 +110,5 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         ),
       ),
     );
-  }
-
-  Future<void> _onBackBtnPressed(BuildContext context) {
-    {
-      DateTime now = DateTime.now();
-      if (_currentBackPressTime == null ||
-          now.difference(_currentBackPressTime!) > const Duration(seconds: 2)) {
-        _currentBackPressTime = now;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            behavior: SnackBarBehavior.floating,
-            elevation: 0.0,
-            shape: const StadiumBorder(
-              side: BorderSide(
-                style: BorderStyle.none,
-              ),
-            ),
-            duration: const Duration(seconds: 2),
-            backgroundColor: Colors.grey.shade100,
-            content: const Text(
-              '한번 더 누르면 앱이 종료됩니다.',
-              style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        );
-        return Future.value(false);
-      }
-      return Future.value(true);
-    }
   }
 }
