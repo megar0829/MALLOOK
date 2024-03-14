@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.cart.dao;
 
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
+import io.ssafy.mallook.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,13 +25,8 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             """
     )
     Page<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId);
-    @Query(
-            """
-            select c from Cart c
-            where c.status = true and c.member.id = :memberId
-            """
-    )
-    Optional<Cart> findMyCartByMember(@Param("memberId") UUID memberId);
+
+    Optional<Cart> findMyCartByMember(Member member);
 
 
 

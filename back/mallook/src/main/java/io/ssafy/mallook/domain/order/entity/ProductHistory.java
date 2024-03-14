@@ -25,6 +25,6 @@ public class ProductHistory extends BaseEntity {
     private String productImage;
     private String productSize;
     private String productColor;
-    private Long productFee;
+    private Integer productFee;
 //    private Shoppingmall shoppingmallId;
 }

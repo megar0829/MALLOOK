@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.cart.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description="장바구니 내 상품 조회시 응답 DTO")
@@ -11,19 +12,19 @@ public record CartDetailRes(
         @Schema(description="상품id")
         Long productId,
         @Schema(description="상품 가격")
-        Long productPrice,
+        Long price,
         @Schema(description="상품개수")
-        Long productCount,
+        Long count,
         @Schema(description="상품명")
-        String productName,
+        String name,
         @Schema(description="상품이미지")
-        String productImage,
+        String image,
         @Schema(description="상품사이즈")
-        String productSize,
+        String size,
         @Schema(description="상품색상")
-        String productColor,
+        String color,
         @Schema(description="상품 배송료")
-        Long productFee
+        Integer fee
 
 ) {
 }

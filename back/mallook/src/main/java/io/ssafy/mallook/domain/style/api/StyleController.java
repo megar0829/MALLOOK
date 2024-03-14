@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.style.api;
 
 import io.ssafy.mallook.domain.style.application.StyleService;
+import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StylePageRes;
@@ -88,8 +89,8 @@ public class StyleController {
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteMyStyle(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody Long styleId){
-        styleService.DeleteStyle(userSecurityDTO.getId(), styleId);
+            @RequestBody StyleDeleteReq styleDeleteReq){
+        styleService.DeleteStyle(userSecurityDTO.getId(), styleDeleteReq.styleIdList());
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,
                 "스타일 삭제 성공"

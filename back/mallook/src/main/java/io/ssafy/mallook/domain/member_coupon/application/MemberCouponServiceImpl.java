@@ -7,6 +7,7 @@ import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 import java.util.UUID;
 
@@ -27,7 +28,7 @@ public class MemberCouponServiceImpl implements MemberCouponService{
 
     @Override
     @Transactional
-    public void deleteMyCoupon(Long memberCouponId) {
-        memberCouponRepository.deleteMyCoupon(memberCouponId);
+    public void deleteMyCoupon(List<Long> memberCouponIdList) {
+        memberCouponRepository.deleteMyCoupon(memberCouponIdList);
     }
 }
