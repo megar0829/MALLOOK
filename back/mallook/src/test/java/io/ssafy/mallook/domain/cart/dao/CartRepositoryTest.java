@@ -34,7 +34,7 @@ class CartRepositoryTest {
                 .cartProductList(cartProductList)
                 .totalPrice(10000L)
                 .totalCount(10L)
-                .totalFee(1000L)
+                .totalFee(1000)
                 .build();
     }
 
@@ -63,7 +63,7 @@ class CartRepositoryTest {
         Cart cart = buildCart(member, cartProductList);
         cartRepository.save(cart);
 
-        Optional<Cart> result = cartRepository.findMyCartByMember_Id(member.getId());
+        Optional<Cart> result = cartRepository.findMyCartByMember(member);
         assertThat(result).isNotNull(); //  결과가 null인지 아닌지 확인
     }
 
