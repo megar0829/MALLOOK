@@ -93,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                   Obx(() {
-                                    // totalQuantity가 0보다 큰 경우에만 Container를 표시합니다.
                                     if (cartController.totalQuantity.value >
                                         0) {
                                       return Container(
@@ -125,8 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       );
                                     } else {
-                                      return const SizedBox
-                                          .shrink(); // totalQuantity가 0 이하일 경우 아무것도 표시하지 않습니다.
+                                      return const SizedBox.shrink();
                                     }
                                   }),
                                 ],
