@@ -21,7 +21,7 @@ export default function Navigation() {
       <div className={styles.container}>
         <div className={styles.leftContainer}>
           <div>
-            <Link href="/public">
+            <Link href="/">
               <Image 
                 src={imgLogo} 
                 alt="Logo Image" 

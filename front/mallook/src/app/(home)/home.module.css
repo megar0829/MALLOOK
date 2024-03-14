@@ -1,8 +1,8 @@
 .container {
   width: 100dvw;
   height: 100dvh;
-  background-color: black;
   display: flex;
+  background-color: black;
 }
 
 .leftDiv {
@@ -14,13 +14,14 @@
 }
 .leftDivTopDiv {
   width: 80%;
-  height: 200px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   margin-left: 70px;
   margin-top: 120px;
+  padding-left: 80px;
 }
 .leftDivTopText {
   font-size: 60px;
@@ -62,6 +63,7 @@
 .rightDiv {
   width: 60%;
   height: 100dvh;
+  margin-top: 20dvh;
 }
 .phoneDiv {
   width: 100%;
