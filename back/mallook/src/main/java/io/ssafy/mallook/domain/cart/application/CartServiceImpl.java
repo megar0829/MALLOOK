@@ -14,6 +14,7 @@ import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
@@ -53,6 +55,7 @@ public class CartServiceImpl implements CartService{
         cart.setTotalPrice(totalPrice);
         cart.setTotalFee(totalFee);
         cart.setTotalCount(totalCnt);
+        cart.setMember(new Member(memberId));
         Cart rs = cartRepository.save(cart);
 
         // cartproduct 저장

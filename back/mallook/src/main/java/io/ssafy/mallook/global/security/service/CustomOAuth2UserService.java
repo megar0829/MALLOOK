@@ -124,6 +124,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     // 신규 회원 등록
     public Member registerMember(SocialType socialType, String socialId, String email) {
+        log.info(email);
         // 소셜 정보
         SocialMember socialMember = SocialMember.builder()
                 .socialType(socialType)
