@@ -87,7 +87,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
           controller: _scrollController,
           child: Column(
             children: [
-              Gaps.v4,
+              Gaps.v10,
               FutureBuilder(
                 future: _script,
                 builder: (context, snapshot) {

@@ -10,6 +10,7 @@ import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
 import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -31,14 +32,11 @@ class _ProductScreenState extends State<ProductScreen> {
   int _currentPageIndex = 0;
 
   final List<String> sizes = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6 asfniasfnpasfjoasnfpsoajfposafnoasnfoanfasnpfonsofnowfnm',
-    'Item7',
-    'Item8',
+    'XS',
+    'S',
+    'M',
+    'L',
+    'XL',
   ];
 
   final List<String> colors = [
@@ -66,14 +64,6 @@ class _ProductScreenState extends State<ProductScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => const MainNavigationScreen(),
-      ),
-    );
-  }
-
-  void _moveToSearchScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SearchScreen(),
       ),
     );
   }
@@ -109,20 +99,8 @@ class _ProductScreenState extends State<ProductScreen> {
               size: Sizes.size28,
             ),
           ),
-          IconButton(
-            onPressed: _moveToSearchScreen,
-            icon: const FaIcon(
-              FontAwesomeIcons.magnifyingGlass,
-              size: Sizes.size24,
-            ),
-          ),
-          IconButton(
-            onPressed: _onClosePressed,
-            icon: const FaIcon(
-              FontAwesomeIcons.xmark,
-              size: Sizes.size28,
-            ),
-          )
+          const CartIconButton(),
+          Gaps.h20,
         ],
       ),
       body: SingleChildScrollView(
@@ -236,7 +214,7 @@ class _ProductScreenState extends State<ProductScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    widget.product.name!,
+                    widget.product.name,
                     maxLines: 5,
                     style: const TextStyle(
                       color: Colors.black,
@@ -261,7 +239,7 @@ class _ProductScreenState extends State<ProductScreen> {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).primaryColorDark,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size12,
                   ),

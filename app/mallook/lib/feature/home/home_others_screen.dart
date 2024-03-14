@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
@@ -78,6 +79,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
         ),
         child: Column(
           children: [
+            Gaps.v10,
             Expanded(
               // ListView를 Expanded로 감싸주어 오류를 방지합니다.
               child: ListView.separated(
