@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.product.api;
 import io.ssafy.mallook.config.security.WithMockCustomUser;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.entity.MainCategory;
+import io.ssafy.mallook.domain.product.entity.SubCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,19 +37,19 @@ class ProductControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getProductList() throws Exception {
-        String mainCategory = "top";
-        String subCategory = "sport";
+        MainCategory mainCategory = MainCategory.TOP;
+        SubCategory subCategory = SubCategory.SPORT;
         List<ProductListDto> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(0, 2);
         Page<ProductListDto> page = new PageImpl<>(list, pageable, list.size());
-        when(productService.getProductList(pageable, mainCategory.toUpperCase(), subCategory.toUpperCase()))
+        when(productService.getProductList(pageable, mainCategory, subCategory))
                 .thenReturn(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .param("primary", mainCategory)
-                        .param("secondary", subCategory))
+                        .param("primary", String.valueOf(mainCategory))
+                        .param("secondary", String.valueOf(subCategory)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));

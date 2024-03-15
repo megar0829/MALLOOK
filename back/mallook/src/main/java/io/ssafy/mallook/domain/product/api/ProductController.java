@@ -2,6 +2,8 @@ package io.ssafy.mallook.domain.product.api;
 
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.entity.MainCategory;
+import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -28,13 +30,13 @@ public class ProductController {
             sort = "name",
             direction = Sort.Direction.ASC
     ) Pageable pageable
-            , @RequestParam(name = "primary", required = false) String mainCategory
-            , @RequestParam(name = "secondary",required = false) String subCategory
+            , @RequestParam(name = "primary", required = false) MainCategory mainCategory
+            , @RequestParam(name = "secondary",required = false) SubCategory subCategory
     ) {
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getProductList(pageable, mainCategory.toUpperCase(), subCategory.toUpperCase())
+                productService.getProductList(pageable, mainCategory, subCategory)
         );
     }
 }

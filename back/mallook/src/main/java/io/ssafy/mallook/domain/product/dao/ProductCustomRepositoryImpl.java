@@ -25,11 +25,13 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
 
     @Override
     public Page<ProductListDto> findAllProduct(Pageable pageable,
-                                        String mainCategory,
-                                        String subCategory) {
+                                        MainCategory mainCategory,
+                                        SubCategory subCategory) {
         List<Product> products = jpaQueryFactory
                 .selectFrom(product)
                 .where(allEq(mainCategory, subCategory))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         return new PageImpl<>(
@@ -40,15 +42,16 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 products.size());
     }
 
-    private BooleanExpression allEq(String mainCategory, String subCategory) {
+    private BooleanExpression allEq(MainCategory mainCategory,
+                                    SubCategory subCategory) {
         return mainCategoryEq(mainCategory).and(subCategoryEq(subCategory));
     }
 
-    private BooleanExpression mainCategoryEq(String mainCategoryEq) {
-        return mainCategoryEq != null ? QProduct.product.mainCategory.eq(MainCategory.valueOf(mainCategoryEq)) : null;
+    private BooleanExpression mainCategoryEq(MainCategory mainCategoryEq) {
+        return mainCategoryEq != null ? QProduct.product.mainCategory.eq(mainCategoryEq) : null;
     }
 
-    private BooleanExpression subCategoryEq(String subCategoryEq) {
-        return subCategoryEq != null ? product.subCategory.eq(SubCategory.valueOf(subCategoryEq)) : null;
+    private BooleanExpression subCategoryEq(SubCategory subCategoryEq) {
+        return subCategoryEq != null ? product.subCategory.eq(subCategoryEq) : null;
     }
 }

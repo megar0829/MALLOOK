@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.product.application;
 import io.ssafy.mallook.domain.product.dao.ProductCustomRepository;
 import io.ssafy.mallook.domain.product.dao.ProductRepository;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.entity.MainCategory;
+import io.ssafy.mallook.domain.product.entity.SubCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductCustomRepository productCustomRepository;
 
     @Override
-    public Page<ProductListDto> getProductList(Pageable pageable, String mainCategory, String subCategory) {
+    public Page<ProductListDto> getProductList(Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         return productCustomRepository.findAllProduct(pageable, mainCategory, subCategory);
     }
 }
