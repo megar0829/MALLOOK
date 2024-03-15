@@ -15,7 +15,6 @@ import java.util.List;
 public class WithMockCustomUserSecurityContextFactory implements WithSecurityContextFactory<WithMockCustomUser> {
     @Override
     public SecurityContext createSecurityContext(WithMockCustomUser annotation) {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
         List<SimpleGrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
         UserSecurityDTO userSecurityDTO = UserSecurityDTO.fromSocial()
                 .username("123e4567-e89b-12d3-a456-426614174000")
