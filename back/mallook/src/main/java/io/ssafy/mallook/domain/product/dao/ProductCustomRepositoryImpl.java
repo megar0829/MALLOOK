@@ -9,12 +9,11 @@ import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.QProduct;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.ssafy.mallook.domain.product.entity.QProduct.product;
 
@@ -25,22 +24,22 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Page<ProductListDto> findAllProduct(Pageable pageable,
-                                        MainCategory mainCategory,
-                                        SubCategory subCategory) {
+    public Slice<ProductListDto> findAllProduct(Long lastProductId, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         List<Product> products = jpaQueryFactory
                 .selectFrom(product)
-                .where(allEq(mainCategory, subCategory))
-                .offset(pageable.getOffset())
+                .where(allEq(mainCategory, subCategory),
+                        product.id.lt(lastProductId))
+                .orderBy(product.id.desc())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(
-                products.stream()
-                        .map(ProductListDto::toDto)
-                        .toList(),
-                pageable,
-                products.size());
+        boolean hasNext = products.size() > pageable.getPageSize();
+        List<ProductListDto> productDtos = products.stream()
+                .limit(pageable.getPageSize())
+                .map(ProductListDto::toDto)
+                .collect(Collectors.toList());
+
+        return new SliceImpl<>(productDtos, pageable, hasNext);
     }
 
     private BooleanExpression allEq(MainCategory mainCategory,

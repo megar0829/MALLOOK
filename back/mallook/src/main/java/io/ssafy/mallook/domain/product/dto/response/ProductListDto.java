@@ -5,6 +5,7 @@ import lombok.Builder;
 
 @Builder
 public record ProductListDto(
+        Long id,
         String mainCategory,
         String subCategory,
         String name,
@@ -20,6 +21,7 @@ public record ProductListDto(
 ) {
     public static ProductListDto toDto(Product product) {
         return ProductListDto.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .build();
     }

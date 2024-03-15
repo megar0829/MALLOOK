@@ -9,6 +9,7 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -25,18 +26,19 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public ResponseEntity<BaseResponse<Page<ProductListDto>>> getProductList(@PageableDefault(
-            size = 20,
-            sort = "name",
-            direction = Sort.Direction.ASC
-    ) Pageable pageable
-            , @RequestParam(name = "primary", required = false) MainCategory mainCategory
-            , @RequestParam(name = "secondary",required = false) SubCategory subCategory
+    public ResponseEntity<BaseResponse<Slice<ProductListDto>>> getProductList(
+            @PageableDefault(size = 20,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false, defaultValue = "21") Long lastProductId,
+            @RequestParam(defaultValue = "10") Integer size,
+            @RequestParam(name = "primary", required = false) MainCategory mainCategory,
+            @RequestParam(name = "secondary",required = false) SubCategory subCategory
     ) {
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getProductList(pageable, mainCategory, subCategory)
+                productService.getProductList(lastProductId, pageable, mainCategory, subCategory)
         );
     }
 }

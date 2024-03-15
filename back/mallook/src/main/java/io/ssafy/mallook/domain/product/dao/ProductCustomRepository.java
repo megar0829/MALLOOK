@@ -6,6 +6,7 @@ import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,7 +14,5 @@ import java.util.List;
 @Repository
 public interface ProductCustomRepository {
 
-    Page<ProductListDto> findAllProduct(Pageable pageable,
-                                        MainCategory mainCategory,
-                                        SubCategory subCategory);
+    Slice<ProductListDto> findAllProduct(Long lastProductId, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 }
