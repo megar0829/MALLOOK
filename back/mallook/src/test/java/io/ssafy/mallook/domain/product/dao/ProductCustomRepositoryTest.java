@@ -68,8 +68,8 @@ class ProductCustomRepositoryTest {
         Pageable pageable = PageRequest.of(0, 2);
 
         Page<ProductListDto> result = productCustomRepository.findAllProduct(pageable,
-                "TOP",
-                "FORMAL");
+                MainCategory.TOP,
+                SubCategory.FORMAL);
 
         List<ProductListDto> expectedList = mockProducts.stream()
                 .map(ProductListDto::toDto)
