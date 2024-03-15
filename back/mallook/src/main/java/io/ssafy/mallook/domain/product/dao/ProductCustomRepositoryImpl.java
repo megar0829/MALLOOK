@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.dao;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
@@ -48,10 +49,10 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     }
 
     private BooleanExpression mainCategoryEq(MainCategory mainCategoryEq) {
-        return mainCategoryEq != null ? QProduct.product.mainCategory.eq(mainCategoryEq) : null;
+        return mainCategoryEq != null ? product.mainCategory.eq(mainCategoryEq) : Expressions.asBoolean(true).isTrue();
     }
 
     private BooleanExpression subCategoryEq(SubCategory subCategoryEq) {
-        return subCategoryEq != null ? product.subCategory.eq(subCategoryEq) : null;
+        return subCategoryEq != null ? product.subCategory.eq(subCategoryEq) : Expressions.asBoolean(true).isTrue();
     }
 }
