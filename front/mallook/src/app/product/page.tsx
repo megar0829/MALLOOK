@@ -13,7 +13,7 @@ export default async function ProductPage() {
 
   return (
     <div className={styles.container}>
-      {/*<Category />*/}
+      <Category />
       <Recommend />
       <Product />
     </div>
