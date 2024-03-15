@@ -14,7 +14,7 @@ class Assets {
       'assets/images/mypage_sample_page.jpg';
   static const String imagesProductSamplePage =
       'assets/images/product_sample_page.png';
-  static const String imagesScriptDefault = 'assets/images/script_default.png';
+  static const String imagesScriptDefault = 'assets/images/ssafy_logo.png';
   static const String imagesStyleSamplePage =
       'assets/images/style_sample_page.png';
 }

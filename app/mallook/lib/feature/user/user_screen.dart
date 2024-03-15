@@ -35,7 +35,7 @@ class UserScreen extends StatelessWidget {
                 onTap: () {},
                 leading: const FaIcon(
                   FontAwesomeIcons.trophy,
-                  color: Colors.black,
+                  color: Colors.orange,
                   size: Sizes.size24,
                 ),
                 title: const Text(

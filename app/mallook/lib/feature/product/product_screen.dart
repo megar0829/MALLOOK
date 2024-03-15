@@ -2,14 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
-import 'package:mallook/feature/search/search_screen.dart';
-import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -95,8 +92,9 @@ class _ProductScreenState extends State<ProductScreen> {
           IconButton(
             onPressed: _moveToHomeScreen,
             icon: const FaIcon(
-              Icons.home,
-              size: Sizes.size28,
+              FontAwesomeIcons.house,
+              size: Sizes.size24,
+              color: Colors.black,
             ),
           ),
           const CartIconButton(),

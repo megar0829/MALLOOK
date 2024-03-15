@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/script.dart';
 
@@ -31,7 +33,7 @@ class RankScriptBox extends StatelessWidget {
               BlendMode.srcOver,
             ),
             child: FadeInImage.assetNetwork(
-              placeholder: "assets/images/script_default.png",
+              placeholder: "assets/images/ssafy_logo.png",
               image: script.imageUrl!,
               fit: BoxFit.cover,
               filterQuality: FilterQuality.low,
@@ -56,19 +58,31 @@ class RankScriptBox extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Text(
-                        "sofnsfosnfo",
+                      CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: FaIcon(
+                          FontAwesomeIcons.solidUser,
+                          color: Theme.of(context).primaryColorDark,
+                          size: Sizes.size24,
+                        ),
+                      ),
+                      Gaps.h12,
+                      const Text(
+                        "아바타",
+                        maxLines: 2,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: Sizes.size18,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                   Text(
                     script.name!,
+                    maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Colors.white,
