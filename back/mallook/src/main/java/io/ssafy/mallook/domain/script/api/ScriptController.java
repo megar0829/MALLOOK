@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -32,13 +33,15 @@ public class ScriptController {
     private final ScriptService scriptService;
 
     @GetMapping
-    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                           @PageableDefault(size = 2,
-                                                     sort = "createdAt",
-                                                     direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Slice<ScriptListDto>>> getScriptList(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PageableDefault(size = 20,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false, defaultValue = "21") Long cursor) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                scriptService.getScriptList(principal.getId(), pageable)
+                scriptService.getScriptList(cursor, principal.getId(), pageable)
         );
     }
 

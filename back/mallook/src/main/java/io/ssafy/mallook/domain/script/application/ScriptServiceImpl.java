@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,10 @@ public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
 
     @Override
-    public Page<ScriptListDto> getScriptList(UUID id, Pageable pageable) {
+    public Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return scriptRepository.findAllByMember(proxyMember, pageable)
+        return scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(ScriptListDto::toDto);
     }
 

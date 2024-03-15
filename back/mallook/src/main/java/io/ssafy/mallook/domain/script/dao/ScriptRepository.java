@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +18,8 @@ import java.util.Optional;
 public interface ScriptRepository extends JpaRepository<Script, Long> {
 
     Page<Script> findAllByMember(Member member, Pageable pageable);
+
+    Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")
