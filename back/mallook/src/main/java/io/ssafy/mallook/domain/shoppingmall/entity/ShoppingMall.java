@@ -2,7 +2,6 @@ package io.ssafy.mallook.domain.shoppingmall.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 @Getter
@@ -11,8 +10,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="shopping_mall")
-public class Shoppingmall extends BaseEntity {
+@Table(name = "shopping_mall")
+public class ShoppingMall extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

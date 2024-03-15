@@ -1,7 +1,7 @@
 package io.ssafy.mallook.domain.coupon.api;
 
 import io.ssafy.mallook.domain.coupon.application.CouponService;
-import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
+import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
@@ -20,8 +20,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/coupons")
 @RequiredArgsConstructor
@@ -35,9 +33,9 @@ public class CouponController {
                     @ApiResponse(responseCode = "404", description = "쿠폰 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<List<CouponRes>>> findMyCouponList(
+    public ResponseEntity<BaseResponse<CouponPageRes>> findMyCouponList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
+            @PageableDefault(size= 20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
         var result = couponService.findMyCouponList(pageable, userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

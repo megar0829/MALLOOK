@@ -1,0 +1,63 @@
+.cody {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    position: relative;
+}
+.codyImg {
+    position: absolute;
+    object-fit: cover;
+    height: 100%;
+    border-radius: 25px;
+    z-index: 1;
+}
+.codyImg__cover {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 25px;
+    z-index: 5;
+}
+.cody__topDiv{
+    z-index: 10;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-top: 15px;
+}
+.cody__topDiv__profileDiv {
+    width: 40px;
+    height: 40px;
+    background-color: #d5cece;
+    border-radius: 100%;
+    border: 1px solid lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cody__topDiv__profileImg {
+    width: 35px;
+    height: 35px;
+    opacity: 0.7;
+}
+.cody__topDiv__username {
+    font-size: 17px;
+    font-weight: 800;
+    color: white;
+    margin-left: 10px;
+}
+.cody__bottomDiv {
+    z-index: 10;
+    align-self: center;
+    margin-bottom: 40px;
+}
+.cody__bottomDiv__codyName {
+    font-size: 40px;
+    font-weight: 600;
+    color: white;
+}
