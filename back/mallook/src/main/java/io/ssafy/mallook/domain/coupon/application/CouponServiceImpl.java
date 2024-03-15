@@ -19,5 +19,4 @@ public class CouponServiceImpl implements CouponService{
         var result = couponRepository.findAllByMemberId(pageable, memberId);
         return new CouponPageRes(result.getContent(), result.getTotalPages(), result.getNumber());
     }
-
 }
