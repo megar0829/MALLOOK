@@ -16,10 +16,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -59,17 +56,20 @@ class ScriptServiceImplTest {
     @DisplayName("스크립트 목록 조회 테스트")
     void getScriptList() {
         // given
-        Pageable pageable = PageRequest.of(0, 2);
+        Long cursor = 21L;
+        boolean hasNext = false;
+        Pageable pageable = PageRequest.of(0, 20);
+        List<Script> list = new ArrayList<>();
         UUID memberId = member.getId();
         Member proxyMember = memberRepository.getReferenceById(memberId);
 
         // When
-        Page<Script> emptyPage = new PageImpl<>(Collections.emptyList());
-        Mockito.when(scriptRepository.findAllByMember(proxyMember, pageable)).thenReturn(emptyPage);
-        Page<ScriptListDto> result = scriptService.getScriptList(memberId, pageable);
+        Slice<Script> emptyPage = new SliceImpl<>(list, pageable, hasNext);
+        Mockito.when(scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)).thenReturn(emptyPage);
+        scriptService.getScriptList(cursor, memberId, pageable);
 
         // then
-        Mockito.verify(scriptRepository, Mockito.times(1)).findAllByMember(proxyMember, pageable);
+        Mockito.verify(scriptRepository, Mockito.times(1)).findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable);
         Mockito.verify(memberRepository, Mockito.times(2)).getReferenceById(memberId);
     }
 
