@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class HeartController {
     private final HeartService heartService;
 
     @GetMapping("/scripts")
-    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getLikedScriptList(
+    public ResponseEntity<BaseResponse<Slice<ScriptListDto>>> getLikedScriptList(
             @AuthenticationPrincipal UserSecurityDTO principal,
             @PageableDefault(size = 20,
                     sort = "createdAt",
