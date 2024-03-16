@@ -65,7 +65,8 @@ class ScriptServiceImplTest {
 
         // When
         Slice<Script> emptyPage = new SliceImpl<>(list, pageable, hasNext);
-        Mockito.when(scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)).thenReturn(emptyPage);
+        Mockito.when(scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable))
+                .thenReturn(emptyPage);
         scriptService.getScriptList(cursor, memberId, pageable);
 
         // then

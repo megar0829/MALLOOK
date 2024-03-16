@@ -15,10 +15,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import java.util.*;
 
@@ -59,14 +56,18 @@ class OrderServiceImplTest {
     @Test
     void getOrderList() {
         UUID id = member.getId();
+        boolean hasNext = false;
         Pageable pageable = PageRequest.of(0, 2);
         Member proxyMember = memberRepository.getReferenceById(id);
+        Long cursor = 21L;
+        List<Orders> list = new ArrayList<>();
 
-        Page<Orders> emptyPage = new PageImpl<>(Collections.emptyList());
-        Mockito.when(orderRepository.findAllByMember(proxyMember, pageable)).thenReturn(emptyPage);
-        Page<OrderListDto> result = orderService.getOrderList(id, pageable);
+        Slice<Orders> emptyPage = new SliceImpl<>(list, pageable, hasNext);
+        Mockito.when(orderRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable))
+                .thenReturn(emptyPage);
+        orderService.getOrderList(cursor, id, pageable);
 
-        Mockito.verify(orderRepository, Mockito.times(1)).findAllByMember(proxyMember, pageable);
+        Mockito.verify(orderRepository, Mockito.times(1)).findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable);
         Mockito.verify(memberRepository, Mockito.times(2)).getReferenceById(id);
     }
 
