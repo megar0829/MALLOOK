@@ -47,12 +47,6 @@ class HeartControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getLikedScriptList() throws Exception {
-        List<ScriptListDto> list = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 2);
-        Page<ScriptListDto> page = new PageImpl<>(list, pageable, list.size());
-        Mockito.when(heartService.getLikeScriptList(any(UUID.class), eq(pageable)))
-                .thenReturn(page);
-
         mockMvc.perform(
                         MockMvcRequestBuilders.get(scriptLikeUrl)
                                 .contentType(MediaType.APPLICATION_JSON)
