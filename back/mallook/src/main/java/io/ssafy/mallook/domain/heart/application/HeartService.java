@@ -13,7 +13,7 @@ public interface HeartService {
 
     Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable);
 
-    Page<StyleListRes> getLikeStyleList(UUID id, Pageable pageable);
+    Slice<StyleListRes> getLikeStyleList(Long cursor, UUID id, Pageable pageable);
 
     void likeScript(UUID id, LikeDto likeDto);
 

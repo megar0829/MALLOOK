@@ -17,9 +17,10 @@ import java.util.Optional;
 public interface HeartRepository extends JpaRepository<Heart, Long> {
 
     Page<Heart> findAllByMemberAndScriptIsNotNull(Member member, Pageable pageable);
-    Slice<Heart> findByIdLessThanAndMemberAAndScriptIsNullOrderByIdDesc(Long id, Member member, Pageable pageable);
+    Slice<Heart> findByIdLessThanAndMemberAndScriptIsNullOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     Page<Heart> findAllByMemberAndStyleIsNotNull(Member member, Pageable pageable);
+    Slice<Heart> findByIdLessThanAndMemberAndStyleIsNullOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     Optional<Heart> findByMemberAndScript(Member member, Script script);
 

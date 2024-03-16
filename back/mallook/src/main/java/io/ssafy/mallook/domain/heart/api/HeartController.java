@@ -33,9 +33,7 @@ public class HeartController {
             @PageableDefault(size = 20,
                     sort = "createdAt",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "21") Long cursor)
-
-    {
+            @RequestParam(required = false, defaultValue = "21") Long cursor) {
         UUID id = principal.getId();
 
         return BaseResponse.success(
@@ -45,15 +43,17 @@ public class HeartController {
     }
 
     @GetMapping("/styles")
-    public ResponseEntity<BaseResponse<Page<StyleListRes>>> getLikeStyleList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                             @PageableDefault(size = 20,
-                                                                                     sort = "createdAt",
-                                                                                     direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Slice<StyleListRes>>> getLikeStyleList(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PageableDefault(size = 20,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false, defaultValue = "21") Long cursor) {
         UUID id = principal.getId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                heartService.getLikeStyleList(id, pageable)
+                heartService.getLikeStyleList(cursor, id, pageable)
         );
     }
 

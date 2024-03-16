@@ -36,16 +36,16 @@ public class HeartServiceImpl implements HeartService {
     public Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findByIdLessThanAndMemberAAndScriptIsNullOrderByIdDesc(cursor, proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAndStyleIsNullOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(Heart::getScript)
                 .map(ScriptListDto::toDto);
     }
 
     @Override
-    public Page<StyleListRes> getLikeStyleList(UUID id, Pageable pageable) {
+    public Slice<StyleListRes> getLikeStyleList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMemberAndStyleIsNotNull(proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAndScriptIsNullOrderByIdDesc(cursor,proxyMember, pageable)
                 .map(Heart::getStyle)
                 .map(StyleListRes::toDto);
     }
