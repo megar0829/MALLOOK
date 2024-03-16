@@ -28,7 +28,7 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<ProductListDto>>> getProductList(
             @PageableDefault(size = 20,
-                    sort = "createdAt",
+                    sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false, defaultValue = "21") Long lastProductId,
             @RequestParam(name = "primary", required = false) MainCategory mainCategory,
