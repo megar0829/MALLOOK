@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -37,12 +34,14 @@ class ProductControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getProductList() throws Exception {
+        Long lastProductId = 21L;
+        boolean hasNext = false;
         MainCategory mainCategory = MainCategory.TOP;
         SubCategory subCategory = SubCategory.SPORT;
         List<ProductListDto> list = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 2);
-        Page<ProductListDto> page = new PageImpl<>(list, pageable, list.size());
-        when(productService.getProductList(pageable, mainCategory, subCategory))
+        Pageable pageable = PageRequest.of(0, 20);
+        Slice<ProductListDto> page = new SliceImpl<>(list, pageable, hasNext);
+        when(productService.getProductList(lastProductId, pageable, mainCategory, subCategory))
                 .thenReturn(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)

@@ -31,7 +31,6 @@ public class ProductController {
                     sort = "createdAt",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false, defaultValue = "21") Long lastProductId,
-            @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(name = "primary", required = false) MainCategory mainCategory,
             @RequestParam(name = "secondary",required = false) SubCategory subCategory
     ) {
