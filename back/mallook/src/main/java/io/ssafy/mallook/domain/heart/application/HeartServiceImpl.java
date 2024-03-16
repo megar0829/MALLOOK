@@ -16,6 +16,7 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,10 +33,10 @@ public class HeartServiceImpl implements HeartService {
     private final StyleRepository styleRepository;
 
     @Override
-    public Page<ScriptListDto> getLikeScriptList(UUID id, Pageable pageable) {
+    public Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMemberAndScriptIsNotNull(proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAAndScriptIsNullOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(Heart::getScript)
                 .map(ScriptListDto::toDto);
     }

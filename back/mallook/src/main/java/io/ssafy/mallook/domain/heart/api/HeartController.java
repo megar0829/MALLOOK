@@ -27,23 +27,27 @@ public class HeartController {
     private final HeartService heartService;
 
     @GetMapping("/scripts")
-    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getLikedScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                                @PageableDefault(size = 20,
-                                                                   sort = "createdAt",
-                                                                   direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getLikedScriptList(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PageableDefault(size = 20,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false, defaultValue = "21") Long cursor)
+
+    {
         UUID id = principal.getId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                heartService.getLikeScriptList(id, pageable)
+                heartService.getLikeScriptList(cursor, id, pageable)
         );
     }
 
     @GetMapping("/styles")
     public ResponseEntity<BaseResponse<Page<StyleListRes>>> getLikeStyleList(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                              @PageableDefault(size = 20,
-                                                                             sort = "createdAt",
-                                                                             direction = Sort.Direction.DESC) Pageable pageable) {
+                                                                                     sort = "createdAt",
+                                                                                     direction = Sort.Direction.DESC) Pageable pageable) {
         UUID id = principal.getId();
 
         return BaseResponse.success(
@@ -68,7 +72,7 @@ public class HeartController {
     public ResponseEntity<BaseResponse<String>> likeStyle(@AuthenticationPrincipal UserSecurityDTO principal,
                                                           @RequestBody @Valid LikeDto likeDto) {
         UUID id = principal.getId();
-        heartService.likeStyle(id , likeDto);
+        heartService.likeStyle(id, likeDto);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "좋아요를 눌렀습니다."
