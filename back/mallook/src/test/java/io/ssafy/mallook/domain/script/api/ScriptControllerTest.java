@@ -12,10 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -46,11 +43,10 @@ class ScriptControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getScriptList() throws Exception {
+        boolean hasNext = false;
         List<ScriptListDto> list = new ArrayList<>();
         Pageable pageable = PageRequest.of(0, 2);
-        Page<ScriptListDto> page = new PageImpl<>(list, pageable, list.size());
-        Mockito.when(scriptService.getScriptList(any(UUID.class), eq(pageable)))
-                .thenReturn(page);
+        Slice<ScriptListDto> page = new SliceImpl<>(list, pageable, hasNext);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get(url)
