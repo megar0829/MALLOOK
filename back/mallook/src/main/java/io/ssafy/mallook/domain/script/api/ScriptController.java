@@ -11,12 +11,10 @@ import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,7 +36,7 @@ public class ScriptController {
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "21") Long cursor) {
+            @RequestParam(required = false, defaultValue = "" + Long.MAX_VALUE) Long cursor) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 scriptService.getScriptList(cursor, principal.getId(), pageable)

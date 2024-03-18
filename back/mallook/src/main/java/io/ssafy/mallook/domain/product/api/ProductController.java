@@ -29,11 +29,11 @@ public class ProductController {
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(name = "lastId", required = false, defaultValue = "21") Long cursor,
+            @RequestParam(required = false) Long cursor,
             @RequestParam(name = "primary", required = false) MainCategory mainCategory,
             @RequestParam(name = "secondary", required = false) SubCategory subCategory
     ) {
-
+        cursor = cursor != null ? cursor : productService.getLastProductId() + 1;
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(cursor, pageable, mainCategory, subCategory)

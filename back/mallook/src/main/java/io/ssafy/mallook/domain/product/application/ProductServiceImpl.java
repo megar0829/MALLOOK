@@ -23,4 +23,9 @@ public class ProductServiceImpl implements ProductService {
     public Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         return productCustomRepository.findAllProduct(cursor, pageable, mainCategory, subCategory);
     }
+
+    @Override
+    public Long getLastProductId() {
+        return productRepository.findMaxId();
+    }
 }

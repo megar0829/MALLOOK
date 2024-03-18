@@ -8,4 +8,6 @@ import org.springframework.data.domain.Slice;
 
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
+
+    Long getLastProductId();
 }
