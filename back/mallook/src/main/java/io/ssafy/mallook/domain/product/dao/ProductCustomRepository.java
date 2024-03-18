@@ -14,5 +14,5 @@ import java.util.List;
 @Repository
 public interface ProductCustomRepository {
 
-    Slice<ProductListDto> findAllProduct(Long lastProductId, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
+    Slice<ProductListDto> findAllProduct(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 }
