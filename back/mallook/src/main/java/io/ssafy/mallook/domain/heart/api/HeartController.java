@@ -9,7 +9,6 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -33,8 +32,9 @@ public class HeartController {
             @PageableDefault(size = 20,
                     sort = "createdAt",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "21") Long cursor) {
+            @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
+        cursor = cursor != null ? cursor : heartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
@@ -48,8 +48,9 @@ public class HeartController {
             @PageableDefault(size = 20,
                     sort = "createdAt",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "21") Long cursor) {
+            @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
+        cursor = cursor != null ? cursor : heartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

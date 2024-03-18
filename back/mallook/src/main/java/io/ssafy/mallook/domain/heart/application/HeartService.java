@@ -3,7 +3,6 @@ package io.ssafy.mallook.domain.heart.application;
 import io.ssafy.mallook.domain.heart.dto.request.LikeDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -22,4 +21,6 @@ public interface HeartService {
     void unlikeScript(UUID id, LikeDto likeDto);
 
     void unlikeStyle(UUID id, LikeDto likeDto);
+
+    Long findMaxHeartId();
 }

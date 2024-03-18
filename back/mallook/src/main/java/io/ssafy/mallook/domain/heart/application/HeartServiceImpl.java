@@ -14,7 +14,6 @@ import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class HeartServiceImpl implements HeartService {
     public Slice<StyleListRes> getLikeStyleList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findByIdLessThanAndMemberAndScriptIsNullOrderByIdDesc(cursor,proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAndScriptIsNullOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(Heart::getStyle)
                 .map(StyleListRes::toDto);
     }
@@ -96,5 +95,10 @@ public class HeartServiceImpl implements HeartService {
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
         heartRepository.deleteById(heart.getId());
+    }
+
+    @Override
+    public Long findMaxHeartId() {
+        return heartRepository.findMaxHeartId();
     }
 }

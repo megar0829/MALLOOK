@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -25,4 +26,7 @@ public interface HeartRepository extends JpaRepository<Heart, Long> {
     Optional<Heart> findByMemberAndScript(Member member, Script script);
 
     Optional<Heart> findByMemberAndStyle(Member member, Style style);
+
+    @Query("SELECT max (h.id) from Heart h")
+    Long findMaxHeartId();
 }
