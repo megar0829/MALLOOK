@@ -24,13 +24,13 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Slice<ProductListDto> findAllProduct(Long lastProductId, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
+    public Slice<ProductListDto> findAllProduct(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         List<Product> products = jpaQueryFactory
                 .selectFrom(product)
                 .where(allEq(mainCategory, subCategory),
-                        product.id.lt(lastProductId))
+                        product.id.lt(cursor))
                 .orderBy(product.id.desc())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         boolean hasNext = products.size() > pageable.getPageSize();
