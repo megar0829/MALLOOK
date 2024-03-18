@@ -104,7 +104,7 @@ class _ProductScreenState extends State<ProductScreen> {
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(
@@ -209,7 +209,6 @@ class _ProductScreenState extends State<ProductScreen> {
                 horizontal: Sizes.size32,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     widget.product.name,
@@ -217,7 +216,7 @@ class _ProductScreenState extends State<ProductScreen> {
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size16,
+                      fontSize: Sizes.size18,
                     ),
                   ),
                 ],
