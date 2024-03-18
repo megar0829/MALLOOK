@@ -6,10 +6,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
-import io.ssafy.mallook.domain.product.entity.QProduct;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -33,13 +34,12 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
 
-        boolean hasNext = products.size() > pageable.getPageSize();
-        List<ProductListDto> productDtos = products.stream()
+        return new SliceImpl<>(products.stream()
                 .limit(pageable.getPageSize())
                 .map(ProductListDto::toDto)
-                .collect(Collectors.toList());
-
-        return new SliceImpl<>(productDtos, pageable, hasNext);
+                .collect(Collectors.toList()),
+                pageable,
+                products.size() > pageable.getPageSize());
     }
 
     private BooleanExpression allEq(MainCategory mainCategory,
