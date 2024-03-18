@@ -34,6 +34,7 @@ public class ProductController {
             @RequestParam(name = "secondary", required = false) SubCategory subCategory
     ) {
         cursor = cursor != null ? cursor : productService.getLastProductId() + 1;
+
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(cursor, pageable, mainCategory, subCategory)
