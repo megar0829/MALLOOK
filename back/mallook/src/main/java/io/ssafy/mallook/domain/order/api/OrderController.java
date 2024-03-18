@@ -33,11 +33,13 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<OrderListDto>>> getOrderList
             (@AuthenticationPrincipal UserSecurityDTO principal,
-             @PageableDefault(size = 2,
+             @PageableDefault(size = 20,
                      sort = "id",
                      direction = Sort.Direction.DESC) Pageable pageable,
-             @RequestParam(required = false, defaultValue = "21") Long cursor) {
+             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
+        cursor = cursor != null ? cursor : orderService.findMaxOrderId();
+
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 orderService.getOrderList(cursor, id, pageable)

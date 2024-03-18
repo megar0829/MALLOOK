@@ -19,4 +19,6 @@ public interface OrderService {
     void createOrder(UUID id, OrderCreateDto createDto);
 
     void deletedOrder(OrderDeleteDto orderDeleteDto);
+
+    Long findMaxOrderId();
 }

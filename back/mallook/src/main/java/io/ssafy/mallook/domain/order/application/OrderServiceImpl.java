@@ -51,4 +51,9 @@ public class OrderServiceImpl implements OrderService {
     public void deletedOrder(OrderDeleteDto orderDeleteDto) {
         orderRepository.deleteOrder(orderDeleteDto.deleteList());
     }
+
+    @Override
+    public Long findMaxOrderId() {
+        return orderRepository.findMaxOrderId();
+    }
 }
