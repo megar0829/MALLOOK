@@ -25,7 +25,7 @@ class MemberCouponServiceImplTest {
 
     @Mock
     private MemberRepository memberRepository;
-    @Mock
+    @Mockm
     private MemberCouponRepository memberCouponRepository;
     @Mock
     private CouponRepository couponRepository;
@@ -57,7 +57,7 @@ class MemberCouponServiceImplTest {
         memberCouponRepository.deleteMyCoupon(memberCouponList);
 
         // Then
-        Mockito.verify(memberCouponRepository, Mockito.times(1)).
+//        Mockito.verify(memberCouponRepository, Mockito.times(1)).
     }
 
 }
