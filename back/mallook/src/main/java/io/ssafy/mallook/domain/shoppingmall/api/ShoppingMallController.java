@@ -28,8 +28,7 @@ public class ShoppingMallController {
             @PageableDefault(
             size = 20,
             sort = "name", direction =
-            Sort.Direction.ASC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "21") Long cursor
+            Sort.Direction.ASC) Pageable pageable
             ) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
