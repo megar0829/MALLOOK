@@ -2,23 +2,16 @@ package io.ssafy.mallook.domain.product.api;
 
 import io.ssafy.mallook.config.security.WithMockCustomUser;
 import io.ssafy.mallook.domain.product.application.ProductService;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = ProductController.class)
 class ProductControllerTest {
@@ -35,18 +28,13 @@ class ProductControllerTest {
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getProductList() throws Exception {
         Long lastProductId = 21L;
-        boolean hasNext = false;
         MainCategory mainCategory = MainCategory.TOP;
         SubCategory subCategory = SubCategory.SPORT;
-        List<ProductListDto> list = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 20);
-        Slice<ProductListDto> page = new SliceImpl<>(list, pageable, hasNext);
-        when(productService.getProductList(lastProductId, pageable, mainCategory, subCategory))
-                .thenReturn(page);
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
+                        .param("lastId", lastProductId.toString())
                         .param("primary", String.valueOf(mainCategory))
                         .param("secondary", String.valueOf(subCategory)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
