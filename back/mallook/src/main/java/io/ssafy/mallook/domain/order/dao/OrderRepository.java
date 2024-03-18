@@ -16,8 +16,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-    Page<Orders> findAllByMember(Member member, Pageable pageable);
-
     Slice<Orders> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
