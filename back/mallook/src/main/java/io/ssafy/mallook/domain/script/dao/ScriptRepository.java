@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface ScriptRepository extends JpaRepository<Script, Long> {
 
+    @Query("SELECT max (s.id) from Script s")
+    Long findMaxId();
+
     Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")

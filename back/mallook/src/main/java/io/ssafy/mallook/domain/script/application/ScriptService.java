@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public interface ScriptService {
 
+    Long getMaxScriptId();
+
     Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable);
 
     ScriptDetailDto getScriptDetail(Long scriptId);

@@ -28,6 +28,11 @@ public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
 
     @Override
+    public Long getMaxScriptId() {
+        return scriptRepository.findMaxId();
+    }
+
+    @Override
     public Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 

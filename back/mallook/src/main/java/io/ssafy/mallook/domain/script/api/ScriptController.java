@@ -36,7 +36,10 @@ public class ScriptController {
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false, defaultValue = "" + Long.MAX_VALUE) Long cursor) {
+            @RequestParam(required = false) Long cursor) {
+
+        cursor = cursor != null ? cursor : scriptService.getMaxScriptId() + 1;
+
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 scriptService.getScriptList(cursor, principal.getId(), pageable)
