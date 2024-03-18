@@ -8,7 +8,6 @@ import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
