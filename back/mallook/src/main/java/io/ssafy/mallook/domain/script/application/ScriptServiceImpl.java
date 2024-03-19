@@ -11,8 +11,8 @@ import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +28,15 @@ public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
 
     @Override
-    public Page<ScriptListDto> getScriptList(UUID id, Pageable pageable) {
+    public Long getMaxScriptId() {
+        return scriptRepository.findMaxId();
+    }
+
+    @Override
+    public Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return scriptRepository.findAllByMember(proxyMember, pageable)
+        return scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(ScriptListDto::toDto);
     }
 
@@ -39,7 +44,7 @@ public class ScriptServiceImpl implements ScriptService {
     public ScriptDetailDto getScriptDetail(Long scriptId) {
         return scriptRepository.findById(scriptId)
                 .map(ScriptDetailDto::toDto)
-                .orElseThrow(() ->new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT));
     }
 
     @Override

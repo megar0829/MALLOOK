@@ -14,8 +14,8 @@ import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,19 +32,19 @@ public class HeartServiceImpl implements HeartService {
     private final StyleRepository styleRepository;
 
     @Override
-    public Page<ScriptListDto> getLikeScriptList(UUID id, Pageable pageable) {
+    public Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMemberAndScriptIsNotNull(proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAndStyleIsNullOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(Heart::getScript)
                 .map(ScriptListDto::toDto);
     }
 
     @Override
-    public Page<StyleListRes> getLikeStyleList(UUID id, Pageable pageable) {
+    public Slice<StyleListRes> getLikeStyleList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return heartRepository.findAllByMemberAndStyleIsNotNull(proxyMember, pageable)
+        return heartRepository.findByIdLessThanAndMemberAndScriptIsNullOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(Heart::getStyle)
                 .map(StyleListRes::toDto);
     }
@@ -59,7 +59,6 @@ public class HeartServiceImpl implements HeartService {
                     throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
                 });
 
-        proxyScript.like();
         heartRepository.save(likeDto.toEntity(proxyMember, proxyScript));
     }
 
@@ -84,7 +83,6 @@ public class HeartServiceImpl implements HeartService {
         Heart heart = heartRepository.findByMemberAndScript(proxyMember, proxyScript)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
-        proxyScript.unlike();
         heartRepository.deleteById(heart.getId());
     }
 
@@ -97,5 +95,10 @@ public class HeartServiceImpl implements HeartService {
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
         heartRepository.deleteById(heart.getId());
+    }
+
+    @Override
+    public Long findMaxHeartId() {
+        return heartRepository.findMaxHeartId();
     }
 }

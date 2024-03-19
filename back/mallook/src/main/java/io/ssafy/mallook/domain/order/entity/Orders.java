@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @SQLRestriction("status = true")
 @Table(name = "orders")
+@EqualsAndHashCode(callSuper = true)
 public class Orders extends BaseEntity {
 
     @Id

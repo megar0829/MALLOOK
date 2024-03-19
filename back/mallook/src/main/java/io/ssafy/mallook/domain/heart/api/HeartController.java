@@ -9,8 +9,8 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -27,28 +27,34 @@ public class HeartController {
     private final HeartService heartService;
 
     @GetMapping("/scripts")
-    public ResponseEntity<BaseResponse<Page<ScriptListDto>>> getLikedScriptList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                                @PageableDefault(size = 20,
-                                                                   sort = "createdAt",
-                                                                   direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Slice<ScriptListDto>>> getLikedScriptList(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PageableDefault(size = 20,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
+        cursor = cursor != null ? cursor : heartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                heartService.getLikeScriptList(id, pageable)
+                heartService.getLikeScriptList(cursor, id, pageable)
         );
     }
 
     @GetMapping("/styles")
-    public ResponseEntity<BaseResponse<Page<StyleListRes>>> getLikeStyleList(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                             @PageableDefault(size = 20,
-                                                                             sort = "createdAt",
-                                                                             direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<BaseResponse<Slice<StyleListRes>>> getLikeStyleList(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PageableDefault(size = 20,
+                    sort = "createdAt",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
+        cursor = cursor != null ? cursor : heartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                heartService.getLikeStyleList(id, pageable)
+                heartService.getLikeStyleList(cursor, id, pageable)
         );
     }
 
@@ -68,7 +74,7 @@ public class HeartController {
     public ResponseEntity<BaseResponse<String>> likeStyle(@AuthenticationPrincipal UserSecurityDTO principal,
                                                           @RequestBody @Valid LikeDto likeDto) {
         UUID id = principal.getId();
-        heartService.likeStyle(id , likeDto);
+        heartService.likeStyle(id, likeDto);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "좋아요를 눌렀습니다."

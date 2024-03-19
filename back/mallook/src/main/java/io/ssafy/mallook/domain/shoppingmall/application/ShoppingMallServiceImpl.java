@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.shoppingmall.dto.response.ShoppingMallListDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class ShoppingMallServiceImpl implements ShoppingMallService {
     private final ShoppingMallRepository shoppingMallRepository;
 
     @Override
-    public Page<ShoppingMallListDto> getAllMallList(Pageable pageable) {
+    public Slice<ShoppingMallListDto> getAllMallList(Pageable pageable) {
         return shoppingMallRepository.findAll(pageable)
                 .map(ShoppingMallListDto::toDto);
     }

@@ -1,17 +1,17 @@
-package io.ssafy.mallook.domain.script.dao;
+package io.ssafy.mallook.domain.order.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.domain.order.entity.Orders;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,77 +25,80 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles(profiles = "dev")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ScriptRepositoryTest {
-
-    @Autowired
-    private ScriptRepository scriptRepository;
+class OrderRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
     private EntityManager entityManager;
 
-    private Script script;
+    private Orders orders;
 
     @BeforeEach
     void setUp() {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
-        script = buildScript(member);
+        orders = buildOrders(member);
+        entityManager.flush();
+        entityManager.clear();
+
     }
 
-    private Script buildScript(Member member) {
-        return Script.builder()
-                .name("테스트용 스크립트")
+    private Orders buildOrders(Member member) {
+        return Orders.builder()
+                .totalPrice(1000L)
+                .totalFee(500L)
+                .totalCount(2L)
                 .member(member)
-                .heartCount(0)
                 .build();
     }
 
     @Test
-    @DisplayName("멤버의 활성화된 스크립트 조회 테스트")
     void findAllByMember() {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
-        PageRequest pageable = PageRequest.of(0, 2);
+        Pageable pageable = PageRequest.of(0, 2);
 
-        Script script1 = buildScript(member);
-        Script script2 = buildScript(member);
-        scriptRepository.save(script1);
-        scriptRepository.save(script2);
+        Orders orders1 = buildOrders(member);
+        Orders orders2 = buildOrders(member);
+        orderRepository.save(orders1);
+        orderRepository.save(orders2);
         entityManager.flush();
         entityManager.clear();
-        Long cursor = scriptRepository.findMaxId() + 1;
+        Long cursor = orderRepository.findMaxOrderId() + 1;
 
-        Slice<Script> scriptPage = scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, member, pageable);
+        // findAllByMember 메서드 호출
+        Slice<Orders> result = orderRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, member, pageable);
+
         // Slice<Orders> 객체에서 주문들의 PK 가져오기
-        List<Long> sliceOrderIds = scriptPage.getContent().stream()
-                .map(Script::getId)
+        List<Long> sliceOrderIds = result.getContent().stream()
+                .map(Orders::getId)
                 .collect(Collectors.toList());
 
         // 비교
-        assertThat(sliceOrderIds).contains(script1.getId(), script2.getId());
+        assertThat(sliceOrderIds).contains(orders1.getId(), orders2.getId());
     }
 
     @Test
-    @DisplayName("스크립트 삭제 테스트")
-    void deleteScript() {
-        // 스크립트 생성 및 저장
+    void deleteOrder() {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
         List<Long> deleteList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            Script script = buildScript(member);
-            scriptRepository.save(script);
-            deleteList.add(script.getId());
+            Orders orders = buildOrders(member);
+            orderRepository.save(orders);
+            deleteList.add(orders.getId());
         }
 
-        scriptRepository.deleteScript(deleteList);
+        orderRepository.deleteOrder(deleteList);
 
         for (Long id : deleteList) {
-            Optional<Script> optionalScript = scriptRepository.findById(id);
-            assertThat(optionalScript.isPresent()).isFalse(); // 저장되었는지 확인
+            Optional<Orders> optionalOrders = orderRepository.findById(id);
+            assertThat(optionalOrders.isPresent()).isFalse();
         }
     }
 }

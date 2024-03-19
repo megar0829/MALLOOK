@@ -8,8 +8,8 @@ import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +24,10 @@ public class OrderServiceImpl implements OrderService {
     private final MemberRepository memberRepository;
 
     @Override
-    public Page<OrderListDto> getOrderList(UUID id, Pageable pageable) {
+    public Slice<OrderListDto> getOrderList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return orderRepository.findAllByMember(proxyMember, pageable)
+        return orderRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(OrderListDto::toDto);
     }
 
@@ -49,5 +49,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void deletedOrder(OrderDeleteDto orderDeleteDto) {
         orderRepository.deleteOrder(orderDeleteDto.deleteList());
+    }
+
+    @Override
+    public Long findMaxOrderId() {
+        return orderRepository.findMaxOrderId();
     }
 }
