@@ -2,14 +2,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
-import 'package:mallook/feature/search/search_screen.dart';
-import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -31,14 +29,11 @@ class _ProductScreenState extends State<ProductScreen> {
   int _currentPageIndex = 0;
 
   final List<String> sizes = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6 asfniasfnpasfjoasnfpsoajfposafnoasnfoanfasnpfonsofnowfnm',
-    'Item7',
-    'Item8',
+    'XS',
+    'S',
+    'M',
+    'L',
+    'XL',
   ];
 
   final List<String> colors = [
@@ -70,14 +65,6 @@ class _ProductScreenState extends State<ProductScreen> {
     );
   }
 
-  void _moveToSearchScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const SearchScreen(),
-      ),
-    );
-  }
-
   void _showOrderBottomSheet() async {
     await showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -105,30 +92,19 @@ class _ProductScreenState extends State<ProductScreen> {
           IconButton(
             onPressed: _moveToHomeScreen,
             icon: const FaIcon(
-              Icons.home,
-              size: Sizes.size28,
-            ),
-          ),
-          IconButton(
-            onPressed: _moveToSearchScreen,
-            icon: const FaIcon(
-              FontAwesomeIcons.magnifyingGlass,
+              FontAwesomeIcons.house,
               size: Sizes.size24,
+              color: Colors.black,
             ),
           ),
-          IconButton(
-            onPressed: _onClosePressed,
-            icon: const FaIcon(
-              FontAwesomeIcons.xmark,
-              size: Sizes.size28,
-            ),
-          )
+          const CartIconButton(),
+          Gaps.h20,
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsets.only(
@@ -233,15 +209,14 @@ class _ProductScreenState extends State<ProductScreen> {
                 horizontal: Sizes.size32,
               ),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    widget.product.name!,
+                    widget.product.name,
                     maxLines: 5,
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size16,
+                      fontSize: Sizes.size18,
                     ),
                   ),
                 ],
@@ -261,7 +236,7 @@ class _ProductScreenState extends State<ProductScreen> {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).primaryColorDark,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size12,
                   ),

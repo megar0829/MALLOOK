@@ -5,14 +5,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/category_screen.dart';
 import 'package:mallook/feature/home/home_screen.dart';
+import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
 import 'package:mallook/feature/user/user_screen.dart';
-import 'package:mallook/feature/worldcup/wordcup_screen.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 const List<TabItem> items = [
   TabItem(
-    icon: FontAwesomeIcons.houseChimney,
+    icon: FontAwesomeIcons.solidStar,
     title: '추천',
   ),
   TabItem(
@@ -20,16 +20,16 @@ const List<TabItem> items = [
     title: '상품',
   ),
   TabItem(
-    icon: FontAwesomeIcons.shirt,
-    title: '스타일',
-  ),
-  TabItem(
-    icon: FontAwesomeIcons.trophy,
+    icon: FontAwesomeIcons.magnifyingGlass,
     title: '검색',
   ),
   TabItem(
+    icon: FontAwesomeIcons.shirt,
+    title: '몰룩북',
+  ),
+  TabItem(
     icon: FontAwesomeIcons.solidUser,
-    title: '마이페이지',
+    title: '프로필',
   ),
 ];
 
@@ -43,6 +43,12 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   DateTime? _currentBackPressTime;
   int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +82,11 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
             Offstage(
               offstage: _selectedIndex != 2,
-              child: const StyleScreen(),
+              child: const SearchScreen(),
             ),
             Offstage(
               offstage: _selectedIndex != 3,
-              child: const WorldCupScreen(),
+              child: const StyleScreen(),
             ),
             Offstage(
               offstage: _selectedIndex != 4,
@@ -104,9 +110,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               Sizes.size24,
             ),
           ),
-          onTap: (index) => setState(() {
-            _selectedIndex = index;
-          }),
+          onTap: (index) => _onItemTapped(index),
         ),
       ),
     );

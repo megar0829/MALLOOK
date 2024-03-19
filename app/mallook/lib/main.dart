@@ -24,9 +24,9 @@ class Mallook extends StatelessWidget {
     return GetMaterialApp(
       title: 'Mallook',
       theme: ThemeData(
-        primaryColor: const Color(0xffeea3df),
-        primaryColorLight: const Color(0xffffeff9),
-        primaryColorDark: const Color(0xffd333b8),
+        primaryColor: const Color(0xffb6bde0),
+        primaryColorLight: const Color(0xffd8dce8),
+        primaryColorDark: const Color(0xff7b8ad0),
         // textTheme: GoogleFonts.nanumGothicTextTheme(),
         textTheme: GoogleFonts.notoSansKrTextTheme(
           Theme.of(context).textTheme,
