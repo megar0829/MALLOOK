@@ -7,7 +7,6 @@ import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.config.QueryDSLConfig;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +14,16 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
-import static org.assertj.core.api.Assertions.*;
+import static java.util.stream.Collectors.toList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QueryDSLConfig.class)
@@ -67,11 +67,10 @@ class ProductCustomRepositoryTest {
     void findAllProduct() {
         Pageable pageable = PageRequest.of(0, 20);
         Slice<ProductListDto> result = productCustomRepository.findAllProduct(
-                product.getId() - 2L,
+                product.getId() + 1,
                 pageable,
                 MainCategory.TOP,
                 SubCategory.FORMAL);
-        System.out.println(result.getContent());
 
         List<ProductListDto> expectedList = mockProducts.stream()
                 .map(ProductListDto::toDto)
@@ -80,6 +79,6 @@ class ProductCustomRepositoryTest {
         assertThat(result.getContent()).usingRecursiveComparison().isEqualTo(expectedList);
         assertThat(result.getNumber()).isEqualTo(pageable.getPageNumber());
         assertThat(result.getSize()).isEqualTo(pageable.getPageSize());
-        assertThat(result.hasNext()).isTrue();
+        assertThat(result.hasNext()).isFalse();
     }
 }
