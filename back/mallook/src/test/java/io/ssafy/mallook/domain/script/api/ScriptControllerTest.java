@@ -91,7 +91,10 @@ class ScriptControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void deleteScript() throws Exception {
-        ScriptDeleteListDto scriptDeleteListDto = new ScriptDeleteListDto(new ArrayList<>());
+        Long id = 1L;
+        List<Long> toDeleteList = new ArrayList<>();
+        toDeleteList.add(id);
+        ScriptDeleteListDto scriptDeleteListDto = new ScriptDeleteListDto(toDeleteList);
         mockMvc.perform(MockMvcRequestBuilders.delete(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(scriptDeleteListDto))
