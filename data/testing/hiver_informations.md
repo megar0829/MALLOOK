@@ -303,3 +303,50 @@
     - 672: 신발
     - 674: 기타
   - 1493: 기타
+
+### 상품 디테일 저장 형태
+- shopping_mall_id: hiver or 넘버링 [직접]
+- main_category: 회의 내용 순서대로 대분류 1~ [API]
+- sub_category: 회의 내용 순서대로 중분류 1~ (기타는 0) [API]
+- gender: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> option_type [API]
+- name: pageProps -> title [API]
+- price: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> sale_price [API]
+- color: 리스트 형태 ['베이지', '차콜'] [크롤링]
+- size: 리스트 형태 ['M', 'L'] [크롤링]
+- quantity: [Null]
+- brand_name: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> seller -> name [API]
+- fee: 하이버는 모두 무료배송 0 [직접]
+- image: pageProps -> image (대표이미지) [API]
+- code: 제목에서 분류하기 or NULL [API]
+- url: https://www.hiver.co.kr/products/{프로덕트id} [직접]
+- detail_images: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> text (모든 이미지 가져와서 리스트 형태) [API]
+- detail_html: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> text 상품 상세 정보 html [API]
+
+### 리뷰 저장 형태(포토)
+- count: meta -> count 리뷰 개수 [API]
+- content: {
+  - 리뷰 번호: {
+    - content: 댓글 내용 [API]
+    - created_at: 게시일 [API]
+    - images: 이미지 있으면 가져오고 없으면 X [API]
+    - point: 하이버는 없음 [Null]
+    - product_option: ['color', 'size'] 없으면 Null [API]
+    - userSize: [키, 몸무게] 없으면 Null [API]
+  - }
+- }
+
+### 리뷰 저장 형태(텍스트)
+- count: meta -> count 리뷰 개수 [API]
+- content: {
+  - 리뷰 번호: {
+    - content: data -> reviews -> text (댓글 내용) [API]
+    - created_at: data -> reviews -> created_time (게시일) [API]
+    - images: [Null]
+    - point: 하이버는 없음 [Null]
+    - product_option: data -> reviews -> product -> option_name ['color', 'size'] 없으면 Null [API]
+    - userSize: data -> reviews -> user -> height, weight [키, 몸무게] 없으면 Null [API]
+  - }
+- }
+
+products[productId]
+reviews[proudctId][content][3]

@@ -1,4 +1,4 @@
-# hiver 크롤링(API)
+# hiver 카테고리 크롤링(API)
 import requests
 from fake_useragent import UserAgent
 import json
@@ -237,15 +237,12 @@ category_numbers = {
     },
 }
 
-hiver_productIds = {
-}
+# 상품 카테고리에 따른 프로덕트 목록들
+hiver_productIds = {}
+# 중복을 제거하기 위한 상품 코드들
+hiver_used = set()
 
 # 상품 카테고리별 productId 가져오기
-# def product_ids():
-#     category = 0
-#     url = f'https://capi.hiver.co.kr/v1/web/categories/{}/products?offset=100&limit=100&order=popular&type=all&service-type=hiver'
-
-    
 def product_ids():
     for category, subcategories in category_numbers.items():
         for subcategory, subcategory_ids in subcategories.items():
@@ -333,6 +330,87 @@ def test_code():
         json.dump(hiver_productIds, f, ensure_ascii=False, indent=4)
 
 
-test_code()
+def used_code():
+    # 대분류, 중분류
+    for category, subcategories in category_numbers.items():
+        # 중분류, 탐색해야할 번호들
+        for subcategory, subcategory_ids in subcategories.items():
+            # 탐색해야할 번호들 순회
+            for subcategory_id in subcategory_ids:
+                url = f'https://capi.hiver.co.kr/v1/web/categories/{subcategory_id}/products'
+                # 한 번호당 5000개까지 조회가능
+                for offset in range(0, 5001, 100):
+                    # 0, 100, ~, 4999
+                    if offset == 5000:
+                        offset = offset - 1
 
-print(hiver_productIds)
+                    # API 요청을 위한 헤더와 파라미터
+                    headers = {
+                        'Authorization': API_KEY,
+                        'User-Agent': UserAgent().random,
+                    }
+                    params = {
+                        'offset': offset,
+                        'limit': 100,
+                        'order': 'popular',
+                        'type': 'all',
+                        'service-type': 'hiver',
+                    }
+                    
+                    # API 요청
+                    response = requests.get(url, headers=headers, params=params)
+                    data = response.json()
+
+                    # 데이터가 없을시 종료
+                    if not data['data']:
+                        break
+                    # 데이터가 존재할 때 각 상품들을 번호로 저장
+                    for product in data['data']:
+                        print(category, subcategory, subcategory_id, offset, product['id'])
+                        hiver_used.add(product['id'])
+    # json 파일에 저장
+    with open('hiver_used.json', 'w', encoding='utf-8') as f:
+        json.dump(hiver_used, f, ensure_ascii=False, indent=4)
+
+def used_code():
+    # 중분류, 탐색해야할 번호들
+    for subcategory_id in category_numbers['상의']['긴팔티']:
+        url = f'https://capi.hiver.co.kr/v1/web/categories/{subcategory_id}/products'
+        # 한 번호당 5000개까지 조회가능
+        for offset in range(0, 5001, 100):
+            # 0, 100, ~, 4999
+            if offset == 5000:
+                offset = offset - 1
+
+            # API 요청을 위한 헤더와 파라미터
+            headers = {
+                'Authorization': API_KEY,
+                'User-Agent': UserAgent().random,
+            }
+            params = {
+                'offset': offset,
+                'limit': 100,
+                'order': 'popular',
+                'type': 'all',
+                'service-type': 'hiver',
+            }
+            
+            # API 요청
+            response = requests.get(url, headers=headers, params=params)
+            data = response.json()
+
+            # 데이터가 없을시 종료
+            if not data['data']:
+                break
+            # 데이터가 존재할 때 각 상품들을 번호로 저장
+            for product in data['data']:
+                print(subcategory_id, offset, product['id'])
+                hiver_used.add(product['id'])
+
+    # json 파일에 저장
+    with open('hiver_used.json', 'w', encoding='utf-8') as f:
+        json.dump(list(hiver_used), f, ensure_ascii=False, indent=4)
+
+used_code()
+
+print(hiver_used)
