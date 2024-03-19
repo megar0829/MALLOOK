@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
-@TestPropertySource(locations = "classpath:application-test.yml")
 class ScriptRepositoryTest {
 
     @Autowired
