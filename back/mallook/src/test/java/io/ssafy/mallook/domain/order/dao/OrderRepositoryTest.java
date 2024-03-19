@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@ActiveProfiles(profiles = "dev")
+@ActiveProfiles(profiles = {"dev", "local"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class OrderRepositoryTest {
 
@@ -38,15 +38,15 @@ class OrderRepositoryTest {
 
     private Orders orders;
 
-    @BeforeEach
-    void setUp() {
-        Member member = Mockito.mock(Member.class);
-        memberRepository.save(member);
-        orders = buildOrders(member);
-        entityManager.flush();
-        entityManager.clear();
-
-    }
+//    @BeforeEach
+//    void setUp() {
+//        Member member = Mockito.mock(Member.class);
+//        memberRepository.save(member);
+//        orders = buildOrders(member);
+//        entityManager.flush();
+//        entityManager.clear();
+//
+//    }
 
     private Orders buildOrders(Member member) {
         return Orders.builder()

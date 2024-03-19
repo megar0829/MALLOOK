@@ -21,7 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@ActiveProfiles(profiles = "dev")
+@ActiveProfiles(profiles = {"dev", "local"})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class HeartRepositoryTest {
 
