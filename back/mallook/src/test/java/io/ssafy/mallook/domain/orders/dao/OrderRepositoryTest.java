@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.orders.entity.Orders;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,30 +24,33 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@ActiveProfiles(profiles = {"dev", "local"})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles(profiles = "test")
+@TestPropertySource(locations = "classpath:application-test.yml")
 class OrderRepositoryTest {
 
     @Autowired
     private MemberRepository memberRepository;
 
+    private Member member;
+
     @Autowired
     private OrderRepository orderRepository;
+
+    private Orders orders;
 
     @Autowired
     private EntityManager entityManager;
 
-    private Orders orders;
+    @BeforeEach
+    void setUp() {
+        member = new Member();
+        memberRepository.save(member);
+        entityManager.flush();
+        orders = buildOrders(member);
+        entityManager.flush();
+        entityManager.clear();
 
-//    @BeforeEach
-//    void setUp() {
-//        Member member = Mockito.mock(Member.class);
-//        memberRepository.save(member);
-//        orders = buildOrders(member);
-//        entityManager.flush();
-//        entityManager.clear();
-//
-//    }
+    }
 
     private Orders buildOrders(Member member) {
         return Orders.builder()
