@@ -1,11 +1,11 @@
-package io.ssafy.mallook.domain.order.api;
+package io.ssafy.mallook.domain.orders.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.ssafy.mallook.config.security.WithMockCustomUser;
-import io.ssafy.mallook.domain.order.application.OrderService;
-import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
+import io.ssafy.mallook.domain.orders.application.OrderService;
+import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

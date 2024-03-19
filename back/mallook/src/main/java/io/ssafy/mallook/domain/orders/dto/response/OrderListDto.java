@@ -1,6 +1,6 @@
-package io.ssafy.mallook.domain.order.dto.response;
+package io.ssafy.mallook.domain.orders.dto.response;
 
-import io.ssafy.mallook.domain.order.entity.Orders;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import lombok.Builder;
 
 @Builder

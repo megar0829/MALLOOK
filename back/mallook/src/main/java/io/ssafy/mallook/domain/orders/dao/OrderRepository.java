@@ -1,8 +1,7 @@
-package io.ssafy.mallook.domain.order.dao;
+package io.ssafy.mallook.domain.orders.dao;
 
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.order.entity.Orders;
-import org.springframework.data.domain.Page;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;

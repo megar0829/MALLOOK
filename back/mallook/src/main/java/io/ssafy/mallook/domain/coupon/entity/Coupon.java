@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.coupon.entity;
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -24,13 +26,17 @@ public class Coupon extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     private CouponType type;
 
+    @NotBlank
     private String amount;
 
+    @NotNull
     @Column(name = "expired_time")
     private LocalDateTime expiredTime;
 
@@ -41,6 +47,4 @@ public class Coupon extends BaseEntity {
     public Coupon(Long id) {
         this.id = id;
     }
-
-
 }

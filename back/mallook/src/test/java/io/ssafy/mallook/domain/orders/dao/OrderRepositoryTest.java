@@ -1,10 +1,9 @@
-package io.ssafy.mallook.domain.order.dao;
+package io.ssafy.mallook.domain.orders.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.order.entity.Orders;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import jakarta.persistence.EntityManager;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

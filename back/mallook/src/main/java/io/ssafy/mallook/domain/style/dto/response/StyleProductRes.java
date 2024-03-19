@@ -7,7 +7,7 @@ public record StyleProductRes(
         @Schema(description="상품명")
         String name,
         @Schema(description="상품 가격")
-        Long price,
+        Integer price,
         @Schema(description="브랜드명")
         String brandName,
         @Schema(description="이미지")

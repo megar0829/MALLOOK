@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.domain.style.entity.Style;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,14 +27,16 @@ public class Keyword extends BaseEntity {
     @JoinColumn(name = "script_id")
     private Script script;
 
+    @NotNull
     private String name;
 
     //상품 아이디
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-    //스타일 아이디
 
+    //스타일 아이디
     @ManyToOne
     @JoinColumn(name = "style_id")
     private Style style;

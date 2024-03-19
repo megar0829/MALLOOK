@@ -1,7 +1,7 @@
-package io.ssafy.mallook.domain.order.dto.request;
+package io.ssafy.mallook.domain.orders.dto.request;
 
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.order.entity.Orders;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 

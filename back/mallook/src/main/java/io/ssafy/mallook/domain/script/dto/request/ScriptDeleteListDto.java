@@ -1,10 +1,10 @@
 package io.ssafy.mallook.domain.script.dto.request;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.List;
 
 public record ScriptDeleteListDto(
-        @NotNull
+        @NotEmpty
         List<Long> toDeleteList) {
 }
