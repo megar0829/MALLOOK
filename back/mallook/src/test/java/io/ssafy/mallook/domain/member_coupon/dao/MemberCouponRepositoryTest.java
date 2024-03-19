@@ -22,7 +22,7 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = "dev")
+@ActiveProfiles(profiles = {"dev", "local"})
 class MemberCouponRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
