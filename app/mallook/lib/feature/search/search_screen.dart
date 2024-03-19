@@ -154,12 +154,12 @@ class _SearchScreenState extends State<SearchScreen> {
         body: Column(
           children: [
             Container(
+              height: _searchKeywords.isNotEmpty ? Sizes.size44 : 0,
               color: Theme.of(context).primaryColorLight,
               padding: const EdgeInsets.symmetric(
                 vertical: Sizes.size6,
                 horizontal: Sizes.size20,
               ),
-              height: Sizes.size44,
               child: ListView.separated(
                 controller: _appBarScrollController,
                 scrollDirection: Axis.horizontal,
