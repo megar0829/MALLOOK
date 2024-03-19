@@ -16,6 +16,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
+  final ScrollController _appBarScrollController = ScrollController();
   final Future<List<HotKeyword>> _hotKeywords =
       SearchApiService.getHotKeywords();
   final Set<String> _searchKeywords = {};
@@ -48,7 +49,19 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void addSearchKeyword(String keyword) {
     setState(() {
+      _appBarScrollController.animateTo(
+        _appBarScrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.ease,
+      );
+
       _searchKeywords.add(keyword);
+    });
+  }
+
+  void _removeSearchKeyword(String keyword) {
+    setState(() {
+      _searchKeywords.remove(keyword);
     });
   }
 
@@ -137,75 +150,69 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             Gaps.h20,
           ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(
-              Sizes.size20,
-            ),
-            child: Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: Sizes.size10,
-                ),
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => Center(
-                    child: Container(
-                      height: Sizes.size24,
-                      padding: const EdgeInsets.symmetric(
-                        vertical: Sizes.size2,
-                        horizontal: Sizes.size6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColorLight,
-                        borderRadius: BorderRadius.circular(
-                          Sizes.size20,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            '#${_searchKeywords.elementAt(index)}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Sizes.size16,
-                            ),
-                          ),
-                          Gaps.h4,
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(
-                                Sizes.size2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size10,
-                                ),
-                              ),
-                              child: FaIcon(
-                                FontAwesomeIcons.xmark,
-                                color: Colors.grey.shade700,
-                                size: Sizes.size18,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                  separatorBuilder: (context, index) => Gaps.h10,
-                  itemCount: _searchKeywords.length,
-                ),
-              ),
-            ),
-          ),
         ),
         body: Column(
           children: [
-            Flexible(
-              flex: 1,
+            Container(
+              color: Theme.of(context).primaryColorLight,
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size6,
+                horizontal: Sizes.size20,
+              ),
+              height: Sizes.size44,
+              child: ListView.separated(
+                controller: _appBarScrollController,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) => Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size4,
+                    horizontal: Sizes.size10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColorDark,
+                    borderRadius: BorderRadius.circular(
+                      Sizes.size20,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Text(
+                        '# ${_searchKeywords.elementAt(index)}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Sizes.size14,
+                        ),
+                      ),
+                      Gaps.h4,
+                      GestureDetector(
+                        onTap: () => _removeSearchKeyword(
+                            _searchKeywords.elementAt(index)),
+                        child: Container(
+                          padding: const EdgeInsets.all(
+                            Sizes.size2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColorLight,
+                            borderRadius: BorderRadius.circular(
+                              Sizes.size10,
+                            ),
+                          ),
+                          child: FaIcon(
+                            FontAwesomeIcons.xmark,
+                            color: Colors.grey.shade700,
+                            size: Sizes.size14,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                separatorBuilder: (context, index) => Gaps.h10,
+                itemCount: _searchKeywords.length,
+              ),
+            ),
+            Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: Sizes.size18,
@@ -268,8 +275,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
             ),
-            Flexible(
-              flex: 1,
+            Expanded(
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   vertical: Sizes.size12,

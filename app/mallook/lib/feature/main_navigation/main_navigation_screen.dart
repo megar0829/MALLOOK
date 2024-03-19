@@ -44,6 +44,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   DateTime? _currentBackPressTime;
   int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -104,9 +110,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
               Sizes.size24,
             ),
           ),
-          onTap: (index) => setState(() {
-            _selectedIndex = index;
-          }),
+          onTap: (index) => _onItemTapped(index),
         ),
       ),
     );
