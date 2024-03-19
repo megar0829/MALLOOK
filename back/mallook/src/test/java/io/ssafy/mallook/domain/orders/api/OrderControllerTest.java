@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
@@ -82,7 +83,10 @@ class OrderControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void deleteOrder() throws Exception {
-        OrderDeleteDto orderDeleteDto = new OrderDeleteDto(new ArrayList<>());
+        Long id = 1L;
+        List<Long> toDeleteList = new ArrayList<>();
+        toDeleteList.add(id);
+        OrderDeleteDto orderDeleteDto = new OrderDeleteDto(toDeleteList);
 
         mockMvc.perform(MockMvcRequestBuilders.delete(url)
                         .contentType(MediaType.APPLICATION_JSON)
