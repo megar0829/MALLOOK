@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.SQLRestriction;
 
 import java.util.*;
 
@@ -16,6 +17,7 @@ import java.util.*;
 @NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
+@SQLRestriction("status=TRUE")
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

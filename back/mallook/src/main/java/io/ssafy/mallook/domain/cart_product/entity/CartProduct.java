@@ -4,16 +4,20 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.product.entity.Product;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
+
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.List;
 
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Entity
+@SQLRestriction("status=true")
 @Table(name = "cart_product")
 public class CartProduct extends BaseEntity {
 
@@ -49,10 +53,18 @@ public class CartProduct extends BaseEntity {
     private String productColor;
 
     @Column(name = "product_fee")
-    private Long productFee;
+    private Integer productFee;
 
     //쇼핑몰 id
 //    private Long shopMallId;
 
+//    public void setCart(Cart cart) {
+//        if(Objects.isNull(cart.getCartProductList())
+//                || ! cart.getCartProductList().contains(this)){
+//            List<CartProduct> cpList = Objects.isNull(cart.getCartProductList())?new ArrayList<>(): cart.getCartProductList().add(this);
+//            cart.getCartProductList().add(this);
+//            cart.setCartProductList(cart.getCartProductList().add(this));
+//        }
+//    }
 
 }

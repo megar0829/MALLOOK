@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "../../assets/css/home.module.css";
+import styles from "./home.module.css";
 import Image from "next/image";
 
 import imgQr from "../../../public/images/qr.png";
@@ -15,7 +15,7 @@ export default async function HomePage() {
     <div className={styles.container}>
       <div className={styles.leftDiv}>
         <div className={styles.leftDivTopDiv}>
-          <span className={styles.leftDivTopText}>패션스쿨</span>
+          <span className={styles.leftDivTopText}>MALLOOK</span>
           <span className={styles.leftDivMiddleText}>App으로 보기</span>
         </div>
 

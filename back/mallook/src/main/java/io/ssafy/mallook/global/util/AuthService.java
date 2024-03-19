@@ -50,7 +50,7 @@ public class AuthService {
 
     public boolean authorizeToDeleteMemberCoupon(UUID memberId, Long memberCouponId) {
         log.info("나에게 등록된 쿠폰인지 확인 시작");
-        return memberCouponRepository.existsByIdAndMember_IdAndStatus(memberCouponId, memberId, true);
+        return memberCouponRepository.existsByIdAndMember_Id(memberCouponId, memberId);
 
     }
 

@@ -8,6 +8,7 @@ import 'package:mallook/feature/onboarding/interests_screen.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 import 'package:mallook/feature/sign_up/widgets/gender_radio_button.dart';
 import 'package:mallook/feature/sign_up/widgets/phone_input_formatter.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:remedi_kopo/remedi_kopo.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -178,24 +179,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const Duration(seconds: 2)) {
           _currentBackPressTime = now;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              elevation: 0.0,
-              shape: const StadiumBorder(
-                side: BorderSide(
-                  style: BorderStyle.none,
-                ),
-              ),
-              duration: const Duration(seconds: 2),
-              backgroundColor: Colors.grey.shade100,
-              content: const Text(
-                '한번 더 누르면 앱이 종료됩니다.',
-                style: TextStyle(
-                  color: Colors.black87,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+            mallookSnackBar(title: '한번 더 누르면 앱이 종료됩니다.'),
           );
           return;
         }
@@ -313,8 +297,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
           ),
         ),
-        Opacity(
+        AnimatedOpacity(
           opacity: _additionalAddressInputEnable ? 1 : 0,
+          duration: const Duration(milliseconds: 300),
           child: TextField(
             enabled: _additionalAddressInputEnable,
             controller: _additionalAddressController,

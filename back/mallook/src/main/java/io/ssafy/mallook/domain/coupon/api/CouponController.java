@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.coupon.api;
 
 import io.ssafy.mallook.domain.coupon.application.CouponService;
+import io.ssafy.mallook.domain.coupon.dto.request.CouponDeleteReq;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -66,8 +67,8 @@ public class CouponController {
     @PreAuthorize("@authService.authorizeToDeleteMemberCoupon(#userSecurityDTO.getId(), #memberCouponId)")
     public ResponseEntity<BaseResponse<String>> deleteMyCoupon(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @NotNull @RequestBody Long memberCouponId){
-        memberCouponService.deleteMyCoupon(memberCouponId);
+            @Valid @NotNull @RequestBody CouponDeleteReq couponDeleteReq){
+        memberCouponService.deleteMyCoupon(couponDeleteReq.memberCouponList());
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,
                 "쿠폰 삭제 완료"
