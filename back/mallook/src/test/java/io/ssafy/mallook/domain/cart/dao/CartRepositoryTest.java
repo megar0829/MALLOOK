@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = "dev")
+@ActiveProfiles(profiles = {"dev", "local"})
 class CartRepositoryTest {
     @Autowired
     CartRepository cartRepository;
