@@ -11,15 +11,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -50,14 +48,14 @@ class OrderRepositoryTest {
 
     }
 
-        private Orders buildOrders(Member member) {
-            return Orders.builder()
-                    .totalPrice(1000L)
-                    .totalFee(500L)
-                    .totalCount(2L)
-                    .member(member)
-                    .build();
-        }
+    private Orders buildOrders(Member member) {
+        return Orders.builder()
+                .totalPrice(1000L)
+                .totalFee(500L)
+                .totalCount(2L)
+                .member(member)
+                .build();
+    }
 
     @Test
     void findAllByMember() {
@@ -69,15 +67,20 @@ class OrderRepositoryTest {
         Orders orders2 = buildOrders(member);
         orderRepository.save(orders1);
         orderRepository.save(orders2);
-//        entityManager.flush();
-//        entityManager.clear();
+        entityManager.flush();
+        entityManager.clear();
+        Long cursor = orderRepository.findMaxOrderId() + 1;
 
         // findAllByMember 메서드 호출
-        Page<Orders> result = orderRepository.findAllByMember(member, pageable);
+        Slice<Orders> result = orderRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, member, pageable);
 
-        // 검증
-        assertThat(result).isNotNull();
-        assertThat(result.getContent()).contains(orders1, orders2);
+        // Slice<Orders> 객체에서 주문들의 PK 가져오기
+        List<Long> sliceOrderIds = result.getContent().stream()
+                .map(Orders::getId)
+                .collect(Collectors.toList());
+
+        // 비교
+        assertThat(sliceOrderIds).contains(orders1.getId(), orders2.getId());
     }
 
     @Test

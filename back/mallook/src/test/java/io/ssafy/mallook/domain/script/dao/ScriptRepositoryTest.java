@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.script.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.order.entity.Orders;
 import io.ssafy.mallook.domain.script.entity.Script;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,11 +14,13 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,10 +66,18 @@ class ScriptRepositoryTest {
         Script script2 = buildScript(member);
         scriptRepository.save(script1);
         scriptRepository.save(script2);
+        entityManager.flush();
+        entityManager.clear();
+        Long cursor = scriptRepository.findMaxId() + 1;
 
-        Page<Script> scriptPage = scriptRepository.findAllByMember(member, pageable);
-        assertThat(scriptPage).isNotNull(); // 결과가 null이 아닌지 확인
-        assertThat(scriptPage.getContent()).contains(script1, script2); // 스크립트가 올바르게 조회되었는지 확인
+        Slice<Script> scriptPage = scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, member, pageable);
+        // Slice<Orders> 객체에서 주문들의 PK 가져오기
+        List<Long> sliceOrderIds = scriptPage.getContent().stream()
+                .map(Script::getId)
+                .collect(Collectors.toList());
+
+        // 비교
+        assertThat(sliceOrderIds).contains(script1.getId(), script2.getId());
     }
 
     @Test
