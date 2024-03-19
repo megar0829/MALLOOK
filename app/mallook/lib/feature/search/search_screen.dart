@@ -208,7 +208,7 @@ class _SearchScreenState extends State<SearchScreen> {
               flex: 1,
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size12,
+                  vertical: Sizes.size18,
                   horizontal: Sizes.size18,
                 ),
                 child: Column(
