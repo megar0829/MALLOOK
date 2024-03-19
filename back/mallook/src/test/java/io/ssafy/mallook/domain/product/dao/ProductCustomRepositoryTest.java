@@ -5,6 +5,8 @@ import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
+import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
+import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import io.ssafy.mallook.global.config.QueryDSLConfig;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +30,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QueryDSLConfig.class)
-@ActiveProfiles(profiles = {"dev", "local"})
+@ActiveProfiles(profiles = "test")
+@TestPropertySource(locations = "classpath:application-test.yml")
 @ComponentScan(basePackages = "io.ssafy.mallook.domain.product.dao")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class ProductCustomRepositoryTest {
+
+    @Autowired
+    private ShoppingMallRepository shoppingMallRepository;
+
+    private ShoppingMall shoppingMall;
 
     @Autowired
     private EntityManager entityManager;
@@ -41,27 +49,47 @@ class ProductCustomRepositoryTest {
     @Autowired
     private ProductCustomRepository productCustomRepository;
 
+    private Product product;
+
     @Autowired
     private ProductRepository productRepository;
 
     private List<Product> mockProducts = new ArrayList<>();
 
-    private Product product;
-
     @BeforeEach
     void init() {
         queryFactory = new JPAQueryFactory(entityManager);
-        product = Product
-                .builder()
-                .name("테스트 바지")
-                .mainCategory(MainCategory.TOP)
-                .subCategory(SubCategory.FORMAL)
-                .build();
+        shoppingMall = getTestShoppingmall();
+        shoppingMallRepository.save(shoppingMall);
+        entityManager.flush();
+        product = getTestProduct();
         productRepository.save(product);
         mockProducts.add(product);
         entityManager.flush();
         entityManager.clear();
     }
+
+    private Product getTestProduct() {
+        return Product.builder()
+                .shopingmall(shoppingMall)
+                .mainCategory(MainCategory.TOP)
+                .subCategory(SubCategory.SPORT)
+                .name("테스트 상의")
+                .price(1000)
+                .quantity(10)
+                .size("Large")
+                .color("white")
+                .fee(500)
+                .build();
+    }
+
+    private ShoppingMall getTestShoppingmall() {
+        return ShoppingMall.builder()
+                .name("테스트 쇼핑몰")
+                .url("www.test.com")
+                .build();
+    }
+
 
     @Test
     void findAllProduct() {
@@ -70,7 +98,7 @@ class ProductCustomRepositoryTest {
                 product.getId() + 1,
                 pageable,
                 MainCategory.TOP,
-                SubCategory.FORMAL);
+                SubCategory.SPORT);
 
         List<ProductListDto> expectedList = mockProducts.stream()
                 .map(ProductListDto::toDto)
