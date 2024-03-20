@@ -5,9 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/category_screen.dart';
 import 'package:mallook/feature/home/home_screen.dart';
+import 'package:mallook/feature/profile/profile_screen.dart';
 import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
-import 'package:mallook/feature/user/user_screen.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 const List<TabItem> items = [
@@ -90,7 +90,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
             Offstage(
               offstage: _selectedIndex != 4,
-              child: const UserScreen(),
+              child: const ProfileScreen(),
             ),
           ],
         ),
