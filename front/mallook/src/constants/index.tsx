@@ -42,19 +42,28 @@ import imgCody27 from "@/assets/img/recommend/cody27.jpg";
 import imgCody28 from "@/assets/img/recommend/cody28.jpg";
 import imgCody29 from "@/assets/img/recommend/cody29.jpg";
 import imgCody30 from "@/assets/img/recommend/cody30.jpg";
+
 import {StaticImageData} from "next/image";
 
+import iconTop from "@/assets/img/category/top.jpg";
+import iconBottom from "@/assets/img/category/bottom.jpg";
+import iconOuter from "@/assets/img/category/outer.jpg";
+import iconOnepiece from "@/assets/img/category/onepiece.jpg";
+import iconBag from "@/assets/img/category/bag.jpg";
+import iconShoe from "@/assets/img/category/shoe.jpg";
+import iconHat from "@/assets/img/category/hat.jpg";
+
 export interface Product {
-    productImg: StaticImageData | String;
+    productImg: string | StaticImageData;
     name: string;
     brand: string;
     price: number;
 }
 
 export interface CodyData {
-    codyImg: StaticImageData | String;
+    codyImg: string | StaticImageData;
     codyName: string;
-    profileImg: StaticImageData | String;
+    profileImg: string | StaticImageData;
     username: string;
     productLeft: Product[];
     productRight: Product[];
@@ -66,20 +75,31 @@ export interface ProductListProps {
 }
 
 export interface CodyBookData {
-    profileImg: StaticImageData | String;
+    profileImg: string | StaticImageData;
     username: string;
     content: string;
     likeCnt: number;
-    codyImg: StaticImageData | String;
+    codyImg: string | StaticImageData;
 }
 
-export const CodyList: CodyData = [
+export interface DetailCategoryData {
+    categoryName: string,
+    categoryUrl: string | StaticImageData
+}
+
+export interface MainCategoryData {
+    name: string,
+    url: string | StaticImageData ,
+    detailCategory: DetailCategoryData[]
+}
+
+export const CodyList: CodyData[] = [
     {
         codyImg: imgCody10,
         codyName: "심플한 코디",
         profileImg: iconDefaultProfile,
         username: "무신소리예요?",
-        productsLeft: [
+        productLeft: [
             {
                 productImg: imgCody10_1,
                 name: "빅 트위치 로고 티셔츠 화이트",
@@ -125,7 +145,7 @@ export const CodyList: CodyData = [
         codyName: "힙하다 힙해",
         profileImg: iconDefaultProfile,
         username: "귀여운패피윤정이",
-        productsLeft: [
+        productLeft: [
             {
                 productImg: imgCody11_1,
                 name: "크루넥 리브 니트 스웨터_아이보리",
@@ -171,7 +191,7 @@ export const CodyList: CodyData = [
         codyName: "조거 팬츠가 대세",
         profileImg: iconDefaultProfile,
         username: "귀여운패피세진이",
-        productsLeft: [
+        productLeft: [
             {
                 productImg: imgCody12_1,
                 name: "CAMPING AURORA KNIT BLACK",
@@ -293,3 +313,294 @@ export const CodyBookList: CodyBookData[] = [
         codyImg: imgCody20
     },
 ]
+
+
+export const MainCategory : MainCategoryData[] = [
+    {
+        name: "상의",
+        url: iconTop,
+        detailCategory: [
+            {
+                categoryName: "긴팔티",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "카라티",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "반팔티",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "민소매",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "후드티",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "맨투맨",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "니트 / 스웨터",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "셔츠 / 블라우스",
+                categoryUrl: iconTop
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconTop
+            }
+        ]
+    },
+    {
+        name: "하의",
+        url: iconBottom,
+        detailCategory: [
+            {
+                categoryName: "데님",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "면",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "슬랙스",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "트레이닝 / 조거 팬츠",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "스커트",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "레깅스",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "숏 팬츠",
+                categoryUrl: iconBottom
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconBottom
+            }
+        ]
+    },
+    {
+        name: "아우터",
+        url: iconOuter,
+        detailCategory: [
+            {
+                categoryName: "숏패딩 / 패딩조끼",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "롱패딩",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "숏코트",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "롱코트",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "라이더 재킷",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "블레이저",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "무스탕",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "재킷",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "점퍼",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "플리스",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "가디건",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "후드집업",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "바람막이",
+                categoryUrl: iconOuter
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconOuter
+            }
+        ]
+    },
+    {
+        name: "원피스",
+        url: iconOnepiece,
+        detailCategory: [
+            {
+                categoryName: "롱원피스",
+                categoryUrl: iconOnepiece
+            },
+            {
+                categoryName: "미니원피스",
+                categoryUrl: iconOnepiece
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconOnepiece
+            }
+        ]
+    },
+    {
+        name: "가방",
+        url: iconBag,
+        detailCategory: [
+            {
+                categoryName: "크로스백",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "숄더백",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "토트백",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "클러치",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "에코 / 캔버스 백",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "백팩",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "웨이스트백",
+                categoryUrl: iconBag
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconBag
+            }
+        ]
+    },
+    {
+        name: "신발",
+        url: iconShoe,
+        detailCategory: [
+            {
+                categoryName: "스니커즈",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "러닝화 / 워킹화",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "스포츠화",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "구두",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "힐 / 펌프스",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "로퍼",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "뮬 / 블로퍼",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "플랫 슈즈",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "플랫 슈즈",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "부츠",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "샌들 / 슬리퍼",
+                categoryUrl: iconShoe
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconShoe
+            }
+        ]
+    },
+    {
+        name: "모자",
+        url: iconHat,
+        detailCategory: [
+            {
+                categoryName: "볼캡 / 야구모자",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "스냅백",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "비니",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "버킷햇",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "베레모",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "페도라",
+                categoryUrl: iconHat
+            },
+            {
+                categoryName: "기타",
+                categoryUrl: iconHat
+            }
+        ]
+    }
+];
+
