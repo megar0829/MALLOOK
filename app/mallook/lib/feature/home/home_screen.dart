@@ -96,7 +96,10 @@ class MallookAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: [Gaps.h6, CartIconButton()],
+                      children: [
+                        Gaps.h6,
+                        CartIconButton(),
+                      ],
                     ),
                   ),
                 ),

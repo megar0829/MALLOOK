@@ -9,6 +9,7 @@ import 'package:mallook/feature/home/widgets/product_widget.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/models/hot_keyword.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
+import 'package:mallook/global/widget/cart_icon_button.dart';
 
 class SearchProductScreen extends StatefulWidget {
   final String searchWord;
@@ -223,10 +224,12 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: Sizes.size20,
+                  fontSize: Sizes.size18,
                 ),
               ),
             ),
+            Gaps.h10,
+            const CartIconButton(),
             Gaps.h20,
           ],
         ),
