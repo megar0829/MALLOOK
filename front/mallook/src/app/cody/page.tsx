@@ -1,10 +1,13 @@
 import Link from "next/link";
-
-export const metadata = {
-  title: "코디",
-};
+import styles from "cody.module.css";
+// import {Metadata} from "next";
+//
+// export const metadata:{title: string} = {
+//   title: "코디",
+// };
 
 import {CodyBookList} from "@/constants";
+import TestCarousel from "@/app/cody/_components/TestCarousel";
 
 export default async function CodyPage() {
 
@@ -15,22 +18,9 @@ export default async function CodyPage() {
       </div>
     );
   }
-
-  const postList = () => {
-    return (
-      CodyBookList.map((codyBook, index) => {
-        return (
-          <div key={index}>
-
-          </div>
-        );
-      })
-    );
-  }
-
   return (
-    <div>
-      cody page
-    </div>
+    <>
+      <TestCarousel />
+    </>
   );
 }

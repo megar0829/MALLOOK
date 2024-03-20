@@ -1,9 +1,9 @@
 import Link from "next/link";
 import styles from "./product.module.css";
 
-import Category from "@/app/product/_components/category";
-import Recommend from "@/app/product/_components/recommend";
-import Product from "@/app/product/_components/product";
+import Category from "@/app/product/_components/Category";
+import Recommend from "@/app/product/_components/Recommend";
+import Product from "@/app/product/_components/Product";
 
 export const metadata = {
   title: "상품",

@@ -2,40 +2,4 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 150px;
-}
-
-.category__container {
-  width: 80%;
-  height: 150px;
-  position: fixed;
-  top: 100px;
-  display: flex;
-  align-items: center;
-  padding: 5px 10px;
-}
-.category__categoryDiv {
-  width: 100px;
-  height: 130px;
-  margin-right: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.category__imageDiv {
-  width: 70px;
-  height: 70px;
-  border-radius: 100%;
-  border: 1px solid lightgray;
-  box-shadow: 0 0 5px;
-}
-.category__image {
-  width: 70px;
-  height: 70px;
-  border-radius: 100%;
-  border: 1px solid lightgray;
-}
-.category__span {
-  font-size: 20px;
-  font-weight: 600;
 }
