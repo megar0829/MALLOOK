@@ -8,6 +8,9 @@ import 'package:mallook/feature/profile/widget/fashion_tile_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final String username = '정우현';
+  final String hashcode = "O12AB2";
+
   const ProfileScreen({super.key});
 
   void _onLogoutBtnPressed() async {
@@ -33,6 +36,7 @@ class ProfileScreen extends StatelessWidget {
           ),
           title: const Text("프로필"),
           actions: [
+            // 쿠폰 버튼
             Stack(
               children: [
                 const Padding(
@@ -73,13 +77,75 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             Gaps.h8,
-            CartIconButton(),
+            const CartIconButton(),
             Gaps.h20,
           ],
         ),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size12,
+            horizontal: Sizes.size18,
+          ),
           child: Column(
             children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.size10,
+                  horizontal: Sizes.size16,
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColorLight.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size20,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: username,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: Sizes.size24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "님 안녕하세요!",
+                                style: TextStyle(
+                                  color: Colors.grey.shade700,
+                                  fontSize: Sizes.size24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Gaps.v4,
+                        Text(
+                          '#$hashcode',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: Sizes.size18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const FaIcon(
+                      FontAwesomeIcons.angleRight,
+                      size: Sizes.size24,
+                      color: Colors.black,
+                    ),
+                  ],
+                ),
+              ),
               Image.asset("assets/images/mypage_sample_page.jpg"),
               const Divider(),
               const FashionTileWidget(),
