@@ -16,18 +16,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = {"dev", "local"})
+@ActiveProfiles(profiles = "test")
 class StyleProductRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
@@ -58,7 +56,8 @@ class StyleProductRepositoryTest {
                 .heartCount(0L)
                 .build();
     }
-    private StyleProduct buildStyleProduct(Style style, Product product){
+
+    private StyleProduct buildStyleProduct(Style style, Product product) {
         return StyleProduct.builder()
                 .style(style)
                 .product(product)
@@ -78,6 +77,7 @@ class StyleProductRepositoryTest {
                 .shopingmall(shoppingMall)
                 .build();
     }
+
     private ShoppingMall buildShoppingMall() {
         return ShoppingMall.builder()
                 .name("testshop")
@@ -91,14 +91,14 @@ class StyleProductRepositoryTest {
         Style style = buildStyle(member);
         styleRepository.save(style);
         List<Long> deleteList = new ArrayList<>();
-        for (int i =0 ; i < 3; i ++) {
+        for (int i = 0; i < 3; i++) {
             Product pd = buildProduct(shoppingMall);
             productRepository.save(pd);
             var rs = styleProductRepository.save(buildStyleProduct(style, pd));
             deleteList.add(rs.getId());
         }
         styleProductRepository.deleteMyStyleProduct(deleteList);
-        for(var a : deleteList) {
+        for (var a : deleteList) {
             assertThat(styleProductRepository.findById(a).isPresent()).isFalse();
         }
 

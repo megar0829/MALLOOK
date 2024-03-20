@@ -32,8 +32,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = {"dev", "local"})
+@ActiveProfiles(profiles = "test")
 @Log4j2
 class CartRepositoryTest {
     @Autowired

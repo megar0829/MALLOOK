@@ -45,7 +45,6 @@ public class Cart extends BaseEntity {
     private Integer totalFee;
 
     @NotNull
-    @ColumnDefault("0")
     @Column(name = "total_count")
     private Long totalCount;
 

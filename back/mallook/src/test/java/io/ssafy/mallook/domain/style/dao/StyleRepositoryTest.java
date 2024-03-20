@@ -30,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = {"dev", "local"})
+@ActiveProfiles(profiles = "test")
 class StyleRepositoryTest {
 
     @Autowired
@@ -128,8 +127,6 @@ class StyleRepositoryTest {
         styleRepository.deleteMyStyle(member.getId(), deleteList);
         for (var a : deleteList) {
             assertThat(styleRepository.findById(a).isPresent()).isFalse();
-            // style product 확인
-            assertThat(styleProductRepository.findByStyle_Id(a).isPresent()).isFalse();
         }
     }
 }

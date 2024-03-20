@@ -37,7 +37,6 @@ public class Style extends BaseEntity {
     private String name;
 
     @NotNull
-    @ColumnDefault(value = "0")
     private Long heartCount;
 
     @OneToMany(mappedBy = "style", cascade = CascadeType.ALL)
