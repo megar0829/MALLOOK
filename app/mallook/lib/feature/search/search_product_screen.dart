@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/models/hot_keyword.dart';
@@ -18,14 +19,31 @@ class SearchProductScreen extends StatefulWidget {
   State<SearchProductScreen> createState() => _SearchProductScreenState();
 }
 
-class _SearchProductScreenState extends State<SearchProductScreen> {
+class _SearchProductScreenState extends State<SearchProductScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _appBarScrollController = ScrollController();
   final Future<List<HotKeyword>> _hotKeywords =
       SearchApiService.getHotKeywords();
-  late Set<String> _searchKeywords;
+  final List<Product> _products = [];
+  int _productPage = 0;
+  bool _isProductLoading = false;
 
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(
+      milliseconds: 200,
+    ),
+  );
+
+  late final Animation<double> _arrowAnimation = Tween(
+    begin: 0.0,
+    end: 0.5,
+  ).animate(_animationController);
+
+  late Set<String> _searchKeywords;
   late String _searchWord;
+  bool _isHotKeywordVisible = false;
 
   @override
   void initState() {
@@ -84,7 +102,22 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
   void dispose() {
     _textEditingController.dispose();
     _appBarScrollController.dispose();
+    _animationController.dispose();
     super.dispose();
+  }
+
+  void _toggleHotKeyword() async {
+    if (_animationController.isCompleted) {
+      setState(() {
+        _isHotKeywordVisible = false;
+      });
+      await _animationController.reverse();
+    } else {
+      setState(() {
+        _isHotKeywordVisible = true;
+      });
+      await _animationController.forward();
+    }
   }
 
   @override
@@ -168,12 +201,15 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
         ),
         body: Column(
           children: [
-            Container(
+            AnimatedContainer(
               height: _searchKeywords.isNotEmpty ? Sizes.size44 : 0,
               color: Theme.of(context).primaryColorLight,
               padding: const EdgeInsets.symmetric(
                 vertical: Sizes.size6,
                 horizontal: Sizes.size20,
+              ),
+              duration: const Duration(
+                milliseconds: 300,
               ),
               child: ListView.separated(
                 controller: _appBarScrollController,
@@ -227,57 +263,63 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                 itemCount: _searchKeywords.length,
               ),
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size18,
-                  horizontal: Sizes.size18,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.fire,
-                          color: Colors.redAccent,
-                          size: Sizes.size24,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.orange.shade300,
-                              blurRadius: 5,
-                              offset: const Offset(Sizes.size2, Sizes.size2),
-                            )
-                          ],
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size18,
+                horizontal: Sizes.size18,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      FaIcon(
+                        FontAwesomeIcons.fire,
+                        color: Colors.redAccent,
+                        size: Sizes.size24,
+                        shadows: [
+                          BoxShadow(
+                            color: Colors.orange.shade300,
+                            blurRadius: 5,
+                            offset: const Offset(Sizes.size2, Sizes.size2),
+                          )
+                        ],
+                      ),
+                      Gaps.h12,
+                      const Text(
+                        '핫한 키워드',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: Sizes.size18,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Gaps.h12,
-                        const Text(
-                          '핫한 키워드',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: Sizes.size18,
-                            fontWeight: FontWeight.bold,
+                      ),
+                      Gaps.h10,
+                      GestureDetector(
+                        onTap: _toggleHotKeyword,
+                        child: RotationTransition(
+                          turns: _arrowAnimation,
+                          child: const FaIcon(
+                            FontAwesomeIcons.angleUp,
                           ),
                         ),
-                      ],
+                      ),
+                    ],
+                  ),
+                  Gaps.v6,
+                  const Divider(),
+                  AnimatedContainer(
+                    height: _isHotKeywordVisible ? 230 : 0,
+                    duration: const Duration(
+                      milliseconds: 300,
                     ),
-                    Gaps.v6,
-                    const Divider(),
-                    FutureBuilder(
+                    child: FutureBuilder(
                       future: _hotKeywords,
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          return Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: Sizes.size6,
-                                horizontal: Sizes.size10,
-                              ),
-                              child: HotKeywordGridWidget(
-                                hotKeywords: snapshot.data!,
-                                addKeyword: addSearchKeyword,
-                              ),
-                            ),
+                          return HotKeywordGridWidget(
+                            hotKeywords: snapshot.data!,
+                            addKeyword: addSearchKeyword,
                           );
                         }
                         return const Center(
@@ -285,22 +327,15 @@ class _SearchProductScreenState extends State<SearchProductScreen> {
                         );
                       },
                     ),
-                    // HotKeywordGridWidget()
-                  ],
-                ),
+                  ),
+                  Visibility(
+                    visible: _isHotKeywordVisible,
+                    child: const Divider(),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size12,
-                  horizontal: Sizes.size18,
-                ),
-                child: const Column(
-                  children: [],
-                ),
-              ),
-            )
+            const Text('sofnsofns'),
           ],
         ),
       ),
