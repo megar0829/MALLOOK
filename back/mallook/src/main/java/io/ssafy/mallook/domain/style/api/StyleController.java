@@ -42,7 +42,7 @@ public class StyleController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<StyleRes>>> findStyleList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable,  // todo: 20으로 변경
+            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable,
             @RequestParam(required = false) Long cursor){
         var result = Objects.nonNull(cursor)? styleService.findStyleList(pageable, cursor)
                 : styleService.findStyleListFirst(pageable);
