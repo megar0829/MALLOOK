@@ -65,27 +65,27 @@ class MallookAppBar extends StatelessWidget implements PreferredSizeWidget {
                 Expanded(
                   child: Align(
                     alignment: Alignment.center,
-                    child: Row(
-                      children: [
-                        const Text(
-                          "MAL",
-                          style: TextStyle(
-                            overflow: TextOverflow.visible,
-                            fontWeight: FontWeight.w800,
-                            fontSize: Sizes.size28,
-                            color: Colors.black,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "MAL",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: Sizes.size28,
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        Text(
-                          "LOOK",
-                          style: TextStyle(
-                            overflow: TextOverflow.visible,
-                            fontWeight: FontWeight.w800,
-                            fontSize: Sizes.size28,
-                            color: Theme.of(context).primaryColorDark,
+                          TextSpan(
+                            text: "LOOK",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: Sizes.size28,
+                              color: Theme.of(context).primaryColorDark,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
