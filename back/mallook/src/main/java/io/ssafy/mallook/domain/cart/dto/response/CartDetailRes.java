@@ -11,9 +11,9 @@ public record CartDetailRes(
         @Schema(description = "상품id")
         Long productId,
         @Schema(description = "상품 가격")
-        Long price,
+        Integer price,
         @Schema(description = "상품개수")
-        Long count,
+        Integer count,
         @Schema(description = "상품명")
         String name,
         @Schema(description = "상품이미지")

@@ -5,6 +5,8 @@ import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StylePageRes;
+import io.ssafy.mallook.domain.style.dto.response.StyleRes;
+import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -14,11 +16,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 
 @RestController
@@ -35,14 +40,17 @@ public class StyleController {
             }
     )
     @GetMapping
-    public ResponseEntity<BaseResponse<StylePageRes>> findStyleList(
+    public ResponseEntity<BaseResponse<Slice<StyleRes>>> findStyleList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable){
-        var result = styleService.findStyleList(pageable);
+            @PageableDefault(size=5, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable,  // todo: 20으로 변경
+            @RequestParam(required = false) Long cursor){
+        var result = Objects.nonNull(cursor)? styleService.findStyleList(pageable, cursor)
+                : styleService.findStyleListFirst(pageable);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
+
     }
     @Operation(
             summary = "코디 상세 조회",

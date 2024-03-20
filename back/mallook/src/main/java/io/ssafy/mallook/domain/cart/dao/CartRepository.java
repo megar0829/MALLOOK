@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +14,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
+
+
     @Query(
             """
             select new io.ssafy.mallook.domain.cart.dto.response.CartDetailRes(
@@ -20,11 +23,11 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             )
             from Cart c
             join CartProduct cp on cp.cart.id = c.id
-            where c.member.id = :memberId and c.status = true and cp.status = true
+            where c.member.id = :memberId and cp.id < :cursor
             order by cp.id
             """
     )
-    Page<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId);
+    Slice<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId, Long cursor);
 
     Optional<Cart> findMyCartByMember(Member member);
 

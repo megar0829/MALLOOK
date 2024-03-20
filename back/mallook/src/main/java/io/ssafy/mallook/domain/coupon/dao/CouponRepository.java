@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +18,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             )
             FROM MemberCoupon mc
             JOIN mc.coupon c
-            WHERE mc.member.id = :memberId AND mc.status = true
+            WHERE mc.member.id = :memberId AND mc.id < :cursor
     """)
-    Page<CouponRes> findAllByMemberId(Pageable pageable, @Param("memberId") UUID memberId);
+    Slice<CouponRes> findAllByMemberId(Pageable pageable, @Param("memberId") UUID memberId, @Param("cursor") Long cursor);
 }
