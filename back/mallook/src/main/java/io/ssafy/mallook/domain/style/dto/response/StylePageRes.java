@@ -6,8 +6,6 @@ import java.util.List;
 public record StylePageRes(
         @Schema(description = "스타일 정보 리스트")
         List<StyleListRes> styleListResList,
-        @Schema(description = "전체 페이지")
-        int totalPage,
         @Schema(description = "현재 페이지")
         int currentPage
 ) {

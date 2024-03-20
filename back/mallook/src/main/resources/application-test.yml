@@ -11,6 +11,8 @@ spring:
     properties:
       hibernate:
         format_sql: true # log
-
+  config:
+    activate:
+      on-profile: test
 logging.level:
   org.hibernate.SQL: debug

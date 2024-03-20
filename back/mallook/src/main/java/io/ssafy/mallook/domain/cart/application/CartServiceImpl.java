@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.cart.application;
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
+import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
@@ -16,6 +17,7 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,11 +31,19 @@ public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
     private  final CartProductRepository cartProductRepository;
     private final ProductRepository productRepository;
+
+    @Override
+    public Slice<CartDetailRes> findProductsInCartFirst(Pageable pageable, UUID memberId) {
+        Cart cart = cartRepository.findMyCartByMember(new Member(memberId))
+                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        Long maxId = cartProductRepository.getMaxId(cart);
+        return cartRepository.findProductsInCart(pageable, memberId, maxId+1);
+    }
+
     @Override
     @Transactional(readOnly = true)
-    public CartPageRes findProductsInCart(Pageable pageable, UUID memberId) {
-        var result = cartRepository.findProductsInCart(pageable, memberId);
-        return new CartPageRes(result.getContent(), result.getTotalPages(), result.getNumber());
+    public Slice<CartDetailRes> findProductsInCart(Pageable pageable, UUID memberId, Long cursor) {
+        return cartRepository.findProductsInCart(pageable, memberId, cursor+1);
     }
 
     @Transactional
