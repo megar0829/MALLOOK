@@ -1,8 +1,8 @@
 package io.ssafy.mallook.global.util;
 
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
-import io.ssafy.mallook.domain.order.dao.OrderRepository;
-import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dao.OrderRepository;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.global.common.code.ErrorCode;

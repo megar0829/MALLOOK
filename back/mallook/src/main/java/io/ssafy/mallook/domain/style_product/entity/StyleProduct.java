@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.style.entity.Style;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -14,16 +15,18 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="style_product")
-@SQLRestriction("status= 'TRUE'")
+@SQLRestriction("status= TRUE")
 public class StyleProduct extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "style_id")
     Style style;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "product_id")
     Product product;

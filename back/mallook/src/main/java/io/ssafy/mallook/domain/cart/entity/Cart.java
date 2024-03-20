@@ -4,14 +4,15 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import java.util.List;
-import java.util.ArrayList;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Getter
@@ -28,16 +29,22 @@ public class Cart extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotNull
+    @ColumnDefault("0")
     @Column(name = "total_price")
     private Long totalPrice;
 
+    @NotNull
+    @ColumnDefault("0")
     @Column(name = "total_fee")
     private Integer totalFee;
 
+    @NotNull
     @Column(name = "total_count")
     private Long totalCount;
 
