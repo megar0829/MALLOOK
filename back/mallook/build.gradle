@@ -31,7 +31,11 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok:1.18.26'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	//test
+	// chatGPT
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.0'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+
+	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.h2database:h2'
