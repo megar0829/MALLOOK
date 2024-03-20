@@ -323,10 +323,23 @@
 - detail_html: pageProps -> fallback -> @\"/products/{id}\",\"{프로덕트id}\", -> data -> text 상품 상세 정보 html [API]
 
 ### 리뷰 저장 형태(포토)
+productId = {
+  - count: meta -> count 리뷰 개수 [API]
+  - reviews: {
+    - 리뷰 번호: {
+      - content: 댓글 내용 [API]
+      - created_at: 게시일 [API]
+      - images: 이미지 있으면 가져오고 없으면 X [API]
+      - point: 하이버는 없음 [Null]
+      - product_option: ['color', 'size'] 없으면 Null [API]
+      - userSize: [키, 몸무게] 없으면 Null [API]
+  - }
+- }
+}
 - count: meta -> count 리뷰 개수 [API]
-- content: {
+- reviews: {
   - 리뷰 번호: {
-    - content: 댓글 내용 [API]
+    - contents: 댓글 내용 [API]
     - created_at: 게시일 [API]
     - images: 이미지 있으면 가져오고 없으면 X [API]
     - point: 하이버는 없음 [Null]
@@ -337,7 +350,7 @@
 
 ### 리뷰 저장 형태(텍스트)
 - count: meta -> count 리뷰 개수 [API]
-- content: {
+- reviews: {
   - 리뷰 번호: {
     - content: data -> reviews -> text (댓글 내용) [API]
     - created_at: data -> reviews -> created_time (게시일) [API]
