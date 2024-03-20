@@ -5,6 +5,7 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/models/hot_keyword.dart';
+import 'package:mallook/feature/search/search_product_screen.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -34,8 +35,15 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onSearchSubmitted() {
-    if (_searchWord != "") {
-      print(_searchWord); // 검색어 전달자 사전작업
+    if (_searchWord.isNotEmpty || _searchKeywords.isNotEmpty) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SearchProductScreen(
+            searchWord: _searchWord,
+            searchKeywords: _searchKeywords,
+          ),
+        ),
+      );
     }
   }
 
@@ -68,9 +76,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   void dispose() {
     _textEditingController.dispose();
-
+    _appBarScrollController.dispose();
     super.dispose();
-  } // Controller 를 사용시는 반드시 dispose 를 하여야 한다 (resource 문제)
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +146,7 @@ class _SearchScreenState extends State<SearchScreen> {
               borderRadius: BorderRadius.circular(
                 Sizes.size20,
               ),
-              onTap: () {},
+              onTap: _onSearchSubmitted,
               child: Text(
                 '검색',
                 style: TextStyle(
@@ -153,12 +161,15 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         body: Column(
           children: [
-            Container(
+            AnimatedContainer(
               height: _searchKeywords.isNotEmpty ? Sizes.size44 : 0,
               color: Theme.of(context).primaryColorLight,
               padding: const EdgeInsets.symmetric(
                 vertical: Sizes.size6,
                 horizontal: Sizes.size20,
+              ),
+              duration: const Duration(
+                milliseconds: 300,
               ),
               child: ListView.separated(
                 controller: _appBarScrollController,

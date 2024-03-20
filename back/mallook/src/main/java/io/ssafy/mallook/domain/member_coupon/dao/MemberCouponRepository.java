@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Long> {
+
+    @Query("select max(mc.id) from MemberCoupon mc")
+    Long getMaxId(UUID memberId);
+
     @Modifying(clearAutomatically = true)
     @Query("""
         update MemberCoupon mc set mc.status = false

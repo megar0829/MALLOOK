@@ -4,10 +4,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
-import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
-import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
-import io.ssafy.mallook.domain.style.dto.response.StylePageRes;
-import io.ssafy.mallook.domain.style.dto.response.StyleProductRes;
+import io.ssafy.mallook.domain.style.dto.response.*;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.dao.StyleProductRepository;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
@@ -18,6 +15,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,15 +26,18 @@ public class StyleServiceImpl implements StyleService{
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
 
+    @Transactional(readOnly = true)
+    @Override
+    public Slice<StyleRes> findStyleListFirst(Pageable pageable) {
+        Long maxId = styleRepository.findMaxId();
+        return styleRepository.findStylesByIdLessThan(pageable, maxId+1);
+    }
+
     @Override
     @Transactional(readOnly = true)
-    public StylePageRes findStyleList(Pageable pageable) {
-        var result = styleRepository.findAll(pageable);
-        return new StylePageRes(
-                result.getContent().stream().map(ele -> new StyleListRes(ele.getId(), ele.getName())).toList(),
-                result.getTotalPages(),
-                result.getNumber()
-        );
+    public Slice<StyleRes> findStyleList(Pageable pageable, Long cursor) {
+        System.out.println(cursor);
+        return styleRepository.findStylesByIdLessThan(pageable, cursor+1);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class StyleServiceImpl implements StyleService{
     @Override
     @Transactional
     public void saveStyle(UUID memberId, StyleInsertReq styleInsertRes) {
-        Style style = new Style().builder()
+        Style style = Style.builder()
                 .name(styleInsertRes.name())
                 .heartCount(0L)
                 .member(new Member(memberId))
@@ -67,9 +68,9 @@ public class StyleServiceImpl implements StyleService{
         var st = styleRepository.save(style);
         styleInsertRes.productIdList().forEach(ele ->
                 styleProductRepository.save(
-                        new StyleProduct().builder()
+                        StyleProduct.builder()
                                 .style(st)
-                                .product(new Product().builder().id(ele).build())
+                                .product(Product.builder().id(ele).build())
                                 .build()));
     }
     @Transactional
