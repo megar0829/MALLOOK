@@ -1,12 +1,12 @@
-package io.ssafy.mallook.domain.order.application;
+package io.ssafy.mallook.domain.orders.application;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.order.dao.OrderRepository;
-import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
-import io.ssafy.mallook.domain.order.entity.Orders;
+import io.ssafy.mallook.domain.orders.dao.OrderRepository;
+import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

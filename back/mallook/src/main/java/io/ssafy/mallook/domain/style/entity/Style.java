@@ -4,6 +4,9 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -24,14 +27,18 @@ public class Style extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     private Long heartCount;
 
+    @NotEmpty
     @OneToMany(mappedBy = "style", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StyleProduct> styleProductList = new ArrayList<>();

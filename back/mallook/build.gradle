@@ -31,6 +31,11 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok:1.18.26'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	//test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
+
 	// spring-boot actuator
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 

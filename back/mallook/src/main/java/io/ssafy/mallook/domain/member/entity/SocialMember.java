@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.member.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -18,6 +19,7 @@ public class SocialMember {
     private String socialId;
     @Enumerated(EnumType.STRING)
     private SocialType socialType;
+    @NotNull
     private String email;
     @ManyToOne
     @JoinColumn(name = "member_id")

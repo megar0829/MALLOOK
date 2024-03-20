@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.script.entity.Script;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,7 +40,16 @@ class CartRepositoryTest {
                 .totalFee(1000)
                 .build();
     }
-
+    private CartProduct buildCartProduct(Product product, Long count, Long price, String name, String size, String color) {
+        return CartProduct.builder()
+                .product(product)
+                .productName(name)
+                .productCount(count)
+                .productPrice(price)
+                .productSize(size)
+                .productColor(color)
+                .build();
+    }
     @BeforeEach
     void setUp() {
         Member member = Mockito.mock(Member.class);

@@ -1,10 +1,10 @@
-package io.ssafy.mallook.domain.order.api;
+package io.ssafy.mallook.domain.orders.api;
 
-import io.ssafy.mallook.domain.order.application.OrderService;
-import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
+import io.ssafy.mallook.domain.orders.application.OrderService;
+import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;

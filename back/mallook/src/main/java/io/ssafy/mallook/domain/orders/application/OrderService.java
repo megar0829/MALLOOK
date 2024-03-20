@@ -1,9 +1,9 @@
-package io.ssafy.mallook.domain.order.application;
+package io.ssafy.mallook.domain.orders.application;
 
-import io.ssafy.mallook.domain.order.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.order.dto.request.OrderDeleteDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderDetailDto;
-import io.ssafy.mallook.domain.order.dto.response.OrderListDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
+import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

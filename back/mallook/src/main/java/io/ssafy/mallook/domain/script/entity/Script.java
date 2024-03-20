@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.script.entity;
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,12 +26,15 @@ public class Script extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @NotBlank
     private String name;
 
+    @NotNull
     @Column(name = "heart_count")
     private Integer heartCount;
 

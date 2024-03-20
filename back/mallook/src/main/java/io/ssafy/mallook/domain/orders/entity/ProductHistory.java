@@ -1,7 +1,10 @@
-package io.ssafy.mallook.domain.order.entity;
+package io.ssafy.mallook.domain.orders.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Getter
@@ -10,7 +13,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="product_history")
+@Table(name = "product_history")
 public class ProductHistory extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,12 +22,29 @@ public class ProductHistory extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Orders orderId;
-    private Long productCount;
-    private Long productPrice;
+
+    @NotNull
+    private Integer productCount;
+
+    @NotNull
+    private Integer productPrice;
+
+    @NotNull
     private String productName;
+
     private String productImage;
+
+    @NotBlank
     private String productSize;
+
+    @NotBlank
     private String productColor;
+
+    @NotNull
     private Integer productFee;
-//    private Shoppingmall shoppingmallId;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "shoppingmall_id")
+    private ShoppingMall shoppingmallId;
 }
