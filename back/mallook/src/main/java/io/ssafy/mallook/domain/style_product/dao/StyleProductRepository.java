@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StyleProductRepository extends JpaRepository<StyleProduct, Long> {
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """
         update StyleProduct s
         set s.status = false

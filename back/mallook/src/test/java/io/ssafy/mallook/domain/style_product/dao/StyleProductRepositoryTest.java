@@ -11,6 +11,7 @@ import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,16 +38,21 @@ class StyleProductRepositoryTest {
     StyleProductRepository styleProductRepository;
     @Autowired
     ShoppingMallRepository shoppingMallRepository;
+    @Autowired
+    EntityManager em;
     private Member member;
     private Product product;
     private ShoppingMall shoppingMall;
 
     @BeforeEach
+
     void setUp() {
-        member = Mockito.mock(Member.class);
+        member = new Member();
         memberRepository.save(member);
         shoppingMall = buildShoppingMall();
         shoppingMallRepository.save(shoppingMall);
+        em.flush();
+        em.clear();
     }
 
     private Style buildStyle(Member member) {
@@ -94,14 +100,13 @@ class StyleProductRepositoryTest {
         for (int i = 0; i < 3; i++) {
             Product pd = buildProduct(shoppingMall);
             productRepository.save(pd);
-            var rs = styleProductRepository.save(buildStyleProduct(style, pd));
-            deleteList.add(rs.getId());
+            var result = styleProductRepository.save(buildStyleProduct(style, pd));
+            System.out.println("#####################" + result.getId());
+            deleteList.add(result.getId());
         }
         styleProductRepository.deleteMyStyleProduct(deleteList);
-        for (var a : deleteList) {
-            assertThat(styleProductRepository.findById(a).isPresent()).isFalse();
+        for (var pk : deleteList) {
+            assertThat(styleProductRepository.findById(pk).isPresent()).isFalse();
         }
-
-
     }
 }
