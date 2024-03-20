@@ -26,11 +26,11 @@ public class MemberCoupon extends BaseEntity {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     Member member;
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name="coupon_id")
+    @JoinColumn(name = "coupon_id")
     Coupon coupon;
 }

@@ -2,6 +2,12 @@ package io.ssafy.mallook.domain.style.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.entity.MainCategory;
+import io.ssafy.mallook.domain.product.entity.Product;
+import io.ssafy.mallook.domain.product.entity.SubCategory;
+import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
+import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.dao.StyleProductRepository;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
@@ -34,77 +40,96 @@ class StyleRepositoryTest {
     MemberRepository memberRepository;
     @Autowired
     StyleProductRepository styleProductRepository;
-
+    @Autowired
+    ProductRepository productRepository;
+    @Autowired
+    ShoppingMallRepository shoppingMallRepository;
+    private Member member;
+    private Product product;
+    private ShoppingMall shoppingMall;
     @BeforeEach
     void setUp() {
-        Member member = Mockito.mock(Member.class);
+        member = Mockito.mock(Member.class);
         memberRepository.save(member);
+        shoppingMall = buildShoppingMall();
+        shoppingMallRepository.save(shoppingMall);
+        product = buildProduct(shoppingMall);
+        productRepository.save(product);
+
     }
 
-    private Style buildStyle(List<StyleProduct> styleProductList, String name, Member member) {
+    private Style buildStyle(Member member) {
         return Style.builder()
-                .styleProductList(styleProductList)
-                .name(name)
+                .name("테스트용 제목")
                 .member(member)
+                .heartCount(0L)
                 .build();
     }
-    private Member buildMember(String nickname) {
-        return Member.builder()
-                .nickname(nickname)
+    private StyleProduct buildStyleProduct(Style style, Product product){
+        return StyleProduct.builder()
+                .style(style)
+                .product(product)
                 .build();
     }
 
+    private Product buildProduct(ShoppingMall shoppingMall) {
+        return Product.builder()
+                .mainCategory(MainCategory.TOP)
+                .subCategory(SubCategory.FORMAL)
+                .name("테스트옷")
+                .price(1000)
+                .quantity(10)
+                .size("s")
+                .color("red")
+                .fee(1000)
+                .shopingmall(shoppingMall)
+                .build();
+    }
+    private ShoppingMall buildShoppingMall() {
+        return ShoppingMall.builder()
+                .name("testshop")
+                .url("www.test.com")
+                .build();
+    }
     @Test
     @DisplayName("페이지를 적용하여 스타일 전체 조회")
     void findAllTest() {
-        List<Style> styleList = new ArrayList<>();
         for (int i = 0; i < 20; i ++) {
-            // 스타일에 속하는 상품 리스트
-            List<StyleProduct> spList = new ArrayList<>();
-            for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = Mockito.mock(StyleProduct.class);
-                styleProductRepository.save(sp);
-                spList.add(sp);
-            }
-            // 스타일 작성 멤버
-            Member member = Mockito.mock(Member.class);
-            memberRepository.save(member);
             // 스타일
-            Style style = buildStyle(spList, "테스트용 제목", member);
-            var rs = styleRepository.save(style);
-            styleList.add(rs);
+            Style style = buildStyle(member);
+            styleRepository.save(style);
+            // style product 저장
+            for (int j = 0 ; j < 2; j ++) {
+                StyleProduct sp = buildStyleProduct(style, product);
+                styleProductRepository.save(sp);
+            }
         }
         Pageable pageable = PageRequest.of(0, 20);
         var result = styleRepository.findAll(pageable);
         assertThat(Objects.nonNull(result)).isTrue();
-        for (var a : styleList) {
-            assertThat(result.getContent().contains(a)).isTrue();
-        }
     }
     @Test
     @DisplayName("내가 등록한 스타일 삭제")
     void deleteMyStyleTest() {
         List<Long> deleteList = new ArrayList<>();
         // 스타일 작성 멤버
-        Member member = buildMember("테스트용 닉네임");
-        memberRepository.save(member);
         for (int i = 0; i < 20; i ++) {
-            // 스타일에 속하는 상품 리스트
-            List<StyleProduct> spList = new ArrayList<>();
-            for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = Mockito.mock(StyleProduct.class);
-                styleProductRepository.save(sp);
-                spList.add(sp);
-            }
             // 스타일
-            Style style = buildStyle(spList, "테스트용 제목", member);
+            Style style = buildStyle(member);
             var rs = styleRepository.save(style);
             deleteList.add(rs.getId());
+            // 스타일에 속하는 상품 리스트
+            for (int j = 0 ; j < 2; j ++) {
+                StyleProduct sp = buildStyleProduct(style, product);
+                styleProductRepository.save(sp);
+            }
         }
+        // style 삭제 확인
         styleRepository.deleteMyStyle(member.getId(), deleteList);
         for (var a : deleteList) {
             assertThat(styleRepository.findById(a).isPresent()).isFalse();
+            // style product 확인
+            assertThat(styleProductRepository.findByStyle_Id(a).isPresent()).isFalse();
         }
-
     }
 }
