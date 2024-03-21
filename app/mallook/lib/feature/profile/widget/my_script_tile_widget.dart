@@ -25,7 +25,7 @@ class MyScriptTileWidget extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.size28,
       ),
-      onTap: () {},
+      onTap: () => _moveToWorldcupScreen(context),
       leading: const FaIcon(
         FontAwesomeIcons.scroll,
         color: Colors.teal,
