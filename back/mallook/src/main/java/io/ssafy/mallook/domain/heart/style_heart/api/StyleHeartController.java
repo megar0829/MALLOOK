@@ -33,7 +33,7 @@ public class StyleHeartController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = cursor != null ? cursor : styleHeartService.findMaxHeartId();
+        cursor = cursor != null ? cursor : styleHeartService.findMaxHeartId() + 1;
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
