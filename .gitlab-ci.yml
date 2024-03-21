@@ -18,6 +18,7 @@ build: # JOB 이름
     - echo "$APPLICATION_LOCAL_YML" > "application-local.yml"
     - echo "$APPLICATION_OAUTH_YML" > "application-oauth.yml"
     - echo "$APPLICATION_REDIS_YML" > "application-redis.yml"
+    - echo "$APPLICATION_TEST_YML" > "application-test.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
     - echo "$APPLICATION_AWS_YML" > "application-aws.yml"
     - ls
     - echo [INFO] spring-boot project build

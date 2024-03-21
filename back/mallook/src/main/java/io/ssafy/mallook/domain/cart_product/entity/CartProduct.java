@@ -41,11 +41,11 @@ public class CartProduct extends BaseEntity {
 
     @NotNull
     @Column(name = "product_count")
-    private Long productCount;
+    private Integer productCount;
 
     @NotNull
     @Column(name = "product_price")
-    private Long productPrice;
+    private Integer productPrice;
 
     @NotBlank
     @Column(name = "product_name")

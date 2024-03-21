@@ -5,6 +5,12 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.entity.MainCategory;
+import io.ssafy.mallook.domain.product.entity.Product;
+import io.ssafy.mallook.domain.product.entity.SubCategory;
+import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
+import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,9 +27,9 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
+
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = {"dev", "local"})
+@ActiveProfiles(profiles = "test")
 class CartProductRepositoryTest {
 
     @Autowired
@@ -33,23 +39,71 @@ class CartProductRepositoryTest {
     @Autowired
     private MemberRepository memberRepository;
     @Autowired
-    private EntityManager entityManager;
+    private ProductRepository productRepository;
+    @Autowired
+    ShoppingMallRepository shoppingMallRepository;
+    @Autowired
+    private EntityManager em;
+    private Member member;
+    private Product product;
+    private ShoppingMall shoppingMall;
+    private Cart cart;
+
     @BeforeEach
     void setUp() {
-        Member member = Mockito.mock(Member.class);
+        member = Mockito.mock(Member.class);
         memberRepository.save(member);
+        cart = buildCart(member);
+        cartRepository.save(cart);
+        shoppingMall = buildShoppingMall();
+        shoppingMallRepository.save(shoppingMall);
+        product = buildProduct(shoppingMall);
+        productRepository.save(product);
     }
-    private CartProduct buildCartProduct(Cart cart, Long price, Long count, Integer fee){
-        return CartProduct.builder()
-                .cart(cart)
-                .productColor("테스트용색")
-                .productSize("테스트용사이즈")
-                .productImage("테스트용이미지")
-                .productPrice(price)
-                .productCount(count)
-                .productFee(fee)
+
+    private Cart buildCart(Member member) {
+        return Cart.builder()
+                .member(member)
+                .totalPrice(10000L)
+                .totalCount(10L)
+                .totalFee(1000)
                 .build();
     }
+
+    private Product buildProduct(ShoppingMall shoppingMall) {
+        return Product.builder()
+                .mainCategory(MainCategory.TOP)
+                .subCategory(SubCategory.FORMAL)
+                .name("테스트옷")
+                .price(1000)
+                .quantity(10)
+                .size("s")
+                .color("red")
+                .fee(1000)
+                .shopingmall(shoppingMall)
+                .build();
+    }
+
+    private CartProduct buildCartProduct(Cart cart, Product product) {
+        return CartProduct.builder()
+                .cart(cart)
+                .product(product)
+                .productName("test")
+                .productCount(1)
+                .productPrice(1000)
+                .productFee(1000)
+                .productSize("s")
+                .productColor("red")
+                .build();
+    }
+
+    private ShoppingMall buildShoppingMall() {
+        return ShoppingMall.builder()
+                .name("testshop")
+                .url("www.test.com")
+                .build();
+    }
+
     @Test
     @DisplayName("활성화된 카트에 활성화된 상품 중 동일한 상품의 개수 조회 테스트")
     void CountSameProductInCartTest() {
@@ -59,13 +113,9 @@ class CartProductRepositoryTest {
     @Test
     @DisplayName("카트내 상품 삭제")
     void deleteCartProductTest() {
-        Member member = Mockito.mock(Member.class);
-        memberRepository.save(member);
-        Cart cart = Mockito.mock(Cart.class);
-        cartRepository.save(cart);
         List<Long> deleteCartList = new ArrayList<>();
-        for (int i = 0; i < 3; i ++) {
-            CartProduct cartProduct = buildCartProduct(cart, 1000L, 1L, 100);
+        for (int i = 0; i < 3; i++) {
+            CartProduct cartProduct = buildCartProduct(cart, product);
             var rs = cartProductRepository.save(cartProduct);
             deleteCartList.add(rs.getId());
         }

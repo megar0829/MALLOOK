@@ -15,7 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="style_product")
-@SQLRestriction("status= 'TRUE'")
+@SQLRestriction("status= TRUE")
 public class StyleProduct extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
