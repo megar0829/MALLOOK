@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/worldcup/worldcup_screen.dart';
 
 class FashionTileWidget extends StatelessWidget {
   const FashionTileWidget({super.key});
+
+  void _moveToWorldcupScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const WorldcupScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +25,7 @@ class FashionTileWidget extends StatelessWidget {
       contentPadding: const EdgeInsets.symmetric(
         horizontal: Sizes.size28,
       ),
-      onTap: () {},
+      onTap: () => _moveToWorldcupScreen(context),
       leading: const FaIcon(
         FontAwesomeIcons.trophy,
         color: Colors.orange,

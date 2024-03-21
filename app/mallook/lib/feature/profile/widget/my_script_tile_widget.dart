@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/my_script/my_script_screen.dart';
 
 class MyScriptTileWidget extends StatelessWidget {
   const MyScriptTileWidget({super.key});
+
+  void _moveToWorldcupScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MyScriptScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
