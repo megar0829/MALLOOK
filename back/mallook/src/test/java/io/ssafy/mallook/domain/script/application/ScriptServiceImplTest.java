@@ -1,6 +1,6 @@
 package io.ssafy.mallook.domain.script.application;
 
-import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionAnswerDto;
+import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.service.GptService;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -116,7 +115,7 @@ class ScriptServiceImplTest {
                 .answer("테스트응답")
                 .build();
 
-        given(gptService.askQuestion(any(QuestionAnswerDto.class)))
+        given(gptService.askQuestion(any(QuestionDto.class)))
                 .willReturn(fakeResponse);
 
         // when

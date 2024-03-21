@@ -1,7 +1,5 @@
 package io.ssafy.mallook.domain.chatgpt.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
@@ -10,7 +8,7 @@ import com.theokanning.openai.completion.chat.ChatMessageRole;
 import com.theokanning.openai.service.OpenAiService;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.prompt.Prompt;
-import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionAnswerDto;
+import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.global.config.ChatGPTConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,17 +36,16 @@ public class GptService {
         return openAiService.createChatCompletion(build);
     }
 
-    public List<ChatMessage> generatedQuestionAndAnswerMessage(QuestionAnswerDto questionAnswerDto) {
-        String prompt = Prompt.generateQuestionPrompt(questionAnswerDto.content());
+    public List<ChatMessage> generatedQuestionAndAnswerMessage(QuestionDto questionDto) {
+        String prompt = Prompt.generateQuestionPrompt(questionDto.content());
         ChatMessage chatMessage = new ChatMessage(ChatMessageRole.USER.value(), prompt);
 
         return List.of(chatMessage);
     }
 
-    public GptResponseDto askQuestion(QuestionAnswerDto questionAnswerDto) {
-        List<ChatMessage> chatMessages = generatedQuestionAndAnswerMessage(questionAnswerDto);
+    public GptResponseDto askQuestion(QuestionDto questionDto) {
+        List<ChatMessage> chatMessages = generatedQuestionAndAnswerMessage(questionDto);
         ChatCompletionResult result = generated(chatMessages);
-        System.out.println("결과: " + result);
 
         String gptAnswer = result.getChoices().get(0).getMessage().getContent();
         return GptResponseDto.builder()
