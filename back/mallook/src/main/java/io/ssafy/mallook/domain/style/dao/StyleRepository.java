@@ -28,4 +28,8 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
             """
     )
     void deleteMyStyle(@Param("memberId") UUID memberId, @Param("styleIdList") List<Long> styleIdList);
+
+    @Modifying
+    @Query("UPDATE Script s SET s.totalLike = 0")
+    void resetAllTotalLike();
 }
