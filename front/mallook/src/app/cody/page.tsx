@@ -1,26 +1,18 @@
 import Link from "next/link";
-import styles from "cody.module.css";
-// import {Metadata} from "next";
-//
-// export const metadata:{title: string} = {
-//   title: "코디",
-// };
+import styles from "./cody.module.css";
 
-import {CodyBookList} from "@/constants";
-import TestCarousel from "@/app/cody/_components/TestCarousel";
+export const metadata:{title: string} = {
+  title: "코디",
+};
 
-export default async function CodyPage() {
+import Masonry from "@/app/cody/_components/Masonry";
 
-  const post = () => {
-    return (
-      <div>
 
-      </div>
-    );
-  }
+export default function CodyPage() {
+
   return (
-    <>
-      <TestCarousel />
-    </>
+    <div className={styles.container}>
+      <Masonry />
+    </div>
   );
 }

@@ -40,10 +40,14 @@
     align-items: flex-start;
 }
 .product__rightDiv__productName {
+    width: 90%;
     font-size: 16px;
     font-weight: 600;
     margin-top: 5px;
     margin-left: 5px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 .product__rightDiv__productBrand {
     font-size: 14px;

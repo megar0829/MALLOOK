@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import styles from "./signup-complete.module.css";
 import Image from "next/image";
-import iconCheck from "../../../../public/images/check.png";
+import iconCheck from "@/assets/img/icons/check.png";
 
 export default function Complete() {
 

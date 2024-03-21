@@ -6,10 +6,10 @@ import { useCallback } from "react";
 import styles from "./login.module.css";
 import Image from "next/image";
 
-import imgLogo from "../../../../public/images/logo.png";
-import iconGoogle from "../../../../public/images/google.png";
-import iconKakao from "../../../../public/images/kakao.png";
-import iconNaver from "../../../../public/images/naver.png";
+import imgLogo from "@/assets/img/icons/logo.png";
+import iconGoogle from "@/assets/img/icons/google.png";
+import iconKakao from "@/assets/img/icons/kakao.png";
+import iconNaver from "@/assets/img/icons/naver.png";
 
 
 export default function LoginModal() {

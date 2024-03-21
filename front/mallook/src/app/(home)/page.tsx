@@ -2,8 +2,8 @@ import Link from "next/link";
 import styles from "./home.module.css";
 import Image from "next/image";
 
-import imgQr from "../../../public/images/qr.png";
-import imgPhone from "../../../public/images/phone.png";
+import imgQr from "@/assets/img/icons/qr.png";
+import imgPhone from "@/assets/img/icons/phone.png";
 
 export const metadata = {
   title: "Home",

@@ -1,0 +1,77 @@
+.scripts__container {
+    width: 100dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.scripts__topDiv {
+    width: 90%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+.scripts__topDiv__textDiv {
+    height: 45px;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.scripts__topDiv__textSpan {
+    font-size: 18px;
+    font-weight: 600;
+}
+.scripts__topDiv__middleLine {
+    width: 2px;
+    height: 25px;
+    background-color: gray;
+    margin-left: 10px;
+}
+
+.scripts__bottomDiv {
+    width: 100dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.scripts__bottomDiv__container {
+    width: 80%;
+    height: 400px;
+    background-color: red;
+    margin-bottom: 20px;
+    border: 1px solid lightgray;
+    border-radius: 30px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.scripts__bottomDiv__cover {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+
+}
+.scripts__bottomDiv__image {
+    width: 100%;
+}
+.scripts__bottomDiv__nameDiv {
+    position: absolute;
+}
+.scripts__bottomDiv__name {
+    font-size: 50px;
+    font-weight: 700;
+    color: white;
+}
+
+.scripts__noneDiv {
+    margin-top: 100px;
+}
+
+.scripts__none {
+    font-size: 30px;
+    font-weight: 600;
+}

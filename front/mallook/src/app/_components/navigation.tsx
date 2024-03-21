@@ -6,10 +6,10 @@ import { useState } from "react";
 import Image from "next/image";
 import styles from "./navigation.module.css";
 
-import imgLogo from "../../../public/images/logo.png";
-import iconSearch from "../../../public/images/search.png";
-import iconCart from "../../../public/images/cart.png";
-import iconProfile from "../../../public/images/profile.png";
+import imgLogo from "@/assets/img/icons/logo.png";
+import iconSearch from "@/assets/img/icons/search.png";
+import iconCart from "@/assets/img/icons/cart.png";
+import iconProfile from "@/assets/img/icons/profile.png";
 
 export default function Navigation() {
   const path = usePathname();
@@ -40,7 +40,7 @@ export default function Navigation() {
               <Link href="/product">상품</Link>
             </li>
             <li>
-              <Link href="/cody">코디북</Link>
+              <Link href="/cody">몰룩북</Link>
             </li>
           </ul>
         </div>
@@ -50,7 +50,7 @@ export default function Navigation() {
             <Link href="/signup">
               <Image 
                 src={iconSearch} 
-                alt="Logo Image" 
+                alt="search Image"
                 style={{
                   width: "30px",
                   height:"30px"
@@ -62,7 +62,7 @@ export default function Navigation() {
             <Link href="/cart">
               <Image 
                 src={iconCart} 
-                alt="Logo Image" 
+                alt="cart Image"
                 style={{
                   width: "30px",
                   height:"30px"
@@ -71,10 +71,10 @@ export default function Navigation() {
             </Link>
           </li>
           <li>
-            <Link href="/login">
+            <Link href="/my-page">
               <Image 
                 src={iconProfile} 
-                alt="Logo Image" 
+                alt="profile Image"
                 style={{
                   width: "40px",
                   height:"40px"

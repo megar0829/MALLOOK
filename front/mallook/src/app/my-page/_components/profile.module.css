@@ -1,0 +1,133 @@
+.container {
+    width: 100dvw;
+    height: 35dvh;
+    border-bottom: 2px double gray;
+    display: flex;
+    align-items: center;
+}
+.leftDiv {
+    width: 200px;
+    height: 200px;
+    border: 2px solid gray;
+    border-radius: 100%;
+    margin-left: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profileImg {
+    width: 195px;
+    height: 195px;
+    border-radius: 100%;
+}
+
+.middleDiv {
+    width: 60%;
+    height: 90%;
+    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding-bottom: 20px;
+    padding-top: 50px;
+}
+.middleDiv__topDiv {
+    margin-left: 10px;
+}
+.middleDiv__topDiv__nickname {
+    font-size: 30px;
+    font-weight: 800;
+
+}
+
+.middleDiv__middleDiv {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+.middleDiv__middleDiv__level {
+    height: 30px;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+.middleDiv__middleDiv__expBarDiv {
+    width: 60%;
+    height: 30px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+}
+.middleDiv__middleDiv__expBar {
+    width: 70%;
+    height: 20px;
+    border-radius: 10px;
+}
+.middleDiv__middleDiv__exp {
+    font-size: 15px;
+    font-weight: 600;
+    color: gray;
+    margin-left: 10px;
+}
+
+.middleDiv__middleDiv__benefitDiv {
+    height: 30px;
+}
+.middleDiv__middleDiv__benefit {
+    font-size: 15px;
+    font-weight: 600;
+    color: lightgray;
+}
+
+.middleDiv__bottomDiv {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    margin-left: 15px;
+}
+.middleDiv__bottomDiv__point {
+    font-size: 16px;
+    font-weight: 700;
+    color: #c9c9ca;
+}
+.middleDiv__bottomDiv__couponDiv {
+    height: 30px;
+    margin-left: 70px;
+}
+.middleDiv__bottomDiv__coupon {
+    font-size: 16px;
+    font-weight: 600;
+}
+.middleDiv__bottomDiv__orderListDiv {
+    height: 30px;
+    margin-left: 40px;
+}
+.middleDiv__bottomDiv__orderLisk {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.rightDiv {
+    width: 15%;
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.worldCupDiv {
+    width: 120px;
+    height: 50px;
+    background-color: lightgray;
+    border: 1px solid gray;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.worldCup {
+    font-size: 18px;
+    font-weight: 600;
+}
