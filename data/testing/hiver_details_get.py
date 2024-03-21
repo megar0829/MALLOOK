@@ -312,7 +312,7 @@ for main_categories in category_numbers:
             category_info_list.append((main_categories, sub_categories, category_number))
 
 # 상품 상세정보를 받아오는 함수
-def process_category(category_info):
+def hiver_process(category_info):
     # 분류
     main_categories, sub_categories, category_number = category_info
     print(category_number)
@@ -522,6 +522,8 @@ def process_category(category_info):
                     print('======================================================')
                     print()
 
+                    print(hiver_products[product['id']]['detail_images'])
+
                     db.products.insert_one(hiver_products[product['id']])
 
 if __name__ == '__main__':
@@ -536,7 +538,7 @@ if __name__ == '__main__':
                 category_info_list.append((main_categories, sub_categories, category_number))
 
     # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
-    pool.map(process_category, category_info_list)
+    pool.map(hiver_process, category_info_list)
 
     # 프로세스 풀 종료
     pool.close()
