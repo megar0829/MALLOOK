@@ -31,7 +31,7 @@ public class ScriptHeartServiceImpl implements ScriptHeartService {
     public Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return scriptHeartRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
+        return scriptHeartRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor + 1, proxyMember, pageable)
                 .map(ScriptHeart::getScript)
                 .map(ScriptListDto::toDto);
     }

@@ -33,7 +33,7 @@ public class ScriptHeartController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = cursor != null ? cursor : scriptHeartService.findMaxHeartId() + 1;
+        cursor = cursor != null ? cursor : scriptHeartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

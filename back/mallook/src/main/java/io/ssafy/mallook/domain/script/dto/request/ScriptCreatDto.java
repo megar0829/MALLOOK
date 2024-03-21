@@ -16,6 +16,7 @@ public record ScriptCreatDto(
                 .name(this.scriptContent)
                 .member(member)
                 .heartCount(0)
+                .totalLike(0)
                 .build();
     }
 }

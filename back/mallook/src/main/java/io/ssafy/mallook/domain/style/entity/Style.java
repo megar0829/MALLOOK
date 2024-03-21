@@ -39,15 +39,21 @@ public class Style extends BaseEntity {
     @NotNull
     private Long heartCount;
 
+    @NotNull
+    @Column(name = "total_like")
+    private Integer totalLike;
+
     @OneToMany(mappedBy = "style", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StyleProduct> styleProductList = new ArrayList<>();
 
     public void like() {
         this.heartCount++;
+        this.totalLike++;
     }
 
     public void unlike() {
         this.heartCount--;
+        this.totalLike--;
     }
 }

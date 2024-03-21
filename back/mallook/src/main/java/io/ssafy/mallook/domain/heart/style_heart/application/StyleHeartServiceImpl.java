@@ -33,7 +33,7 @@ public class StyleHeartServiceImpl implements StyleHeartService {
     public Slice<StyleListRes> getLikeStyleList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
 
-        return styleHeartRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
+        return styleHeartRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor + 1, proxyMember, pageable)
                 .map(StyleHeart::getStyle)
                 .map(StyleListRes::toDto);
     }
@@ -43,6 +43,7 @@ public class StyleHeartServiceImpl implements StyleHeartService {
     public void likeStyle(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Style proxyStyle = styleRepository.getReferenceById(likeDto.targetId());
+        proxyStyle.like();
         styleHeartRepository.findByMemberAndStyle(proxyMember, proxyStyle)
                 .ifPresent(style -> {
                     throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
@@ -56,6 +57,7 @@ public class StyleHeartServiceImpl implements StyleHeartService {
     public void unlikeStyle(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Style proxyStyle = styleRepository.getReferenceById(likeDto.targetId());
+        proxyStyle.unlike();
         StyleHeart heart = styleHeartRepository.findByMemberAndStyle(proxyMember, proxyStyle)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 
