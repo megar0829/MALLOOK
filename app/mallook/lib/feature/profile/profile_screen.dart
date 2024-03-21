@@ -5,6 +5,7 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/profile/widget/fashion_tile_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_controller_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_widget.dart';
+import 'package:mallook/feature/profile/widget/my_script_tile_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -80,28 +81,30 @@ class ProfileScreen extends StatelessWidget {
             vertical: Sizes.size12,
             horizontal: Sizes.size18,
           ),
-          child: Column(
-            children: [
-              MyProfileWidget(
-                username: username,
-                hashcode: hashcode,
-                level: level,
-                percentage: percentage,
-              ),
-              Gaps.v12,
-              const MyProfileControllerWidget(
-                order: 7,
-                deliver: 3,
-                coupon: 12,
-                point: 2633,
-              ),
-              const FashionTileWidget(),
-              const Divider(),
-              // GestureDetector(
-              //   onTap: _onLogoutBtnPressed,
-              //   child: const Text("my page"),
-              // ),
-            ],
+          child: Center(
+            child: Column(
+              children: [
+                Gaps.v20,
+                MyProfileWidget(
+                  username: username,
+                  hashcode: hashcode,
+                  level: level,
+                  percentage: percentage,
+                ),
+                Gaps.v12,
+                const MyProfileControllerWidget(
+                  order: 7,
+                  deliver: 3,
+                  coupon: 12,
+                  point: 2633,
+                ),
+                Gaps.v20,
+                const FashionTileWidget(),
+                const Divider(),
+                const MyScriptTileWidget(),
+                const Divider(),
+              ],
+            ),
           ),
         ),
       ),
