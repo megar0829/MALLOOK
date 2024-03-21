@@ -26,7 +26,7 @@ options.add_argument("disable-gpu")
 options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
 options.add_argument('--disable-images')
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # 속도 향상을 위한 옵션 해제
 prefs = {'profile.default_content_setting_values': {
