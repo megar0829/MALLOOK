@@ -1,41 +1,108 @@
+.container {
+    width: 90dvw;
+}
+
 .item {
     display: inline-block;
     width: 21dvw;
-    position: relative;
+    padding-bottom: 40px;
+}
+.innerDiv {
+    width: 21dvw;
     border: 1px solid lightgray;
     border-radius: 8px;
     box-shadow: 1px 1px lightgray;
 }
+.topDiv {
+    overflow: hidden;
+    border-radius: 8px;
+    position: relative;
+}
 .cover {
-    display: none;
+    /*display: none;*/
     width: 100%;
-    height: 100%;
+    height: inherit;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
     background-color: black;
     border-radius: 8px;
-    opacity: 0.1;
+    opacity: 0.9;
     z-index: 20;
 }
+/*.item {*/
+/*    transition: opacity ease 1s;*/
+/*    transition-delay: 0.2s;*/
+/*    opacity: 1;*/
+/*}*/
 
 
-.thumbnail {
-    overflow: hidden;
-    border-radius: 8px;
+.bottomDiv {
+    width: 100%;
+}
+.bottomDiv__topDiv {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+.bottomDiv__topDiv__leftDiv {
+    width: 70%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+.bottomDiv__topDiv__leftDiv__profileImageDiv {
+    width: 40px;
+    height: 40px;
+    border: 1px solid lightgray;
+    border-radius: 100%;
+    margin-right: 10px;
+}
+.bottomDiv__topDiv__leftDiv__profileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+}
+.bottomDiv__topDiv__leftDiv__username {
+    font-size: 16px;
+    font-weight: 600;
+    color: gray;
 }
 
-.info {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #777;
+.bottomDiv__topDiv__rightDiv {
+    width: 20%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
 }
-.item {
-    transition: opacity ease 1s;
-    transition-delay: 0.2s;
-    opacity: 1;
+.bottomDiv__topDiv__rightDiv__likeDiv {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
 }
-.container {
-    width: 90dvw;
+.bottomDiv__topDiv__rightDiv__like {
+    width: 25px;
+    height: 25px;
+}
+.bottomDiv__topDiv__rightDiv__likeCnt {
+    font-size: 14px;
+    font-weight: 700;
+    color: lightgray;
+}
+.bottomDiv__bottomDiv {
+    width: 100%;
+    padding-left: 10px;
+    padding-bottom: 20px;
+}
+.bottomDiv__bottomDiv__content {
+    display: block;
+    width: 90%;
+    font-size: 15px;
+    font-weight: 600;
+    text-wrap: normal;
+    word-break: break-word;
 }

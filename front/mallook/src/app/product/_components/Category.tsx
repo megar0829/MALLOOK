@@ -7,7 +7,7 @@ import Image, {StaticImageData} from 'next/image';
 
 import useEmblaCarousel from "embla-carousel-react";
 
-import iconDefault from "../../../../public/images/default.png";
+import iconDefault from "@/assets/img/icons/default.png";
 
 import iconTop from "@/assets/img/category/top.jpg";
 import iconBottom from "@/assets/img/category/bottom.jpg";

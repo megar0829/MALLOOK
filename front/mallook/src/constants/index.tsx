@@ -1,4 +1,4 @@
-import iconDefaultProfile from "../../public/images/defaultUser.png";
+import iconDefaultProfile from "@/assets/img/icons/defaultUser.png";
 
 import imgCody10 from "@/assets/img/recommend/cody10.jpg";
 import imgCody10_1 from "@/assets/img/recommend/cody10-1.jpg";
@@ -42,6 +42,17 @@ import imgCody27 from "@/assets/img/recommend/cody27.jpg";
 import imgCody28 from "@/assets/img/recommend/cody28.jpg";
 import imgCody29 from "@/assets/img/recommend/cody29.jpg";
 import imgCody30 from "@/assets/img/recommend/cody30.jpg";
+
+import imgProduct1 from "@/assets/img/product/product1.jpg";
+import imgProduct2 from "@/assets/img/product/product2.jpg";
+import imgProduct3 from "@/assets/img/product/product3.jpg";
+import imgProduct4 from "@/assets/img/product/product4.jpg";
+import imgProduct5 from "@/assets/img/product/product5.jpg";
+import imgProduct6 from "@/assets/img/product/product6.jpg";
+import imgProduct7 from "@/assets/img/product/product7.jpg";
+import imgProduct8 from "@/assets/img/product/product8.jpg";
+import imgProduct9 from "@/assets/img/product/product9.jpg";
+import imgProduct10 from "@/assets/img/product/product10.jpg";
 
 import {StaticImageData} from "next/image";
 
@@ -91,6 +102,26 @@ export interface MainCategoryData {
     name: string,
     url: string | StaticImageData ,
     detailCategory: DetailCategoryData[]
+}
+
+export interface ProfileData {
+    nickname: string;
+    birth: string;
+    gender: string;
+    phone: string;
+    point: number;
+    exp: number;
+    city: string;
+    district: string;
+    address: string;
+    zipcode: string;
+}
+
+export interface ProfileSampleData {
+    nickname: string;
+    point: number;
+    exp: number;
+    profileImg: string | StaticImageData;
 }
 
 export const CodyList: CodyData[] = [
@@ -313,7 +344,6 @@ export const CodyBookList: CodyBookData[] = [
         codyImg: imgCody20
     },
 ]
-
 
 export const MainCategory : MainCategoryData[] = [
     {
@@ -604,3 +634,9 @@ export const MainCategory : MainCategoryData[] = [
     }
 ];
 
+export const ProfileSample: ProfileSampleData = {
+    nickname: "무신소리예요?",
+    point: 2000,
+    exp: 40,
+    profileImg: imgProduct9
+};
