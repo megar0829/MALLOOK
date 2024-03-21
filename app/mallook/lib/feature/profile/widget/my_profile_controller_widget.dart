@@ -21,6 +21,7 @@ class MyProfileControllerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 120,
+      clipBehavior: Clip.hardEdge,
       padding: const EdgeInsets.symmetric(
         vertical: Sizes.size16,
         horizontal: Sizes.size12,
@@ -35,6 +36,7 @@ class MyProfileControllerWidget extends StatelessWidget {
         ),
       ),
       child: GridView(
+        physics: const NeverScrollableScrollPhysics(), // 스크롤 금지
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 4,
         ),
