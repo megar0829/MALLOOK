@@ -85,7 +85,7 @@ class ProductWidget extends StatelessWidget {
               ),
               Gaps.v2,
               Text(
-                _product.name!,
+                _product.name,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black,
