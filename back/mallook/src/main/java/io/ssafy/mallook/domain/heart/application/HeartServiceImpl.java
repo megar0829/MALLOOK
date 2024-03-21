@@ -54,6 +54,7 @@ public class HeartServiceImpl implements HeartService {
     public void likeScript(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
+        proxyScript.like();
         heartRepository.findByMemberAndScript(proxyMember, proxyScript)
                 .ifPresent(like -> {
                     throw new BaseExceptionHandler(ErrorCode.DUPLICATE_LIKE);
@@ -80,6 +81,7 @@ public class HeartServiceImpl implements HeartService {
     public void unlikeScript(UUID id, LikeDto likeDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         Script proxyScript = scriptRepository.getReferenceById(likeDto.targetId());
+        proxyScript.unlike();
         Heart heart = heartRepository.findByMemberAndScript(proxyMember, proxyScript)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_LIKE));
 

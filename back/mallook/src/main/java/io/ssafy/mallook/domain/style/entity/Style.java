@@ -42,4 +42,12 @@ public class Style extends BaseEntity {
     @OneToMany(mappedBy = "style", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StyleProduct> styleProductList = new ArrayList<>();
+
+    public void like() {
+        this.heartCount++;
+    }
+
+    public void unlike() {
+        this.heartCount--;
+    }
 }
