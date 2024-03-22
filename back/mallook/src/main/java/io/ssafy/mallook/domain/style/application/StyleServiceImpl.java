@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.style.application;
 
+import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
@@ -18,12 +19,15 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class StyleServiceImpl implements StyleService {
+
+    private final MemberRepository memberRepository;
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
 
@@ -38,6 +42,18 @@ public class StyleServiceImpl implements StyleService {
     @Transactional(readOnly = true)
     public Slice<StyleRes> findStyleList(Pageable pageable, Long cursor) {
         return styleRepository.findStylesByIdLessThan(pageable, cursor + 1);
+    }
+
+    @Override
+    public List<StyleRes> getWorldCupList(UUID id) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        List<Style> top50StyleList = styleRepository.findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(proxyMember);
+        Collections.shuffle(top50StyleList);
+
+        return top50StyleList.subList(0, 8)
+                .stream()
+                .map(StyleRes::toDto)
+                .toList();
     }
 
     @Override

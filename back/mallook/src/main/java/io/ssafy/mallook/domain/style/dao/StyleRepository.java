@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.style.dao;
 
+import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
 import io.ssafy.mallook.domain.style.entity.Style;
@@ -17,6 +18,8 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
     @Query("select max(s.id) from Style s")
     Long findMaxId();
 
+    @Query("SELECT s FROM Style s WHERE s.member <> :member ORDER BY s.totalLike DESC")
+    List<Style> findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(@Param("member") Member member);
 
     Slice<StyleRes> findStylesByIdLessThan(Pageable pageable, Long cursor);
 
