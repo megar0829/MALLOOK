@@ -1,5 +1,8 @@
 package io.ssafy.mallook.domain.script.application;
 
+import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
+import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
+import io.ssafy.mallook.domain.chatgpt.service.GptService;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
@@ -13,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ScriptServiceImplTest {
@@ -39,12 +43,15 @@ class ScriptServiceImplTest {
     @InjectMocks
     private ScriptServiceImpl scriptService;
 
+    @Mock
+    private GptService gptService;
+
     private Script script;
     private Member member;
 
     @BeforeEach
     void setUp() {
-        member = Mockito.mock(Member.class);
+        member = mock(Member.class);
         memberRepository.save(member);
         script = buildScript(member);
     }
@@ -70,13 +77,13 @@ class ScriptServiceImplTest {
 
         // When
         Slice<Script> emptyPage = new SliceImpl<>(list, pageable, hasNext);
-        Mockito.when(scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable))
+        when(scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable))
                 .thenReturn(emptyPage);
         scriptService.getScriptList(cursor, memberId, pageable);
 
         // then
-        Mockito.verify(scriptRepository, Mockito.times(1)).findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable);
-        Mockito.verify(memberRepository, Mockito.times(2)).getReferenceById(memberId);
+        verify(scriptRepository, times(1)).findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable);
+        verify(memberRepository, times(2)).getReferenceById(memberId);
     }
 
     @Test
@@ -86,10 +93,10 @@ class ScriptServiceImplTest {
         Long scriptId = script.getId();
 
         // when
-        Mockito.when(scriptRepository.findById(scriptId)).thenReturn(Optional.of(script));
+        when(scriptRepository.findById(scriptId)).thenReturn(Optional.of(script));
         ScriptDetailDto result = scriptService.getScriptDetail(scriptId);
 
-        Mockito.verify(scriptRepository, Mockito.times(1)).findById(scriptId);
+        verify(scriptRepository, times(1)).findById(scriptId);
         assertThat(result).isNotNull();
     }
 
@@ -97,12 +104,24 @@ class ScriptServiceImplTest {
     @DisplayName("스크립트 생성 api 테스트")
     void createScript() {
         // given
-        ScriptCreatDto scriptCreateDto = new ScriptCreatDto("테스트용 스크립트입니다");
+        List<String> keywordList = new ArrayList<>();
+        keywordList.add("예쁜");
+        keywordList.add("멋진");
+        ScriptCreatDto scriptCreateDto = ScriptCreatDto.builder()
+                .keywordsList(keywordList)
+                .build();
         UUID id = member.getId();
+        GptResponseDto fakeResponse = GptResponseDto.builder()
+                .answer("테스트응답")
+                .build();
+
+        given(gptService.askQuestion(any(QuestionDto.class)))
+                .willReturn(fakeResponse);
+
         // when
         scriptService.createScript(scriptCreateDto, id);
         // then
-        Mockito.verify(scriptRepository, Mockito.times(1)).save(Mockito.any(Script.class));
+        verify(scriptRepository, times(1)).save(any(Script.class));
     }
 
     @Test
@@ -116,7 +135,7 @@ class ScriptServiceImplTest {
         scriptService.deleteScript(scriptDeleteListDto);
 
         // Then
-        Mockito.verify(scriptRepository, Mockito.times(1)).deleteScript(Mockito.anyList());
+        verify(scriptRepository, times(1)).deleteScript(anyList());
     }
 }
 

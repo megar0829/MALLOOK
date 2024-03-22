@@ -1,5 +1,8 @@
 package io.ssafy.mallook.domain.script.application;
 
+import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
+import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
+import io.ssafy.mallook.domain.chatgpt.service.GptService;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
@@ -18,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static java.util.stream.Collectors.joining;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -26,6 +31,7 @@ public class ScriptServiceImpl implements ScriptService {
 
     private final MemberRepository memberRepository;
     private final ScriptRepository scriptRepository;
+    private final GptService gptService;
 
     @Override
     public Long getMaxScriptId() {
@@ -51,9 +57,12 @@ public class ScriptServiceImpl implements ScriptService {
     @Transactional
     public void createScript(ScriptCreatDto scriptCreateDto, UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
-        log.info("제목: " + scriptCreateDto.scriptContent());
-
-        scriptRepository.save(scriptCreateDto.toEntity(proxyMember));
+        String scriptContent = String.join(", ", scriptCreateDto.keywordsList());
+        QuestionDto questionDto = QuestionDto.builder()
+                .content(scriptContent)
+                .build();
+        GptResponseDto gptResponseDto = gptService.askQuestion(questionDto);
+        scriptRepository.save(scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer()));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.script.api;
 
+import com.theokanning.openai.service.OpenAiService;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -59,12 +60,12 @@ public class ScriptController {
     @PostMapping
     public ResponseEntity<BaseResponse<String>> createScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                              @RequestBody @Valid ScriptCreatDto scriptCreateDto) {
-        log.info("userPk: " + principal.getId().toString());
         UUID id = principal.getId();
         scriptService.createScript(scriptCreateDto, id);
+
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
-                "스크립트 생성 성공"
+                "스크립트가 생성되었습니다."
         );
     }
 
