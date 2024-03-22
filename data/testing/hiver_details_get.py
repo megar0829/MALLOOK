@@ -63,7 +63,7 @@ options.add_experimental_option('prefs', prefs)
 driver = webdriver.Chrome(options=options)
 
 # 암시적 대기 설정 (10초)
-driver.implicitly_wait(5)
+driver.implicitly_wait(10)
 
 # API 키
 API_KEY = '3b17176f2eb5fdffb9bafdcc3e4bc192b013813caddccd0aad20c23ed272f076_1423639497'
@@ -304,18 +304,10 @@ hiver_products = {}
 # 중복을 제거하기 위한 상품 코드들
 hiver_used = set()
 
-# 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
-category_info_list = []
-for main_categories in category_numbers:
-    for sub_categories in category_numbers[main_categories]:
-        for category_number in category_numbers[main_categories][sub_categories]:
-            category_info_list.append((main_categories, sub_categories, category_number))
-
 # 상품 상세정보를 받아오는 함수
 def hiver_process(category_info):
     # 분류
     main_categories, sub_categories, category_number = category_info
-    print(category_number)
     category_url = f'https://capi.hiver.co.kr/v1/web/categories/{category_number}/products'
     
     # 리뷰 파라미터
@@ -337,7 +329,6 @@ def hiver_process(category_info):
         'service-type': 'hiver',
     }
 
-    print('### offset 조회 ###')
     # 한 번호당 5000개까지 조회가능
     for offset in range(0, 5001, 100):
         # 0, 100, ~, 4999
@@ -366,15 +357,13 @@ def hiver_process(category_info):
         category_response = requests.get(category_url, headers=headers, params=params)
         category_data = category_response.json()
         
-        print('### 데이터 조회 ###')
         # 데이터가 존재하는 경우에만
         if category_data['data']:
             # 데이터가 존재할 때 각 상품 번호 활용
             for product in category_data['data']:
-                print('start', category_number, offset, product['id'])
                 # 사용되지 않은 프로덕트라면 세부정보 저장
                 if product['id'] not in hiver_used:
-                    print('### 세부정보 조회 ###')
+                    print(f'[{product["id"]}]', main_categories, sub_categories, category_number, offset)
                     start_time = time.time()
 
                     # 중복 기록
@@ -402,7 +391,7 @@ def hiver_process(category_info):
                         'reviews': []
                     }
 
-                    print('### 리뷰정보 조회 ###')
+                    print(f'[{product["id"]}]', '### 리뷰정보 조회 ###')
 
                     # 리뷰 요청
                     review_url = f'https://hiver-api.brandi.biz/v2/web/products/{product["id"]}/reviews'
@@ -450,15 +439,26 @@ def hiver_process(category_info):
                     for tag in tags:
                         tag_list.append(tag['name'])
 
-                    print('### 색상/사이즈 조회 ###')
-
+                    print(f'[{product["id"]}]', '#### 색상/사이즈 조회 ####')
+                    
                     # 웹 페이지 열기
                     web_url = f'https://www.hiver.co.kr/products/{product["id"]}'
+                    # 상품이 존재하는지 확인 (존재하지 않는다면 404 발생)
+                    try:
+                        response = requests.get(web_url)
+                        response.raise_for_status()
+                    except:
+                        print(f'[{product["id"]}] 조회 실패 Pass' )
+                        continue
                     driver.get(web_url)
 
-                    # 버튼 클릭하여 요소 로드 대기
-                    button = driver.find_element(By.CSS_SELECTOR, 'button.order.css-xnq7lu')
-                    button.send_keys(Keys.ENTER)
+                    try:
+                        # 버튼 클릭하여 요소 로드 대기
+                        button = driver.find_element(By.CSS_SELECTOR, 'button.order.css-xnq7lu')
+                        button.send_keys(Keys.ENTER)
+                    except:
+                        print(f'[{product["id"]}] 버튼 클릭 불가 Pass')
+                        continue
 
                     # 색상 선택
                     colors = driver.execute_script('''
@@ -471,16 +471,24 @@ def hiver_process(category_info):
                     ''')
 
                     # 품절이 아닌 상품 클릭
-                    prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
-                    for prod in prod_list:
-                        if '품절' in prod.text:
-                            continue
-                        else:
+                    try:
+                        prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
+                        for prod in prod_list:
+                            # 클릭 가능시 버튼 누르기
                             try:
-                                WebDriverWait(driver, 2).until(EC.element_to_be_clickable((By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li'))).click()
+                                prod.click()
                                 break
+                            # 클릭이 안되면 다음 것 확인
                             except:
                                 continue
+                        # 클릭할 수 있는게 없다면 이번 상품 건너뛰기
+                        else:
+                            print(f'[{product["id"]}] 건너 뛰기')
+                            continue
+                    # 상품 클릭이 안되면 넘기기
+                    except:
+                        print(f'[{product["id"]}] 색상 클릭 불가 Pass')
+                        continue
 
                     # 사이즈 선택
                     sizes = driver.execute_script('''
@@ -492,7 +500,7 @@ def hiver_process(category_info):
                         return sizeNames;
                     ''')
 
-                    print('### 상품 정보 입력 ###')
+                    # print('### 상품 정보 입력 ###')
 
                     # 상품 정보 입력
                     hiver_products[product['id']] = {
@@ -518,17 +526,20 @@ def hiver_process(category_info):
                     }
 
                     print('======================================================')
-                    print(time.time() - start_time, '초 경과')
+                    print(f'[{product["id"]}]', hiver_products[product['id']]['color'], hiver_products[product['id']]['size'])
+                    print(f'[{product["id"]}]', time.time() - start_time, '초 경과')
                     print('======================================================')
                     print()
 
-                    print(hiver_products[product['id']]['detail_images'])
+                    # print(hiver_products[product['id']]['detail_images'])
 
-                    db.products.insert_one(hiver_products[product['id']])
+                    # driver.quit()
+
+                    # db.products.insert_one(hiver_products[product['id']])
 
 if __name__ == '__main__':
     # 병렬 처리를 위한 프로세스 풀 생성
-    pool = Pool(processes=20)
+    pool = Pool(processes=14)
 
     # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
     category_info_list = []
@@ -548,4 +559,4 @@ if __name__ == '__main__':
     with open('hiver_details.json', 'w', encoding='utf-8') as f:
         json.dump(hiver_products, f, ensure_ascii=False, indent=4)  
 
-print(hiver_products)
+    print(hiver_products)
