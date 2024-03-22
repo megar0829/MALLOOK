@@ -20,9 +20,9 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
-    @Transactional(readOnly= true)
     @Override
     public MemberDetailRes findMemberDetail(UUID memberId) {
         var memberDetail = memberRepository.findById(memberId)
@@ -45,7 +45,7 @@ public class MemberServiceImpl implements MemberService{
         return "램덤닉네임" + Integer.toString ((int) (Math.random()*10000));
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public boolean validateNickname(String nickname) {
         return memberRepository.existsByNickname(nickname);
@@ -55,8 +55,8 @@ public class MemberServiceImpl implements MemberService{
 
 
 
-    @Transactional
     @Override
+    @Transactional
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -83,8 +83,8 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
-    @Transactional
     @Override
+    @Transactional
     public void updateNickname(UUID memberId, String nickname) {
         var member = memberRepository.findById(memberId)
                 .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));

@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CouponServiceImpl implements CouponService{
     private final CouponRepository couponRepository;
     private final MemberCouponRepository memberCouponRepository;
@@ -24,7 +25,6 @@ public class CouponServiceImpl implements CouponService{
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Slice<CouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor) {
         return couponRepository.findAllByMemberId(pageable, memberId, cursor + 1);
     }
