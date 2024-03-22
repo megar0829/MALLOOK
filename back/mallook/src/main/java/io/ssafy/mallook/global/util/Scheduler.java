@@ -21,7 +21,7 @@ public class Scheduler {
     private final StyleRepository styleRepository;
 
     @Transactional
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @SchedulerLock(name = "resetScriptLikeTask", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void resetScriptLike() {
         log.info("작업 실행");
@@ -30,7 +30,7 @@ public class Scheduler {
     }
 
     @Transactional
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     @SchedulerLock(name = "resetStyleLikeTask", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void resetStyleLike() {
         log.info("스타일 작업 실행");
