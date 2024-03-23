@@ -1,9 +1,15 @@
 package io.ssafy.mallook.global.batch;
 
+import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
+import io.ssafy.mallook.domain.coupon.entity.Coupon;
+import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.ssafy.mallook.domain.grade.dao.GradeRepository;
+import io.ssafy.mallook.domain.grade.entity.Grade;
 import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
+import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.persistence.EntityManagerFactory;
@@ -23,8 +29,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @Slf4j
@@ -35,12 +45,14 @@ public class GradeBatchConfig {
     private final EntityManagerFactory entityManagerFactory;
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
+    private final CouponRepository couponRepository;
+    private final MemberCouponRepository memberCouponRepository;
     @Bean
     public Job gradeJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
         return new JobBuilder("gradeJob", jobRepository)
                 .start(this.updateExpStep(jobRepository, transactionManager))
                 .next(this.updateGradeStep(jobRepository, transactionManager))
-                // todo: 쿠폰 발급 추가
+                // todo: 등급별 쿠폰 등록 및 회원별 쿠폰 등록
                 .build();
     }
     // 구매내역 조회 후 exp 갱신
@@ -58,13 +70,21 @@ public class GradeBatchConfig {
         return new StepBuilder("updateGradeStep", jobRepository)
                 .<Member, Member>chunk(CHUNK_SIZE, transactionManager)
                 .reader(loadMemberData())
-                .processor(checkMemberData())
+                .processor(checkMemberGradeData())
                 .writer(changeMemberGradeData())
                 .build();
     }
+//    @Bean(JOB_NAME + "_updateGradeCouponStep")
+//    public Step updateGradeCouponStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
+//        return new StepBuilder("updateGradeCouponStep", jobRepository)
+//                .<Member, Member>chunk(CHUNK_SIZE, transactionManager)
+//                .reader(loadMemberData())
+//                .writer(changeMemberGradeData())
+//                .build();
+//    }
     private ItemReader<? extends Member> loadMemberData() throws Exception {
         JpaPagingItemReader<Member> jpaPagingItemReader = new JpaPagingItemReaderBuilder<Member>()
-                .name(JOB_NAME + "_loadUserData")
+                .name(JOB_NAME + "_loadMemberData")
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
                 .queryString("select m from Member m")
@@ -91,7 +111,7 @@ public class GradeBatchConfig {
         return jpaPagingItemReader;
 
     }
-    private ItemProcessor<? super Member, ? extends Member> checkMemberData () {
+    private ItemProcessor<? super Member, ? extends Member> checkMemberGradeData () {
         return member -> {
             if (member.availableLevelUp()) {
                 return member;
@@ -114,11 +134,26 @@ public class GradeBatchConfig {
             gradeRepository.save(grade);
         });
     }
-    // 등급별 쿠폰 제공
-//    @Bean
-//    public Step giveUserCouponStep(){
-//        return null;
+//    private ItemWriter<? super Member> createCouponAndMemberCoupon() {
+//        // 등급별 쿠폰 등록\
+//        Arrays.stream(Level.values()).forEach(level -> {
+//            // level 별 쿠폰 발급
+//            couponRepository.save(Coupon.builder()
+//                        .name("회원 등급별 정기 쿠폰")
+//                        .type(CouponType.RATIO)
+//                        .amount(level.discountRate.toString())
+//                        .expiredTime(LocalDateTime.now().plusDays(5))
+//                        .build());
+//        });
+//        // 회원별 쿠폰 등록
+//        return members -> members.forEach( member -> {
+//            couponRepository.;
+//            memberCouponRepository.save(
+//                    MemberCoupon.builder()
+//                            .coupon()
+//                            .build()
+//            );
+//
+//        });
 //    }
-
-
 }

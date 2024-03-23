@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.coupon.application;
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
+import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,5 +29,7 @@ public class CouponServiceImpl implements CouponService{
     public Slice<CouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor) {
         return couponRepository.findAllByMemberId(pageable, memberId, cursor + 1);
     }
+
+
 
 }
