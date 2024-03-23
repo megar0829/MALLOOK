@@ -1,5 +1,7 @@
 package io.ssafy.mallook.domain.grade.entity;
 
+import java.util.Objects;
+
 public enum Level {
     LEVEL7(1000001, null),
     LEVEL6(1000001, LEVEL7),
@@ -17,13 +19,22 @@ public enum Level {
         this.nextLevel = nextLevel;
     }
 
+    public static boolean availableLevelUp(Level level, Long exp) {
+        if (Objects.isNull(level)) {
+            return false;
+        }
+        if (Objects.isNull(level.nextLevel)) {
+            return false;
+        }
+        return exp >= level.nextExp;
+    }
     public static Level getNextGrade(Long exp) {
-        if (exp >= LEVEL6.nextExp) return LEVEL7;
-        if (exp >= LEVEL5.nextExp ) return LEVEL6;
-        if (exp >= LEVEL4.nextExp ) return LEVEL5;
-        if (exp >= LEVEL3.nextExp ) return LEVEL4;
-        if (exp >= LEVEL2.nextExp ) return LEVEL3;
-        if (exp >= LEVEL1.nextExp ) return LEVEL2;
-        else return LEVEL1; // todo: 수정
+        if (exp >= LEVEL6.nextExp) return LEVEL6.nextLevel;
+        if (exp >= LEVEL5.nextExp ) return LEVEL5.nextLevel;
+        if (exp >= LEVEL4.nextExp ) return LEVEL4.nextLevel;
+        if (exp >= LEVEL3.nextExp ) return LEVEL3.nextLevel;
+        if (exp >= LEVEL2.nextExp ) return LEVEL2.nextLevel;
+        if (exp >= LEVEL1.nextExp ) return LEVEL1.nextLevel;
+        return LEVEL1; // todo: 수정
     }
 }

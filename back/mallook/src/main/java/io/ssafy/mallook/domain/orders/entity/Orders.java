@@ -41,4 +41,5 @@ public class Orders extends BaseEntity {
     public boolean isCreateByTargetMember(UUID memberId) {
         return this.member.getId().equals(memberId);
     }
+
 }

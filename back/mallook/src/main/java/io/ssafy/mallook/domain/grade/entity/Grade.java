@@ -4,13 +4,11 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +24,7 @@ public class Grade extends BaseEntity {
     private Level level;
 
     @NotNull
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name="member_id")
     private Member member;
 }

@@ -23,7 +23,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
 
-    private final RatioDiscountDiplomacy ratioDiscountDiplomacy;
     @Override
     public Slice<OrderListDto> getOrderList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
@@ -60,7 +59,5 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findMaxOrderId();
     }
 
-    public RatioDiscountDiplomacy getRatioDiscountDiplomacy() {
-        return ratioDiscountDiplomacy;
-    }
+
 }
