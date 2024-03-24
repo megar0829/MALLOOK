@@ -458,7 +458,7 @@ def hiver_process(category_info):
                         button.send_keys(Keys.ENTER)
                     except:
                         print(f'[{product["id"]}] 버튼 클릭 불가 Pass')
-                        continue
+                        return
 
                     # 색상 선택
                     colors = driver.execute_script('''
@@ -470,6 +470,7 @@ def hiver_process(category_info):
                         return names;
                     ''')
 
+
                     # 품절이 아닌 상품 클릭
                     try:
                         prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
@@ -477,28 +478,31 @@ def hiver_process(category_info):
                             # 클릭 가능시 버튼 누르기
                             try:
                                 prod.click()
+
+                                # 사이즈 선택
+                                sizes = driver.execute_script(f'''
+                                    var sizeNames = [];
+                                    var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
+                                    sizeElements.forEach(function(elem) {{
+                                        sizeNames.push(elem.textContent.trim());
+                                    }});
+                                    return sizeNames;
+                                ''')
                                 break
+                                
                             # 클릭이 안되면 다음 것 확인
                             except:
                                 continue
                         # 클릭할 수 있는게 없다면 이번 상품 건너뛰기
                         else:
                             print(f'[{product["id"]}] 건너 뛰기')
-                            continue
+                            return
+                            
+
                     # 상품 클릭이 안되면 넘기기
                     except:
                         print(f'[{product["id"]}] 색상 클릭 불가 Pass')
-                        continue
-
-                    # 사이즈 선택
-                    sizes = driver.execute_script('''
-                        var sizeNames = [];
-                        var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
-                        sizeElements.forEach(function(elem) {
-                            sizeNames.push(elem.textContent.trim());
-                        });
-                        return sizeNames;
-                    ''')
+                        return                    
 
                     # print('### 상품 정보 입력 ###')
 
@@ -526,7 +530,6 @@ def hiver_process(category_info):
                     }
 
                     print('======================================================')
-                    print(f'[{product["id"]}]', hiver_products[product['id']]['color'], hiver_products[product['id']]['size'])
                     print(f'[{product["id"]}]', time.time() - start_time, '초 경과')
                     print('======================================================')
                     print()
@@ -535,11 +538,11 @@ def hiver_process(category_info):
 
                     # driver.quit()
 
-                    # db.products.insert_one(hiver_products[product['id']])
+                    db.products.insert_one(hiver_products[product['id']])
 
 if __name__ == '__main__':
     # 병렬 처리를 위한 프로세스 풀 생성
-    pool = Pool(processes=14)
+    pool = Pool(processes=28)
 
     # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
     category_info_list = []
