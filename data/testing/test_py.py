@@ -358,7 +358,7 @@ def hiver_process(category_info):
         # category_data = category_response.json()
     
     product = {
-        'id': "142786310",
+        'id': "102168545",
     }
     # 사용되지 않은 프로덕트라면 세부정보 저장
     if product['id'] not in hiver_used:
@@ -462,26 +462,26 @@ def hiver_process(category_info):
             return names;
         ''')
 
+
         # 품절이 아닌 상품 클릭
         try:
             prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
-            print(prod_list)
             for prod in prod_list:
                 # 클릭 가능시 버튼 누르기
                 try:
-                    print(prod)
                     prod.click()
 
                     # 사이즈 선택
-                    sizes = driver.execute_script('''
+                    sizes = driver.execute_script(f'''
                         var sizeNames = [];
                         var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
-                        sizeElements.forEach(function(elem) {
+                        sizeElements.forEach(function(elem) {{
                             sizeNames.push(elem.textContent.trim());
-                        });
+                        }});
                         return sizeNames;
                     ''')
                     break
+                    
                 # 클릭이 안되면 다음 것 확인
                 except:
                     continue
@@ -489,21 +489,12 @@ def hiver_process(category_info):
             else:
                 print(f'[{product["id"]}] 건너 뛰기')
                 return
+                
+
         # 상품 클릭이 안되면 넘기기
         except:
             print(f'[{product["id"]}] 색상 클릭 불가 Pass')
             return
-
-        # 사이즈 선택
-        sizes = driver.execute_script('''
-            var sizeNames = [];
-            var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
-            sizeElements.forEach(function(elem) {
-                sizeNames.push(elem.textContent.trim());
-            });
-            return sizeNames;
-        ''')
-
 
         # print('### 상품 정보 입력 ###')
 
