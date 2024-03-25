@@ -2,8 +2,8 @@ import Link from "next/link";
 import styles from "./recommend.module.css";
 
 
-import Cody from "@/app/recommend/_components/Cody";
-import ProductList from "@/app/recommend/_components/ProductList";
+import MainCody from "@/app/recommend/_components/MainCody";
+import MainProductList from "@/app/recommend/_components/MainProductList";
 
 export const metadata = {
   title: "추천",
@@ -19,11 +19,11 @@ export default function RecommendPage() {
         return (
           <div className={styles.cody__container} key={index}>
             <div className={styles.leftDiv}>
-              <Cody cody={cody} />
+              <MainCody codyId={index} cody={cody} />
             </div>
 
             <div className={styles.rightDiv}>
-              <ProductList productLeft={cody.productLeft} productRight={cody.productRight}/>
+              <MainProductList codyId={index} productLeft={cody.productLeft} productRight={cody.productRight}/>
             </div>
           </div>
         );

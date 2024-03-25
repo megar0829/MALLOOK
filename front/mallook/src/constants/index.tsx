@@ -124,6 +124,117 @@ export interface ProfileSampleData {
     profileImg: string | StaticImageData;
 }
 
+export const ProductList: Product[] = [
+    {
+        productImg: imgCody10_1,
+        name: "빅 트위치 로고 티셔츠 화이트",
+        brand: "리",
+        price: 39000
+    },
+    {
+        productImg: imgCody10_2,
+        name: "Deep One Tuck Sweat Pants [Grey]",
+        brand: "제로",
+        price: 35100
+    },
+    {
+        productImg: imgCody10_3,
+        name: "LENTO(렌토) 블랙 Glasses",
+        brand: "세미콜론 아이웨어",
+        price: 39900
+    },
+    {
+        productImg: imgCody10_4,
+        name: "에라 - 인센스:트루 화이트 / VN0A54F14G51",
+        brand: "반스",
+        price: 49900
+    },
+    {
+        productImg: imgCody10_5,
+        name: "빅 트위치 로고 티셔츠 네이비",
+        brand: "리",
+        price: 39000
+    },
+    {
+        productImg: imgCody10_6,
+        name: "EL 라디우스 와이드 스웨트 팬츠 그레이",
+        brand: "엘리메노",
+        price: 38000
+    },
+    {
+        productImg: imgCody11_1,
+        name: "크루넥 리브 니트 스웨터_아이보리",
+        brand: "블론드나인",
+        price: 29800
+    },
+    {
+        productImg: imgCody11_2,
+        name: "Classic Sweat Pants [Black]",
+        brand: "제로",
+        price: 39000
+    },
+    {
+        productImg: imgCody11_3,
+        name: "Black_Double Ring Necklace",
+        brand: "월간",
+        price: 12000
+    },
+    {
+        productImg: imgCody11_4,
+        name: "에어스니커즈 찰리 블랙",
+        brand: "키치오브제",
+        price: 128000
+    },
+    {
+        productImg: imgCody11_5,
+        name: "램스울 크루넥 오버 니트 (아이보리)",
+        brand: "테이크이지",
+        price: 37800
+    },
+    {
+        productImg: imgCody11_6,
+        name: "글로리 모먼트 스웨트 팬츠_블랙",
+        brand: "마카사이트",
+        price: 29900
+    },
+    {
+        productImg: imgCody12_1,
+        name: "CAMPING AURORA KNIT BLACK",
+        brand: "크리틱",
+        price: 59200
+    },
+    {
+        productImg: imgCody12_2,
+        name: "Classic Sweat Pants [Grey]",
+        brand: "제로",
+        price: 39000
+    },
+    {
+        productImg: imgCody12_3,
+        name: "SVB-#175 뱅글 체인팔찌",
+        brand: "쇼브오프",
+        price: 21600
+    },
+    {
+        productImg: imgCody12_4,
+        name: "선셋 비치 오버핏 니트 스웨터_블랙",
+        brand: "스테이지 네임",
+        price: 56950
+    },
+    {
+        productImg: imgCody12_5,
+        name: "글로리 모먼트 스웨트 팬츠_멜란지 그레이",
+        brand: "마카사이트",
+        price: 29900
+    },
+    {
+        productImg: imgCody12_6,
+        name: "SVB-#178 체인팔찌",
+        brand: "쇼브오프",
+        price: 15200
+    }
+]
+
 export const CodyList: CodyData[] = [
     {
         codyImg: imgCody10,

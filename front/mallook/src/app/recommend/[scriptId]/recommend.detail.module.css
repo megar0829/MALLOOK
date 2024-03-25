@@ -1,0 +1,15 @@
+.background {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container {
+    width: 80dvw;
+    border: 1px solid lightgray;
+    border-radius: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

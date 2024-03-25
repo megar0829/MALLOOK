@@ -1,0 +1,23 @@
+.productList__container {
+    width: 75dvw;
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(auto-fill, 350px);
+    gap: 10px 5px;
+}
+.product {
+    border: 1px solid lightgray;
+}
+.product__image {
+
+}
+.product__price {
+
+}
+.product__name {
+
+}
+.product__brand {
+
+}

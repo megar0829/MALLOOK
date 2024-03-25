@@ -1,14 +1,15 @@
-import styles from "./productList.module.css";
+import styles from "./mainProductList.module.css";
 import {object} from "prop-types";
 import Image from "next/image";
 
 import {ProductListProps, Product} from "@/constants";
+import Link from "next/link";
 
-export default function ProductList( { productLeft, productRight }: ProductListProps) {
+export default function MainProductList(props:{ productLeft: Product[], productRight: Product[], codyId: number } ) {
 
   const productListLeft = () => {
     return (
-      productLeft.map((product, index) => {
+      props.productLeft.map((product, index) => {
         return (
           <div className={styles.product} key={index}>
             <div className={styles.product__leftDiv}>
@@ -21,7 +22,7 @@ export default function ProductList( { productLeft, productRight }: ProductListP
               <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
             </div>
 
-            {index != productLeft.length - 1 &&
+            {index != props.productLeft.length - 1 &&
               <div className={styles.line}></div>
             }
           </div>
@@ -32,7 +33,7 @@ export default function ProductList( { productLeft, productRight }: ProductListP
 
   const productListRight = () => {
     return (
-      productRight.map((product, index) => {
+      props.productRight.map((product, index) => {
         return (
           <div className={styles.product} key={index}>
             <div className={styles.product__leftDiv}>
@@ -45,7 +46,7 @@ export default function ProductList( { productLeft, productRight }: ProductListP
               <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
             </div>
 
-            {index != productLeft.length - 1 &&
+            {index != props.productLeft.length - 1 &&
                 <div className={styles.line}></div>
             }
           </div>
@@ -62,6 +63,9 @@ export default function ProductList( { productLeft, productRight }: ProductListP
       <div className={styles.productList}>
         {productListRight()}
       </div>
+      <Link className={styles.link} href={`/recommend/${props.codyId}`} >
+        <span>더보기</span>
+      </Link>
     </div>
   );
 }
