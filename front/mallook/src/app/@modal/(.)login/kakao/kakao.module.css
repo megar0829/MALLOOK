@@ -1,0 +1,64 @@
+.container {
+    width: 500px;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+}
+
+.logoDiv {
+    width: 300px;
+    height: 200px;
+    background-color: black;
+    border-radius: 20px;
+}
+.logoImg {
+
+}
+
+.textDiv {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+.text {
+    font-size: 23px;
+    font-weight: 700;
+}
+
+.socialDiv {
+    width: 400px;
+    height: 210px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+.kakaoDiv {
+    width: 350px;
+    height: 70px;
+
+}
+.kakaoImg {
+
+}
+.naverDiv {
+    width: 350px;
+    height: 70px;
+}
+.naverImg {
+}
+.googleDiv {
+    width: 350px;
+    height: 70px;
+}
+.googleImg {
+
+}
