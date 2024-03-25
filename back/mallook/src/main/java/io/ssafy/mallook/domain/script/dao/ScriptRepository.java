@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")
     void deleteScript(@Param("deleteList") List<Long> deleteList);
+
+    @Modifying
+    @Query("UPDATE Script s SET s.totalLike = 0")
+    void resetAllTotalLike();
 }

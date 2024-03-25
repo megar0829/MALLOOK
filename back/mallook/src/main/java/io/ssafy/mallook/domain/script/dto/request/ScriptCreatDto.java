@@ -20,6 +20,7 @@ public record ScriptCreatDto(
                 .name(scriptContent)
                 .member(member)
                 .heartCount(0)
+                .totalLike(0)
                 .build();
     }
 }

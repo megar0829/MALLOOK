@@ -4,9 +4,7 @@ import io.ssafy.mallook.domain.style.application.StyleService;
 import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
-import io.ssafy.mallook.domain.style.dto.response.StylePageRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
-import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -23,7 +21,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @RestController
@@ -31,7 +31,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Log4j2
 public class StyleController {
+
     private final StyleService styleService;
+
     @Operation(
             summary = "코디 목록 조회",
             responses = {
@@ -42,16 +44,27 @@ public class StyleController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<StyleRes>>> findStyleList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC, page=0) Pageable pageable,
-            @RequestParam(required = false) Long cursor){
-        var result = Objects.nonNull(cursor)? styleService.findStyleList(pageable, cursor)
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
+            @RequestParam(required = false) Long cursor) {
+        var result = Objects.nonNull(cursor) ? styleService.findStyleList(pageable, cursor)
                 : styleService.findStyleListFirst(pageable);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
-
     }
+
+    @GetMapping("/world-cup")
+    public ResponseEntity<BaseResponse<List<StyleRes>>> getWorldCupList(
+            @AuthenticationPrincipal UserSecurityDTO principal
+    ) {
+        UUID id = principal.getId();
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                styleService.getWorldCupList(id)
+        );
+    }
+
     @Operation(
             summary = "코디 상세 조회",
             responses = {
@@ -62,13 +75,14 @@ public class StyleController {
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<StyleDetailRes>> findStyleDetail(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PathVariable("id") Long id){
+            @PathVariable("id") Long id) {
         var result = styleService.findStyleDetail(id);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
     }
+
     @Operation(
             summary = "코디 등록",
             responses = {
@@ -79,7 +93,7 @@ public class StyleController {
     @PostMapping
     public ResponseEntity<BaseResponse<String>> saveStyle(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @RequestBody StyleInsertReq styleInsertReq){
+            @Valid @RequestBody StyleInsertReq styleInsertReq) {
         styleService.saveStyle(userSecurityDTO.getId(), styleInsertReq);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
@@ -97,7 +111,7 @@ public class StyleController {
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteMyStyle(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody StyleDeleteReq styleDeleteReq){
+            @RequestBody StyleDeleteReq styleDeleteReq) {
         styleService.DeleteStyle(userSecurityDTO.getId(), styleDeleteReq.styleIdList());
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,
