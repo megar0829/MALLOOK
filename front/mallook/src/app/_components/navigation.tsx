@@ -47,16 +47,26 @@ export default function Navigation() {
 
         <ul className={styles.rightContainer}>
           <li>
-            <Link href="/login">
-              <Image 
-                src={iconSearch} 
+            <Link href="https://j10a606.p.ssafy.io/oauth2/authorization/kakao">
+              <Image
+                src={iconSearch}
                 alt="search Image"
                 style={{
                   width: "30px",
                   height:"30px"
-                }} 
-              />  
+                }}
+              />
             </Link>
+            {/*<Link href="/login">*/}
+            {/*  <Image*/}
+            {/*    src={iconSearch}*/}
+            {/*    alt="search Image"*/}
+            {/*    style={{*/}
+            {/*      width: "30px",*/}
+            {/*      height:"30px"*/}
+            {/*    }}*/}
+            {/*  />*/}
+            {/*</Link>*/}
           </li>
           <li>
             <Link href="/cart">

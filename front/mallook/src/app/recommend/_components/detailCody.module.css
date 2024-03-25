@@ -1,0 +1,67 @@
+.cody__container {
+    width: 80dvw;
+    height: 400px;
+    border: 1px solid lightgray;
+    border-radius: 25px;
+    display: flex;
+    margin-top: 30px;
+    align-items: center;
+}
+
+.cody__leftDiv {
+    width: 30dvw;
+    height: 350px;
+    margin-left: 30px;
+    border-radius: 25px;
+    border: 2px solid lightgray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cody__leftDiv__image {
+    width: 30dvw;
+    height: 350px;
+    border-radius: 25px;
+}
+
+.cody__rightDiv {
+    width: 45dvw;
+    height: 350px;
+    padding-left: 50px;
+    display: flex;
+    flex-direction: column;
+}
+.cody__rightDiv__topDiv {
+    width: 45dvw;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+.cody__rightDiv__topDiv__profileImage {
+    width: 35px;
+    height: 35px;
+    border-radius: 100%;
+    border: 2px solid lightgray;
+}
+.cody__rightDiv__topDiv__username {
+    font-size: 20px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+.cody__rightDiv__bottomDiv {
+    width: 45dvw;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.cody__rightDiv__bottomDiv__codyName {
+    font-size: 34px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+.cody__rightDiv__bottomDiv__span {
+    font-size: 20px;
+    font-weight: 600;
+}

@@ -6,6 +6,7 @@
     justify-content: space-around;
     border: 1px solid lightgray;
     border-radius: 25px;
+    position: relative;
 }
 
 .productList {
@@ -68,4 +69,13 @@
     width: 90%;
     height: 1px;
     background-color: lightgray;
+}
+
+.link {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    color: gray;
+    font-size: 16px;
+    font-weight: 600;
 }
