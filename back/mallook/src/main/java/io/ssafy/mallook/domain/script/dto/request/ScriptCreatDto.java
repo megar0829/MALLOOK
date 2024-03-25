@@ -23,4 +23,11 @@ public record ScriptCreatDto(
                 .totalLike(0)
                 .build();
     }
+
+    public Keyword toKeyword(Script script, String name) {
+        return Keyword.builder()
+                .script(script)
+                .name(name)
+                .build();
+    }
 }

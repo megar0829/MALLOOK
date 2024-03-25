@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.application;
 import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.service.GptService;
+import io.ssafy.mallook.domain.keyword.entity.Keyword;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
@@ -10,6 +11,7 @@ import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.joining;
@@ -57,12 +60,19 @@ public class ScriptServiceImpl implements ScriptService {
     @Transactional
     public void createScript(ScriptCreatDto scriptCreateDto, UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
+        // ChatGPT에 질문 전달
         String scriptContent = String.join(", ", scriptCreateDto.keywordsList());
         QuestionDto questionDto = QuestionDto.builder()
                 .content(scriptContent)
                 .build();
         GptResponseDto gptResponseDto = gptService.askQuestion(questionDto);
-        scriptRepository.save(scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer()));
+        Script script = scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer());
+        List<Keyword> list = scriptCreateDto.keywordsList()
+                .stream()
+                .map((String s)
+                        -> scriptCreateDto.toKeyword(script, s))
+                .toList();
+        scriptRepository.save(script);
     }
 
     @Override
