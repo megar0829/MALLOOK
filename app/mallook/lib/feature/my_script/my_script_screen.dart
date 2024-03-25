@@ -89,6 +89,9 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
           horizontal: Sizes.size20,
         ),
         child: ListView.separated(
+          controller: _scrollController,
+          separatorBuilder: (context, index) => Gaps.v10,
+          itemCount: _scripts.length + 1,
           itemBuilder: (context, index) {
             if (index < _scripts.length) {
               return MyScriptListBox(script: _scripts[index]);
@@ -96,8 +99,6 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
               return const CustomCircularWaitWidget();
             }
           },
-          separatorBuilder: (context, index) => Gaps.v10,
-          itemCount: _scripts.length,
         ),
       ),
     );
