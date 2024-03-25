@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/hearts/scripts")
+@RequestMapping("/api/scripts/hearts")
 public class ScriptHeartController {
 
     private final ScriptHeartService scriptHeartService;

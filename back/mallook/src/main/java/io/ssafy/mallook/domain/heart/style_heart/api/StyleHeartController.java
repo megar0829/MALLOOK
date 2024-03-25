@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/hearts/styles")
+@RequestMapping("/api/styles/hearts")
 public class StyleHeartController {
 
     private final StyleHeartService styleHeartService;
