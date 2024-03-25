@@ -12,9 +12,11 @@ export default function DetailProductList(props:{codyId: string}) {
 				return (
 					<div className={styles.product} key={index}>
 						<Image className={styles.product__image} src={product.productImg} alt="상품 이미지"/>
-						<span className={styles.product__price}>{product.price}</span>
-						<span className={styles.product__name}>{product.name}</span>
-						<span className={styles.product__brand}>{product.brand}</span>
+						<div className={styles.product__textDiv}>
+							<span className={styles.product__price}>{product.price}</span>
+							<span className={styles.product__name}>{product.name}</span>
+							<span className={styles.product__brand}>{product.brand}</span>
+						</div>
 					</div>
 				);
 			})
