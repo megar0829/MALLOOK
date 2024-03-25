@@ -39,6 +39,14 @@ services:
     depends_on:
       - springboot
 
+  nextjs:
+    container_name: mallook-nextjs
+    image: duckbill413/mallook-nextjs:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - mallook_net
+
 networks:
   mallook_net:
     driver: bridge

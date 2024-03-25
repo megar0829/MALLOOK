@@ -27,7 +27,7 @@ build: # JOB 이름
     - chmod +x gradlew # gradle 권한 부여
     - ./gradlew clean
     - ./gradlew build
-#    - ./gradlew bootjar
+  #    - ./gradlew bootjar
   # artifacts 설정 (bulld를 통해 생성된 파일을 job artifacts에 보관하여 다음에 수행되는 JOB에서 가져다 활용할 수 있게 도와줌)
   artifacts:
     # 보관이 이루어질 경로 설정
@@ -40,6 +40,7 @@ build: # JOB 이름
     - master
     - release
     - develop
+    - chore/46-front-deploy
 
 package:
   image: docker:latest
@@ -59,6 +60,11 @@ package:
     - echo [INFO] Spring docker project build
     - docker build -t $DOCKER_REGISTRY_USER/$SPRING_IMAGE_NAME . # Dockerfile로 build
     - docker push $DOCKER_REGISTRY_USER/$SPRING_IMAGE_NAME:latest # Container Registry에 image push
+    - cd ../..
+    - cd ./front/mallook
+    - echo [INFO] Start build Nextjs
+    - docker build -t $DOCKER_REGISTRY_USER/$NGINX_IMAGE_NAME . #
+    - docker push $DOCKER_REGISTRY_USER/mallook-nextjs:latest # Container
   # script가 실행된 후 수행 될 script
   after_script:
     - docker logout # GitLab Container Registry 로그아웃
@@ -67,6 +73,7 @@ package:
     - master
     - release
     - develop
+    - chore/46-front-deploy
 
 deploy: # JOB 이름
   image: docker:latest
@@ -93,3 +100,4 @@ deploy: # JOB 이름
     - master
     - release
     - develop
+    - chore/46-front-deploy
