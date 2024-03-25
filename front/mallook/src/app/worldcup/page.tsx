@@ -1,7 +1,14 @@
-export default function WorldcupStartPage () {
+
+import Link from "next/link";
+
+export const metadata = {
+  title: "월드컵",
+};
+
+export default async function WorldCupPage() {
   return (
-      <div>
-          <span>Worldcup Start Page</span>
-      </div>
+    <div>
+        <h1>WorldCup Main Page</h1>
+    </div>
   );
 }
