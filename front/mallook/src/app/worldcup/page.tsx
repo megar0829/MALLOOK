@@ -1,7 +1,7 @@
 export default function WorldcupStartPage () {
   return (
       <div>
-        Worldcup Start Page
+          <span>Worldcup Start Page</span>
       </div>
   );
 }
