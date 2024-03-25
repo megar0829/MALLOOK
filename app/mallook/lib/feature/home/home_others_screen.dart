@@ -4,6 +4,7 @@ import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/home/widgets/rank_script_box.dart';
+import 'package:mallook/feature/script/script_screen.dart';
 
 class HomeOthersScreen extends StatefulWidget {
   const HomeOthersScreen({super.key});
@@ -56,6 +57,16 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
     }
   }
 
+  void _moveToScriptDetail(Script script) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ScriptScreen(
+          scriptId: script.id!,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,8 +84,11 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
           ),
           itemBuilder: (context, index) {
             if (index < _scripts.length) {
-              return RankScriptBox(
-                script: _scripts[index],
+              return GestureDetector(
+                onTap: () => _moveToScriptDetail(_scripts[index]),
+                child: RankScriptBox(
+                  script: _scripts[index],
+                ),
               );
             } else {
               return const CustomCircularWaitWidget();

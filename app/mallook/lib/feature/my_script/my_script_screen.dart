@@ -5,6 +5,7 @@ import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/my_script/api/my_script_api_service.dart';
 import 'package:mallook/feature/my_script/widget/my_script_list_box.dart';
+import 'package:mallook/feature/script/script_screen.dart';
 
 class MyScriptScreen extends StatefulWidget {
   const MyScriptScreen({super.key});
@@ -23,11 +24,8 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
   void initState() {
     super.initState();
 
-    print("ssssssssssssssssssssssssssss");
     _loadMoreScripts();
-    print("eeeeeeeeeeeeeeeeeeeeeeeeeeee");
     _scrollController.addListener(() {
-      print('offset: ${_scrollController.offset}');
       if (_scrollController.offset >=
               (_scrollController.position.maxScrollExtent * 0.9) &&
           !_scrollController.position.outOfRange) {
@@ -43,27 +41,32 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
   }
 
   void _loadMoreScripts() async {
-    print('aaaaaaaaaaaaaaa');
     if (!_isScriptLoading) {
-      print('bbbbbbbbbbbbbbbbbbbbbbb');
-
       if (mounted) {
         setState(() {
           _isScriptLoading = true;
         });
       }
       var loadedScripts = await MyScriptApiService.getMyScripts(_scriptPage);
-      print('cccccccccccccccccccccccc');
 
       if (mounted) {
         setState(() {
-          print('dddddddddddddddddddddddddddd');
           _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
           _scriptPage++;
           _isScriptLoading = false;
         });
       }
     }
+  }
+
+  void _moveToScriptDetail(Script script) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ScriptScreen(
+          scriptId: script.id!,
+        ),
+      ),
+    );
   }
 
   @override
@@ -94,7 +97,10 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
           itemCount: _scripts.length + 1,
           itemBuilder: (context, index) {
             if (index < _scripts.length) {
-              return MyScriptListBox(script: _scripts[index]);
+              return GestureDetector(
+                onTap: () => _moveToScriptDetail(_scripts[index]),
+                child: MyScriptListBox(script: _scripts[index]),
+              );
             } else {
               return const CustomCircularWaitWidget();
             }
