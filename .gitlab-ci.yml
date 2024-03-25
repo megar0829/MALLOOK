@@ -40,7 +40,6 @@ build: # JOB 이름
     - master
     - release
     - develop
-    - chore/46-front-deploy
 
 package:
   image: docker:latest
@@ -73,7 +72,6 @@ package:
     - master
     - release
     - develop
-    - chore/46-front-deploy
 
 deploy: # JOB 이름
   image: docker:latest
@@ -100,4 +98,3 @@ deploy: # JOB 이름
     - master
     - release
     - develop
-    - chore/46-front-deploy
