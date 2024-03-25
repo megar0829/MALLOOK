@@ -63,7 +63,7 @@ package:
     - cd ../..
     - cd ./front/mallook
     - echo [INFO] Start build Nextjs
-    - docker build -t $DOCKER_REGISTRY_USER/$NGINX_IMAGE_NAME . #
+    - docker build -t $DOCKER_REGISTRY_USER/mallook-nextjs . #
     - docker push $DOCKER_REGISTRY_USER/mallook-nextjs:latest # Container
   # script가 실행된 후 수행 될 script
   after_script:
