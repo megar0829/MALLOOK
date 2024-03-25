@@ -31,7 +31,6 @@ public class Keyword extends BaseEntity {
     private String name;
 
     //상품 아이디
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
