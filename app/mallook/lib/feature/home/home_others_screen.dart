@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/script.dart';
@@ -64,29 +63,23 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: Sizes.size20,
+          vertical: Sizes.size10,
         ),
-        child: Column(
-          children: [
-            Gaps.v10,
-            Expanded(
-              child: ListView.separated(
-                controller: _scrollController,
-                itemCount: _scripts.length + 1,
-                separatorBuilder: (context, index) => const SizedBox(
-                  height: Sizes.size10,
-                ),
-                itemBuilder: (context, index) {
-                  if (index < _scripts.length) {
-                    return RankScriptBox(
-                      script: _scripts[index],
-                    );
-                  } else {
-                    return const CustomCircularWaitWidget();
-                  }
-                },
-              ),
-            ),
-          ],
+        child: ListView.separated(
+          controller: _scrollController,
+          itemCount: _scripts.length + 1,
+          separatorBuilder: (context, index) => const SizedBox(
+            height: Sizes.size10,
+          ),
+          itemBuilder: (context, index) {
+            if (index < _scripts.length) {
+              return RankScriptBox(
+                script: _scripts[index],
+              );
+            } else {
+              return const CustomCircularWaitWidget();
+            }
+          },
         ),
       ),
     );
