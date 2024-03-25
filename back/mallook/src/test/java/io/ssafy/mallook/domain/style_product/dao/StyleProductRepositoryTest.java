@@ -59,6 +59,7 @@ class StyleProductRepositoryTest {
                 .name("테스트용 제목")
                 .member(member)
                 .heartCount(0L)
+                .totalLike(0)
                 .build();
     }
 

@@ -50,6 +50,7 @@ class ScriptRepositoryTest {
                 .name("테스트용 스크립트")
                 .member(member)
                 .heartCount(0)
+                .totalLike(0)
                 .build();
     }
 
