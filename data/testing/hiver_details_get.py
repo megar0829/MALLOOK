@@ -14,7 +14,7 @@ from multiprocessing import Pool
 from pymongo import MongoClient
 
 client = MongoClient('mongodb+srv://root:R3MQHeXWnLco43kS@cluster0.stojj99.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client.hiver
+db = client.products
 
 # Chrome 옵션 설정
 options = Options()
@@ -61,9 +61,6 @@ options.add_experimental_option('prefs', prefs)
 
 # 웹 드라이버 로드
 driver = webdriver.Chrome(options=options)
-
-# 암시적 대기 설정 (10초)
-driver.implicitly_wait(10)
 
 # API 키
 API_KEY = '3b17176f2eb5fdffb9bafdcc3e4bc192b013813caddccd0aad20c23ed272f076_1423639497'
@@ -190,7 +187,7 @@ category_numbers = {
         '백팩': [
             453, 336, 1468,
         ],
-        # 토트백, 웨이스트백, 기타
+        # 웨이스트백, 기타
         '기타(분류필요)': [
             616, 617, 457, 592, 593, 340, 1467, 653, 659,
         ],
@@ -220,7 +217,7 @@ category_numbers = {
             449, 333, 1461,
         ],
         # 샌들/슬리퍼, 뮬/블로퍼
-        '샌들/슬리퍼': [
+        '샌들/슬리퍼(분류필요)': [
             450, 334, 1463,
         ],
         '기타': [
@@ -256,11 +253,7 @@ category_numbers = {
         '니트/가디건(분류필요)': [
             801,
         ],
-        # 상의[기타], 트레이닝/조거팬츠, 아우터[기타]
-        '트레이닝복(분류필요)': [
-            802,
-        ],
-        # 숏패딩/패딩조끼, 롱패딩, 무스탕, 점퍼, 플리스, 가디건, 기타
+        # 숏패딩/패딩조끼, 롱패딩, 무스탕, 점퍼, 플리스, 기타
         '점퍼/야상/패딩(분류필요)': [
             803,
         ],
@@ -288,10 +281,6 @@ category_numbers = {
         '상의(분류필요)': [
             655,
         ],
-        # 숏패딩/패딩조끼, 롱패딩, 바람막이, 기타
-        '의류(분류필요)': [
-            676,
-        ],
         # 러닝화/워킹화, 스포츠화
         '신발(분류필요)': [
             658, 1479,
@@ -303,31 +292,17 @@ category_numbers = {
 hiver_products = {}
 # 중복을 제거하기 위한 상품 코드들
 hiver_used = set()
+# 사이즈 이름들
+size_names = {
+    '사이즈', 'SIZE', 'size', 'Size', '사이즈1', 'size1', 'SIZE1', 'Size1',
+}
+
 
 # 상품 상세정보를 받아오는 함수
 def hiver_process(category_info):
     # 분류
     main_categories, sub_categories, category_number = category_info
     category_url = f'https://capi.hiver.co.kr/v1/web/categories/{category_number}/products'
-    
-    # 리뷰 파라미터
-    photo_params = {
-        'is-first': 'false',
-        'tab-type': 'photo',
-        'limit': 100,
-        'offset': 0,
-        'version': 2101,
-        'service-type': 'hiver',
-    }
-
-    text_params = {
-        'is-first': 'false',
-        'tab-type': 'text',
-        'limit': 100,
-        'offset': 0,
-        'version': 2101,
-        'service-type': 'hiver',
-    }
 
     # 한 번호당 5000개까지 조회가능
     for offset in range(0, 5001, 100):
@@ -356,6 +331,9 @@ def hiver_process(category_info):
         # 카테고리 API 요청
         category_response = requests.get(category_url, headers=headers, params=params)
         category_data = category_response.json()
+
+        # 쿠키 삭제
+        driver.delete_all_cookies()
         
         # 데이터가 존재하는 경우에만
         if category_data['data']:
@@ -364,6 +342,7 @@ def hiver_process(category_info):
                 # 사용되지 않은 프로덕트라면 세부정보 저장
                 if product['id'] not in hiver_used:
                     print(f'[{product["id"]}]', main_categories, sub_categories, category_number, offset)
+
                     start_time = time.time()
 
                     # 중복 기록
@@ -388,50 +367,88 @@ def hiver_process(category_info):
 
                     reviews = {
                         'count': 0,
-                        'reviews': []
+                        'average_point': None,
+                        'reviews': [],
                     }
 
                     print(f'[{product["id"]}]', '### 리뷰정보 조회 ###')
 
                     # 리뷰 요청
                     review_url = f'https://hiver-api.brandi.biz/v2/web/products/{product["id"]}/reviews'
-                    # 포토 리뷰 API 요청
-                    photo_review_response = requests.get(review_url, headers=headers2, params=photo_params)
-                    photo_review_data = photo_review_response.json()
+                    # 한 번호당 5000개까지 조회가능
+                    for offset2 in range(0, 5001, 100):
+                        # 0, 100, ~, 4999
+                        if offset2 == 5000:
+                            offset2 = offset2 - 1
 
-                    # 리뷰 데이터가 있는 경우에 넣기
-                    if photo_review_data['data']:
-                        reviews['count'] += photo_review_data['meta']['count']
-                        for photo_review in photo_review_data['data']:
-                            review = {
-                                'content': photo_review['text'],
-                                'created_at': photo_review['created_time'],
-                                'images': photo_review['user']['image_url'],
-                                'point': None,
-                                'product_option': [photo_review['product']['option_name'].split('/')],
-                                'user_size': [photo_review['user']['height'], photo_review['user']['weight']],
-                            }
+                        # 포토 리뷰 파라미터
+                        photo_params = {
+                            'is-first': 'false',
+                            'tab-type': 'photo',
+                            'limit': 100,
+                            'offset': offset2,
+                            'version': 2101,
+                            'service-type': 'hiver',
+                        }
 
-                            reviews['reviews'].append(review)
+                        # 포토 리뷰 API 요청
+                        photo_review_response = requests.get(review_url, headers=headers2, params=photo_params)
+                        photo_review_data = photo_review_response.json()
 
-                    # 텍스트 리뷰 API 요청
-                    text_review_response = requests.get(review_url, headers=headers2, params=text_params)
-                    text_review_data = text_review_response.json()
+                        # 리뷰 데이터가 있는 경우에 넣기
+                        if photo_review_data['data']:
+                            reviews['count'] += photo_review_data['meta']['count']
+                            for photo_review in photo_review_data['data']:
+                                review = {
+                                    'content': photo_review['text'],
+                                    'created_at': photo_review['created_time'],
+                                    'images': photo_review['user']['image_url'],
+                                    'point': None,
+                                    'product_option': [photo_review['product']['option_name'].split('/')],
+                                    'user_size': [photo_review['user']['height'], photo_review['user']['weight']],
+                                }
 
-                    # 리뷰 데이터가 있는 경우에 넣기
-                    if text_review_data['data']:
-                        reviews['count'] += text_review_data['meta']['count']
-                        for text_review in text_review_data['data']:
-                            review = {
-                                'content': text_review['text'],
-                                'created_at': text_review['created_time'],
-                                'images': None,
-                                'point': None,
-                                'product_option': [text_review['product']['option_name'].split('/')],
-                                'user_size': [text_review['user']['height'], text_review['user']['weight']],
-                            }
+                                reviews['reviews'].append(review)
+                        # 데이터가 없는 경우 넘기기
+                        else:
+                            break
+                    
+                    # 한 번호당 5000개까지 조회가능
+                    for offset2 in range(0, 5001, 100):
+                        # 0, 100, ~, 4999
+                        if offset2 == 5000:
+                            offset2 = offset2 - 1
 
-                            reviews['reviews'].append(review)
+                        text_params = {
+                            'is-first': 'false',
+                            'tab-type': 'text',
+                            'limit': 100,
+                            'offset': offset2,
+                            'version': 2101,
+                            'service-type': 'hiver',
+                        }
+
+                        # 텍스트 리뷰 API 요청
+                        text_review_response = requests.get(review_url, headers=headers2, params=text_params)
+                        text_review_data = text_review_response.json()
+
+                        # 리뷰 데이터가 있는 경우에 넣기
+                        if text_review_data['data']:
+                            reviews['count'] += text_review_data['meta']['count']
+                            for text_review in text_review_data['data']:
+                                review = {
+                                    'content': text_review['text'],
+                                    'created_at': text_review['created_time'],
+                                    'images': None,
+                                    'point': None,
+                                    'product_option': [text_review['product']['option_name'].split('/')],
+                                    'user_size': [text_review['user']['height'], text_review['user']['weight']],
+                                }
+
+                                reviews['reviews'].append(review)
+                        # 데이터가 없는 경우 종료
+                        else:
+                            break
                     
                     # 태그 조회
                     tag_list = []
@@ -439,10 +456,11 @@ def hiver_process(category_info):
                     for tag in tags:
                         tag_list.append(tag['name'])
 
-                    print(f'[{product["id"]}]', '#### 색상/사이즈 조회 ####')
-                    
+                    print(f'[{product["id"]}]', '#### 색상/사이즈 조회 ####')    
+
                     # 웹 페이지 열기
                     web_url = f'https://www.hiver.co.kr/products/{product["id"]}'
+                    
                     # 상품이 존재하는지 확인 (존재하지 않는다면 404 발생)
                     try:
                         response = requests.get(web_url)
@@ -450,15 +468,28 @@ def hiver_process(category_info):
                     except:
                         print(f'[{product["id"]}] 조회 실패 Pass' )
                         continue
+
                     driver.get(web_url)
 
+                    # 팝업버튼이 존재하면 클릭
+                    try:
+                        # 버튼 클릭하여 요소 로드 대기
+                        popup = driver.find_element(By.CSS_SELECTOR, 'button.textButton.btn-text.css-1hv5ygr')
+                        popup.send_keys(Keys.ENTER)
+                    except:
+                        pass
+                    
+                    # 암시적 대기 설정 (10초)
+                    driver.implicitly_wait(10)
+
+                    # 구매 버튼 클릭
                     try:
                         # 버튼 클릭하여 요소 로드 대기
                         button = driver.find_element(By.CSS_SELECTOR, 'button.order.css-xnq7lu')
                         button.send_keys(Keys.ENTER)
                     except:
                         print(f'[{product["id"]}] 버튼 클릭 불가 Pass')
-                        return
+                        continue
 
                     # 색상 선택
                     colors = driver.execute_script('''
@@ -470,46 +501,329 @@ def hiver_process(category_info):
                         return names;
                     ''')
 
-
-                    # 품절이 아닌 상품 클릭
+                    # 사이즈 이름
                     try:
-                        prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
-                        for prod in prod_list:
-                            # 클릭 가능시 버튼 누르기
-                            try:
-                                prod.click()
-
-                                # 사이즈 선택
-                                sizes = driver.execute_script(f'''
-                                    var sizeNames = [];
-                                    var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
-                                    sizeElements.forEach(function(elem) {{
-                                        sizeNames.push(elem.textContent.trim());
-                                    }});
-                                    return sizeNames;
-                                ''')
-                                break
-                                
-                            # 클릭이 안되면 다음 것 확인
-                            except:
-                                continue
-                        # 클릭할 수 있는게 없다면 이번 상품 건너뛰기
-                        else:
-                            print(f'[{product["id"]}] 건너 뛰기')
-                            return
-                            
-
-                    # 상품 클릭이 안되면 넘기기
+                        size_name = driver.execute_script(f'''
+                            var element = document.querySelector('details.product-option.css-zzmtgj:nth-child(2) p.title');
+                            var text = element.textContent.trim();
+                            return text;
+                        ''')
+                        # 사이즈를 나타내는 것이 아니라면 넘기기
+                        if size_name not in size_names:
+                            print('No size')
+                            continue
                     except:
-                        print(f'[{product["id"]}] 색상 클릭 불가 Pass')
-                        return                    
+                        pass
+
+                    # 사이즈 선택
+                    try:
+                        sizes = driver.execute_script(f'''
+                            var sizeNames = [];
+                            var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
+                            sizeElements.forEach(function(elem) {{
+                                sizeNames.push(elem.textContent.trim());
+                            }});
+                            return sizeNames;
+                        ''')
+                    except:
+                        sizes = []
+
+                    # 버튼 리스트가 열려있지 않다면
+                    if not sizes:
+                        # 품절이 아닌 상품 클릭
+                        try:
+                            prod_list = driver.find_elements(By.CSS_SELECTOR, 'div.bottom-modal.modal-wrap.purchaseModal.css-2aucks.modal-open li')
+                            for prod in prod_list:
+                                # 클릭 가능시 버튼 누르기
+                                try:
+                                    prod.click()
+
+                                    # 사이즈 재선택
+                                    sizes = driver.execute_script(f'''
+                                        var sizeNames = [];
+                                        var sizeElements = document.querySelectorAll('details.product-option.css-zzmtgj:nth-child(2) p.name');
+                                        sizeElements.forEach(function(elem) {{
+                                            sizeNames.push(elem.textContent.trim());
+                                        }});
+                                        return sizeNames;
+                                    ''')
+                                    break
+                                    
+                                # 클릭이 안되면 다음 것 확인
+                                except:
+                                    continue
+                            # 클릭할 수 있는게 없다면 이번 상품 건너뛰기
+                            else:
+                                print(f'[{product["id"]}] 건너 뛰기')
+                                continue
+                        # 상품 클릭이 안되면 넘기기
+                        except:
+                            print(f'[{product["id"]}] 색상 클릭 불가 Pass')
+                            continue                                        
 
                     # print('### 상품 정보 입력 ###')
 
+                    # 카테고리 재분류
+                    if '분류' in sub_categories:
+                        if main_categories == '상의':
+                            if sub_categories == '후드티(분류필요)':
+                                if '집업' in product_data['pageProps']['title']:
+                                    main_categories = '아우터'
+                                    sub_categories = '후드집업'
+                                else:
+                                    sub_categories = '후드티'
+                        elif main_categories == '하의':
+                            if sub_categories == '기타(분류필요)':
+                                if '조거' in product_data['pageProps']['title']:
+                                    sub_categories = '트레이닝/조거팬츠'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '스키니(분류필요)':
+                                sub_categories = '기타'
+                            elif sub_categories == '와이드(분류필요)':
+                                sub_categories = '와이드'
+                        elif main_categories == '아우터':
+                            if sub_categories == '패딩(분류필요)':
+                                if '숏' in product_data['pageProps']['title']:
+                                    sub_categories = '숏패딩/패딩조끼'
+                                elif '조끼' in product_data['pageProps']['title']:
+                                    sub_categories = '숏패딩/패딩조끼'
+                                else:
+                                    sub_categories = '롱패딩'
+                            elif sub_categories == '재킷(분류필요)':
+                                if '무스탕' in product_data['pageProps']['title']:
+                                    sub_categories = '무스탕'
+                                elif '플리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '후리스' in product_data['pageProps']['title']:
+                                    sub_categories = '후리스'
+                                elif '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '아노락' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                else:
+                                    sub_categories = '재킷'
+                            elif sub_categories == '점퍼(분류필요)':
+                                if '무스탕' in product_data['pageProps']['title']:
+                                    sub_categories = '무스탕'
+                                elif '플리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '후리스' in product_data['pageProps']['title']:
+                                    sub_categories = '후리스'
+                                elif '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '아노락' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                else:
+                                    sub_categories = '점퍼'
+                            elif sub_categories == '기타(분류필요)':
+                                if '무스탕' in product_data['pageProps']['title']:
+                                    sub_categories = '무스탕'
+                                elif '플리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '후리스' in product_data['pageProps']['title']:
+                                    sub_categories = '후리스'
+                                elif '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '아노락' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '베스트(분류필요)':
+                                if '패딩' in product_data['pageProps']['title']:
+                                    sub_categories = '숏패딩/패딩조끼'
+                                else:
+                                    sub_categories = '기타'
+                        elif main_categories == '가방':
+                            if sub_categories == '기타(분류필요)':
+                                if '웨이스트' in product_data['pageProps']['title']:
+                                    sub_categories = '웨이스트백'
+                                else:
+                                    sub_categories = '기타'
+                        elif main_categories == '신발':
+                            if sub_categories == '운동화(분류필요)':
+                                if '러닝' in product_data['pageProps']['title']:
+                                    sub_categories = '러닝화/워킹화'
+                                elif '워킹' in product_data['pageProps']['title']:
+                                    sub_categories = '러닝화/워킹화'
+                                elif '축구' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '농구' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '테니스' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '골프' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                else:
+                                    sub_categories == '러닝화/워킹화'
+                            elif sub_categories == '구두/로퍼(분류필요)':
+                                if '로퍼' in product_data['pageProps']['title']:
+                                    sub_categories = '로퍼'
+                                else:
+                                    sub_categories = '구두'
+                            elif sub_categories == '샌들/슬리퍼(분류필요)':
+                                if '뮬' in product_data['pageProps']['title']:
+                                    sub_categories = '뮬/블로퍼'
+                                elif '블로퍼' in product_data['pageProps']['title']:
+                                    sub_categories = '뮬/블로퍼'
+                                else:
+                                    sub_categories = '샌들/슬리퍼'
+                        elif main_categories == '모자':
+                            if sub_categories == '캡(분류필요)':
+                                if '스냅' in product_data['pageProps']['title']:
+                                    sub_categories = '스냅백'
+                                else:
+                                    sub_categories = '볼캡/야구모자'
+                            elif sub_categories == '기타(분류필요)':
+                                if '스냅백' in product_data['pageProps']['title']:
+                                    sub_categories = '스냅백'
+                                elif '베레모' in product_data['pageProps']['title']:
+                                    sub_categories = '베레모'
+                                elif '페도라' in product_data['pageProps']['title']:
+                                    sub_categories = '페도라'
+                                elif '중절모' in product_data['pageProps']['title']:
+                                    sub_categories = '페도라'
+                                else:
+                                    sub_categories = '기타'
+                        elif main_categories == '빅사이즈':
+                            if sub_categories == '티셔츠(분류필요)':
+                                main_categories = '상의'
+                                if '긴팔' in product_data['pageProps']['title']:
+                                    sub_categories = '긴팔티'
+                                elif '반팔' in product_data['pageProps']['title']:
+                                    sub_categories = '반팔티'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '맨투맨/후드(분류필요)':
+                                main_categories = '상의'
+                                if '후드' in product_data['pageProps']['title']:
+                                    sub_categories = '후드티'
+                                else:
+                                    sub_categories = '맨투맨'
+                            elif sub_categories == '니트/가디건(분류필요)':
+                                main_categories = '상의'
+                                if '가디건' in product_data['pageProps']['title']:
+                                    sub_categories = '가디건'
+                                else:
+                                    sub_categories = '니트/스웨터'
+                            elif sub_categories == '점퍼/야상/패딩(분류필요)':
+                                main_categories = '아우터'
+                                if '숏패딩' in product_data['pageProps']['title']:
+                                    sub_categories = '숏패딩/패딩조끼'
+                                elif '롱패딩' in product_data['pageProps']['title']:
+                                    sub_categories = '롱패딩'
+                                elif '무스탕' in product_data['pageProps']['title']:
+                                    sub_categories = '무스탕'
+                                elif '플리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '후리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '아노락' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '점퍼' in product_data['pageProps']['title']:
+                                    sub_categories = '점퍼'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '자켓/코트(분류필요)':
+                                main_categories = '아우터'
+                                if '숏코트' in product_data['pageProps']['title']:
+                                    sub_categories = '숏코트'
+                                elif '롱코트' in product_data['pageProps']['title']:
+                                    sub_categories = '롱코트'
+                                elif '라이더' in product_data['pageProps']['title']:
+                                    sub_categories = '라이더 재킷'
+                                elif '무스탕' in product_data['pageProps']['title']:
+                                    sub_categories = '무스탕'
+                                elif '플리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '후리스' in product_data['pageProps']['title']:
+                                    sub_categories = '플리스'
+                                elif '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '아노락' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                else:
+                                    sub_categories = '재킷'
+                            elif sub_categories == '팬츠(분류필요)':
+                                main_categories = '하의'
+                                if '데님' in product_data['pageProps']['title']:
+                                    sub_categories = '데님'
+                                elif '면' in product_data['pageProps']['title']:
+                                    sub_categories = '면'
+                                elif '슬랙스' in product_data['pageProps']['title']:
+                                    sub_categories = '슬랙스'
+                                elif '트레이닝' in product_data['pageProps']['title']:
+                                    sub_categories = '트레이닝/조거팬츠'
+                                elif '숏' in product_data['pageProps']['title']:
+                                    sub_categories = '숏팬츠'
+                                elif '반바지' in product_data['pageProps']['title']:
+                                    sub_categories = '숏팬츠'
+                                else:
+                                    sub_categories = '기타'
+                        elif main_categories == '럭셔리':
+                            main_categories = '상의'
+                            if '긴팔' in product_data['pageProps']['title']:
+                                sub_categories = '긴팔티'
+                            elif '반팔' in product_data['pageProps']['title']:
+                                sub_categories = '반팔티'
+                            else:
+                                sub_categories = '기타'
+                        elif main_categories == '스포츠':
+                            if sub_categories == '아우터(분류필요)':
+                                main_categories = '아우터'
+                                if '바람' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                elif '윈드' in product_data['pageProps']['title']:
+                                    sub_categories = '바람막이'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '상의(분류필요)':
+                                main_categories = '상의'
+                                if '긴팔' in product_data['pageProps']['title']:
+                                    sub_categories = '긴팔티'
+                                elif '반팔' in product_data['pageProps']['title']:
+                                    sub_categories = '반팔티'
+                                elif '민소매' in product_data['pageProps']['title']:
+                                    sub_categories = '민소매'
+                                elif '나시' in product_data['pageProps']['title']:
+                                    sub_categories = '나시'
+                                elif '후드' in product_data['pageProps']['title']:
+                                    sub_categories = '후드'
+                                else:
+                                    sub_categories = '기타'
+                            elif sub_categories == '신발(분류필요)':
+                                main_categories = '신발'
+                                if '러닝' in product_data['pageProps']['title']:
+                                    sub_categories = '러닝화/워킹화'
+                                elif '워킹' in product_data['pageProps']['title']:
+                                    sub_categories = '러닝화/워킹화'
+                                elif '축구' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '농구' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '테니스' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                elif '골프' in product_data['pageProps']['title']:
+                                    sub_categories = '스포츠화'
+                                else:
+                                    sub_categories = '기타'
+
                     # 상품 정보 입력
                     hiver_products[product['id']] = {
+                        'mall_name': 'hiver',
                         'product_id': product['id'],
-                        'shopping_mall_id': 'hiver',
                         'main_category': main_categories,
                         'sub_category': sub_categories,
                         'gender': product_data['pageProps']['fallback'][complexity]['data']['option_type'],
@@ -540,6 +854,11 @@ def hiver_process(category_info):
 
                     db.products.insert_one(hiver_products[product['id']])
 
+        # data가 존재하지 않는 경우 넘기기
+        else:
+            continue
+
+
 if __name__ == '__main__':
     # 병렬 처리를 위한 프로세스 풀 생성
     pool = Pool(processes=28)
@@ -553,6 +872,9 @@ if __name__ == '__main__':
 
     # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
     pool.map(hiver_process, category_info_list)
+
+    # 웹드라이버 종료
+    driver.quit()
 
     # 프로세스 풀 종료
     pool.close()
