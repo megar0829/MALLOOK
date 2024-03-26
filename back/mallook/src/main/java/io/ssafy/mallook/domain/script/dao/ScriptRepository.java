@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.script.dao;
 
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.domain.style.entity.Style;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,6 +21,10 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
     Long findMaxId();
 
     Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
+
+    @Query("SELECT s FROM Script s ORDER BY s.totalLike DESC")
+    List<Script> findTop50ScriptsOrderByTotalLikeDesc();
+
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")

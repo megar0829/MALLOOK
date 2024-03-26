@@ -21,6 +21,7 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
     @Query("SELECT s FROM Style s WHERE s.member <> :member ORDER BY s.totalLike DESC")
     List<Style> findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(@Param("member") Member member);
 
+
     Slice<StyleRes> findStylesByIdLessThan(Pageable pageable, Long cursor);
 
     @Modifying(clearAutomatically = true)
