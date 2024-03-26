@@ -19,7 +19,9 @@ import java.util.UUID;
 @Getter
 @Builder
 @Entity
-@Table(name = "script")
+@Table(name = "script", indexes = {
+        @Index(name = "idx_script_total_like", columnList = "total_like")
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLRestriction("status = TRUE")

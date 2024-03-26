@@ -20,7 +20,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "style")
+@Table(name = "style", indexes = {
+        @Index(name = "idx_style_total_like", columnList = "total_like")
+})
 @SQLRestriction("status=TRUE")
 public class Style extends BaseEntity {
 
