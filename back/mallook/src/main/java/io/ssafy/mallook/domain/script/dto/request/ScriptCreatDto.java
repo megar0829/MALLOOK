@@ -21,13 +21,7 @@ public record ScriptCreatDto(
                 .member(member)
                 .heartCount(0)
                 .totalLike(0)
-                .build();
-    }
-
-    public Keyword toKeyword(Script script, String name) {
-        return Keyword.builder()
-                .script(script)
-                .name(name)
+                .keywordList(keywordsList)
                 .build();
     }
 }

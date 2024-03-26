@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
+import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -55,7 +56,7 @@ public class StyleController {
     }
 
     @GetMapping("/world-cup")
-    public ResponseEntity<BaseResponse<List<StyleRes>>> getWorldCupList(
+    public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
             @AuthenticationPrincipal UserSecurityDTO principal
     ) {
         UUID id = principal.getId();

@@ -8,6 +8,7 @@ import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleProductRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
+import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.dao.StyleProductRepository;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
@@ -45,14 +46,14 @@ public class StyleServiceImpl implements StyleService {
     }
 
     @Override
-    public List<StyleRes> getWorldCupList(UUID id) {
+    public List<StyledWorldCupDto> getWorldCupList(UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
         List<Style> top50StyleList = styleRepository.findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(proxyMember);
         Collections.shuffle(top50StyleList);
 
         return top50StyleList.subList(0, 8)
                 .stream()
-                .map(StyleRes::toDto)
+                .map(StyledWorldCupDto::toDto)
                 .toList();
     }
 

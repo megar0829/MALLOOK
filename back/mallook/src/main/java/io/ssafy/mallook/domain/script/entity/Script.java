@@ -45,9 +45,9 @@ public class Script extends BaseEntity {
     @Column(name = "total_like")
     private Integer totalLike;
 
-    @OneToMany(mappedBy = "script")
     @Builder.Default
-    private List<Keyword> keywordList = new ArrayList<>();
+    @ElementCollection
+    private List<String> keywordList = new ArrayList<>();
 
     public boolean isWrittenByTargetMember(UUID memberId) {
         return this.member.getId().equals(memberId);

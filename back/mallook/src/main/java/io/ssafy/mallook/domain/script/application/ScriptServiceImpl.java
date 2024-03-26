@@ -67,11 +67,6 @@ public class ScriptServiceImpl implements ScriptService {
                 .build();
         GptResponseDto gptResponseDto = gptService.askQuestion(questionDto);
         Script script = scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer());
-        List<Keyword> list = scriptCreateDto.keywordsList()
-                .stream()
-                .map((String s)
-                        -> scriptCreateDto.toKeyword(script, s))
-                .toList();
         scriptRepository.save(script);
     }
 
