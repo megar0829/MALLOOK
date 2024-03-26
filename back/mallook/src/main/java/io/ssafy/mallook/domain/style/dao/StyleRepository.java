@@ -17,9 +17,8 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
     @Query("select max(s.id) from Style s")
     Long findMaxId();
 
-    @Query("SELECT s FROM Style s WHERE s.member <> :member ORDER BY s.totalLike DESC")
-    List<Style> findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(@Param("member") Member member);
-
+    @Query("SELECT s FROM Style s ORDER BY s.totalLike DESC")
+    List<Style> findTop50StylesOrderByTotalLikeDesc();
 
     Slice<StyleRes> findStylesByIdLessThan(Pageable pageable, Long cursor);
 

@@ -6,6 +6,7 @@ import io.ssafy.mallook.domain.style.entity.Style;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
@@ -22,12 +23,12 @@ public class StyleProduct extends BaseEntity {
     Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "style_id")
     Style style;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     Product product;
 }

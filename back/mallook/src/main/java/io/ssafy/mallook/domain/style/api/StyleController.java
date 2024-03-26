@@ -57,12 +57,10 @@ public class StyleController {
 
     @GetMapping("/world-cup")
     public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
-            @AuthenticationPrincipal UserSecurityDTO principal
     ) {
-        UUID id = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                styleService.getWorldCupList(id)
+                styleService.getWorldCupList()
         );
     }
 

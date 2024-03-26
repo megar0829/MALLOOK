@@ -26,13 +26,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class StyleServiceImpl implements StyleService {
 
     private final MemberRepository memberRepository;
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
 
-    @Transactional(readOnly = true)
     @Override
     public Slice<StyleRes> findStyleListFirst(Pageable pageable) {
         Long maxId = styleRepository.findMaxId();
@@ -40,15 +40,13 @@ public class StyleServiceImpl implements StyleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Slice<StyleRes> findStyleList(Pageable pageable, Long cursor) {
         return styleRepository.findStylesByIdLessThan(pageable, cursor + 1);
     }
 
     @Override
-    public List<StyledWorldCupDto> getWorldCupList(UUID id) {
-        Member proxyMember = memberRepository.getReferenceById(id);
-        List<Style> top50StyleList = styleRepository.findTop50StylesWithDifferentMembersOrderByTotalLikeDesc(proxyMember);
+    public List<StyledWorldCupDto> getWorldCupList() {
+        List<Style> top50StyleList = styleRepository.findTop50StylesOrderByTotalLikeDesc();
         Collections.shuffle(top50StyleList);
 
         return top50StyleList.subList(0, 8)
@@ -58,7 +56,6 @@ public class StyleServiceImpl implements StyleService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public StyleDetailRes findStyleDetail(Long id) {
         var style = styleRepository.findById(id).orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         return new StyleDetailRes(
@@ -92,8 +89,8 @@ public class StyleServiceImpl implements StyleService {
                                 .build()));
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void DeleteStyle(UUID memberId, List<Long> styleIdList) {
         styleRepository.deleteMyStyle(memberId, styleIdList);
     }
