@@ -20,7 +20,7 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
 
     Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
-    @Query("SELECT s FROM Script s ORDER BY s.totalLike DESC")
+    @Query("SELECT s FROM Script s ORDER BY s.totalLike DESC limit 50")
     List<Script> findTop50ScriptsOrderByTotalLikeDesc();
 
 
