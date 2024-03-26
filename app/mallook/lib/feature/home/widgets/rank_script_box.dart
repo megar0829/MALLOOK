@@ -58,6 +58,7 @@ class RankScriptBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
@@ -79,6 +80,24 @@ class RankScriptBox extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const FaIcon(
+                            FontAwesomeIcons.heart,
+                            color: Colors.red,
+                            size: Sizes.size28,
+                          ),
+                          Gaps.h4,
+                          Text(
+                            '${script.heartCount}',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: Sizes.size18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
                         ],
                       ),
                     ],

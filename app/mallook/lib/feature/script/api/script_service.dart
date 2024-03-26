@@ -13,4 +13,8 @@ class ScriptService {
           "https://image.msscdn.net/images/goods_img/20230111/3019671/3019671_17083089992446_500.jpg",
     );
   }
+
+// static Future<List<Product>> getKeywordProducts(List<String> keywords) {
+//   return List<Product>[];
+// }
 }
