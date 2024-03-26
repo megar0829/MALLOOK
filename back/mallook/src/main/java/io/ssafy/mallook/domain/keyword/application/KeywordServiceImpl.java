@@ -10,6 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +25,18 @@ public class KeywordServiceImpl implements KeywordService {
     @Override
     public List<KeywordListRes> getKeywordList() {
         List<Script> top50Script = scriptRepository.findTop50ScriptsOrderByTotalLikeDesc();
-        List<String> keywordList = new ArrayList<>(top50Script.stream()
+
+        // 키워드 리스트에서 중복을 제거하기 위해 Set 사용
+        Set<String> uniqueKeywords = top50Script.stream()
                 .flatMap(script -> script.getKeywordList().stream())
-                .toList());
-        Collections.shuffle(keywordList);
-        return keywordList.stream()
+                .collect(toSet()); // Set으로 수집하여 중복 제거
+
+        List<String> shuffledKeywords = new ArrayList<>(uniqueKeywords);
+        Collections.shuffle(shuffledKeywords);
+
+        return shuffledKeywords.stream()
                 .map(KeywordListRes::toDto)
                 .limit(8)
-                .toList();
+                .collect(toList());
     }
 }
