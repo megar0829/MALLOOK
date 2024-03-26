@@ -5,11 +5,8 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.util.ArrayList;

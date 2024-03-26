@@ -3,7 +3,6 @@ package io.ssafy.mallook.domain.script.application;
 import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.service.GptService;
-import io.ssafy.mallook.domain.keyword.entity.Keyword;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
@@ -21,10 +20,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
-
-import static java.util.stream.Collectors.joining;
 
 @Service
 @RequiredArgsConstructor

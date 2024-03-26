@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.style.dao;
 
-import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
 import io.ssafy.mallook.domain.style.entity.Style;
 import org.springframework.data.domain.Pageable;
