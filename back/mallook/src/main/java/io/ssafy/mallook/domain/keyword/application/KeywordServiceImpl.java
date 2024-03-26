@@ -27,6 +27,7 @@ public class KeywordServiceImpl implements KeywordService {
         Collections.shuffle(keywordList);
         return keywordList.stream()
                 .map(KeywordListRes::toDto)
-                .limit(8).toList();
+                .limit(8)
+                .toList();
     }
 }
