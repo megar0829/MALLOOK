@@ -24,9 +24,7 @@ public class KeywordController {
 
     @GetMapping
     public ResponseEntity<BaseResponse<List<KeywordListRes>>> getKeywordList(
-            @AuthenticationPrincipal UserSecurityDTO principal
             ) {
-        UUID id = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 keywordService.getKeywordList()
