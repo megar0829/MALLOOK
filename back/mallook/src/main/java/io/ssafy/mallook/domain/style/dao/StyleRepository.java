@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.style.dao;
 
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
 import io.ssafy.mallook.domain.style.entity.Style;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +10,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 public interface StyleRepository extends JpaRepository<Style, Long> {
     @Query("select max(s.id) from Style s")
