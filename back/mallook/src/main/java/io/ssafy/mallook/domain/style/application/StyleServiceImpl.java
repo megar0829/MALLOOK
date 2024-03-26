@@ -49,9 +49,9 @@ public class StyleServiceImpl implements StyleService {
         List<Style> top50StyleList = styleRepository.findTop50StylesOrderByTotalLikeDesc();
         Collections.shuffle(top50StyleList);
 
-        return top50StyleList.subList(0, 8)
-                .stream()
+        return top50StyleList.stream()
                 .map(StyledWorldCupDto::toDto)
+                .limit(8)
                 .toList();
     }
 
