@@ -24,7 +24,7 @@ public record StyledWorldCupDto(
         @Schema(description = "스타일을 생성한 회원 닉네임")
         String memberNickname,
 
-        @Schema(description = "스타일을 보여주는 이미지 URL")
+        @Schema(description = "스타일에 포함되어 있는 상품 이미지 URL 리스트")
         List<String> urlList,
 
         @Schema(description = "스타일을 대표하는 키워드 리스트")
