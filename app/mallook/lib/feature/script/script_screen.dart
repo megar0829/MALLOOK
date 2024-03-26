@@ -8,6 +8,7 @@ import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/script/widget/script_img_widget.dart';
+import 'package:mallook/feature/script/widget/script_product_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -155,7 +156,10 @@ class _ScriptScreenState extends State<ScriptScreen>
                         )
                       ],
                     ),
-                    Gaps.v10,
+                    Divider(
+                      color:
+                          Theme.of(context).primaryColorLight.withOpacity(0.4),
+                    ),
                     Text(
                       snapshot.data!.name!,
                       maxLines: 5,
@@ -165,118 +169,16 @@ class _ScriptScreenState extends State<ScriptScreen>
                         fontSize: Sizes.size18,
                       ),
                     ),
-                    Gaps.v10,
+                    Gaps.v6,
                     Divider(
-                      color: Colors.grey.shade200,
+                      color: Theme.of(context).primaryColorLight,
                     ),
                     Gaps.v10,
                     ListView.separated(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => Row(
-                        children: [
-                          Container(
-                            width: 120,
-                            height: 120,
-                            clipBehavior: Clip.hardEdge,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: Sizes.size1,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                Sizes.size20,
-                              ),
-                            ),
-                            child: Image.network(
-                              _products[index].image!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Gaps.h8,
-                          Expanded(
-                            child: Container(
-                              height: 120,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: Sizes.size8,
-                                horizontal: Sizes.size10,
-                              ),
-                              clipBehavior: Clip.hardEdge,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.grey.shade300,
-                                  width: Sizes.size1,
-                                ),
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size20,
-                                ),
-                              ),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    _products[index].name,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Gaps.h4,
-                                  Text(
-                                    '${_products[index].price}₩',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Gaps.h4,
-                                  const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          CircleAvatar(),
-                                          Gaps.h4,
-                                          Text(
-                                            'sfsfs',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: Sizes.size14,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          FaIcon(
-                                            FontAwesomeIcons.heart,
-                                            size: Sizes.size16,
-                                            color: Colors.red,
-                                          ),
-                                          Text(
-                                            '121',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: Sizes.size12,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
+                      itemBuilder: (context, index) => ScriptProductWidget(
+                        product: _products[index],
                       ),
                       separatorBuilder: (context, index) => Gaps.v8,
                       itemCount: _products.length,
