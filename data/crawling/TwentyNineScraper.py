@@ -13,6 +13,9 @@ class TwentyNineScraper:
     def __init__(self):
         self.driver = None
         self.load_webdriver()
+        load_dotenv()
+        self.password = os.getenv("MONGODB_PASSWORD")
+        self.connect_to_mongodb()
 
 
     def load_webdriver(self):
@@ -26,6 +29,13 @@ class TwentyNineScraper:
         # 웹드라이버 종료
         if self.driver:
             self.driver.quit()
+
+
+    def connect_to_mongodb(self):
+        self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
+                                          f"?retryWrites=true&w=majority&appName=Cluster")
+        self.db = self.client["products"]
+        self.collection = self.db["products"]
 
 
     def get_twentyninecm_products_list(self, categoryLargeCode, categoryMediumCode, categorySmallCode, mainCategory, subCategory):
@@ -66,6 +76,11 @@ class TwentyNineScraper:
 
         for product in products[:1000]:
             itemNo = product.get('itemNo', None)
+
+            # 이미 저장된 상품 pass
+            if not self.check_if_product_in_mongodb(itemNo):
+                continue
+
             reviewCount = product.get('reviewCount', None)
             print(f"{subCategory}({itemNo}) 크롤링 중...")
 
@@ -261,18 +276,14 @@ class TwentyNineScraper:
         return product_reviews
 
 
-    def save_to_mongodb(self, productList):
-        load_dotenv()
-        password = os.getenv("MONGODB_PASSWORD")
-
-        # MongoDB 연결 설정
-        client = pymongo.MongoClient(f"mongodb+srv://root:{password}@cluster0.stojj99.mongodb.net/?retryWrites=true&w=majority&appName=Cluster")
-        db = client["products"]
-        collection = db["products"]
-
+    def save_to_mongodb(self, product_info):
         try:
-            # MongoDB에 productInfo 추가
-            collection.insert_one(productList)
+            self.collection.insert_one(product_info)
             print("상품 정보가 MongoDB에 성공적으로 저장되었습니다!")
         except Exception as e:
             print(f"MongoDB에 저장하는 중 오류가 발생했습니다: {e}")
+
+
+    def check_if_product_in_mongodb(self, product_id):
+        result = self.collection.find_one({'product_id': product_id})
+        return result is not None
