@@ -1,15 +1,11 @@
 package io.ssafy.mallook.global.batch;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
-import io.ssafy.mallook.domain.coupon.entity.Coupon;
-import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.ssafy.mallook.domain.grade.dao.GradeRepository;
-import io.ssafy.mallook.domain.grade.entity.Grade;
 import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
-import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.persistence.EntityManagerFactory;
@@ -29,12 +25,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 @Configuration
 @Slf4j
@@ -47,6 +39,7 @@ public class GradeBatchConfig {
     private final GradeRepository gradeRepository;
     private final CouponRepository couponRepository;
     private final MemberCouponRepository memberCouponRepository;
+
     @Bean
     public Job gradeJob(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
         return new JobBuilder("gradeJob", jobRepository)
@@ -55,6 +48,7 @@ public class GradeBatchConfig {
                 // todo: 등급별 쿠폰 등록 및 회원별 쿠폰 등록
                 .build();
     }
+
     // 구매내역 조회 후 exp 갱신
     @Bean(JOB_NAME + "_updateExpStep")
     public Step updateExpStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
@@ -64,6 +58,7 @@ public class GradeBatchConfig {
                 .writer(changeMemberExpData())
                 .build();
     }
+
     // exp에 따른 등급 갱신
     @Bean(JOB_NAME + "_updateGradeStep")
     public Step updateGradeStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
@@ -74,7 +69,8 @@ public class GradeBatchConfig {
                 .writer(changeMemberGradeData())
                 .build();
     }
-//    @Bean(JOB_NAME + "_updateGradeCouponStep")
+
+    //    @Bean(JOB_NAME + "_updateGradeCouponStep")
 //    public Step updateGradeCouponStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
 //        return new StepBuilder("updateGradeCouponStep", jobRepository)
 //                .<Member, Member>chunk(CHUNK_SIZE, transactionManager)
@@ -91,8 +87,8 @@ public class GradeBatchConfig {
                 .build();
         jpaPagingItemReader.afterPropertiesSet();
         return jpaPagingItemReader;
-
     }
+
     private ItemReader<? extends MemberExpDto> loadRecentOrderData() throws Exception {
         JpaPagingItemReader<MemberExpDto> jpaPagingItemReader = new JpaPagingItemReaderBuilder<MemberExpDto>()
                 .name(JOB_NAME + "_loadUserData")
@@ -111,7 +107,8 @@ public class GradeBatchConfig {
         return jpaPagingItemReader;
 
     }
-    private ItemProcessor<? super Member, ? extends Member> checkMemberGradeData () {
+
+    private ItemProcessor<? super Member, ? extends Member> checkMemberGradeData() {
         return member -> {
             if (member.availableLevelUp()) {
                 return member;
@@ -119,17 +116,19 @@ public class GradeBatchConfig {
             return null;
         };
     }
+
     private ItemWriter<MemberExpDto> changeMemberExpData() {
-        return members -> members.forEach( member -> {
+        return members -> members.forEach(member -> {
             var newExp = member.calculateExp();
             member.member().setExp(newExp);
             memberRepository.save(member.member());
         });
     }
+
     private ItemWriter<? super Member> changeMemberGradeData() {
-        return members -> members.forEach( member -> {
+        return members -> members.forEach(member -> {
             var grade = gradeRepository.findByMember(member)
-                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
             grade.setLevel(Level.getNextGrade(member.getExp()));
             gradeRepository.save(grade);
         });

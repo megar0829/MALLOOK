@@ -2,7 +2,7 @@ package io.ssafy.mallook.domain.style_product.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;

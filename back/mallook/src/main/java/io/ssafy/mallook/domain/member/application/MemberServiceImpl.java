@@ -11,6 +11,7 @@ import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import io.ssafy.mallook.global.security.service.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public String makeRandomNickname() {
+        var test = RandomStringUtils.random(6, true, true);
+        System.out.println(test);
         return "램덤닉네임" + Integer.toString ((int) (Math.random()*10000));
     }
 
