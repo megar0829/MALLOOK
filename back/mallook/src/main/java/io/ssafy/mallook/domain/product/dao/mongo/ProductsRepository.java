@@ -13,7 +13,8 @@ import java.util.List;
 @Repository
 public interface ProductsRepository extends MongoRepository<Products, String>{
 
-    Products findFirstByOrderByIdAsc();
+    Products findProductsById(String id);
+    Products findFirstByOrderByIdDesc();
     Slice<Products> findProductsByMainCategoryAndSubCategoryAndIdGreaterThan(
             String mainCategory, String subCategory, ObjectId cursor, Pageable pageable);
     Slice<Products> findProductsByMainCategoryAndSubCategory(

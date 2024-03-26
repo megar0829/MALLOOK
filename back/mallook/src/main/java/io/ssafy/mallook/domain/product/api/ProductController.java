@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.product.api;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.testDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
@@ -28,6 +29,23 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
+    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductsList(
+            @PageableDefault(size = 20,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) String cursor,
+            @RequestParam(name = "primary", required = false) String mainCategory,
+            @RequestParam(name = "secondary", required = false) String subCategory
+    ) {
+        cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
+        ObjectId cursorObjectId = new ObjectId(cursor);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
+        );
+    }
+
+    @GetMapping("/mysql")
     public ResponseEntity<BaseResponse<Slice<ProductListDto>>> getProductList(
             @PageableDefault(size = 20,
                     sort = "id",
@@ -37,26 +55,9 @@ public class ProductController {
             @RequestParam(name = "secondary", required = false) SubCategory subCategory
     ) {
         cursor = cursor != null ? cursor : productService.getLastProductId() + 1;
-
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(cursor, pageable, mainCategory, subCategory)
-        );
-    }
-    @GetMapping("/test")
-    public ResponseEntity<BaseResponse<Slice<Products>>> getProductsList(
-            @PageableDefault(size = 20,
-                    sort = "id",
-                    direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(required = false) String cursor,
-            @RequestParam(name = "primary", required = false) String mainCategory,
-            @RequestParam(name = "secondary", required = false) String subCategory
-    ) {
-        cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
-        ObjectId ncursor = new ObjectId(cursor);
-        return BaseResponse.success(
-                SuccessCode.SELECT_SUCCESS,
-                productService.getMongoProductsList(ncursor, pageable, mainCategory, subCategory)
         );
     }
     @GetMapping("/mongotest")

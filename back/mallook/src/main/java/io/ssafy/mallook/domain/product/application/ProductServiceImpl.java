@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
@@ -37,21 +38,17 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<Products> findByName(Pageable name) {
-        var rst = mongoProductsRepository.findFirstByOrderByIdAsc();
-        System.out.println("######################"+rst.getId());
-//        var rsult = mongoProductsRepository.findAll();
-//        System.out.println(rsult);
+//        var rst = mongoProductsRepository.findFirstByOrderByIdDesc();
         return mongoProductsRepository.findAll(name);
     }
 
     @Override
     public String getLastMongoProductsId() {
-        return mongoProductsRepository.findFirstByOrderByIdAsc().getId().toString();
+        return mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
     }
 
     @Override
-    public Slice<Products> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
-//        return mongoProductsRepository.findProductsByMainCategoryAndSubCategoryAndIdGreaterThan(mainCategory, subCategory, cursor, pageable);
+    public Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
         return productsCustomRepository.findByCategory(cursor, pageable, mainCategory, subCategory);
     }
 }
