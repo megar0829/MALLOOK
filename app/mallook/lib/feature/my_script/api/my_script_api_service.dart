@@ -36,8 +36,6 @@ class MyScriptApiService {
     ),
   ];
 
-  /// 랭킹에 따른 스크립트
-  /// TODO: 스크립트 작성자 정보 추가 필요
   static Future<List<Script>> getMyScripts(int page) async {
     List<Script> scriptInstances = [];
 

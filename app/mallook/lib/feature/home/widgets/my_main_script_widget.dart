@@ -15,7 +15,7 @@ class MyMainScriptWidget extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ScriptScreen(
-          scriptId: script.id!,
+          script: script,
         ),
       ),
     );
