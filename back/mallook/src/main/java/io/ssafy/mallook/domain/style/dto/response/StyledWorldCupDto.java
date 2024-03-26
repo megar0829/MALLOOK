@@ -4,8 +4,10 @@ import io.ssafy.mallook.domain.style.entity.Style;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 @Builder
@@ -24,7 +26,7 @@ public record StyledWorldCupDto(
         @Schema(description = "스타일을 생성한 회원 닉네임")
         String memberNickname,
 
-        @Schema(description = "스타일에 포함되어 있는 상품 이미지 URL 리스트")
+        @Schema(description = "스타일을 구성하는 상품 이미지 URL")
         List<String> urlList,
 
         @Schema(description = "스타일을 대표하는 키워드 리스트")
@@ -46,6 +48,8 @@ public record StyledWorldCupDto(
                         .flatMap(ele -> ele.getProduct()
                                 .getKeywordList()
                                 .stream())
+                        .collect(toCollection(LinkedHashSet::new))
+                        .stream()
                         .limit(5)
                         .collect(toList()))
                 .build();
