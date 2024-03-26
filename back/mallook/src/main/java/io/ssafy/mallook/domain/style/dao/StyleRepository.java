@@ -21,7 +21,7 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
 
     Slice<StyleRes> findStylesByIdLessThan(Pageable pageable, Long cursor);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = """
             update Style s
             set s.status = false
