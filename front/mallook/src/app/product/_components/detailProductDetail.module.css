@@ -5,13 +5,14 @@
     align-items: center;
 }
 .detailProductDetail__button {
-    width: 70dvw;
-    height: 10dvh;
+    width: 50dvw;
+    height: 7dvh;
     background-color: lightgray;
     font-size: 20px;
     font-weight: 600;
     color: white;
     border-radius: 50px;
+    margin-top: 20px;
 }
 .detailProductDetail__HTML {
     width: 80dvw;

@@ -21,14 +21,15 @@ export default async function ProductDetailPage({params: {productId}} : IParams)
     <div className={styles.container}>
       <DetailProduct productData={productData}/>
 
-      <div style={{marginTop: "40px"}} className={styles.line}></div>
-      <div style={{marginBottom: "30px"}} className={styles.line}></div>
+      <div className={styles.line}></div>
 
       <DetailProductInformation/>
 
-      <div style={{marginTop: "40px"}} className={styles.line}></div>
-      <div style={{marginBottom: "30px"}} className={styles.line}></div>
+      <div className={styles.line}></div>
 
+      <div className={styles.bottomDiv}>
+        <span>이 상품과 유사한 상품들</span>
+      </div>
       <ProductListComponent/>
     </div>
   );

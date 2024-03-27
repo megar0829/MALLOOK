@@ -124,7 +124,7 @@ export default function DetailProductDetail() {
 	  `;
 
 		return (
-			<div style={{ height: isHide ? "60dvh" : "", overflowY: isHide ? "hidden" : "visible"}} className={styles.detailProductDetail__HTML} dangerouslySetInnerHTML={{__html: htmlString}} ></div>
+			<div style={{ height: isHide ? "150dvh" : "", overflowY: isHide ? "hidden" : "visible"}} className={styles.detailProductDetail__HTML} dangerouslySetInnerHTML={{__html: htmlString}} ></div>
 		);
 	};
 
