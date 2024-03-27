@@ -69,8 +69,7 @@ public class SecurityConfig {
         final List<String> allowedHeaders = List.of("*");
         final List<String> allowedOriginPatterns = List.of(
                 "http://localhost:8080",
-                "http://localhost:5173",
-                "http://localhost:45476"
+                "http://localhost:3000"
         );
         return request -> {
             CorsConfiguration config = new CorsConfiguration();

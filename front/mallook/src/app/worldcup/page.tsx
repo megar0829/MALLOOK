@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 
 export const metadata = {
@@ -5,10 +6,9 @@ export const metadata = {
 };
 
 export default async function WorldCupPage() {
-
   return (
     <div>
-      WorldCup page
+        <h1>WorldCup Main Page</h1>
     </div>
   );
 }

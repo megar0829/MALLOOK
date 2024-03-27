@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import styles from "./login.module.css";
 import Image from "next/image";
+import Link from "next/link";
 
-import imgLogo from "../../../../public/images/logo.png";
-import iconGoogle from "../../../../public/images/google.png";
-import iconKakao from "../../../../public/images/kakao.png";
-import iconNaver from "../../../../public/images/naver.png";
+import imgLogo from "@/assets/img/icons/logo.png";
+import iconGoogle from "@/assets/img/icons/google.png";
+import iconKakao from "@/assets/img/icons/kakao.png";
+import iconNaver from "@/assets/img/icons/naver.png";
 
 
 export default function LoginModal() {
@@ -20,6 +21,9 @@ export default function LoginModal() {
     router.back(); // 라우터 뒤로가기 기능을 이용
   }, [router]);
 
+  const kakaoLogin = () => {
+    router.push("https://j10a606.p.ssafy.io/oauth2/authorization/kakao")
+  }
   return (
     <Modal>
       <div className={styles.container}>
@@ -32,10 +36,12 @@ export default function LoginModal() {
         </div>
 
         <div className={styles.socialDiv}>
-          <button className={styles.kakaoDiv}>
-            <Image className={styles.kakaoImg} src={iconKakao} alt="카카오 로그인"/>
-          </button>
-          <button className={styles.naverDiv}>
+          <Link href="/login/kakao">
+            <button className={styles.kakaoDiv}>
+              <Image className={styles.kakaoImg} src={iconKakao} alt="카카오 로그인"/>
+            </button>
+          </Link>
+          <button className={styles.naverDiv} onClick={() => kakaoLogin()}>
             <Image className={styles.naverImg} src={iconNaver} alt="네이버 로그인"/>
           </button>
           <button className={styles.googleDiv}>

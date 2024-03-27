@@ -14,6 +14,7 @@ import java.util.UUID;
 public interface StyleService {
     Slice<StyleRes> findStyleListFirst(Pageable pageable);
     Slice<StyleRes> findStyleList(Pageable pageable, Long cursor);
+    List<StyleRes> getWorldCupList(UUID id);
     StyleDetailRes findStyleDetail(Long id);
     void saveStyle(UUID memberId, StyleInsertReq styleInsertRes);
     void DeleteStyle(UUID memberId, List<Long> styleIdList);

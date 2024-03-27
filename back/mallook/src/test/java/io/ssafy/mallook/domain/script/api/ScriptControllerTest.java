@@ -76,7 +76,12 @@ class ScriptControllerTest {
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void createScript() throws Exception {
-        ScriptCreatDto scriptCreateDto = new ScriptCreatDto("테스트 스크립트입니다.");
+        List<String> keywordList = new ArrayList<>();
+        keywordList.add("예쁜");
+        keywordList.add("멋진");
+        ScriptCreatDto scriptCreateDto = ScriptCreatDto.builder()
+                .keywordsList(keywordList)
+                .build();
         mockMvc.perform(MockMvcRequestBuilders.post(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)

@@ -1,21 +1,26 @@
 package io.ssafy.mallook.domain.script.dto.request;
 
+import io.ssafy.mallook.domain.keyword.entity.Keyword;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+import java.util.List;
+
+@Builder
 public record ScriptCreatDto(
-        @NotBlank(message = "공백일 수 없습니다.")
-        @Size(min = 10, message = "너무 짧습니다")
-        @Size(max = 200, message = "너무 깁니다")
-        String scriptContent) {
+        @NotEmpty
+        List<String> keywordsList) {
 
-    public Script toEntity(Member member) {
+    public Script toEntity(Member member, String scriptContent) {
         return Script.builder()
-                .name(this.scriptContent)
+                .name(scriptContent)
                 .member(member)
                 .heartCount(0)
+                .totalLike(0)
                 .build();
     }
 }

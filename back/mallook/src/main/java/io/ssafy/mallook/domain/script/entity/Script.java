@@ -38,15 +38,21 @@ public class Script extends BaseEntity {
     @Column(name = "heart_count")
     private Integer heartCount;
 
+    @NotNull
+    @Column(name = "total_like")
+    private Integer totalLike;
+
     public boolean isWrittenByTargetMember(UUID memberId) {
         return this.member.getId().equals(memberId);
     }
 
     public void like() {
         this.heartCount++;
+        this.totalLike++;
     }
 
     public void unlike() {
         this.heartCount--;
+        this.totalLike--;
     }
 }
