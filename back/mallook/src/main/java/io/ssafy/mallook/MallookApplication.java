@@ -16,12 +16,12 @@ import java.util.TimeZone;
 
 @Log4j2
 @SpringBootApplication
-@EnableScheduling
-@EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
-		type = FilterType.ASSIGNABLE_TYPE,
-		classes = ProductsRepository.class
-))
-@EnableMongoRepositories(basePackages = "io.ssafy.mallook.domain.product.dao.mongo")
+//@EnableScheduling
+//@EnableJpaRepositories(excludeFilters = @ComponentScan.Filter(
+//		type = FilterType.ASSIGNABLE_TYPE,
+//		classes = ProductsRepository.class
+//))
+//@EnableMongoRepositories(basePackages = "io.ssafy.mallook.domain.product.dao.mongo")
 public class MallookApplication {
 
 	public static void main(String[] args) {

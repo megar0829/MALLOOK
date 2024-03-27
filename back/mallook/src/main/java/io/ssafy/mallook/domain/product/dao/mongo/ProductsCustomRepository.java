@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
-import io.ssafy.mallook.domain.product.entity.Products;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

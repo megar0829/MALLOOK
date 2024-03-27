@@ -11,12 +11,13 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 @Repository
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     @Autowired
-    MongoTemplate mongoTemplate ;
+    MongoTemplate mongoTemplate;
 
     @Override
     public Slice<ProductsListDto> findByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
@@ -47,7 +48,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                         ele.getCode(),
                         ele.getUrl())).toList();
 
-        boolean hasNext =  mongoTemplate.count(query, Products.class) >( (pageable.getPageNumber()+1) * pageable.getPageSize());
+        boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
         return new SliceImpl<>(productsList, pageable, hasNext);
     }
 

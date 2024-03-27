@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(QueryDSLConfig.class)
 @ActiveProfiles(profiles = "test")
-@ComponentScan(basePackages = "io.ssafy.mallook.domain.product.dao")
+@ComponentScan(basePackages = "io.ssafy.mallook.domain.product.dao.jpa")
 class ProductCustomRepositoryTest {
 
     @Autowired
