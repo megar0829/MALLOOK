@@ -42,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor) {
-        return null;
+        return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor);
     }
 
     @Override

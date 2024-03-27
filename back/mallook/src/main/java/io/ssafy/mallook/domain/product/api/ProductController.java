@@ -46,7 +46,7 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductDetail(
-            @RequestParam String name,
+            @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
             @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
         cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
