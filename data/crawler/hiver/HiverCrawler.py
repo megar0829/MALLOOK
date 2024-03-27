@@ -220,7 +220,7 @@ def hiver_process(category_info):
                                 review = {
                                     'contents': photo_review['text'],
                                     'created_at': created_at,
-                                    'images': photo_review['user']['image_url'],
+                                    'images': [photo_review['user']['image_url']],
                                     'point': None,
                                     'product_option': product_option,
                                     'user_size': user_size,
