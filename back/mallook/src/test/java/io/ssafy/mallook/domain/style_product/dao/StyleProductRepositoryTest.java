@@ -63,7 +63,7 @@ class StyleProductRepositoryTest {
                 .build();
     }
 
-    private StyleProduct buildStyleProduct(Style style, Product product) {
+    private StyleProduct buildStyleProduct(Style style, String product) {
         return StyleProduct.builder()
                 .style(style)
                 .product(product)
@@ -100,7 +100,7 @@ class StyleProductRepositoryTest {
         for (int i = 0; i < 3; i++) {
             Product pd = buildProduct(shoppingMall);
             productRepository.save(pd);
-            var result = styleProductRepository.save(buildStyleProduct(style, pd));
+            var result = styleProductRepository.save(buildStyleProduct(style, "66021cc8a57f1a18f0b8edd0"));
             System.out.println("#####################" + result.getId());
             deleteList.add(result.getId());
         }

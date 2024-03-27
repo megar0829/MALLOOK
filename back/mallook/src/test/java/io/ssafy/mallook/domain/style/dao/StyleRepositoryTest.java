@@ -63,7 +63,7 @@ class StyleRepositoryTest {
                 .totalLike(0)
                 .build();
     }
-    private StyleProduct buildStyleProduct(Style style, Product product){
+    private StyleProduct buildStyleProduct(Style style, String product){
         return StyleProduct.builder()
                 .style(style)
                 .product(product)
@@ -98,7 +98,7 @@ class StyleRepositoryTest {
             styleRepository.save(style);
             // style product 저장
             for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = buildStyleProduct(style, product);
+                StyleProduct sp = buildStyleProduct(style, "66021cc8a57f1a18f0b8edd0");
                 styleProductRepository.save(sp);
             }
         }
@@ -118,7 +118,7 @@ class StyleRepositoryTest {
             deleteList.add(rs.getId());
             // 스타일에 속하는 상품 리스트
             for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = buildStyleProduct(style, product);
+                StyleProduct sp = buildStyleProduct(style, "66021cc8a57f1a18f0b8edd0");
                 styleProductRepository.save(sp);
             }
         }
