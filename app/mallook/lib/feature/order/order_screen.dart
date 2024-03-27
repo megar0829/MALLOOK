@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
@@ -17,7 +18,11 @@ class OrderScreen extends StatefulWidget {
 class _OrderScreenState extends State<OrderScreen> {
   late List<CartItem> _cartItems;
   final CartController cartController = Get.put(CartController());
-  bool _selectAllItem = true;
+  static NumberFormat numberFormat = NumberFormat.currency(
+    locale: 'ko_KR',
+    symbol: '',
+  );
+  bool _isAllItemSelected = true;
 
   @override
   void initState() {
@@ -25,7 +30,7 @@ class _OrderScreenState extends State<OrderScreen> {
     _cartItems = widget.carItem ?? cartController.items;
     for (var item in _cartItems) {
       if (!item.selected) {
-        _selectAllItem = false;
+        _isAllItemSelected = false;
         break;
       }
     }
@@ -40,14 +45,19 @@ class _OrderScreenState extends State<OrderScreen> {
   }
 
   void _toggleAllItem(bool? value) {
-    _selectAllItem = value!;
-    if (_selectAllItem) {
-      for (var element in _cartItems) {
-        element.selected = true;
-      }
-    } else {
-      for (var element in _cartItems) {
-        element.selected = false;
+    _isAllItemSelected = value!;
+    for (var item in _cartItems) {
+      item.selected = _isAllItemSelected;
+    }
+    setState(() {});
+  }
+
+  void _updateIsAllItemSelected() {
+    _isAllItemSelected = true;
+    for (var item in _cartItems) {
+      if (!item.selected) {
+        _isAllItemSelected = false;
+        break;
       }
     }
     setState(() {});
@@ -67,6 +77,26 @@ class _OrderScreenState extends State<OrderScreen> {
       cartController.removeItem(cartItem: item);
     }
     setState(() {});
+  }
+
+  int _getTotalPrice() {
+    int totalPrice = 0;
+    for (var item in _cartItems) {
+      if (item.selected) {
+        totalPrice += item.product.price * item.quantity;
+      }
+    }
+    return totalPrice;
+  }
+
+  int _getTotalQuantity() {
+    int totalQuantity = 0;
+    for (var item in _cartItems) {
+      if (item.selected) {
+        totalQuantity += item.quantity;
+      }
+    }
+    return totalQuantity;
   }
 
   @override
@@ -116,7 +146,7 @@ class _OrderScreenState extends State<OrderScreen> {
                         visualDensity: const VisualDensity(
                           horizontal: VisualDensity.minimumDensity,
                         ),
-                        value: _selectAllItem,
+                        value: _isAllItemSelected,
                         onChanged: (value) => _toggleAllItem(value),
                       ),
                     ),
@@ -197,6 +227,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               value: _cartItems[index].selected,
                               onChanged: (value) => setState(() {
                                 _cartItems[index].selected = value!;
+                                _updateIsAllItemSelected();
                               }),
                             ),
                           ),
@@ -318,10 +349,10 @@ class _OrderScreenState extends State<OrderScreen> {
                             ),
                             Gaps.v12,
                             Text(
-                              '${_cartItems[index].product.price * _cartItems[index].quantity}원',
+                              '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)}원',
                               style: TextStyle(
                                 color: Theme.of(context).primaryColorDark,
-                                fontSize: Sizes.size20,
+                                fontSize: Sizes.size18,
                                 fontWeight: FontWeight.bold,
                               ),
                             )
@@ -346,7 +377,33 @@ class _OrderScreenState extends State<OrderScreen> {
           vertical: Sizes.size12,
           horizontal: Sizes.size20,
         ),
-        child: Row(),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blueAccent,
+            border: Border.all(
+              color: Colors.lightBlue,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(
+              Sizes.size18,
+            ),
+          ),
+          child: ListTile(
+              textColor: Colors.white,
+              titleTextStyle: const TextStyle(
+                fontSize: Sizes.size20,
+                fontWeight: FontWeight.bold,
+              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text("${_getTotalQuantity()}개"),
+                  Text("${numberFormat.format(_getTotalPrice())}₩"),
+                  Gaps.h20,
+                  const Text('구매하기'),
+                ],
+              )),
+        ),
       ),
     );
   }
