@@ -13,16 +13,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 import java.util.List;
+
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 
-    Slice<ProductsDetailDto> getProductDetail(String name);
+    Slice<ProductsDetailDto> getProductDetail(String name, String cursor);
 
-    Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto);
+    Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor);
 
     Long getLastProductId();
 
     Slice<Products> findByName(Pageable pageable);
+
     String getLastMongoProductsId();
+
     Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 }
