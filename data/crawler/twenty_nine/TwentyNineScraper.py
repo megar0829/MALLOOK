@@ -13,11 +13,9 @@ class TwentyNineScraper:
     def __init__(self):
         self.driver = None
         self.load_webdriver()
-        self.dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-        load_dotenv(self.dotenv_path)
+        load_dotenv()
         self.password = os.getenv("MONGODB_PASSWORD")
         self.connect_to_mongodb()
-
 
     def load_webdriver(self):
         # 크롬 웹드라이버 초기화
@@ -95,9 +93,9 @@ class TwentyNineScraper:
                 continue
 
             # categoryLargeCode가 272000000 이상이면 여성 상품
-            gender = '여성'
+            gender = 'female'
             if (categoryLargeCode // 1000000) >= 272:
-                gender = '남성'
+                gender = 'male'
 
             product_info = {
                 'product_id': itemNo,
@@ -107,8 +105,7 @@ class TwentyNineScraper:
                 'gender': gender,
                 'name': product.get('itemName', None),
                 'price': product.get('consumerPrice', None),
-                'brand_name_kr': product.get('frontBrandNameKor', None),
-                'brand_name_en': product.get('frontBrandNameEng', None),
+                'brand_name': product.get('frontBrandNameKor', None),
                 'image': f"https://img.29cm.co.kr/{product.get('imageUrl', None)}",
                 'url': f"https://product.29cm.co.kr/catalog/{itemNo}",
                 'color': detail_info['color'],
@@ -264,6 +261,14 @@ class TwentyNineScraper:
 
                 # 색상과 사이즈 정보를 option 딕셔너리에 할당
                 product_option.append({'color': color, 'size': size})
+                user_size = {'height': '', 'weight': ''}
+
+                if review.get('userSize', None):
+                    for size in review['userSize']:
+                        if 'cm' in size:
+                            user_size['height'] = size
+                        else:
+                            user_size['weight'] = size
 
             product_reviews['reviews'].append({
                 'contents': review.get('contents', None),
@@ -271,7 +276,7 @@ class TwentyNineScraper:
                 'images': images,
                 'point': review.get('point', None),
                 'productOption': product_option,
-                'userSize': review.get('userSize', None)
+                'userSize': user_size
             })
 
         return product_reviews

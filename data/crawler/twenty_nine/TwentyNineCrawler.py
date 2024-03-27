@@ -2,7 +2,7 @@ import time
 import pickle
 from TwentyNineScraper import TwentyNineScraper
 from multiprocessing import Pool
-
+import os
 scraper = TwentyNineScraper()  # 스크래퍼 객체 생성
 
 
@@ -31,7 +31,10 @@ if __name__ == "__main__":
     start_time = time.time()
 
     # 카테고리 목록 불러오기
-    with open("TwentyNineCategory.pkl", "rb") as f:
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    file_path = os.path.join(script_directory, "TwentyNineCategory.pkl")
+
+    with open(file_path, "rb") as f:
         category_data_list = pickle.load(f)
 
     # Pool 실행

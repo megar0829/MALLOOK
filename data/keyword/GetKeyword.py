@@ -1,20 +1,29 @@
 import pymongo
 from dotenv import load_dotenv
 import os
-from konlpy.tag import Kkma       # 한글 자연어 처리
+from konlpy.tag import Kkma
 from konlpy.tag import Okt
 import re
 
 
-kkma = Kkma()
-okt = Okt()
-
-
 def review_preprocessing(reviews):
-    keywords = set()
-    for review in reviews:
-        print(review)
+    print(reviews)
+    keywords =[]
+    okt = Okt()  # Okt 형태소 분석기 초기화
     
+    for review in reviews:
+        # 숫자, 영어 알파벳, 특수 문자, 구두점 및 개행 문자 제거
+        cleaned_review = re.sub(r'[0-9a-zA-Z\s\W_]+', '', review)
+        
+        # 공백 제거
+        cleaned_review = cleaned_review.strip()
+        
+        # 형태소 분석을 통해 명사만 추출
+        tokens = okt.nouns(cleaned_review)
+        
+        # 키워드를 고유한 토큰으로 업데이트
+        keywords += tokens
+        
     return keywords
 
 
@@ -36,6 +45,7 @@ for document in cursor:
         continue
 
     for review in document['reviews']['reviews']:
+        print(review)
         # content가 존재하는 리뷰에 대해서만 수행
         if not review.get('content', False):
             continue
@@ -44,11 +54,12 @@ for document in cursor:
     
     if not reviews:
         continue
-
+    
     keywords = review_preprocessing(reviews)
+    # print(keywords)
     break
 
 
   # 추출된 키워드 저장
   # document['keywords'] = keywords
-  # collection.update_one({"_id": document["_id"]}, {"$set": document}) 
+  # collection.update_one({"_id": document["_id"]}, {"$set": document})
