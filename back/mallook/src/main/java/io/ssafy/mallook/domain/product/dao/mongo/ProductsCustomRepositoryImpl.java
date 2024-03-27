@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -15,10 +16,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
-    @Autowired
-    MongoTemplate mongoTemplate;
+    private final MongoTemplate mongoTemplate;
 
     @Override
     public Slice<ProductsListDto> findByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
