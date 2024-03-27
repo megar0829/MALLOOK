@@ -10,8 +10,6 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.List;
 
 @Getter
-//@Entity
-
 @Document(collection = "products")
 public class Products {
     @MongoId
