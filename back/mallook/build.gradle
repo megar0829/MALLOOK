@@ -31,6 +31,12 @@ dependencies {
 	testImplementation 'org.projectlombok:lombok:1.18.26'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// batch
+	implementation 'org.springframework.boot:spring-boot-starter-batch'
+//	implementation 'org.springframework.batch:spring-batch-core:5.0.0'
+	implementation 'org.springframework.batch:spring-batch-integration' // Async
+
+	//test
 	// ShedLock(with Redis)
 	implementation 'net.javacrumbs.shedlock:shedlock-spring:4.29.0'
 	implementation 'net.javacrumbs.shedlock:shedlock-provider-redis-spring:4.29.0'
@@ -38,6 +44,7 @@ dependencies {
 	// chatGPT
 	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.0'
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+	implementation 'com.theokanning.openai-gpt3-java:service:0.12.0'
 
 	// test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -45,7 +52,8 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 
 	// spring-boot actuator
-	implementation 'com.theokanning.openai-gpt3-java:service:0.12.0'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
 
 	// security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -66,9 +74,12 @@ dependencies {
 
 	// mongodb 연결
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-
+	implementation('com.querydsl:querydsl-mongodb') {
+		exclude group: 'org.mongodb', module: 'mongo-java-driver'
+	}
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.redisson:redisson-spring-boot-starter:3.24.3'
 
 	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation 'org.modelmapper:modelmapper:3.2.0'
@@ -95,6 +106,10 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+	// 랜덤 문자열
+	implementation 'org.apache.commons:commons-lang3:3.12.0'
+
 }
 
 tasks.named('test') {

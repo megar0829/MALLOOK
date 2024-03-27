@@ -5,7 +5,7 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest

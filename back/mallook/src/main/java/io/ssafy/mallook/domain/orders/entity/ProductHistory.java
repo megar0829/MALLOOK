@@ -43,6 +43,10 @@ public class ProductHistory extends BaseEntity {
     @NotNull
     private Integer productFee;
 
+    @ManyToOne
+    @JoinColumn(name = "orders_id")
+    private Orders orders;
+
     @NotNull
     @ManyToOne
     @JoinColumn(name = "shoppingmall_id")
