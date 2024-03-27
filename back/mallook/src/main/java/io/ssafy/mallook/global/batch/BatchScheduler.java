@@ -2,6 +2,7 @@ package io.ssafy.mallook.global.batch;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.JobParametersInvalidException;
@@ -11,6 +12,7 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +25,11 @@ public class BatchScheduler {
 
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
+    @Value("${spring.server.role}")
+    private String serverRole;
 
     @Scheduled(cron = "0 0 0 * * 1")
+    @SchedulerLock(name = "couponTask", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runJob() {
         String time = LocalDateTime.now().toString();
         try {
@@ -35,6 +40,5 @@ public class BatchScheduler {
                  JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
