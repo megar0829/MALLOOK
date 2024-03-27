@@ -8,7 +8,7 @@ void moveToLoginScreen() {
 }
 
 void moveToNavigationScreen() {
-  Get.to(const MainNavigationScreen());
+  Get.to(() => const MainNavigationScreen());
 }
 
 MemberRole? _parseStringToMemberRole(String role) {

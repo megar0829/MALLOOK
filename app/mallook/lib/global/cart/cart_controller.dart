@@ -6,6 +6,7 @@ class CartItem {
   int quantity;
   String size;
   String color;
+  bool selected = true;
 
   CartItem({
     required this.product,
