@@ -64,7 +64,7 @@ class _OrderScreenState extends State<OrderScreen> {
     }
 
     for (var item in removeItems) {
-      _cartItems.remove(item);
+      cartController.removeItem(cartItem: item);
     }
     setState(() {});
   }
@@ -146,18 +146,207 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _cartItems.length,
-              itemBuilder: (context, index) => Text(
-                _cartItems[index].toString(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size12,
+            horizontal: Sizes.size24,
+          ),
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: _cartItems.length,
+            itemBuilder: (context, index) => Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: Sizes.size10,
+                horizontal: Sizes.size16,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: Sizes.size1,
+                ),
+                borderRadius: BorderRadius.circular(
+                  Sizes.size18,
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Transform.scale(
+                            scale: 1.2,
+                            child: Checkbox(
+                              checkColor: Theme.of(context).primaryColorDark,
+                              fillColor:
+                                  const MaterialStatePropertyAll(Colors.white),
+                              shape: const CircleBorder(
+                                side: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: const VisualDensity(
+                                horizontal: VisualDensity.minimumDensity,
+                                vertical: VisualDensity.minimumDensity,
+                              ),
+                              value: _cartItems[index].selected,
+                              onChanged: (value) => setState(() {
+                                _cartItems[index].selected = value!;
+                              }),
+                            ),
+                          ),
+                          Gaps.h6,
+                          Text(
+                            '선택',
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: Sizes.size16,
+                            ),
+                          )
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          cartController.removeItem(
+                            cartItem: _cartItems[index],
+                          );
+                        }),
+                        child: Text(
+                          '삭제',
+                          style: TextStyle(
+                            color: Colors.grey.shade800,
+                            fontSize: Sizes.size16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const Divider(),
+                  Text(
+                    _cartItems[index].product.name,
+                    maxLines: 5,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: Sizes.size16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Gaps.v8,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Image.network(
+                        _cartItems[index].product.image!,
+                        height: 150,
+                        fit: BoxFit.cover,
+                      ),
+                      Gaps.h10,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  '사이즈',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                                Text(
+                                  _cartItems[index].size,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Gaps.v12,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  '색상',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                                Text(
+                                  _cartItems[index].color,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Gaps.v12,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Text(
+                                  '수량',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                                Text(
+                                  "${_cartItems[index].quantity}",
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Gaps.v12,
+                            Text(
+                              '${_cartItems[index].product.price * _cartItems[index].quantity}원',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColorDark,
+                                fontSize: Sizes.size20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
-          ],
+            separatorBuilder: (context, index) => Gaps.v10,
+          ),
         ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 1,
+        shadowColor: Colors.grey.shade600,
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        padding: const EdgeInsets.symmetric(
+          vertical: Sizes.size12,
+          horizontal: Sizes.size20,
+        ),
+        child: Row(),
       ),
     );
   }
