@@ -17,7 +17,6 @@ public record ProductsListDto (
         Integer fee,
         List<String> tags,
         List<String> detailImages,
-        String detailHtml,
         String code,
         String url,
         String image
@@ -38,7 +37,6 @@ public record ProductsListDto (
                 .url(products.getUrl())
                 .tags(products.getTags())
                 .detailImages(products.getDetailImages())
-                .detailHtml(products.getDetailHtml())
                 .build();
     }
 }
