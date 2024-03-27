@@ -40,6 +40,5 @@ public record ProductsListDto (
                 .detailImages(products.getDetailImages())
                 .detailHtml(products.getDetailHtml())
                 .build();
-
     }
 }
