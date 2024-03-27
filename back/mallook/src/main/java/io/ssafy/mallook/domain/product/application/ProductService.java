@@ -1,6 +1,8 @@
 package io.ssafy.mallook.domain.product.application;
 
+import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
@@ -13,6 +15,10 @@ import org.springframework.data.domain.Slice;
 import java.util.List;
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
+
+    Slice<ProductsDetailDto> getProductDetail(String name);
+
+    Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto);
 
     Long getLastProductId();
 

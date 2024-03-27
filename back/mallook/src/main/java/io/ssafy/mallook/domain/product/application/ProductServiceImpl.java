@@ -4,7 +4,9 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductCustomRepository;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
+import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +33,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         return productCustomRepository.findAllProduct(cursor, pageable, mainCategory, subCategory);
+    }
+
+    @Override
+    public Slice<ProductsDetailDto> getProductDetail(String name) {
+        List<Products> products = mongoProductsRepository.findByName(name);
+        return products.stream()
+                .map(ProductsDetailDto::toDto);
+    }
+
+    @Override
+    public Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto) {
+        return null;
     }
 
     @Override
