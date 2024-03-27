@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.member.application.MemberService;
 import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
 import io.ssafy.mallook.domain.member.dto.request.MemberNicknameReq;
 import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
+import io.ssafy.mallook.domain.member.dto.response.NicknameRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -44,29 +45,13 @@ public class MemberController {
                 result
         );
     }
-    @Operation(summary = "닉네임 중복검사",
-            responses = {
-                    @ApiResponse(responseCode = "200", description = "닉네임 중복검사 성공"),
-                    @ApiResponse(responseCode = "404", description = "닉네임 중복검사 실패")
-            })
-    @GetMapping("/nickname")
-    public ResponseEntity<BaseResponse<String>> validateNickname(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody MemberNicknameReq nicknameReq
-            ){
-        var result = memberService.validateNickname(nicknameReq.nickname());
-        return BaseResponse.success(
-                SuccessCode.SELECT_SUCCESS,
-                result? "중복된 닉네임은 허용되지 않습니다.": "사용할 수 있는 닉네임입니다."
-        );
-    }
     @Operation(summary = "랜덤 닉네임 생성",
             responses = {
                     @ApiResponse(responseCode = "200", description = "랜덤 닉네임 생성 성공"),
                     @ApiResponse(responseCode = "404", description = "랜덤 닉네임 생성 실패")
             })
     @GetMapping("/random")
-    public ResponseEntity<BaseResponse<String>> getRandomNickname(
+    public ResponseEntity<BaseResponse<NicknameRes>> getRandomNickname(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO
     ){
         var result = memberService.makeRandomNickname();

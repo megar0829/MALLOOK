@@ -1,4 +1,4 @@
-package io.ssafy.mallook.domain.product.dao;
+package io.ssafy.mallook.domain.product.dao.jpa;
 
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;

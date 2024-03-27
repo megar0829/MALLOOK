@@ -1,4 +1,4 @@
-package io.ssafy.mallook.domain.product.dao;
+package io.ssafy.mallook.domain.product.dao.jpa;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;

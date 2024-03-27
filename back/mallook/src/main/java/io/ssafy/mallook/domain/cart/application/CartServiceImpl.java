@@ -4,13 +4,11 @@ import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
-import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
-import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
@@ -21,12 +19,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CartServiceImpl implements CartService{
     private final CartRepository cartRepository;
     private  final CartProductRepository cartProductRepository;
@@ -41,13 +39,12 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Slice<CartDetailRes> findProductsInCart(Pageable pageable, UUID memberId, Long cursor) {
         return cartRepository.findProductsInCart(pageable, memberId, cursor+1);
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq) {
         Product product = productRepository.findById(cartInsertReq.productId()).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         Cart cart = cartRepository.findMyCartByMember(new Member(memberId)).orElse(new Cart());

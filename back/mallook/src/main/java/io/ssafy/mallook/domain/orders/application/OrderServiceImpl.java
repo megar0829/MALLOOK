@@ -43,16 +43,21 @@ public class OrderServiceImpl implements OrderService {
     public void createOrder(UUID id, OrderCreateDto createDto) {
         Member proxyMember = memberRepository.getReferenceById(id);
         orderRepository.save(createDto.toEntity(proxyMember));
+        // todo : 주문 상품 (product history) 저장
+        // todo : 회원 등급별 할인율 적용
     }
 
     @Override
     @Transactional
     public void deletedOrder(OrderDeleteDto orderDeleteDto) {
         orderRepository.deleteOrder(orderDeleteDto.deleteList());
+        // todo: 주문 상품 (product history) 삭제
     }
 
     @Override
     public Long findMaxOrderId() {
         return orderRepository.findMaxOrderId();
     }
+
+
 }
