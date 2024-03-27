@@ -1,0 +1,28 @@
+.detailProductInformation__container {
+    width: 80dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.detailProductInformation__topDiv {
+    width: 75dvw;
+    height: 10dvh;
+    display: flex;
+    padding-left: 30px;
+    background-color: lightgray;
+    align-items: center;
+}
+.detailProductInformation__button {
+    width: 10dvw;
+    height: 10dvh;
+    margin-right: 1dvw;
+    font-size: 20px;
+    font-weight: 600;
+    color: gray;
+}
+.detailProductInformation__line {
+    width: 3px;
+    height: 7dvh;
+    background-color: white;
+    margin-right: 1dvw;
+}

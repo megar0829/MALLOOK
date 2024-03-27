@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import {usePathname, useSearchParams} from "next/navigation";
+import {useEffect, useState} from "react";
 import Image from "next/image";
 import styles from "./navigation.module.css";
 
@@ -12,6 +12,14 @@ import iconCart from "@/assets/img/icons/cart.png";
 import iconProfile from "@/assets/img/icons/profile.png";
 
 export default function Navigation() {
+  const params = useSearchParams();
+
+  useEffect(() => {
+    console.log(params);
+  }, [params]);
+
+  console.log(params.get("access-token"));
+
   const path = usePathname();
   const [count, setCount] = useState(0);
 

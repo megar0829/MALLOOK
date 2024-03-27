@@ -1,0 +1,12 @@
+.container {
+    width: 100dvw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.line {
+    width: 80dvw;
+    height: 2px;
+    background-color: lightgray;
+    margin-top: 5px;
+}
