@@ -21,7 +21,7 @@ public class Products {
     private String subCategory;
     private String gender;
     private String name;
-    private Long price;
+    private Integer price;
     private List<String> color;
     private List<String> size;
     @Field(name = "brand_name")
@@ -36,4 +36,6 @@ public class Products {
     private List<String> detailImages;
     @Field(name = "detail_html")
     private String detailHtml;
+    @Field(name = "keywords")
+    private List<String> keywords;
 }
