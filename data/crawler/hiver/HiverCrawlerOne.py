@@ -4,6 +4,7 @@ import time
 import json
 import pickle
 import os
+import datetime
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -135,7 +136,7 @@ def hiver_process(category_info):
         # category_data = category_response.json()
     
     product = {
-        'id': "96342356",
+        'id': "122949807",
     }
     # 사용되지 않은 프로덕트라면 세부정보 저장
     if product['id'] not in hiver_used:
@@ -195,9 +196,14 @@ def hiver_process(category_info):
             if photo_review_data['data']:
                 reviews['count'] += photo_review_data['meta']['count']
                 for photo_review in photo_review_data['data']:
+
+                    # 시간변경                    
+                    timestamp = int(photo_review['created_time'])
+                    created_at = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+
                     review = {
                         'content': photo_review['text'],
-                        'created_at': photo_review['created_time'],
+                        'created_at': created_at,
                         'images': photo_review['user']['image_url'],
                         'point': None,
                         'product_option': [photo_review['product']['option_name'].split('/')],
@@ -232,9 +238,14 @@ def hiver_process(category_info):
             if text_review_data['data']:
                 reviews['count'] += text_review_data['meta']['count']
                 for text_review in text_review_data['data']:
+
+                    # 시간변경                    
+                    timestamp = int(text_review['created_time'])
+                    created_at = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+
                     review = {
                         'content': text_review['text'],
-                        'created_at': text_review['created_time'],
+                        'created_at': created_at,
                         'images': None,
                         'point': None,
                         'product_option': [text_review['product']['option_name'].split('/')],

@@ -1,9 +1,10 @@
-# hiver 상품 상세정보 크롤링(API)
+# hiver 상품 상세정보 크롤링(API) -> data 디렉토리에서 실행할 것
 import requests
 import pickle
 import json
 import time
 import os
+import datetime
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -16,8 +17,8 @@ from multiprocessing import Pool
 from pymongo import MongoClient
 from dotenv import load_dotenv
 
-dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-load_dotenv(dotenv_path)
+# dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv()
 password = os.getenv("MONGODB_PASSWORD")
 API_KEY = os.getenv("HIVER_API")
 
@@ -34,7 +35,7 @@ options.add_argument("disable-gpu")
 options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
 options.add_argument('--disable-images')
-options.add_argument('--headless')
+# options.add_argument('--headless')
 
 # 속도 향상을 위한 옵션 해제
 prefs = {'profile.default_content_setting_values': {
@@ -71,7 +72,10 @@ options.add_experimental_option('prefs', prefs)
 driver = webdriver.Chrome(options=options)
 
 # 카테고리 번호
-with open("HiverCategory.pkl", "rb") as f:
+script_directory = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(script_directory, "HiverCategory.pkl")
+
+with open(file_path, "rb") as f:
     category_numbers = pickle.load(f)
 
 # 상품 목록들(productId 기준)
@@ -185,13 +189,41 @@ def hiver_process(category_info):
                         if photo_review_data['data']:
                             reviews['count'] += photo_review_data['meta']['count']
                             for photo_review in photo_review_data['data']:
+
+                                # 색상과 사이즈
+                                product_options = photo_review['product']['option_name'].split('/')
+                                if len(product_options) >= 1:
+                                    product_color = product_options[0]
+                                else:
+                                    product_color = ''
+
+                                if len(product_options) == 2:
+                                    product_size = product_options[1]
+                                else:
+                                    product_size = ''
+                                product_option = {
+                                    'color': product_color,
+                                    'size': product_size,
+                                }
+
+                                # 키와 몸무게
+                                user_size = {
+                                    'height': f"{photo_review['user']['height']}cm",
+                                    'weight': f"{photo_review['user']['weight']}kg",
+                                }
+
+                                # 시간변경                    
+                                timestamp = int(photo_review['created_time'])
+                                created_at = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+
+                                # 개별 리뷰 정보
                                 review = {
-                                    'content': photo_review['text'],
-                                    'created_at': photo_review['created_time'],
+                                    'contents': photo_review['text'],
+                                    'created_at': created_at,
                                     'images': photo_review['user']['image_url'],
                                     'point': None,
-                                    'product_option': [photo_review['product']['option_name'].split('/')],
-                                    'user_size': [photo_review['user']['height'], photo_review['user']['weight']],
+                                    'product_option': product_option,
+                                    'user_size': user_size,
                                 }
 
                                 reviews['reviews'].append(review)
@@ -222,13 +254,41 @@ def hiver_process(category_info):
                         if text_review_data['data']:
                             reviews['count'] += text_review_data['meta']['count']
                             for text_review in text_review_data['data']:
+
+                                # 색상과 사이즈
+                                product_options = text_review['product']['option_name'].split('/')
+                                if len(product_options) >= 1:
+                                    product_color = product_options[0]
+                                else:
+                                    product_color = ''
+
+                                if len(product_options) >= 2:
+                                    product_size = product_options[1]
+                                else:
+                                    product_size = ''
+                                product_option = {
+                                    'color': product_color,
+                                    'size': product_size,
+                                }
+
+                                # 키와 몸무게
+                                user_size = {
+                                    'height': f"{text_review['user']['height']}cm",
+                                    'weight': f"{text_review['user']['weight']}kg",
+                                }
+
+                                # 시간변경                    
+                                timestamp = int(text_review['created_time'])
+                                created_at = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
+                                
+                                # 개별 리뷰 정보
                                 review = {
-                                    'content': text_review['text'],
-                                    'created_at': text_review['created_time'],
-                                    'images': None,
+                                    'contents': text_review['text'],
+                                    'created_at': created_at,
+                                    'images': [],
                                     'point': None,
-                                    'product_option': [text_review['product']['option_name'].split('/')],
-                                    'user_size': [text_review['user']['height'], text_review['user']['weight']],
+                                    'product_option': product_option,
+                                    'user_size': user_size,
                                 }
 
                                 reviews['reviews'].append(review)
@@ -605,25 +665,29 @@ def hiver_process(category_info):
                                     sub_categories = '스포츠화'
                                 else:
                                     sub_categories = '기타'
+                    
+                    # 성별 
+                    if product_data['pageProps']['fallback'][complexity]['data']['option_type'] == 'M':
+                        gender = 'male'
+                    elif product_data['pageProps']['fallback'][complexity]['data']['option_type'] == 'N':
+                        gender = 'unisex'
+                    else:
+                        gender = 'female'
 
                     # 상품 정보 입력
                     hiver_products[product['id']] = {
-                        'mall_name': 'hiver',
                         'product_id': product['id'],
+                        'mall_name': 'hiver',
                         'main_category': main_categories,
                         'sub_category': sub_categories,
-                        'gender': product_data['pageProps']['fallback'][complexity]['data']['option_type'],
+                        'gender': gender,
                         'name': product_data['pageProps']['title'],
                         'price': product_data['pageProps']['fallback'][complexity]['data']['sale_price'],
+                        'brand_name': product_data['pageProps']['fallback'][complexity]['data']['seller']['name'],
+                        'image': product_data['pageProps']['image'],
+                        'url': f'https://www.hiver.co.kr/products/{product["id"]}',
                         'color': colors,
                         'size': sizes,
-                        'quantity': 0, 
-                        'brand_name': product_data['pageProps']['fallback'][complexity]['data']['seller']['name'],
-                        'fee': 0,
-                        'image': product_data['pageProps']['image'],
-                        'code': None,
-                        'url': f'https://www.hiver.co.kr/products/{product["id"]}',
-                        'tags': tag_list,
                         'detail_images': image_urls,
                         'detail_html': image_code,
                         'reviews': reviews,
@@ -638,7 +702,7 @@ def hiver_process(category_info):
 
                     # driver.quit()
 
-                    db.products.insert_one(hiver_products[product['id']])
+                    db.test.insert_one(hiver_products[product['id']])
 
         # data가 존재하지 않는 경우 넘기기
         else:
@@ -647,7 +711,7 @@ def hiver_process(category_info):
 
 if __name__ == '__main__':
     # 병렬 처리를 위한 프로세스 풀 생성
-    pool = Pool(processes=1)
+    pool = Pool(processes=14)
 
     # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
     category_info_list = []
