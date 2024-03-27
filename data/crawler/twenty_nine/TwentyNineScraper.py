@@ -17,6 +17,7 @@ class TwentyNineScraper:
         self.password = os.getenv("MONGODB_PASSWORD")
         self.connect_to_mongodb()
 
+
     def load_webdriver(self):
         # 크롬 웹드라이버 초기화
         chrome_options = Options()
@@ -28,13 +29,6 @@ class TwentyNineScraper:
         # 웹드라이버 종료
         if self.driver:
             self.driver.quit()
-
-
-    def connect_to_mongodb(self):
-        self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
-                                          f"?retryWrites=true&w=majority&appName=Cluster")
-        self.db = self.client["products"]
-        self.collection = self.db["products"]
 
 
     def get_twentyninecm_products_list(self, categoryLargeCode, categoryMediumCode, categorySmallCode, mainCategory, subCategory):
@@ -54,9 +48,13 @@ class TwentyNineScraper:
         # 카테고리별로 상품 2개만 조회 후 res의 productsTotalCount를 저장
         response = requests.get(url, params=params)
         try:
+            response = requests.get(url)
             response.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            print(f"HTTP Error: {err}")
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
+            return
 
         results = response.json()
         params['count'] = results.get('data', {}).get('productsTotalCount', 0)
@@ -76,9 +74,9 @@ class TwentyNineScraper:
         for product in products[:1000]:
             itemNo = product.get('itemNo', None)
 
-            # 이미 저장된 상품 pass
-            if not self.check_if_product_in_mongodb(itemNo):
-                continue
+            # 이미 저장된 상품인지 확인
+            # if self.check_if_product_in_mongodb(itemNo):
+            #     continue
 
             reviewCount = product.get('reviewCount', None)
             print(f"{subCategory}({itemNo}) 크롤링 중...")
@@ -119,14 +117,17 @@ class TwentyNineScraper:
 
 
     def crawling_twentyninecm_product_info(self, itemNo):
+        print(itemNo, '!!!!!!!!!!!!!!!!!!!!!')
         detail_info = {'color': [], 'size': [], 'detail_images': [], 'detail_html': ''}
         url = f'https://product.29cm.co.kr/catalog/{itemNo}'
 
-        # 상품이 존재하는지 확인 (존재하지 않는다면 404 발생)
         try:
             response = requests.get(url)
             response.raise_for_status()
-        except:
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
             return
 
         self.driver.get(url)
@@ -261,14 +262,14 @@ class TwentyNineScraper:
 
                 # 색상과 사이즈 정보를 option 딕셔너리에 할당
                 product_option.append({'color': color, 'size': size})
-                user_size = {'height': '', 'weight': ''}
 
-                if review.get('userSize', None):
-                    for size in review['userSize']:
-                        if 'cm' in size:
-                            user_size['height'] = size
-                        else:
-                            user_size['weight'] = size
+            user_size = {'height': '', 'weight': ''}
+
+            for size in review.get('userSize', []):
+                if 'cm' in size:
+                    user_size['height'] = size
+                else:
+                    user_size['weight'] = size
 
             product_reviews['reviews'].append({
                 'contents': review.get('contents', None),
@@ -280,6 +281,13 @@ class TwentyNineScraper:
             })
 
         return product_reviews
+
+
+    def connect_to_mongodb(self):
+        self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
+                                          f"?retryWrites=true&w=majority&appName=Cluster")
+        self.db = self.client["products"]
+        self.collection = self.db["products"]
 
 
     def save_to_mongodb(self, product_info):
