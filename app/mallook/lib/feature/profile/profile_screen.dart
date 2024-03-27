@@ -22,6 +22,8 @@ class ProfileScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
+          centerTitle: true,
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.white,
           shadowColor: Colors.grey.shade600,
@@ -31,7 +33,13 @@ class ProfileScreen extends StatelessWidget {
             fontSize: Sizes.size24,
             fontWeight: FontWeight.bold,
           ),
-          title: const Text("프로필"),
+          title: const Text(
+            "프로필",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: Sizes.size20,
+            ),
+          ),
           actions: [
             // 쿠폰 버튼
             Stack(
