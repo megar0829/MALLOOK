@@ -36,14 +36,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsDetailDto> getProductDetail(String name, String cursor) {
-        List<Products> products = mongoProductsRepository.findByName(name);
-        return products.stream()
-                .map(ProductsDetailDto::toDto);
+    public Slice<ProductsListDto> getProductDetail(String name, String cursor) {
+        return productsCustomRepository.findByProductName(name, cursor);
     }
 
     @Override
-    public Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor) {
+    public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor) {
         return null;
     }
 

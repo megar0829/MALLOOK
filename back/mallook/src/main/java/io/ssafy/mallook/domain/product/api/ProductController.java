@@ -45,14 +45,15 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BaseResponse<Slice<ProductsDetailDto>>> getProductDetail(
+    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductDetail(
             @RequestParam String name,
             @RequestParam(required = false) String cursor,
             @RequestBody ProductHotKeywordDto hotKeywordDto) {
         cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
-        Supplier<Slice<ProductsDetailDto>> methodToCall = (hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
-                ? () -> productService.getProductDetail(name, cursor)
-                : () -> productService.getProductDetail(hotKeywordDto, cursor);
+        String finalCursor = cursor;
+        Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
+                ? () -> productService.getProductDetail(name, finalCursor)
+                : () -> productService.getProductDetail(hotKeywordDto, finalCursor);
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

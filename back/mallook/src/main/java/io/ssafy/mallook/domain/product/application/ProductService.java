@@ -17,9 +17,9 @@ import java.util.List;
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 
-    Slice<ProductsDetailDto> getProductDetail(String name, String cursor);
+    Slice<ProductsListDto> getProductDetail(String name, String cursor);
 
-    Slice<ProductsDetailDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor);
+    Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor);
 
     Long getLastProductId();
 

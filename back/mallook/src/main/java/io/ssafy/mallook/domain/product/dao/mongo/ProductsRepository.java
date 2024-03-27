@@ -14,6 +14,4 @@ import java.util.List;
 public interface ProductsRepository extends MongoRepository<Products, String>{
 
     Products findFirstByOrderByIdDesc();
-
-    List<Products> findByName(String name);
 }
