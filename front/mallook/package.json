@@ -11,6 +11,7 @@
   "dependencies": {
     "@egjs/react-infinitegrid": "^4.11.1",
     "@nextui-org/react": "^2.2.10",
+    "axios": "^1.6.8",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
     "framer-motion": "^11.0.8",
@@ -19,6 +20,7 @@
     "rc-progress": "^3.5.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-query": "^3.39.3",
     "sass": "^1.71.1"
   },
   "devDependencies": {

@@ -4,13 +4,13 @@ import Image from "next/image";
 
 import imgQr from "@/assets/img/icons/qr.png";
 import imgPhone from "@/assets/img/icons/phone.png";
+import {useParams} from "next/navigation";
 
 export const metadata = {
   title: "Home",
 };
 
 export default async function HomePage() {
-
   return (
     <div className={styles.container}>
       <div className={styles.leftDiv}>
