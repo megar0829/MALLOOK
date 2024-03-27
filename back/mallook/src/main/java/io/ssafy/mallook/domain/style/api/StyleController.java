@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
+import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 
 @RestController
@@ -55,13 +55,11 @@ public class StyleController {
     }
 
     @GetMapping("/world-cup")
-    public ResponseEntity<BaseResponse<List<StyleRes>>> getWorldCupList(
-            @AuthenticationPrincipal UserSecurityDTO principal
+    public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
     ) {
-        UUID id = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                styleService.getWorldCupList(id)
+                styleService.getWorldCupList()
         );
     }
 

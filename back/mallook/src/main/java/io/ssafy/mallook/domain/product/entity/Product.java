@@ -61,4 +61,7 @@ public class Product extends BaseEntity {
     private String code;
 
     private String url;
+
+    @ElementCollection
+    private List<String> keywordList;
 }

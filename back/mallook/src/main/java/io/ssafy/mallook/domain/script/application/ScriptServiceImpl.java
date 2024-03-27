@@ -10,6 +10,7 @@ import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
-
-import static java.util.stream.Collectors.joining;
 
 @Service
 @RequiredArgsConstructor
@@ -57,12 +56,14 @@ public class ScriptServiceImpl implements ScriptService {
     @Transactional
     public void createScript(ScriptCreatDto scriptCreateDto, UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
+        // ChatGPT에 질문 전달
         String scriptContent = String.join(", ", scriptCreateDto.keywordsList());
         QuestionDto questionDto = QuestionDto.builder()
                 .content(scriptContent)
                 .build();
         GptResponseDto gptResponseDto = gptService.askQuestion(questionDto);
-        scriptRepository.save(scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer()));
+        Script script = scriptCreateDto.toEntity(proxyMember, gptResponseDto.answer());
+        scriptRepository.save(script);
     }
 
     @Override

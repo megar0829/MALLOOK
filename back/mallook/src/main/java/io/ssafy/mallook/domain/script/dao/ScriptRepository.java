@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,6 +19,10 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
     Long findMaxId();
 
     Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
+
+    @Query("SELECT s FROM Script s ORDER BY s.totalLike DESC limit 50")
+    List<Script> findTop50ScriptsOrderByTotalLikeDesc();
+
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("update Script s set s.status = false where s.id in :deleteList and s.status = true ")
