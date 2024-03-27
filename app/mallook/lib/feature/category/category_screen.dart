@@ -60,11 +60,12 @@ class _CategoryScreenState extends State<CategoryScreen> {
   int _productPage = 0;
   bool _isProductLoading = false;
   String primary = categorys.keys.first;
-  String secondary = "";
+  late String secondary = "";
 
   @override
   void initState() {
     super.initState();
+    secondary = categorys[primary]!.first;
 
     _loadMoreProducts();
     _scrollController.addListener(() {
