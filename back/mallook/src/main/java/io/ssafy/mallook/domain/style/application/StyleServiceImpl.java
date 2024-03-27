@@ -56,6 +56,11 @@ public class StyleServiceImpl implements StyleService {
     public List<StyledWorldCupDto> getWorldCupList() {
         List<Style> top50StyleList = styleRepository.findTop50StylesOrderByTotalLikeDesc();
         Collections.shuffle(top50StyleList);
+//        for (Style style : top50StyleList) {
+//            for (StyleProduct sp : style.getStyleProductList()) {
+//                System.out.println("상품pk: " + sp.getProduct());
+//            }
+//        }
 
         return top50StyleList.stream()
                 .map(this::toDto)
@@ -118,9 +123,12 @@ public class StyleServiceImpl implements StyleService {
                 .memberNickname(style.getMember().getNickname())
                 .urlList(style.getStyleProductList()
                         .stream()
-                        .map(ele -> productsRepository.findById(ele.getProduct())
-                                .map(Products::getImage)
-                                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT)))
+                        .map(ele -> {
+                            System.out.println(ele.getProduct());
+                            return productsRepository.findById(ele.getProduct())
+                                    .map(Products::getImage)
+                                    .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT));
+                        })
                         .collect(toList()))
                 .keywordList(style.getStyleProductList()
                         .stream()
