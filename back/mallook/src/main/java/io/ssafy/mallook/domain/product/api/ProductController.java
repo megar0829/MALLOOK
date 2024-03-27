@@ -48,10 +48,10 @@ public class ProductController {
     public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductDetail(
             @RequestParam String name,
             @RequestParam(required = false) String cursor,
-            @RequestBody ProductHotKeywordDto hotKeywordDto) {
+            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
         cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
         String finalCursor = cursor;
-        Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
+        Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto == null || hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
                 ? () -> productService.getProductDetail(name, finalCursor)
                 : () -> productService.getProductDetail(hotKeywordDto, finalCursor);
 
