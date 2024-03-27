@@ -1,7 +1,7 @@
 class Script {
   Script({
-    this.id,
-    this.name,
+    required this.id,
+    required this.name,
     this.heartCount,
     this.imageUrl,
   });

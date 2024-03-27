@@ -58,7 +58,7 @@ class _ProductImgWidgetState extends State<ProductImgWidget> {
                     controller: _imageController,
                     itemBuilder: (context, index) => Image.network(
                       filterQuality: FilterQuality.high,
-                      widget.product.image!,
+                      widget.product.image!, // TODO: 상품 이미지 리스트
                       fit: BoxFit.cover,
                     ),
                     itemCount: _pageLength,
