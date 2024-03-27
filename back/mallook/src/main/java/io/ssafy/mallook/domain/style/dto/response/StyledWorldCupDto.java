@@ -32,26 +32,4 @@ public record StyledWorldCupDto(
         @Schema(description = "스타일을 대표하는 키워드 리스트")
         List<String> keywordList
 ) {
-
-    public static StyledWorldCupDto toDto(Style style) {
-        return StyledWorldCupDto.builder()
-                .id(style.getId())
-                .name(style.getName())
-                .heartCount(style.getHeartCount())
-                .memberNickname(style.getMember().getNickname())
-                .urlList(style.getStyleProductList()
-                        .stream()
-                        .map(ele -> ele.getProduct().getUrl())
-                        .collect(toList()))
-                .keywordList(style.getStyleProductList()
-                        .stream()
-                        .flatMap(ele -> ele.getProduct()
-                                .getKeywordList()
-                                .stream())
-                        .collect(toCollection(LinkedHashSet::new))
-                        .stream()
-                        .limit(5)
-                        .collect(toList()))
-                .build();
-    }
 }

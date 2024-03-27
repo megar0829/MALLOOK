@@ -6,7 +6,7 @@ public record ProductsListDto (
         String subCategory,
         String gender,
         String name,
-        Long price,
+        Integer price,
         String brandName,
         List<String> size,
         Integer fee,
