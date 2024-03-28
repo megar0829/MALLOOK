@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/home/widgets/rank_script_box.dart';
 import 'package:mallook/feature/script/script_screen.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class HomeOthersScreen extends StatefulWidget {
   const HomeOthersScreen({super.key});

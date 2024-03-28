@@ -6,9 +6,9 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/home/widgets/my_main_script_widget.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class HomeMyScreen extends StatefulWidget {
   const HomeMyScreen({super.key});
