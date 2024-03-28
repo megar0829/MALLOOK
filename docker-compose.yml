@@ -16,7 +16,6 @@ services:
     container_name: mallook-batch
     image: duckbill413/mallook-docker-batch:latest
     environment:
-      - SPRING_PROFILES_ACTIVE=batch
       - TZ=Asia/Seoul
     networks:
       - mallook_net
