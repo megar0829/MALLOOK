@@ -11,9 +11,9 @@ import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
 class CartScreen extends StatefulWidget {
-  final List<CartItem>? carItem;
+  final List<CartItem>? cartItems;
 
-  const CartScreen({super.key, this.carItem});
+  const CartScreen({super.key, this.cartItems});
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -31,7 +31,7 @@ class _CartScreenState extends State<CartScreen> {
   @override
   void initState() {
     super.initState();
-    _cartItems = widget.carItem ?? cartController.items;
+    _cartItems = widget.cartItems ?? cartController.items;
     for (var item in _cartItems) {
       item.selected = true;
     }
@@ -128,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => OrderScreen(
-          cartItem: _cartItems,
+          orderItems: _cartItems,
         ),
       ),
     );

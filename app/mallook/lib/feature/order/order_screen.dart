@@ -1,15 +1,265 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:mallook/constants/gaps.dart';
+import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/coupon/model/coupon_model.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/widget/home_icon_button.dart';
 
-class OrderScreen extends StatelessWidget {
-  final List<CartItem> cartItem;
+class OrderScreen extends StatefulWidget {
+  final List<CartItem> orderItems;
 
-  const OrderScreen({super.key, required this.cartItem});
+  const OrderScreen({super.key, required this.orderItems});
+
+  @override
+  State<OrderScreen> createState() => _OrderScreenState();
+}
+
+class _OrderScreenState extends State<OrderScreen> {
+  final List<Coupon> _coupons = [];
+  static NumberFormat numberFormat = NumberFormat.currency(
+    locale: 'ko_KR',
+    symbol: '',
+  );
+
+  void _doOrderProcess() {
+    print('order');
+  }
+
+  bool _isOrderAble() {
+    return true;
+  }
+
+  int _getTotalQuantity() {
+    int total = 0;
+    for (var item in widget.orderItems) {
+      total += item.quantity;
+    }
+    return total;
+  }
+
+  int _getTotalPrice() {
+    int total = 0;
+    for (var item in widget.orderItems) {
+      total += item.quantity * item.product.price;
+    }
+    return total;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.white,
+        elevation: 1,
+        shadowColor: Colors.grey.shade400,
+        centerTitle: true,
+        title: const Text('주문하기'),
+        titleTextStyle: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: Sizes.size18,
+        ),
+        actions: const [
+          HomeIconButton(),
+          Gaps.h20,
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size12,
+            horizontal: Sizes.size24,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.gift,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  Gaps.h10,
+                  const Text(
+                    '상품 목록',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size18,
+                    ),
+                  ),
+                ],
+              ),
+              Gaps.v10,
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.orderItems.length,
+                itemBuilder: (context, index) => Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size10,
+                    horizontal: Sizes.size16,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade300,
+                      width: Sizes.size1,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      Sizes.size18,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.network(
+                            widget.orderItems[index].product.image!,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                          Gaps.h10,
+                          Expanded(
+                            child: SizedBox(
+                              height: 120,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    widget.orderItems[index].product.name,
+                                    maxLines: 5,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: Sizes.size16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: Sizes.size6,
+                                      horizontal: Sizes.size18,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '수량 ${widget.orderItems[index].quantity}',
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: Sizes.size16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          widget.orderItems[index].size,
+                                          maxLines: 3,
+                                          style: TextStyle(
+                                            color: Colors.grey.shade700,
+                                            fontSize: Sizes.size16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        '${numberFormat.format(widget.orderItems[index].product.price * widget.orderItems[index].quantity)} ₩',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .primaryColorDark,
+                                          fontSize: Sizes.size18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+                separatorBuilder: (context, index) => Gaps.v10,
+              ),
+              Gaps.v14,
+              const Divider(),
+              Gaps.v14,
+              Row(
+                children: [
+                  FaIcon(
+                    FontAwesomeIcons.ticket,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  Gaps.h10,
+                  const Text(
+                    '쿠폰 선택',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size18,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        elevation: 1,
+        shadowColor: Colors.grey.shade600,
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        padding: const EdgeInsets.symmetric(
+          vertical: Sizes.size12,
+          horizontal: Sizes.size20,
+        ),
+        child: AnimatedContainer(
+          decoration: BoxDecoration(
+            color: _isOrderAble() ? Colors.blueAccent : Colors.grey,
+            borderRadius: BorderRadius.circular(
+              Sizes.size18,
+            ),
+          ),
+          duration: const Duration(
+            milliseconds: 500,
+          ),
+          child: ListTile(
+            textColor: Colors.white,
+            titleTextStyle: const TextStyle(
+              fontSize: Sizes.size20,
+              fontWeight: FontWeight.bold,
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("${_getTotalQuantity()}개"),
+                const Text("|"),
+                Text("${numberFormat.format(_getTotalPrice())} ₩"),
+                Gaps.h20,
+                const Text('구매하기'),
+                const SizedBox.shrink(),
+              ],
+            ),
+            onTap: _doOrderProcess,
+          ),
+        ),
+      ),
     );
   }
 }

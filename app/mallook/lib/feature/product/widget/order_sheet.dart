@@ -69,7 +69,7 @@ class _OrderSheetState extends State<OrderSheet> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => CartScreen(
-          carItem: _cartItems,
+          cartItems: _cartItems,
         ),
       ),
     );

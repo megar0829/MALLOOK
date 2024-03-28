@@ -51,7 +51,7 @@ class _ScriptScreenState extends State<ScriptScreen>
   }
 
   void _loadMoreProducts() async {
-    List<String> keywords = ["예쁜", "섹시"];
+    List<String> keywords = ["예쁜", "섹시"]; // TODO: script keyword
     if (!_isProductLoading && keywords.isNotEmpty) {
       if (mounted) {
         setState(() {
@@ -64,7 +64,6 @@ class _ScriptScreenState extends State<ScriptScreen>
             _products.addAll(loadedProducts);
             _productPage++;
             _isProductLoading = false;
-            print('sofnsofn ${_products.length}');
           });
         }
       }
