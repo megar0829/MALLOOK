@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 import java.util.UUID;
 
+import static java.util.Objects.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/styles/hearts")
@@ -34,7 +36,7 @@ public class StyleHeartController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = !Objects.isNull(cursor) ? cursor : styleHeartService.findMaxHeartId();
+        cursor = !isNull(cursor) ? cursor : styleHeartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

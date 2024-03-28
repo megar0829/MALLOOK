@@ -18,6 +18,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.ssafy.mallook.domain.product.entity.QProduct.product;
+import static java.util.Objects.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -49,10 +50,10 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository {
     }
 
     private BooleanExpression mainCategoryEq(MainCategory mainCategoryEq) {
-        return !Objects.isNull(mainCategoryEq) ? product.mainCategory.eq(mainCategoryEq) : Expressions.asBoolean(true).isTrue();
+        return !isNull(mainCategoryEq) ? product.mainCategory.eq(mainCategoryEq) : Expressions.asBoolean(true).isTrue();
     }
 
     private BooleanExpression subCategoryEq(SubCategory subCategoryEq) {
-        return !Objects.isNull(subCategoryEq) ? product.subCategory.eq(subCategoryEq) : Expressions.asBoolean(true).isTrue();
+        return !isNull(subCategoryEq) ? product.subCategory.eq(subCategoryEq) : Expressions.asBoolean(true).isTrue();
     }
 }

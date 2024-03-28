@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
+import static java.util.Objects.*;
+
 @Repository
 @RequiredArgsConstructor
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
@@ -27,10 +29,10 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
                 .with(pageable);
 
-        if (!Objects.isNull(mainCategory)) {
+        if (!isNull(mainCategory)) {
             query.addCriteria(Criteria.where("mainCategory").is(mainCategory));
         }
-        if (!Objects.isNull(subCategory)) {
+        if (!isNull(subCategory)) {
             query.addCriteria(Criteria.where("subCategory").is(subCategory));
         }
 
@@ -48,7 +50,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
-        if (!Objects.isNull(cursor) && !cursor.isEmpty()) {
+        if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 
@@ -67,7 +69,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         List<String> keywords = hotKeywordDto.hotKeywordList();
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
 
-        if (!Objects.isNull(cursor) && !cursor.isEmpty()) {
+        if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 

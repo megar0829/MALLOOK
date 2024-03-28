@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 import java.util.UUID;
 
+import static java.util.Objects.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/scripts/hearts")
@@ -34,7 +36,7 @@ public class ScriptHeartController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = !Objects.isNull(cursor) ? cursor : scriptHeartService.findMaxHeartId();
+        cursor = !isNull(cursor) ? cursor : scriptHeartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
