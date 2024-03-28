@@ -14,6 +14,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -47,7 +48,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
-        if (cursor != null && !cursor.isEmpty()) {
+        if (!Objects.isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 
@@ -66,7 +67,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         List<String> keywords = hotKeywordDto.hotKeywordList();
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
 
-        if (cursor != null && !cursor.isEmpty()) {
+        if (!Objects.isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 
