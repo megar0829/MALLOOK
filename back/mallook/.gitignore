@@ -292,4 +292,4 @@ gradle-app.setting
 /src/main/resources/application-local.yml
 /src/main/resources/application-redis.yml
 /src/main/resources/application-test.yml
-/src/main/resources/application-shed.yml
+/src/main/resources/application-batch.yml
