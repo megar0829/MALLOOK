@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/order/order_screen.dart';
 import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
@@ -36,10 +37,6 @@ class _CartScreenState extends State<CartScreen> {
         break;
       }
     }
-    // if (_cartItems.isEmpty) {
-    //   print('empty cart');
-    //   goBack(context);
-    // }
   }
 
   void goBack(BuildContext context) {
@@ -101,10 +98,20 @@ class _CartScreenState extends State<CartScreen> {
     return totalQuantity;
   }
 
-  void _moveToProductPage(Product product) {
+  void _moveToProductScreen(Product product) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ProductScreen(product: product),
+      ),
+    );
+  }
+
+  void _moveToOrderScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OrderScreen(
+          cartItem: _cartItems,
+        ),
       ),
     );
   }
@@ -271,7 +278,8 @@ class _CartScreenState extends State<CartScreen> {
                   const Divider(),
                   Gaps.v8,
                   GestureDetector(
-                    onTap: () => _moveToProductPage(_cartItems[index].product),
+                    onTap: () =>
+                        _moveToProductScreen(_cartItems[index].product),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
