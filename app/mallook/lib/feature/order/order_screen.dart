@@ -5,8 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/model/coupon_model.dart';
-import 'package:mallook/feature/order/OrderedScreen.dart';
+import 'package:mallook/feature/order/ordered_screen.dart';
 import 'package:mallook/feature/order/widget/cart_coupon_dropdown_widget.dart';
+import 'package:mallook/feature/order/widget/order_product_widget.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/custom_circular_wait_bold_widget.dart';
@@ -231,100 +232,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: widget.orderItems.length,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Sizes.size10,
-                    horizontal: Sizes.size16,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.grey.shade300,
-                      width: Sizes.size1,
-                    ),
-                    borderRadius: BorderRadius.circular(
-                      Sizes.size18,
-                    ),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.network(
-                            widget.orderItems[index].product.image!,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                          Gaps.h10,
-                          Expanded(
-                            child: SizedBox(
-                              height: 120,
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    widget.orderItems[index].product.name,
-                                    maxLines: 5,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: Sizes.size16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: Sizes.size6,
-                                      horizontal: Sizes.size18,
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '수량 ${widget.orderItems[index].quantity}',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade700,
-                                            fontSize: Sizes.size16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          widget.orderItems[index].size,
-                                          maxLines: 3,
-                                          style: TextStyle(
-                                            color: Colors.grey.shade700,
-                                            fontSize: Sizes.size16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        '${numberFormat.format(widget.orderItems[index].product.price * widget.orderItems[index].quantity)} ₩',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .primaryColorDark,
-                                          fontSize: Sizes.size18,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  ),
+                itemBuilder: (context, index) => OrderProductWidget(
+                  cartItem: widget.orderItems[index],
                 ),
                 separatorBuilder: (context, index) => Gaps.v10,
               ),
