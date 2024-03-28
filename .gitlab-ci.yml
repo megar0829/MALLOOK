@@ -105,22 +105,17 @@ build-batch:
 package-batch:
   image: docker:latest
   stage: package-batch
-  # service 설정 (설정한 image가 작업이 이루어지는 동안 실행되는 docker 이미지)
   services:
     - docker:dind
-    # script가 실행 전 수행 될 script
   before_script:
-    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD # GitLab Container Registry에 로그인
-  # 실행될 script 설정
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
     - cd ./back/mallook
     - echo [INFO] BATCH_IMAGE_NAME       $BATCH_IMAGE_NAME
-    - # batchDockerfile로 build
     - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME -f batchDockerfile .
-    - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest # Container Registry에 image push
+    - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest
   after_script:
-    - docker logout # GitLab Container Registry 로그아웃
-  # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
+    - docker logout
   only:
     - master
     - release
