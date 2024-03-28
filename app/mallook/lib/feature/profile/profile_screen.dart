@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/profile/widget/coupon_icon_button.dart';
 import 'package:mallook/feature/profile/widget/fashion_tile_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_controller_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_widget.dart';
@@ -30,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
           elevation: 1,
           titleTextStyle: const TextStyle(
             color: Colors.black,
-            fontSize: Sizes.size24,
+            fontSize: Sizes.size18,
             fontWeight: FontWeight.bold,
           ),
           title: const Text(
@@ -40,48 +41,12 @@ class ProfileScreen extends StatelessWidget {
               fontSize: Sizes.size20,
             ),
           ),
-          actions: [
+          actions: const [
             // 쿠폰 버튼
-            Stack(
-              children: [
-                const Padding(
-                  padding: EdgeInsets.only(
-                    left: Sizes.size10,
-                    top: Sizes.size4,
-                  ),
-                  child: FaIcon(
-                    FontAwesomeIcons.ticket,
-                    size: Sizes.size24,
-                    color: Colors.black,
-                  ),
-                ),
-                Container(
-                  width: Sizes.size20,
-                  height: Sizes.size20,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: Theme.of(context).primaryColor,
-                      width: 0.5,
-                    ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '2',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: Sizes.size12,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
+            CouponIconButton(),
             Gaps.h8,
-            const CartIconButton(),
-            Gaps.h20,
+            CartIconButton(),
+            Gaps.h24,
           ],
         ),
         body: Padding(

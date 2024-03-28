@@ -230,7 +230,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
             ),
             Gaps.h10,
             const CartIconButton(),
-            Gaps.h20,
+            Gaps.h24,
           ],
         ),
         body: SingleChildScrollView(

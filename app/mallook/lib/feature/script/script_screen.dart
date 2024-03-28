@@ -92,7 +92,7 @@ class _ScriptScreenState extends State<ScriptScreen>
           HomeIconButton(),
           Gaps.h10,
           CartIconButton(),
-          Gaps.h20,
+          Gaps.h24,
         ],
       ),
       body: FutureBuilder(

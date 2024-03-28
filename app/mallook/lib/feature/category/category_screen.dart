@@ -139,7 +139,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ),
           actions: const [
             CartIconButton(),
-            Gaps.h20,
+            Gaps.h24,
           ],
           bottom: PreferredSize(
               preferredSize: const Size.fromHeight(
