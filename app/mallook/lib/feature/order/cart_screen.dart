@@ -8,16 +8,16 @@ import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
-class OrderScreen extends StatefulWidget {
+class CartScreen extends StatefulWidget {
   final List<CartItem>? carItem;
 
-  const OrderScreen({super.key, this.carItem});
+  const CartScreen({super.key, this.carItem});
 
   @override
-  State<OrderScreen> createState() => _OrderScreenState();
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> {
+class _CartScreenState extends State<CartScreen> {
   late List<CartItem> _cartItems;
   final CartController cartController = Get.put(CartController());
   static NumberFormat numberFormat = NumberFormat.currency(

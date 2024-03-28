@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/order/order_screen.dart';
+import 'package:mallook/feature/order/cart_screen.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
@@ -68,7 +68,7 @@ class _OrderSheetState extends State<OrderSheet> {
     }
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => OrderScreen(
+        builder: (context) => CartScreen(
           carItem: _cartItems,
         ),
       ),
@@ -101,7 +101,7 @@ class _OrderSheetState extends State<OrderSheet> {
         icon: FontAwesomeIcons.arrowRight,
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => const OrderScreen(),
+            builder: (context) => const CartScreen(),
           ),
         ),
       ),

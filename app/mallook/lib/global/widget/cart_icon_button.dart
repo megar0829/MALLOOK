@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/order/order_screen.dart';
+import 'package:mallook/feature/order/cart_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 
 class CartIconButton extends StatefulWidget {
@@ -17,7 +17,7 @@ class _CartIconButtonState extends State<CartIconButton> {
   void _moveToOrderScreen() {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const OrderScreen(),
+        builder: (context) => const CartScreen(),
       ),
     );
   }
