@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 @Component
 public class BatchScheduler {
 
-    private final JobLauncher jobLauncher;
+    private final  JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @Scheduled(cron = "0 0 0 * * 1")
+    @Scheduled(cron= "0 0 0 * * 1")
     public void runJob() {
         String time = LocalDateTime.now().toString();
         try {
@@ -35,6 +35,5 @@ public class BatchScheduler {
                  JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

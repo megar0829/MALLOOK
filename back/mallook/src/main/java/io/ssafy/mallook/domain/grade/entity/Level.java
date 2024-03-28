@@ -1,6 +1,8 @@
 package io.ssafy.mallook.domain.grade.entity;
 
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.List;
 
 public enum Level {
     LEVEL7(1000001, 4L, null),
@@ -20,7 +22,10 @@ public enum Level {
         this.discountRate = discountRate;
         this.nextLevel = nextLevel;
     }
-
+    public static List<Integer> getExpRange(Level level) {
+        List<Integer> rslt = List.of(level.nextExp, level.nextLevel.nextExp-1);
+        return rslt;
+    }
     public static boolean availableLevelUp(Level level, Long exp) {
         if (Objects.isNull(level)) {
             return false;

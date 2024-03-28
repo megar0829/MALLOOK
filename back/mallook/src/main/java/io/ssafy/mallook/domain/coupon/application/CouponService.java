@@ -10,4 +10,7 @@ import java.util.UUID;
 public interface CouponService {
     Slice<CouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId);
     Slice<CouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor);
+
+    void saveNewCoupon();
+    void decreaseCoupon(String key, UUID memberId);
 }

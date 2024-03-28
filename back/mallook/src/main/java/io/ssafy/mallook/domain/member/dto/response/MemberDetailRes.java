@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.member.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 
 @Schema(description = "회원 정보 조회시 응답 DTO")
 public record MemberDetailRes(
@@ -17,6 +18,8 @@ public record MemberDetailRes(
         Long point,
         @Schema(description="경험치")
         Long exp,
+        @Schema(description = "경험치 범위")
+        List<Integer> expRange,
         @Schema(description="시도")
         String city,
         @Schema(description = "시군구")

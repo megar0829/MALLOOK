@@ -1,5 +1,8 @@
 package io.ssafy.mallook.domain.member.application;
 
+import io.ssafy.mallook.domain.grade.dao.GradeRepository;
+import io.ssafy.mallook.domain.grade.entity.Grade;
+import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
 import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService{
     private final MemberRepository memberRepository;
+    private final GradeRepository gradeRepository;
     public static final List<String> nicknameAdjective = List.of("예쁜", "화난", "귀여운", "배고픈", "철학적인", "현학적인",
             "슬픈","푸른","비싼","밝은");
     public static final List<String> nicknameNoun = List.of("호랑이", "비버", "강아지", "부엉이", "여우", "치타",
@@ -34,6 +38,7 @@ public class MemberServiceImpl implements MemberService{
     public MemberDetailRes findMemberDetail(UUID memberId) {
         var memberDetail = memberRepository.findById(memberId)
                 .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        System.out.println("################" + memberDetail);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return new MemberDetailRes(memberDetail.getNickname(),
                 sdf.format(memberDetail.getBirth()),
@@ -41,6 +46,7 @@ public class MemberServiceImpl implements MemberService{
                 memberDetail.getPhone(),
                 memberDetail.getPoint(),
                 memberDetail.getExp(),
+                memberDetail.getGrade().getGradeRange(),
                 memberDetail.getAddress().getCity(),
                 memberDetail.getAddress().getDistrict(),
                 memberDetail.getAddress().getAddress(),
@@ -72,13 +78,16 @@ public class MemberServiceImpl implements MemberService{
                         .birth(sdf.parse(memberDetailReq.birth()))
                         .phone(memberDetailReq.phone())
                         .point(0L)
+                        .grade(Grade.builder()
+                                .member(Member.builder().id(memberId).build())
+                                .level(Level.LEVEL1)
+                                .build())
                         .exp(0L)
                         .address(new Address(memberDetailReq.city(),
                                 memberDetailReq.district(),
                                 memberDetailReq.address(),
                                 memberDetailReq.zipcode()))
                             .build();
-
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
             memberRepository.save(member);

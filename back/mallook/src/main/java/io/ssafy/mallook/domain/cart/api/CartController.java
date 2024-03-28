@@ -36,12 +36,9 @@ public class CartController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<CartDetailRes>>> findProductsInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page=0) Pageable pageable,
-            @RequestParam(required = false) Long cursor
+            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page=0) Pageable pageable
         ){
-
-        var result = Objects.nonNull(cursor)? cartService.findProductsInCart(pageable, userSecurityDTO.getId(), cursor)
-                :cartService.findProductsInCartFirst(pageable, userSecurityDTO.getId());
+        var result = cartService.findProductsInCart(pageable, userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result

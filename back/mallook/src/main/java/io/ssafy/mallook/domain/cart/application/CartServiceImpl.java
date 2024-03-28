@@ -25,39 +25,32 @@ import java.util.UUID;
 @Log4j2
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class CartServiceImpl implements CartService{
+public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
-    private  final CartProductRepository cartProductRepository;
+    private final CartProductRepository cartProductRepository;
     private final ProductRepository productRepository;
 
     @Override
-    public Slice<CartDetailRes> findProductsInCartFirst(Pageable pageable, UUID memberId) {
-        Cart cart = cartRepository.findMyCartByMember(new Member(memberId))
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        Long maxId = cartProductRepository.getMaxId(cart);
-        return cartRepository.findProductsInCart(pageable, memberId, maxId+1);
-    }
-
-    @Override
-    public Slice<CartDetailRes> findProductsInCart(Pageable pageable, UUID memberId, Long cursor) {
-        return cartRepository.findProductsInCart(pageable, memberId, cursor+1);
+    public Slice<CartDetailRes> findProductsInCart(Pageable pageable, UUID memberId) {
+        return cartRepository.findProductsInCart(pageable, memberId);
     }
 
     @Override
     @Transactional
     public void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq) {
-        Product product = productRepository.findById(cartInsertReq.productId()).orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        Product product = productRepository.findById(cartInsertReq.productId()).orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         Cart cart = cartRepository.findMyCartByMember(new Member(memberId)).orElse(new Cart());
-        var sameProductCnt = cart.getId() == null? cartInsertReq.count(): cartProductRepository.CountSameProductInCart(cart.getId(), cartInsertReq.productId())+ cartInsertReq.count();
+        var sameProductCnt = cart.getId() == null ? cartInsertReq.count() : cartProductRepository.CountSameProductInCart(cart.getId(), cartInsertReq.productId()) + cartInsertReq.count();
         // 수량, 색상 확인
-        if (product.getQuantity()< sameProductCnt|| ! product.getColor().equals(cartInsertReq.color()) ) {
+        if (product.getQuantity() < sameProductCnt || !product.getColor().equals(cartInsertReq.color())) {
             throw new BaseExceptionHandler(ErrorCode.BAD_REQUEST_ERROR);
         }
         // 카트 내 총계 계산 (totalFee , totalPrice)
-        var totalPrice = cart.getTotalPrice() == null ? cartInsertReq.count() * product.getPrice(): cartInsertReq.count() * product.getPrice()+ cart.getTotalPrice() ;
+        var totalPrice = cart.getTotalPrice() == null ? cartInsertReq.count() * product.getPrice() : cartInsertReq.count() * product.getPrice() + cart.getTotalPrice();
         var totalFee = cart.getTotalFee() == null ? cartInsertReq.fee() : cart.getTotalFee() + cartInsertReq.fee();
-        var totalCnt = cart.getTotalCount() == null ? cartInsertReq.count() : cart.getTotalCount() + cartInsertReq.count(); ;
-        
+        var totalCnt = cart.getTotalCount() == null ? cartInsertReq.count() : cart.getTotalCount() + cartInsertReq.count();
+        ;
+
         // 카트 저장 및 수정
         cart.setTotalPrice(totalPrice);
         cart.setTotalFee(totalFee);
@@ -79,13 +72,14 @@ public class CartServiceImpl implements CartService{
                 .build();
         cartProductRepository.save(cartProduct);
     }
+
     @Override
     @Transactional
     public void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq) {
         Cart cart = cartRepository.findMyCartByMember(new Member(memberId))
-                .orElseThrow(()->new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         CartProduct cartProduct = cartProductRepository.findById(cartDeleteReq.cartProductId())
-                .orElseThrow(()->new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         // 총계 계산
         cart.setTotalCount(cart.getTotalCount() - cartProduct.getProductCount());
         cart.setTotalFee(cart.getTotalFee() - cartProduct.getProductFee());

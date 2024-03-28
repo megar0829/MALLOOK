@@ -38,4 +38,6 @@ public class Products {
     private String detailHtml;
     @Field(name = "keywords")
     private List<String> keywords;
+    @Field(name = "reviews")
+    private Reviews reviews;
 }

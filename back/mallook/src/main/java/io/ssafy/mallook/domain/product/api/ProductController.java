@@ -15,10 +15,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +40,15 @@ public class ProductController {
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
         );
     }
+    @GetMapping("/detail")
+    public ResponseEntity<BaseResponse<Products>> getProductsDetail(
+            @RequestParam(name="id") String id) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                productService.getProductDetail(id)
+        );
+    }
+
 
     @GetMapping("/mysql")
     public ResponseEntity<BaseResponse<Slice<ProductListDto>>> getProductList(
