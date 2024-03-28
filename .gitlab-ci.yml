@@ -83,6 +83,7 @@ build-batch:
     - cd ./back/mallook # zooting-api server 위치로 이동
     - cd ./src/main/resources # resources 폴더 위치로 이동
     - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
+    - echo "$APPLICATION_TEST_YML" > "application-test.yml"
     - ls
     - echo [INFO] spring-batch server build
     - cd ../../.. # 프로젝트 폴더로 경로 이동
