@@ -1,8 +1,8 @@
 stages:
   - build
   - package
-  - build-sched
-  - package-sched
+  - build-batch
+  - package-batch
   - deploy
 
 build: # JOB 이름
@@ -74,16 +74,16 @@ package:
     - release
     - develop
 
-build-sched:
+build-batch:
   image: gradle:8.5.0-jdk17 # gradle - java 이미지 지정
   # stage 설정
-  stage: build-sched
+  stage: build-batch
   script:
     - echo [INFO] YML Settings
     - cd ./back/mallook
     - cd ./src/main/resources # resources 폴더 위치로 이동
     - echo "$APPLICATION_YML" > "application.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
-    - echo "$APPLICATION_SCHED_YML" > "application-sched.yml"
+    - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
     - echo "$APPLICATION_DEV_YML" > "application-dev.yml"
     - echo "$APPLICATION_LOCAL_YML" > "application-local.yml"
     - echo "$APPLICATION_OAUTH_YML" > "application-oauth.yml"
@@ -109,18 +109,18 @@ build-sched:
     - release
     - develop
 
-package-sched:
+package-batch:
   image: docker:latest
-  stage: package-sched
+  stage: package-batch
   services:
     - docker:dind
   before_script:
     - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
     - cd ./back/mallook
-    - echo [INFO] SCHED_IMAGE_NAME       $BATCH_IMAGE_NAME
-    - docker build -t $DOCKER_REGISTRY_USER/$SCHED_IMAGE_NAME . # Dockerfile로 build
-    - docker push $DOCKER_REGISTRY_USER/$SCHED_IMAGE_NAME:latest
+    - echo [INFO] BATCH_IMAGE_NAME       $BATCH_IMAGE_NAME
+    - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME . # Dockerfile로 build
+    - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest
   after_script:
     - docker logout
   only:
