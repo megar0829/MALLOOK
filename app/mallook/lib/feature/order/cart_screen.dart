@@ -7,6 +7,7 @@ import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/order/order_screen.dart';
 import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
 class CartScreen extends StatefulWidget {
@@ -32,10 +33,7 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     _cartItems = widget.carItem ?? cartController.items;
     for (var item in _cartItems) {
-      if (!item.selected) {
-        _isAllItemSelected = false;
-        break;
-      }
+      item.selected = true;
     }
   }
 
@@ -60,6 +58,15 @@ class _CartScreenState extends State<CartScreen> {
       }
     }
     setState(() {});
+  }
+
+  bool _isOrderAble() {
+    for (var item in _cartItems) {
+      if (item.selected) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // 선택되어 있는 상품 삭제
@@ -107,6 +114,17 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   void _moveToOrderScreen() {
+    List<CartItem> orderItem = [];
+    for (var item in _cartItems) {
+      if (!item.selected) continue;
+      orderItem.add(item);
+    }
+    if (orderItem.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(title: '주문하려는 상품이 없습니다.'),
+      );
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => OrderScreen(
@@ -371,33 +389,34 @@ class _CartScreenState extends State<CartScreen> {
           vertical: Sizes.size12,
           horizontal: Sizes.size20,
         ),
-        child: Container(
+        child: AnimatedContainer(
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
-            border: Border.all(
-              color: Colors.lightBlue,
-              width: 1,
-            ),
+            color: _isOrderAble() ? Colors.blueAccent : Colors.grey,
             borderRadius: BorderRadius.circular(
               Sizes.size18,
             ),
           ),
+          duration: const Duration(
+            milliseconds: 500,
+          ),
           child: ListTile(
-              textColor: Colors.white,
-              titleTextStyle: const TextStyle(
-                fontSize: Sizes.size20,
-                fontWeight: FontWeight.bold,
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text("${_getTotalQuantity()}개"),
-                  Text("${numberFormat.format(_getTotalPrice())} ₩"),
-                  Gaps.h20,
-                  const Text('구매하기'),
-                  const SizedBox.shrink(),
-                ],
-              )),
+            textColor: Colors.white,
+            titleTextStyle: const TextStyle(
+              fontSize: Sizes.size20,
+              fontWeight: FontWeight.bold,
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text("${_getTotalQuantity()}개"),
+                Text("${numberFormat.format(_getTotalPrice())} ₩"),
+                Gaps.h20,
+                const Text('구매하기'),
+                const SizedBox.shrink(),
+              ],
+            ),
+            onTap: _moveToOrderScreen,
+          ),
         ),
       ),
     );
