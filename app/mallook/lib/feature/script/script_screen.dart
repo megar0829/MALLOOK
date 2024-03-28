@@ -5,11 +5,11 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/script/widget/script_img_widget.dart';
 import 'package:mallook/feature/script/widget/script_product_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
 class ScriptScreen extends StatefulWidget {

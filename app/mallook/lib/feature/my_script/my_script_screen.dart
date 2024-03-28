@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/script.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/my_script/api/my_script_api_service.dart';
 import 'package:mallook/feature/my_script/widget/my_script_list_box.dart';
 import 'package:mallook/feature/script/script_screen.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class MyScriptScreen extends StatefulWidget {
   const MyScriptScreen({super.key});
