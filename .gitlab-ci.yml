@@ -1,8 +1,8 @@
 stages:
   - build
   - package
-#  - build-batch
-#  - package-batch
+  - build-batch
+  - package-batch
   - deploy
 
 build: # JOB 이름
