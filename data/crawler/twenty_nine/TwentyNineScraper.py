@@ -2,6 +2,8 @@ import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import re
 import os
@@ -48,15 +50,15 @@ class TwentyNineScraper:
         # 카테고리별로 상품 2개만 조회 후 res의 productsTotalCount를 저장
         response = requests.get(url, params=params)
         try:
-            response = requests.get(url)
             response.raise_for_status()
         except requests.exceptions.HTTPError as http_err:
             print(f'HTTP error occurred: {http_err}')
         except Exception as err:
             print(f'Other error occurred: {err}')
             return
-
+        
         results = response.json()
+
         params['count'] = results.get('data', {}).get('productsTotalCount', 0)
 
         # 전체 상품 조회
@@ -75,8 +77,8 @@ class TwentyNineScraper:
             itemNo = product.get('itemNo', None)
 
             # 이미 저장된 상품인지 확인
-            # if self.check_if_product_in_mongodb(itemNo):
-            #     continue
+            if self.check_if_product_in_mongodb(itemNo):
+                continue
 
             reviewCount = product.get('reviewCount', None)
             print(f"{subCategory}({itemNo}) 크롤링 중...")
@@ -117,7 +119,6 @@ class TwentyNineScraper:
 
 
     def crawling_twentyninecm_product_info(self, itemNo):
-        print(itemNo, '!!!!!!!!!!!!!!!!!!!!!')
         detail_info = {'color': [], 'size': [], 'detail_images': [], 'detail_html': ''}
         url = f'https://product.29cm.co.kr/catalog/{itemNo}'
 
@@ -130,7 +131,12 @@ class TwentyNineScraper:
             print(f'Other error occurred: {err}')
             return
 
-        self.driver.get(url)
+        self.driver.implicitly_wait(10)
+
+        try:
+            self.driver.get(url)
+        except:
+            return
 
         # color 및 size 옵션 입력 요소 찾기
         i = 0
@@ -155,11 +161,10 @@ class TwentyNineScraper:
                     option_name = option_mapping[option_name]
 
                 # 옵션 목록을 text로 변환한 후 저장
+                option_values = list(map(lambda x: x.text, li_elements[1:]))
                 if option_name in ('color', 'size'):
-                    option_values = list(map(lambda x: x.text, li_elements[1:]))
                     detail_info[option_name] = option_values
                 elif option_name == 'color:size':
-                    option_values = list(map(lambda x: x.text, li_elements[1:]))
                     color_set = set()
                     size_set = set()
                     for option_value in option_values:
@@ -168,6 +173,8 @@ class TwentyNineScraper:
                         size_set.add(size)
                     detail_info['color'] = list(color_set)
                     detail_info['size'] = list(size_set)
+                elif 'color' in option_name:
+                    detail_info['color'] = option_values
                 else:
                     pass
 
@@ -263,7 +270,7 @@ class TwentyNineScraper:
                 # 색상과 사이즈 정보를 option 딕셔너리에 할당
                 product_option.append({'color': color, 'size': size})
 
-            user_size = {'height': '', 'weight': ''}
+            user_size = {'height': None, 'weight': None }
 
             for size in review.get('userSize', []):
                 if 'cm' in size:
@@ -276,7 +283,7 @@ class TwentyNineScraper:
                 'created_at': review.get('insertTimestamp', None),
                 'images': images,
                 'point': review.get('point', None),
-                'productOption': product_option,
+                'product_option': product_option,
                 'userSize': user_size
             })
 
@@ -300,4 +307,5 @@ class TwentyNineScraper:
 
     def check_if_product_in_mongodb(self, product_id):
         result = self.collection.find_one({'product_id': product_id})
+
         return result is not None
