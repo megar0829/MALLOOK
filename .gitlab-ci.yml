@@ -84,8 +84,12 @@ build-batch:
     - cd ./src/main/resources # resources 폴더 위치로 이동
     - echo "$APPLICATION_YML" > "application.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
     - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
+    - echo "$APPLICATION_YML" > "application.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
+    - echo "$APPLICATION_DEV_YML" > "application-dev.yml"
+    - echo "$APPLICATION_LOCAL_YML" > "application-local.yml"
     - echo "$APPLICATION_OAUTH_YML" > "application-oauth.yml"
     - echo "$APPLICATION_REDIS_YML" > "application-redis.yml"
+    - echo "$APPLICATION_TEST_YML" > "application-test.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
     - echo "$APPLICATION_AWS_YML" > "application-aws.yml"
     - ls
     - echo [INFO] spring-batch server build
