@@ -13,8 +13,8 @@ services:
       - /home/ec2-user/logs:/logs
 
   mallook-batch:
-    container_name: mallook-batch
-    image: duckbill413/mallook-docker-batch:latest
+    container_name: mallook-sched
+    image: duckbill413/mallook-docker-sched:latest
     environment:
       - TZ=Asia/Seoul
     networks:
