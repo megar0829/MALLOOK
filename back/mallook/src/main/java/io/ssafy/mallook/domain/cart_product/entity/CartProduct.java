@@ -2,17 +2,12 @@ package io.ssafy.mallook.domain.cart_product.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.cart.entity.Cart;
-import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.List;
 
 @Getter
 @Builder

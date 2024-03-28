@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.List;
 
 public interface MemberRepository extends JpaRepository<Member, UUID> {
     @Query("""
@@ -23,5 +23,6 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     Optional<Member> findByPhone(String phone);
 
     boolean existsByNicknameTag(String nickname);
+
     List<Member> findMembersByGrade(Grade grade);
 }

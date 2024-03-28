@@ -1,11 +1,9 @@
 package io.ssafy.mallook.domain.coupon.application;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
-import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
-import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
 import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
@@ -26,17 +24,18 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Slf4j
-public class CouponServiceImpl implements CouponService{
+public class CouponServiceImpl implements CouponService {
     private final CouponRepository couponRepository;
     private final MemberCouponRepository memberCouponRepository;
     private final RedissonClient redissonClient;
     public static final Integer couponStock = 100;  //todo: redis에 있는 숫자로 판단? 아니면 따로
     public static final Integer outOfStock = 0;
     public static final String PURCHASED_COUPON_SET_KEY = "PURCHASED_COUPON_SET_KEY";
+
     @Override
     public Slice<CouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId) {
         Long maxId = memberCouponRepository.getMaxId(memberId);
-        return couponRepository.findAllByMemberId(pageable, memberId, maxId+1);
+        return couponRepository.findAllByMemberId(pageable, memberId, maxId + 1);
     }
 
     @Override
@@ -57,9 +56,11 @@ public class CouponServiceImpl implements CouponService{
         couponRepository.save(coupon);
         // couponId랑 stock을 redis에 저장해줘야할듯
     }
+
     public Integer availableCoupons(String key) {
         return (int) redissonClient.getBucket(key).get();
     }
+
     public void setCouponStock(String key, Integer quantity) {
         redissonClient.getBucket(key).set(quantity);
     }
@@ -68,12 +69,13 @@ public class CouponServiceImpl implements CouponService{
     private boolean userDuplicate(UUID memberId) {
         return redissonClient.getSet(PURCHASED_COUPON_SET_KEY).contains(memberId.toString());
     }
+
     @Override
     @Transactional
     public void decreaseCoupon(String key, UUID memberId) {
         // 같은 쿠폰이 재고보다 많이 발급되지 않도록
         // 한 사람 당 한번만 등록 가능 -> hash 사용
-        boolean usingLock ;
+        boolean usingLock;
         Long waitTime = 1L;
         Long leaseTime = 3L;
         final RLock lock = redissonClient.getLock(key);
@@ -95,10 +97,10 @@ public class CouponServiceImpl implements CouponService{
                 return;
             }
             log.info("쿠폰 발급 중 : {} - 현재 잔여 쿠폰 {} (수량 : {}개)", thread, key, currentStock);
-            setCouponStock(key, currentStock -1);
+            setCouponStock(key, currentStock - 1);
             memberCouponRepository.save(MemberCoupon.builder()
-                            .coupon(Coupon.builder().id(Long.parseLong(key)).build())
-                            .member(Member.builder().id(memberId).build())
+                    .coupon(Coupon.builder().id(Long.parseLong(key)).build())
+                    .member(Member.builder().id(memberId).build())
                     .build());
             redissonClient.getSet(PURCHASED_COUPON_SET_KEY).add(memberId.toString());
         } catch (InterruptedException e) {

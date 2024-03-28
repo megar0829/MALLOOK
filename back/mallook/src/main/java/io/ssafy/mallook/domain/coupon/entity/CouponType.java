@@ -5,5 +5,8 @@ public enum CouponType {
     RATIO("정률할인"),
     ;
     final String korean;
-    CouponType(String korean) {this.korean = korean;}
+
+    CouponType(String korean) {
+        this.korean = korean;
+    }
 }

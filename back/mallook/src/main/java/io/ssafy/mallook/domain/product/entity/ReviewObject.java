@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.product.entity;
 
 import lombok.Getter;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.List;

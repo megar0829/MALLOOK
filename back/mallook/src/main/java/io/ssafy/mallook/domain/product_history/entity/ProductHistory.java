@@ -2,7 +2,6 @@ package io.ssafy.mallook.domain.product_history.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.orders.entity.Orders;
-import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

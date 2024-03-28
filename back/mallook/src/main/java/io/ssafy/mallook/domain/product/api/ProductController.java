@@ -42,6 +42,7 @@ public class ProductController {
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
         );
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<Products>> getProductsDetail(
             @PathVariable("id") String id) {
@@ -50,9 +51,10 @@ public class ProductController {
                 productService.getMongoProductsDetail(id)
         );
     }
+
     @GetMapping("/reviews")
     public ResponseEntity<BaseResponse<Page<ReviewObject>>> getReviewList(
-            @RequestParam(name="id") String id,
+            @RequestParam(name = "id") String id,
             @PageableDefault(size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

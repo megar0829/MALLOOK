@@ -1,6 +1,8 @@
 package io.ssafy.mallook.domain.product.dto.response;
+
 import java.util.List;
-public record ProductsListDto (
+
+public record ProductsListDto(
         String id,
         String mainCategory,
         String subCategory,
@@ -15,5 +17,5 @@ public record ProductsListDto (
         String detailHtml,
         String code,
         String url
-){
+) {
 }

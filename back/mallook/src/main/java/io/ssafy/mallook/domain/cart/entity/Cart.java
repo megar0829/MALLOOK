@@ -4,8 +4,6 @@ import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;

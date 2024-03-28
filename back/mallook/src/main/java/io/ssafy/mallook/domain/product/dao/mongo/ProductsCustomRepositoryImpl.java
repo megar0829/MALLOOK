@@ -8,7 +8,10 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -16,16 +19,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
-import static com.mongodb.client.model.Projections.slice;
-import static org.springframework.data.mongodb.core.aggregation.Aggregation.match;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @Repository
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     @Autowired
     MongoTemplate mongoTemplate;
-
-    private String COLLECTION_NAME = "hiver";
+    private final String COLLECTION_NAME = "hiver";
 
     @Override
     public Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
@@ -64,15 +64,15 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     public Products getProductDetailWithLimitedReviews(String id) {
         AggregationOperation matchOperation = Aggregation.match(Criteria.where("_id").is(id));
         AggregationOperation projectOperation = Aggregation.project(
-                "main_category", "sub_category", "gender",
-                "name", "price", "color", "size", "brand_name", "fee",
-                "image", "code", "url", "tags", "detail_images", "detail_html",
-                "keywords")
+                        "main_category", "sub_category", "gender",
+                        "name", "price", "color", "size", "brand_name", "fee",
+                        "image", "code", "url", "tags", "detail_images", "detail_html",
+                        "keywords")
                 .and("reviews.count").as("reviews.count")
                 .and("reviews.average_point").as("reviews.average_point")
                 .and("reviews.reviews").slice(5).as("reviews.reviews");
         TypedAggregation<Products> aggregation = newAggregation(Products.class, matchOperation, projectOperation);
-        AggregationResults<Products> result =  mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
+        AggregationResults<Products> result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
         return result.getUniqueMappedResult();
     }
 
@@ -82,7 +82,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         AggregationOperation sliceOperation = Aggregation.project()
                 .and("reviews.count").as("reviews.count")
                 .and("reviews.average_point").as("reviews.average_point")
-                .and("reviews.reviews").slice(pageable.getPageSize(),(int) (pageable.getOffset())).as("reviews.reviews");
+                .and("reviews.reviews").slice(pageable.getPageSize(), (int) (pageable.getOffset())).as("reviews.reviews");
         TypedAggregation<Products> aggregation = Aggregation.newAggregation(Products.class, matchOperation, sliceOperation);
         AggregationResults<Products> result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
         Reviews reviews = Objects.requireNonNull(result.getUniqueMappedResult()).getReviews();

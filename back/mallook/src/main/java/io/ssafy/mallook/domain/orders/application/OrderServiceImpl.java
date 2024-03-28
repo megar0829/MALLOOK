@@ -4,8 +4,8 @@ import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.orders.dao.OrderRepository;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
 import io.ssafy.mallook.domain.orders.entity.Orders;
@@ -21,9 +21,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.UUID;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -68,20 +66,21 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(createDtoList.totalPrice())
                 .member(proxyMember)
                 .build());
-        // producthistory 저장
+        // producthistory 저장, 장바구니 삭제
         createDtoList.products().forEach((dto) -> {
             Products product = productsRepository.findById(dto.productId())
-                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
             productHistoryRepository.save(ProductHistory.builder()
-                            .productCount(dto.count())
-                            .productPrice(dto.price())
-                            .productName(product.getName())
-                            .productImage(product.getImage())
-                            .productSize(dto.size())
-                            .productColor(dto.color())
-                            .orders(order)
+                    .productCount(dto.count())
+                    .productPrice(dto.price())
+                    .productName(product.getName())
+                    .productImage(product.getImage())
+                    .productSize(dto.size())
+                    .productColor(dto.color())
+                    .orders(order)
                     .build());
         });
+
     }
 
     @Override

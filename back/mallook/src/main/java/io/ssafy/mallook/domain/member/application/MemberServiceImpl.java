@@ -26,18 +26,18 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class MemberServiceImpl implements MemberService{
+public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
     public static final List<String> nicknameAdjective = List.of("예쁜", "화난", "귀여운", "배고픈", "철학적인", "현학적인",
-            "슬픈","푸른","비싼","밝은");
+            "슬픈", "푸른", "비싼", "밝은");
     public static final List<String> nicknameNoun = List.of("호랑이", "비버", "강아지", "부엉이", "여우", "치타",
             "문어", "고양이", "미어캣", "다람쥐");
 
     @Override
     public MemberDetailRes findMemberDetail(UUID memberId) {
         var memberDetail = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         System.out.println("################" + memberDetail);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return new MemberDetailRes(memberDetail.getNickname(),
@@ -55,8 +55,8 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public NicknameRes makeRandomNickname() {
-        String randomName = nicknameAdjective.get((int)(Math.random()* nicknameAdjective.size()))
-                + nicknameNoun.get((int)(Math.random()*nicknameNoun.size()));
+        String randomName = nicknameAdjective.get((int) (Math.random() * nicknameAdjective.size()))
+                + nicknameNoun.get((int) (Math.random() * nicknameNoun.size()));
         String randomTag = RandomStringUtils.random(6, true, true);
         while (memberRepository.existsByNicknameTag(randomTag)) {
             randomTag = RandomStringUtils.random(6, true, true);
@@ -65,29 +65,28 @@ public class MemberServiceImpl implements MemberService{
     }
 
 
-
     @Override
     @Transactional
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Member member = Member.builder()
-                        .id(memberId)
-                        .nickname(memberDetailReq.nickname())
-                        .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
-                        .birth(sdf.parse(memberDetailReq.birth()))
-                        .phone(memberDetailReq.phone())
-                        .point(0L)
-                        .grade(Grade.builder()
-                                .member(Member.builder().id(memberId).build())
-                                .level(Level.LEVEL1)
-                                .build())
-                        .exp(0L)
-                        .address(new Address(memberDetailReq.city(),
-                                memberDetailReq.district(),
-                                memberDetailReq.address(),
-                                memberDetailReq.zipcode()))
-                            .build();
+                    .id(memberId)
+                    .nickname(memberDetailReq.nickname())
+                    .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
+                    .birth(sdf.parse(memberDetailReq.birth()))
+                    .phone(memberDetailReq.phone())
+                    .point(0L)
+                    .grade(Grade.builder()
+                            .member(Member.builder().id(memberId).build())
+                            .level(Level.LEVEL1)
+                            .build())
+                    .exp(0L)
+                    .address(new Address(memberDetailReq.city(),
+                            memberDetailReq.district(),
+                            memberDetailReq.address(),
+                            memberDetailReq.zipcode()))
+                    .build();
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
             memberRepository.save(member);
@@ -101,7 +100,7 @@ public class MemberServiceImpl implements MemberService{
     @Transactional
     public void updateNickname(UUID memberId, String nickname) {
         var member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         member.changeNickname(nickname);
         memberRepository.save(member);
     }

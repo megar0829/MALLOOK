@@ -10,7 +10,6 @@ import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
-import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
@@ -54,7 +53,7 @@ public class CartServiceImpl implements CartService {
         // 카트 저장 및 수정
         memberCart.setTotalPrice((long) totalPrice);
         memberCart.setTotalFee(totalFee);
-        memberCart.setTotalCount((long)totalCnt);
+        memberCart.setTotalCount((long) totalCnt);
         memberCart.setMember(Member.builder().id(memberId).build());
         Cart cart = cartRepository.save(memberCart);
 

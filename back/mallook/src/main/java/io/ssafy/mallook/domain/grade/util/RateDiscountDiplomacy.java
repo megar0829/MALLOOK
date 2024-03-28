@@ -11,10 +11,11 @@ import lombok.RequiredArgsConstructor;
 public class RateDiscountDiplomacy implements DiscountDiplomacy {
 
     final private GradeRepository gradeRepository;
+
     @Override
     public Long discount(Member member) {
         Grade memberGrade = gradeRepository.findByMember(member)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         return switch (memberGrade.getLevel()) {
             case LEVEL1, LEVEL2 -> 1L;
             case LEVEL3, LEVEL4 -> 2L;
