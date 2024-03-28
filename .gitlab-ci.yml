@@ -90,7 +90,7 @@ build-batch:
     - ls
     - chmod +x gradlew # gradle 권한 부여
     - ./gradlew clean
-    - ./gradlew build
+    - ./gradlew bootjar
   artifacts:
     # 보관이 이루어질 경로 설정
     paths:
