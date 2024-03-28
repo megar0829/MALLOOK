@@ -5,6 +5,8 @@ import json
 import time
 import os
 import datetime
+import random
+import re
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -23,7 +25,7 @@ password = os.getenv("MONGODB_PASSWORD")
 API_KEY = os.getenv("HIVER_API")
 
 client = MongoClient(f'mongodb+srv://root:{password}@cluster0.stojj99.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client.products
+db = client.hiver
 
 # Chrome 옵션 설정
 options = Options()
@@ -71,6 +73,10 @@ options.add_experimental_option('prefs', prefs)
 # 웹 드라이버 로드
 driver = webdriver.Chrome(options=options)
 
+# 암시적 대기 설정 (10초)
+driver.implicitly_wait(10)
+
+
 # 카테고리 번호
 script_directory = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(script_directory, "HiverCategory.pkl")
@@ -80,25 +86,31 @@ with open(file_path, "rb") as f:
 
 # 상품 목록들(productId 기준)
 hiver_products = {}
-# 중복을 제거하기 위한 상품 코드들
-hiver_used = set()
 # 사이즈 이름들
 size_names = {
-    '사이즈', 'SIZE', 'size', 'Size', '사이즈1', 'size1', 'SIZE1', 'Size1',
+    '사이즈', 'SIZE', 'size', 'Size', '사이즈1', 'size1', 'SIZE1', 'Size1', '사이즈 1', 'size 1', 'Size 1', 'SIZE 1', 
 }
 
+# 키워드 테스트용
+numbers = random.randint(2, 6)
+keywords = {
+    '캐주얼', '클래식', '모던', '빈티지', '보헤미안', '러스틱', '캠퍼스', '프레피', '글래머러스', '볼드', '캡슐', '레트로', '우먼리', '펑키', '에스닉', '민낯', '스트릿', '심플', '소피스티케이티드', '아방가르드', '메도우', '꽃무늬', '히피', '거리풍', '타이다이', '스포티', '모노크롬', '무드', '로맨틱', '우아함', '키치', '빈지', '마니시', '플라워', '스트릿웨어', '래디럴', '아방', '나이키', '좋즈', '이지부스트', '바팔로체크', '코튼', '러블리', '세련미', '쿨', '하이티크', '패션', '실버피', '퀸스', '스카프', '플레어', '포멀', '아디다스'
+}
 
 # 상품 상세정보를 받아오는 함수
 def hiver_process(category_info):
     # 분류
     main_categories, sub_categories, category_number = category_info
     category_url = f'https://capi.hiver.co.kr/v1/web/categories/{category_number}/products'
-
     # 한 번호당 5000개까지 조회가능
-    for offset in range(0, 5001, 100):
+    # for offset in range(0, 5001, 100):
+    for offset in range(0, 1, 100):
+        limit = 20
         # 0, 100, ~, 4999
         if offset == 5000:
             offset = offset - 1
+        elif offset == 4900:
+            limit = 99
 
         # API 요청을 위한 헤더와 파라미터
         headers = {
@@ -112,7 +124,7 @@ def hiver_process(category_info):
 
         params = {
             'offset': offset,
-            'limit': 100,
+            'limit': limit,
             'order': 'popular',
             'type': 'all',
             'service-type': 'hiver',
@@ -129,14 +141,19 @@ def hiver_process(category_info):
         if category_data['data']:
             # 데이터가 존재할 때 각 상품 번호 활용
             for product in category_data['data']:
+                # 해당 PRODUCT_id 값으로 문서 검색
+                query = {"product_id": product['id']}
+                existing_doc = db.hiver.find_one(query)
+
+                # 값이 이미 있는 경우 넘어가기
+                if existing_doc:
+                    print(f"[{product['id']}] {main_categories} {sub_categories} {category_number} 중복")
+                    continue
                 # 사용되지 않은 프로덕트라면 세부정보 저장
-                if product['id'] not in hiver_used:
+                else:
                     print(f'[{product["id"]}]', main_categories, sub_categories, category_number, offset)
 
                     start_time = time.time()
-
-                    # 중복 기록
-                    hiver_used.add(product['id'])
                     
                     # 상품 세부 정보 불러오기
                     product_url = f'https://www.hiver.co.kr/_next/data/NkOT5yhyYbV_Xxvt8xp9e/ko/products/{product["id"]}.json'
@@ -166,16 +183,19 @@ def hiver_process(category_info):
                     # 리뷰 요청
                     review_url = f'https://hiver-api.brandi.biz/v2/web/products/{product["id"]}/reviews'
                     # 한 번호당 5000개까지 조회가능
-                    for offset2 in range(0, 5001, 100):
+                    for offset2 in range(0, 5001, 100):   
+                        limit2 = 100
                         # 0, 100, ~, 4999
-                        if offset2 == 5000:
-                            offset2 = offset2 - 1
+                        if offset == 5000:
+                            offset = offset - 1
+                        elif offset == 4900:
+                            limit2 = 99
 
                         # 포토 리뷰 파라미터
                         photo_params = {
                             'is-first': 'false',
                             'tab-type': 'photo',
-                            'limit': 100,
+                            'limit': limit2,
                             'offset': offset2,
                             'version': 2101,
                             'service-type': 'hiver',
@@ -195,21 +215,23 @@ def hiver_process(category_info):
                                 if len(product_options) >= 1:
                                     product_color = product_options[0]
                                 else:
-                                    product_color = ''
+                                    product_color = None
 
                                 if len(product_options) == 2:
                                     product_size = product_options[1]
                                 else:
-                                    product_size = ''
+                                    product_size = None
                                 product_option = {
                                     'color': product_color,
                                     'size': product_size,
                                 }
 
                                 # 키와 몸무게
+                                height = f"{photo_review['user']['height']}cm" if photo_review['user']['height'] else None
+                                weight = f"{photo_review['user']['weight']}cm" if photo_review['user']['weight'] else None
                                 user_size = {
-                                    'height': f"{photo_review['user']['height']}cm",
-                                    'weight': f"{photo_review['user']['weight']}kg",
+                                    'height': height,
+                                    'weight': weight,
                                 }
 
                                 # 시간변경                    
@@ -222,7 +244,7 @@ def hiver_process(category_info):
                                     'created_at': created_at,
                                     'images': [photo_review['user']['image_url']],
                                     'point': None,
-                                    'product_option': product_option,
+                                    'product_option': [product_option],
                                     'user_size': user_size,
                                 }
 
@@ -233,14 +255,17 @@ def hiver_process(category_info):
                     
                     # 한 번호당 5000개까지 조회가능
                     for offset2 in range(0, 5001, 100):
+                        limit2 = 100
                         # 0, 100, ~, 4999
-                        if offset2 == 5000:
-                            offset2 = offset2 - 1
+                        if offset == 5000:
+                            offset = offset - 1
+                        elif offset == 4900:
+                            limit2 = 99
 
                         text_params = {
                             'is-first': 'false',
                             'tab-type': 'text',
-                            'limit': 100,
+                            'limit': limit2,
                             'offset': offset2,
                             'version': 2101,
                             'service-type': 'hiver',
@@ -260,21 +285,23 @@ def hiver_process(category_info):
                                 if len(product_options) >= 1:
                                     product_color = product_options[0]
                                 else:
-                                    product_color = ''
+                                    product_color = None
 
                                 if len(product_options) >= 2:
                                     product_size = product_options[1]
                                 else:
-                                    product_size = ''
+                                    product_size = None
                                 product_option = {
                                     'color': product_color,
                                     'size': product_size,
                                 }
 
                                 # 키와 몸무게
+                                height = f"{text_review['user']['height']}cm" if text_review['user']['height'] else None
+                                weight = f"{text_review['user']['weight']}cm" if text_review['user']['weight'] else None
                                 user_size = {
-                                    'height': f"{text_review['user']['height']}cm",
-                                    'weight': f"{text_review['user']['weight']}kg",
+                                    'height': height,
+                                    'weight': weight,
                                 }
 
                                 # 시간변경                    
@@ -287,7 +314,7 @@ def hiver_process(category_info):
                                     'created_at': created_at,
                                     'images': [],
                                     'point': None,
-                                    'product_option': product_option,
+                                    'product_option': [product_option],
                                     'user_size': user_size,
                                 }
 
@@ -295,12 +322,6 @@ def hiver_process(category_info):
                         # 데이터가 없는 경우 종료
                         else:
                             break
-                    
-                    # 태그 조회
-                    tag_list = []
-                    tags = product_data['pageProps']['fallback'][complexity]['data']['tags']
-                    for tag in tags:
-                        tag_list.append(tag['name'])
 
                     print(f'[{product["id"]}]', '#### 색상/사이즈 조회 ####')    
 
@@ -321,18 +342,17 @@ def hiver_process(category_info):
                     try:
                         # 버튼 클릭하여 요소 로드 대기
                         popup = driver.find_element(By.CSS_SELECTOR, 'button.textButton.btn-text.css-1hv5ygr')
-                        popup.send_keys(Keys.ENTER)
+                        clickable_popup = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(popup))
+                        clickable_popup.click()
                     except:
                         pass
-                    
-                    # 암시적 대기 설정 (10초)
-                    driver.implicitly_wait(10)
 
                     # 구매 버튼 클릭
                     try:
                         # 버튼 클릭하여 요소 로드 대기
                         button = driver.find_element(By.CSS_SELECTOR, 'button.order.css-xnq7lu')
-                        button.send_keys(Keys.ENTER)
+                        clickable_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(button))
+                        clickable_button.click()
                     except:
                         print(f'[{product["id"]}] 버튼 클릭 불가 Pass')
                         continue
@@ -356,7 +376,7 @@ def hiver_process(category_info):
                         ''')
                         # 사이즈를 나타내는 것이 아니라면 넘기기
                         if size_name not in size_names:
-                            print('No size')
+                            print(f'[{product["id"]}] {size_name} is not size')
                             continue
                     except:
                         pass
@@ -382,7 +402,10 @@ def hiver_process(category_info):
                             for prod in prod_list:
                                 # 클릭 가능시 버튼 누르기
                                 try:
-                                    prod.click()
+                                    # WebDriverWait을 사용하여 현재 검사하고 있는 prod가 클릭 가능한 상태인지 확인
+                                    clickable_prod = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(prod))
+                                    # 클릭 가능하면 클릭하고 사이즈 재선택 로직으로 넘어감
+                                    clickable_prod.click()
 
                                     # 사이즈 재선택
                                     sizes = driver.execute_script(f'''
@@ -406,8 +429,10 @@ def hiver_process(category_info):
                         except:
                             print(f'[{product["id"]}] 색상 클릭 불가 Pass')
                             continue                                        
-
-                    # print('### 상품 정보 입력 ###')
+                    
+                    # 품절 글자없애기
+                    colors = [re.sub(r'\(품절\)|\s+', '', c) for c in colors]
+                    sizes = [re.sub(r'\(품절\)|\s+', '', s) for s in sizes]      
 
                     # 카테고리 재분류
                     if '분류' in sub_categories:
@@ -674,6 +699,10 @@ def hiver_process(category_info):
                     else:
                         gender = 'female'
 
+                    # 상품 이름 [] 내용 삭제 및 좌측 공백 제거
+                    name = product_data['pageProps']['title']
+                    name = re.sub(r'\[.*?\]', '', name).lstrip()
+
                     # 상품 정보 입력
                     hiver_products[product['id']] = {
                         'product_id': product['id'],
@@ -681,7 +710,7 @@ def hiver_process(category_info):
                         'main_category': main_categories,
                         'sub_category': sub_categories,
                         'gender': gender,
-                        'name': product_data['pageProps']['title'],
+                        'name': name,
                         'price': product_data['pageProps']['fallback'][complexity]['data']['sale_price'],
                         'brand_name': product_data['pageProps']['fallback'][complexity]['data']['seller']['name'],
                         'image': product_data['pageProps']['image'],
@@ -691,6 +720,7 @@ def hiver_process(category_info):
                         'detail_images': image_urls,
                         'detail_html': image_code,
                         'reviews': reviews,
+                        'keywords': random.sample(keywords, numbers),
                     }
 
                     print('======================================================')
@@ -702,11 +732,11 @@ def hiver_process(category_info):
 
                     # driver.quit()
 
-                    db.test.insert_one(hiver_products[product['id']])
+                    db.hiver.insert_one(hiver_products[product['id']])
 
         # data가 존재하지 않는 경우 넘기기
         else:
-            continue
+            return
 
 
 if __name__ == '__main__':
@@ -720,17 +750,15 @@ if __name__ == '__main__':
             for category_number in category_numbers[main_categories][sub_categories]:
                 category_info_list.append((main_categories, sub_categories, category_number))
 
-    hiver_process(('상의', '긴팔티', 426))
+    # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
+    pool.map(hiver_process, category_info_list)
 
-    # # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
-    # pool.map(hiver_process, category_info_list)
+    # 웹드라이버 종료
+    driver.quit()
 
-    # # 웹드라이버 종료
-    # driver.quit()
-
-    # # 프로세스 풀 종료
-    # pool.close()
-    # pool.join()
+    # 프로세스 풀 종료
+    pool.close()
+    pool.join()
 
     # # json 파일에 저장
     # with open('hiver_details.json', 'w', encoding='utf-8') as f:
