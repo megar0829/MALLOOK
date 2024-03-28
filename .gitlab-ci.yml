@@ -20,6 +20,7 @@ build: # JOB 이름
     - echo "$APPLICATION_REDIS_YML" > "application-redis.yml"
     - echo "$APPLICATION_TEST_YML" > "application-test.yml" # gitlab APPLICATION_YML을 이용하여 application.yml 파일 생성
     - echo "$APPLICATION_AWS_YML" > "application-aws.yml"
+    - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
     - ls
     - echo [INFO] spring-boot project build
     - cd ../../.. # 프로젝트 폴더로 경로 이동
