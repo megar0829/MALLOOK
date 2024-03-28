@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -39,7 +40,7 @@ public class ScriptController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
 
-        cursor = cursor != null ? cursor : scriptService.getMaxScriptId() + 1;
+        cursor = !Objects.isNull(cursor) ? cursor : scriptService.getMaxScriptId() + 1;
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

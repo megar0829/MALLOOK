@@ -20,6 +20,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
@@ -36,7 +38,7 @@ public class ProductController {
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
-        cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
+        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         ObjectId cursorObjectId = new ObjectId(cursor);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
@@ -49,7 +51,7 @@ public class ProductController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
             @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
-        cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
+        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         String finalCursor = cursor;
         Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto == null || hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
                 ? () -> productService.getProductDetail(name, finalCursor)
@@ -70,7 +72,7 @@ public class ProductController {
             @RequestParam(name = "primary", required = false) MainCategory mainCategory,
             @RequestParam(name = "secondary", required = false) SubCategory subCategory
     ) {
-        cursor = cursor != null ? cursor : productService.getLastProductId() + 1;
+        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastProductId() + 1;
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(cursor, pageable, mainCategory, subCategory)
