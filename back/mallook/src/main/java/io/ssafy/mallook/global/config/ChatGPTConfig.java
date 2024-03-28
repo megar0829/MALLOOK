@@ -16,7 +16,7 @@ public class ChatGPTConfig {
     public static final double TOP_P = 1.0;
     public static final double TEMPERATURE = 1.0;
 
-    @Value("${chatgpt.api-key}")
+    @Value("${spring.chatgpt.api-key}")
     private String token;
 
     @Bean
