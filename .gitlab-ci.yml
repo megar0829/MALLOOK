@@ -66,7 +66,6 @@ package:
     - echo [INFO] Start build Nextjs
     - docker build -t $DOCKER_REGISTRY_USER/mallook-nextjs . #
     - docker push $DOCKER_REGISTRY_USER/mallook-nextjs:latest # Container
-  # script가 실행된 후 수행 될 script
   after_script:
     - docker logout # GitLab Container Registry 로그아웃
   # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
