@@ -74,55 +74,55 @@ package:
     - release
     - develop
 
-#build-batch:
-#  image: gradle:8.5.0-jdk17 # gradle - java 이미지 지정
-#  # stage 설정
-#  stage: build-batch
-#  script:
-#    - echo [INFO] YML Settings
-#    - cd ./back/mallook
-#    - cd ./src/main/resources # resources 폴더 위치로 이동
-#    - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
-#    - echo "$APPLICATION_OAUTH_YML" > "application-oauth.yml"
-#    - echo "$APPLICATION_REDIS_YML" > "application-redis.yml"
-#    - echo "$APPLICATION_AWS_YML" > "application-aws.yml"
-#    - ls
-#    - echo [INFO] spring-batch server build
-#    - cd ../../.. # 프로젝트 폴더로 경로 이동
-#    - ls
-#    - chmod +x gradlew # gradle 권한 부여
-#    - ./gradlew clean
-#    - ./gradlew bootjar
-#  artifacts:
-#    # 보관이 이루어질 경로 설정
-#    paths:
-#      - back/mallook/build/libs/mallook-0.0.1-SNAPSHOT.jar # Dockerfile에 지정한 경로로 지정
-#    # 유효기간 설정
-#    expire_in: 1 days
-#  # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
-#  only:
-#    - master
-#    - release
-#    - develop
-#
-#package-batch:
-#  image: docker:latest
-#  stage: package-batch
-#  services:
-#    - docker:dind
-#  before_script:
-#    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
-#  script:
-#    - cd ./back/mallook
-#    - echo [INFO] BATCH_IMAGE_NAME       $BATCH_IMAGE_NAME
-#    - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME -f batchDockerfile .
-#    - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest
-#  after_script:
-#    - docker logout
-#  only:
-#    - master
-#    - release
-#    - develop
+build-batch:
+  image: gradle:8.5.0-jdk17 # gradle - java 이미지 지정
+  # stage 설정
+  stage: build-batch
+  script:
+    - echo [INFO] YML Settings
+    - cd ./back/mallook
+    - cd ./src/main/resources # resources 폴더 위치로 이동
+    - echo "$APPLICATION_BATCH_YML" > "application-batch.yml"
+    - echo "$APPLICATION_OAUTH_YML" > "application-oauth.yml"
+    - echo "$APPLICATION_REDIS_YML" > "application-redis.yml"
+    - echo "$APPLICATION_AWS_YML" > "application-aws.yml"
+    - ls
+    - echo [INFO] spring-batch server build
+    - cd ../../.. # 프로젝트 폴더로 경로 이동
+    - ls
+    - chmod +x gradlew # gradle 권한 부여
+    - ./gradlew clean
+    - ./gradlew bootjar
+  artifacts:
+    # 보관이 이루어질 경로 설정
+    paths:
+      - back/mallook/build/libs/mallook-0.0.1-SNAPSHOT.jar # Dockerfile에 지정한 경로로 지정
+    # 유효기간 설정
+    expire_in: 1 days
+  # JOB이 수행될 branch 설정 (설정된 branch에 push가 발생될 시 JOB 수행)
+  only:
+    - master
+    - release
+    - develop
+
+package-batch:
+  image: docker:latest
+  stage: package-batch
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+  script:
+    - cd ./back/mallook
+    - echo [INFO] BATCH_IMAGE_NAME       $BATCH_IMAGE_NAME
+    - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME -f batchDockerfile .
+    - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest
+  after_script:
+    - docker logout
+  only:
+    - master
+    - release
+    - develop
 
 deploy: # JOB 이름
   image: docker:latest
