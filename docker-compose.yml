@@ -13,12 +13,14 @@ services:
       - /home/ec2-user/logs:/logs
   mallook-batch:
     container_name: mallook-batch
-    image: duckbill413/mallook-batch:latest
+    image: duckbill413/mallook-docker-api:latest
     environment:
       - SPRING_PROFILES_ACTIVE=batch
       - TZ=Asia/Seoul
     networks:
       - mallook_net
+    depends_on:
+      - springboot
 
   redis:
     image: redis:alpine
