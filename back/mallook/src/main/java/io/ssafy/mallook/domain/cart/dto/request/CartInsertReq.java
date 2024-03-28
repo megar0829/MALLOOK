@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 public record CartInsertReq(
         @Schema(description = "상품 id")
         @NotBlank(message = "상품 id는 공백일 수 없습니다.")
-        Long productId,
+        String productId,
         @Schema(description = "상품 개수")
         @NotBlank(message = "상품 개수는 공백일 수 없습니다.")
         Integer count,

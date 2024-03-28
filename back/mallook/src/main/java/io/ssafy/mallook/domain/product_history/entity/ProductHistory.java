@@ -1,6 +1,7 @@
-package io.ssafy.mallook.domain.orders.entity;
+package io.ssafy.mallook.domain.product_history.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
+import io.ssafy.mallook.domain.orders.entity.Orders;
 import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -19,10 +20,6 @@ public class ProductHistory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Orders orderId;
-
     @NotNull
     private Integer productCount;
 
@@ -40,15 +37,15 @@ public class ProductHistory extends BaseEntity {
     @NotBlank
     private String productColor;
 
-    @NotNull
-    private Integer productFee;
+//    @NotNull
+//    private Integer productFee;   //todo: 지울것
 
     @ManyToOne
     @JoinColumn(name = "orders_id")
     private Orders orders;
 
-    @NotNull
-    @ManyToOne
-    @JoinColumn(name = "shoppingmall_id")
-    private ShoppingMall shoppingmallId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "shoppingmall_id")
+//    private ShoppingMall shoppingmallId;
 }

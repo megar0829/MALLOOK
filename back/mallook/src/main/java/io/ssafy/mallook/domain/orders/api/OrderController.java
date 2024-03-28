@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.orders.api;
 
 import io.ssafy.mallook.domain.orders.application.OrderService;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
@@ -53,8 +54,7 @@ public class OrderController {
                 orderService.getOrderDetail(id)
         );
     }
-
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<BaseResponse<String>> createOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderCreateDto createDto) {
         UUID id = principal.getId();
@@ -65,7 +65,29 @@ public class OrderController {
         );
     }
 
+
+    @PostMapping
+    public ResponseEntity<BaseResponse<String>> insertOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderInsertReq createDto) {
+        UUID id = principal.getId();
+        orderService.insertOrder(id, createDto);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "성공적으로 주문되었습니다."
+        );
+    }
     @DeleteMapping
+    @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
+    public ResponseEntity<BaseResponse<String>> removeOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
+        orderService.removeOrder(orderDeleteDto);
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "성공적으로 삭제되었습니다."
+        );
+    }
+
+    @DeleteMapping("/delete")
     @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
     public ResponseEntity<BaseResponse<String>> deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderDeleteDto orderDeleteDto) {

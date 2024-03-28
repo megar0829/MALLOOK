@@ -19,7 +19,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     @Query(
             """
             select new io.ssafy.mallook.domain.cart.dto.response.CartDetailRes(
-                c.id, cp.id, cp.product.id, cp.productPrice, cp.productCount, cp.productName, cp.productImage, cp.productSize, cp.productColor, cp.productFee
+                c.id, cp.id, cp.product, cp.productPrice, cp.productCount, cp.productName, cp.productImage, cp.productSize, cp.productColor, cp.productFee
             )
             from Cart c
             join CartProduct cp on cp.cart.id = c.id

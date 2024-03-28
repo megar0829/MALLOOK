@@ -19,10 +19,10 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
             select COALESCE(sum(cp.productCount), 0)
             from CartProduct cp
             join cp.cart c
-            where c.id = :cartId and cp.product.id = :productId
+            where c.id = :cartId and cp.product = :productId
             """
     )
-    Long CountSameProductInCart(@Param("cartId") Long cartId, @Param("productId") Long productId);
+    Long CountSameProductInCart(@Param("cartId") Long cartId, @Param("productId") String productId);
     @Modifying(clearAutomatically = true)
     @Query("""
         update CartProduct cp set cp.status = false

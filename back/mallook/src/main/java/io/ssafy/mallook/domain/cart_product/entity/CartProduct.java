@@ -33,11 +33,9 @@ public class CartProduct extends BaseEntity {
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
-    // 상품 id
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "product_id")
+    private String product;
 
     @NotNull
     @Column(name = "product_count")
