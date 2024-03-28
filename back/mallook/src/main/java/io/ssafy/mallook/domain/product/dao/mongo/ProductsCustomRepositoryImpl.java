@@ -27,10 +27,10 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
                 .with(pageable);
 
-        if (mainCategory != null) {
+        if (!Objects.isNull(mainCategory)) {
             query.addCriteria(Criteria.where("mainCategory").is(mainCategory));
         }
-        if (subCategory != null) {
+        if (!Objects.isNull(subCategory)) {
             query.addCriteria(Criteria.where("subCategory").is(subCategory));
         }
 
