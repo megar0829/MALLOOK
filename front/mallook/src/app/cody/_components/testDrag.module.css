@@ -1,0 +1,26 @@
+.background {
+    width: 100dvw;
+    height: 80dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.drag__component {
+    background-color: black;
+    width: 24%;
+    height: 24%;
+}
+.image {
+    width: 90%;
+    height: 90%;
+}
+.box {
+
+}

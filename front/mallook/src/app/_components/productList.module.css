@@ -9,6 +9,7 @@
 .product {
     display: flex;
     flex-direction: column;
+    width: inherit;
 }
 .product__image {
     border: 1px solid lightgray;
@@ -28,12 +29,12 @@
     font-weight: 600;
 }
 .product__name {
-    width: 270px;
     font-size: 17px;
     font-weight: 700;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow-x: hidden;
+    /*width: inherit;*/
+    /*white-space: nowrap;*/
+    /*text-overflow: ellipsis;*/
+    /*overflow-x: hidden;*/
 }
 .product__brand {
     font-size: 15px;
