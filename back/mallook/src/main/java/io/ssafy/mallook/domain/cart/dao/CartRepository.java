@@ -27,7 +27,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             order by cp.id
             """
     )
-    Slice<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId, Long cursor);
+    Slice<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId, @Param("cursor") Long cursor);
 
     Optional<Cart> findMyCartByMember(Member member);
 

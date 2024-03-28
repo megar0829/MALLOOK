@@ -110,6 +110,7 @@ dependencies {
 	// 랜덤 문자열
 	implementation 'org.apache.commons:commons-lang3:3.12.0'
 
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 tasks.named('test') {

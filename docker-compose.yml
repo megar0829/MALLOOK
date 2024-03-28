@@ -56,6 +56,12 @@ services:
       - "127.0.0.1:3000:3000"
     networks:
       - mallook_net
+  
+  prometheus:
+    container_name: mallook-prometheus
+    image: prom/prometheus:latest
+    ports:
+      - "127.0.0.1:9090:9090"
 
 networks:
   mallook_net:
