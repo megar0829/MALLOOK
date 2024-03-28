@@ -5,19 +5,22 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetail;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
+import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductsRepository mongoProductsRepository;
     private final ProductsCustomRepository productsCustomRepository;
+
     @Override
     public Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         return productCustomRepository.findAllProduct(cursor, pageable, mainCategory, subCategory);
@@ -56,19 +60,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Products getProductDetail(String id) {
-        System.out.println(id);
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$");
-        System.out.println(productsCustomRepository.getProductDetailWithFirstReviews(id));
-        var result =  mongoProductsRepository.findById(id)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-//        ProductsDetail productsDetail = ProductsDetail.builder()
-//                .id(result.getId())
-//                .
-//                .build();
-//        System.out.println("#######################" + result.getReviews());
+    public Products getMongoProductsDetail(String id) {
+        var result = productsCustomRepository.getProductDetailWithLimitedReviews(id);
+        if (Objects.isNull(result)) {
+            throw new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR);
+        }
         return result;
     }
 
-
+    @Override
+    public Page<ReviewObject> getReviewList(String productsId, Pageable pageable) {
+        return productsCustomRepository.getReviews(productsId, pageable);
+    }
 }

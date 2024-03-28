@@ -5,11 +5,13 @@ import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
+import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -40,12 +42,21 @@ public class ProductController {
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
         );
     }
-    @GetMapping("/detail")
+    @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<Products>> getProductsDetail(
-            @RequestParam(name="id") String id) {
+            @PathVariable("id") String id) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getProductDetail(id)
+                productService.getMongoProductsDetail(id)
+        );
+    }
+    @GetMapping("/reviews")
+    public ResponseEntity<BaseResponse<Page<ReviewObject>>> getReviewList(
+            @RequestParam(name="id") String id,
+            @PageableDefault(size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                productService.getReviewList(id, pageable)
         );
     }
 
