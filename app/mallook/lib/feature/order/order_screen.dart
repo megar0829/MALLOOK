@@ -259,18 +259,10 @@ class _OrderScreenState extends State<OrderScreen> {
                     ],
                   ),
                   const Divider(),
-                  Text(
-                    _cartItems[index].product.name,
-                    maxLines: 5,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: Sizes.size16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
                   Gaps.v8,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Image.network(
                         _cartItems[index].product.image!,
@@ -279,86 +271,66 @@ class _OrderScreenState extends State<OrderScreen> {
                       ),
                       Gaps.h10,
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text(
-                                  '사이즈',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
+                        child: SizedBox(
+                          height: 150,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                _cartItems[index].product.name,
+                                maxLines: 5,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: Sizes.size16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                Text(
-                                  _cartItems[index].size,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Gaps.v12,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text(
-                                  '색상',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
-                                ),
-                                Text(
-                                  _cartItems[index].color,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Gaps.v12,
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                const Text(
-                                  '수량',
-                                  style: TextStyle(
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
-                                ),
-                                Text(
-                                  "${_cartItems[index].quantity}",
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: Sizes.size18,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Gaps.v12,
-                            Text(
-                              '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)}원',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColorDark,
-                                fontSize: Sizes.size18,
-                                fontWeight: FontWeight.bold,
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: Sizes.size6,
+                                  horizontal: Sizes.size18,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      '수량 ${_cartItems[index].quantity}',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: Sizes.size16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      _cartItems[index].size,
+                                      maxLines: 3,
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontSize: Sizes.size16,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)} ₩',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColorDark,
+                                      fontSize: Sizes.size18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   )
                 ],
@@ -398,9 +370,10 @@ class _OrderScreenState extends State<OrderScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text("${_getTotalQuantity()}개"),
-                  Text("${numberFormat.format(_getTotalPrice())}₩"),
+                  Text("${numberFormat.format(_getTotalPrice())} ₩"),
                   Gaps.h20,
                   const Text('구매하기'),
+                  const SizedBox.shrink(),
                 ],
               )),
         ),
