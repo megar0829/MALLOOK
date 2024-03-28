@@ -18,22 +18,22 @@ class CouponIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(
-            left: Sizes.size10,
-            top: Sizes.size4,
+    return GestureDetector(
+      onTap: () => _moveToMyCouponScreen(context),
+      child: Stack(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(
+              left: Sizes.size10,
+              top: Sizes.size4,
+            ),
+            child: FaIcon(
+              FontAwesomeIcons.ticket,
+              size: Sizes.size24,
+              color: Colors.black,
+            ),
           ),
-          child: FaIcon(
-            FontAwesomeIcons.ticket,
-            size: Sizes.size24,
-            color: Colors.black,
-          ),
-        ),
-        GestureDetector(
-          onTap: () => _moveToMyCouponScreen(context),
-          child: Container(
+          Container(
             width: Sizes.size20,
             height: Sizes.size20,
             decoration: BoxDecoration(
@@ -54,9 +54,9 @@ class CouponIconButton extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
