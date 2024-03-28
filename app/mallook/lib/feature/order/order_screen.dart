@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -97,6 +99,14 @@ class _OrderScreenState extends State<OrderScreen> {
       }
     }
     return totalQuantity;
+  }
+
+  void _moveToProductPage(Product product) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => ProductScreen(product: product),
+      ),
+    );
   }
 
   @override
@@ -260,78 +270,82 @@ class _OrderScreenState extends State<OrderScreen> {
                   ),
                   const Divider(),
                   Gaps.v8,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Image.network(
-                        _cartItems[index].product.image!,
-                        height: 150,
-                        fit: BoxFit.cover,
-                      ),
-                      Gaps.h10,
-                      Expanded(
-                        child: SizedBox(
+                  GestureDetector(
+                    onTap: () => _moveToProductPage(_cartItems[index].product),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.network(
+                          _cartItems[index].product.image!,
                           height: 150,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                _cartItems[index].product.name,
-                                maxLines: 5,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: Sizes.size16,
-                                  fontWeight: FontWeight.bold,
+                          fit: BoxFit.cover,
+                        ),
+                        Gaps.h10,
+                        Expanded(
+                          child: SizedBox(
+                            height: 150,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  _cartItems[index].product.name,
+                                  maxLines: 5,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: Sizes.size16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: Sizes.size6,
-                                  horizontal: Sizes.size18,
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: Sizes.size6,
+                                    horizontal: Sizes.size18,
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        '수량 ${_cartItems[index].quantity}',
+                                        style: TextStyle(
+                                          color: Colors.grey.shade700,
+                                          fontSize: Sizes.size16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        _cartItems[index].size,
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                          color: Colors.grey.shade700,
+                                          fontSize: Sizes.size16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Text(
-                                      '수량 ${_cartItems[index].quantity}',
+                                      '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)} ₩',
                                       style: TextStyle(
-                                        color: Colors.grey.shade700,
-                                        fontSize: Sizes.size16,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                        fontSize: Sizes.size18,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Text(
-                                      _cartItems[index].size,
-                                      maxLines: 3,
-                                      style: TextStyle(
-                                        color: Colors.grey.shade700,
-                                        fontSize: Sizes.size16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    )
                                   ],
-                                ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)} ₩',
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColorDark,
-                                      fontSize: Sizes.size18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   )
                 ],
               ),
