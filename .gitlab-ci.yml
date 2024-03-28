@@ -116,7 +116,8 @@ package-batch:
   script:
     - cd ./back/mallook
     - echo [INFO] BATCH_IMAGE_NAME       $BATCH_IMAGE_NAME
-    - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME . # Dockerfile로 build
+    - # batchDockerfile로 build
+    - docker build -t $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME -f batchDockerfile .
     - docker push $DOCKER_REGISTRY_USER/$BATCH_IMAGE_NAME:latest # Container Registry에 image push
   after_script:
     - docker logout # GitLab Container Registry 로그아웃
