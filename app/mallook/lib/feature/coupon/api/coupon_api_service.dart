@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:mallook/feature/coupon/model/coupon_model.dart';
+
 class CouponApiService {
   static Future<List<Coupon>> getMyCoupons(int page) async {
     List<Coupon> coupons = [];
@@ -7,7 +9,12 @@ class CouponApiService {
     for (int i = 0; i < 10; i++) {
       int id = Random().nextInt(10000);
       coupons.add(
-        Coupon(),
+        Coupon(
+          name: '쿠폰명 $id',
+          type: i % 2 == 0 ? "amount" : "ratio",
+          discount:
+              i % 2 == 0 ? Random().nextInt(100000) : Random().nextInt(100),
+        ),
       );
     }
 
@@ -21,9 +28,13 @@ class CouponApiService {
     for (int i = 0; i < 10; i++) {
       int id = Random().nextInt(10000);
       coupons.add(
-        Coupon(id: id, name: '쿠폰 $id', description: '쿠폰 상세 정보 $id'),
+        Coupon(
+          name: '쿠폰명 $id',
+          type: i % 2 == 0 ? "amount" : "ratio",
+          discount:
+              i % 2 == 0 ? Random().nextInt(100000) : Random().nextInt(100),
+        ),
       );
-      print(id);
     }
 
     await Future.delayed(const Duration(seconds: 1));

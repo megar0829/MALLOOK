@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
+import 'package:mallook/feature/coupon/model/coupon_model.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
 class MyCouponScreen extends StatefulWidget {
@@ -71,17 +72,118 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
           Gaps.h24,
         ],
       ),
-      body: ListView.separated(
-        controller: _scrollController,
-        itemBuilder: (context, index) {
-          if (index < coupons.length) {
-            return Container();
-          } else {
-            return const CustomCircularWaitWidget();
-          }
-        },
-        separatorBuilder: (context, index) => Gaps.v10,
-        itemCount: coupons.length + 1,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: Sizes.size12,
+          vertical: Sizes.size24,
+        ),
+        child: ListView.separated(
+          controller: _scrollController,
+          itemBuilder: (context, index) {
+            if (index < coupons.length) {
+              return Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: Sizes.size2,
+                  horizontal: Sizes.size4,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.size10,
+                  horizontal: Sizes.size14,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.grey.shade300,
+                    width: Sizes.size1,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Sizes.size16,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade400,
+                      offset: const Offset(2, 1),
+                    )
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            coupons[index].name,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Sizes.size16,
+                            ),
+                          ),
+                          Gaps.v4,
+                          Text(
+                            coupons[index].name,
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Sizes.size14,
+                            ),
+                          ),
+                          Gaps.v4,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                coupons[index].type,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size16,
+                                ),
+                              ),
+                              Text(
+                                '${coupons[index].discount}',
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size16,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    Gaps.h20,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '삭제시 재발급이\n 어렵습니다.',
+                          textAlign: TextAlign.center,
+                          maxLines: 3,
+                          style: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: Sizes.size10,
+                          ),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: const Text("쿠폰 삭제"),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              );
+            } else {
+              return const CustomCircularWaitWidget();
+            }
+          },
+          separatorBuilder: (context, index) => Gaps.v10,
+          itemCount: coupons.length + 1,
+        ),
       ),
     );
   }
