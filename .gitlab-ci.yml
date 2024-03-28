@@ -119,7 +119,7 @@ package-sched:
   script:
     - cd ./back/mallook
     - echo [INFO] SCHED_IMAGE_NAME       $BATCH_IMAGE_NAME
-    - docker build -t $DOCKER_REGISTRY_USER/$SCHED_IMAGE_NAME -f batchDockerfile .
+    - docker build -t $DOCKER_REGISTRY_USER/$SCHED_IMAGE_NAME . # Dockerfile로 build
     - docker push $DOCKER_REGISTRY_USER/$SCHED_IMAGE_NAME:latest
   after_script:
     - docker logout
