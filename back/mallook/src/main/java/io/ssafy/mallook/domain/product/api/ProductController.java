@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.product.api;
 
+import com.amazonaws.util.CollectionUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
@@ -9,6 +10,8 @@ import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.BaseResponse;
+import io.ssafy.mallook.global.common.ErrorResponse;
+import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Supplier;
@@ -18,9 +21,17 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import static com.amazonaws.util.CollectionUtils.*;
+import static io.ssafy.mallook.global.common.code.ErrorCode.*;
+import static io.ssafy.mallook.global.common.code.ErrorCode.BAD_REQUEST_ERROR;
+import static java.util.Objects.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +49,7 @@ public class ProductController {
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
-        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         ObjectId cursorObjectId = new ObjectId(cursor);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
@@ -47,13 +58,28 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductDetail(
+    public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
             @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
-        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        if (isNull(name) && isNull(hotKeywordDto)) {
+            List<FieldError> errors = new ArrayList<>();
+            FieldError fieldError = new FieldError("검색어", "name", "FAIL");
+            errors.add(fieldError);
+            ErrorResponse errorResponse = ErrorResponse.of()
+                    .code(BAD_REQUEST_ERROR)
+                    .message("검색어를 입력해야 합니다.")
+                    .errors(errors)
+                    .build();
+
+            return ResponseEntity
+                    .badRequest()
+                    .body(errorResponse);
+        }
+
+        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         String finalCursor = cursor;
-        Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto == null || hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
+        Supplier<Slice<ProductsListDto>> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
                 ? () -> productService.getProductDetail(name, finalCursor)
                 : () -> productService.getProductDetail(hotKeywordDto, finalCursor);
 
@@ -72,7 +98,7 @@ public class ProductController {
             @RequestParam(name = "primary", required = false) MainCategory mainCategory,
             @RequestParam(name = "secondary", required = false) SubCategory subCategory
     ) {
-        cursor = !Objects.isNull(cursor) ? cursor : productService.getLastProductId() + 1;
+        cursor = !isNull(cursor) ? cursor : productService.getLastProductId() + 1;
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getProductList(cursor, pageable, mainCategory, subCategory)
