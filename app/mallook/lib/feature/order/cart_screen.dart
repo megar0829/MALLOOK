@@ -423,6 +423,7 @@ class _CartScreenState extends State<CartScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("${_getTotalQuantity()}개"),
+                const Text("|"),
                 Text("${numberFormat.format(_getTotalPrice())} ₩"),
                 Gaps.h20,
                 const Text('구매하기'),
