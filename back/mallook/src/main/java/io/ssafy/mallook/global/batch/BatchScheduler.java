@@ -36,6 +36,7 @@ public class BatchScheduler {
             log.info("현재 서버 역할이 '{}'로 설정되어 있어, 'gradeJob' 작업을 수행하지 않습니다.", serverRole);
             return;
         }
+
         try {
             Job job = jobRegistry.getJob("gradeJob");
             JobParametersBuilder jobParameter = new JobParametersBuilder().addString("time", time);
