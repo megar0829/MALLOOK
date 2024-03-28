@@ -15,8 +15,11 @@ services:
   mallook-batch:
     container_name: mallook-sched
     image: duckbill413/mallook-docker-sched:latest
+    ports:
+      - "127.0.0.1:8082:8082"
     environment:
       - TZ=Asia/Seoul
+      - SPRING_PROFILES_ACTIVE=sched
     networks:
       - mallook_net
     depends_on:
