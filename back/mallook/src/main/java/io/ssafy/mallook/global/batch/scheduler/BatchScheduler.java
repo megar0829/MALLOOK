@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch;
+package io.ssafy.mallook.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +33,21 @@ public class BatchScheduler {
 
         try {
             Job job = jobRegistry.getJob("gradeJob");
+            JobParametersBuilder jobParameter = new JobParametersBuilder().addString("time", time);
+            jobLauncher.run(job, jobParameter.toJobParameters());
+        } catch (NoSuchJobException | JobRestartException | JobParametersInvalidException |
+                 JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Scheduled(cron = "0 0/30 * * * *") // 매 30분마다 실행
+    @SchedulerLock(name = "heartTask", lockAtLeastFor = "50s", lockAtMostFor = "10m")
+    public void runSecondJob() {
+        String time = LocalDateTime.now().toString();
+
+        try {
+            Job job = jobRegistry.getJob("heartInitJob");
             JobParametersBuilder jobParameter = new JobParametersBuilder().addString("time", time);
             jobLauncher.run(job, jobParameter.toJobParameters());
         } catch (NoSuchJobException | JobRestartException | JobParametersInvalidException |

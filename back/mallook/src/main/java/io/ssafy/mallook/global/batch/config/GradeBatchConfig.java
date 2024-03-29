@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch;
+package io.ssafy.mallook.global.batch.config;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
 import io.ssafy.mallook.domain.grade.dao.GradeRepository;
@@ -6,6 +6,7 @@ import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
+import io.ssafy.mallook.global.batch.dto.MemberExpDto;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.persistence.EntityManagerFactory;
