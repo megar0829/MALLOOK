@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -14,11 +13,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductsCustomRepository {
 
-    Slice<ProductsListDto> findByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
-
     Slice<ProductsListDto> findByProductName(String name, String cursor);
 
     Slice<ProductsListDto> findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor);
+
     Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 
     Products getProductDetailWithLimitedReviews(String id);

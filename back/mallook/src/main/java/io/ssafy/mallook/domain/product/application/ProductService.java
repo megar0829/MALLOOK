@@ -33,6 +33,4 @@ public interface ProductService {
     Slice<Products> findByName(Pageable pageable);
 
     String getLastMongoProductsId();
-
-    Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 }

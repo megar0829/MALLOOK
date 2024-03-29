@@ -4,11 +4,8 @@ import io.ssafy.mallook.domain.product.entity.Products;
 import lombok.Builder;
 
 import java.util.List;
-
-public record ProductsListDto(
-
 @Builder
-public record ProductsListDto (
+public record ProductsListDto(
         String id,
         String mainCategory,
         String subCategory,
