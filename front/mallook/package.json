@@ -11,14 +11,20 @@
   "dependencies": {
     "@egjs/react-infinitegrid": "^4.11.1",
     "@nextui-org/react": "^2.2.10",
+    "@types/file-saver": "^2.0.7",
+    "axios": "^1.6.8",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^11.0.8",
     "html-react-parser": "^5.1.9",
+    "html2canvas": "^1.4.1",
     "next": "14.1.0",
+    "next-images": "^1.8.5",
     "rc-progress": "^3.5.1",
     "react": "^18",
     "react-dom": "^18",
+    "react-query": "^3.39.3",
     "sass": "^1.71.1"
   },
   "devDependencies": {

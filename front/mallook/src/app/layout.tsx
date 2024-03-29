@@ -10,6 +10,7 @@ export const metadata :Metadata = {
     default: "Loading..."
   },
   description: 'The clothing store',
+  icons: "/favicon.png",
 };
 
 export default function Layout(
