@@ -16,6 +16,7 @@ import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
@@ -40,6 +41,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
+@Tag(name = "주문", description = "주문 관련 API")
 public class ProductController {
 
     private final ProductService productService;

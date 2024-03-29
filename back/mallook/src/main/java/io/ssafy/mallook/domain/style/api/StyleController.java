@@ -11,6 +11,7 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +31,7 @@ import java.util.Objects;
 @RequestMapping("/api/styles")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "스타일", description = "스타일 관련 API")
 public class StyleController {
 
     private final StyleService styleService;
@@ -53,7 +55,13 @@ public class StyleController {
                 result
         );
     }
-
+    @Operation(
+            summary = "월드컵 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "월드컵 리스트 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "월드컵 리스트 조회 실패")
+            }
+    )
     @GetMapping("/world-cup")
     public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
     ) {
