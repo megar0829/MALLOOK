@@ -5,6 +5,7 @@ services:
     image: duckbill413/mallook-docker-api:latest
     ports:
       - "127.0.0.1:8080:8080"
+      - "8081:8081"
     environment:
       TZ: "Asia/Seoul"
     networks:
