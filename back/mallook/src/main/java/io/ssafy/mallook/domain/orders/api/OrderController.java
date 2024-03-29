@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.orders.api;
 import io.ssafy.mallook.domain.orders.application.OrderService;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDirectInsertReq;
 import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
@@ -72,6 +73,16 @@ public class OrderController {
                                                             @RequestBody @Valid OrderInsertReq createDto) {
         UUID id = principal.getId();
         orderService.insertOrder(id, createDto);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "성공적으로 주문되었습니다."
+        );
+    }
+    @PostMapping("/direct")
+    public ResponseEntity<BaseResponse<String>> insertDirectOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderDirectInsertReq insertReq) {
+        UUID id = principal.getId();
+        orderService.insertDirectOrder(id, insertReq);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "성공적으로 주문되었습니다."

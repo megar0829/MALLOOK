@@ -22,7 +22,7 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
     )
     Long CountSameProductInCart(@Param("cartId") Long cartId, @Param("productId") String productId);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("""
                 update CartProduct cp set cp.status = false
                 where cp.id = :cartProductId and cp.status = true

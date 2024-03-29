@@ -24,7 +24,7 @@ public class BatchScheduler {
     private final  JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @Scheduled(cron= "* /30 * * * *")
+    @Scheduled(cron = "0 */30 * * * *")
     public void runJob() {
         String time = LocalDateTime.now().toString();
         try {

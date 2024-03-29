@@ -14,7 +14,6 @@ public record CartInsertReq(
         @Schema(description = "상품 사이즈")
         @NotBlank(message = "상품 사이즈는 공백일 수 없습니다.")
         String size,
-
         @Schema(description = "상품 가격")
         @NotBlank(message = "상품 가격은 공백일 수 없습니다.")
         Integer price,

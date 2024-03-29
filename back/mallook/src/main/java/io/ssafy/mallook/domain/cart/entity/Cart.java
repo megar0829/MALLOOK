@@ -40,7 +40,7 @@ public class Cart extends BaseEntity {
     @NotNull
     @ColumnDefault("0")
     @Column(name = "total_fee")
-    private Integer totalFee;
+    private Long totalFee;
 
     @NotNull
     @Column(name = "total_count")

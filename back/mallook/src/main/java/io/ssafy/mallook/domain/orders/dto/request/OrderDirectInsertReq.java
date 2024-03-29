@@ -2,12 +2,10 @@ package io.ssafy.mallook.domain.orders.dto.request;
 
 import java.util.List;
 
-public record OrderInsertReq(
+public record OrderDirectInsertReq(
         Long totalPrice,
         Long totalFee,
         Long totalCount,
-        Long cartId,
-        List<Long> cartProductList
+        ProductHistoryDto products
 ) {
 }
-
