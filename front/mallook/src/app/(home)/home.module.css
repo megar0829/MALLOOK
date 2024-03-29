@@ -6,7 +6,7 @@
 }
 
 .leftDiv {
-  width: 40%;
+  width: 40dvw;
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -61,14 +61,13 @@
 }
 
 .rightDiv {
-  width: 60%;
+  width: 60dvw;
   height: 100dvh;
-  margin-top: 20dvh;
+  padding-top: 20dvh;
 }
 .phoneDiv {
-  width: 100%;
+  width: 60dvw;
   height: 700px;
-  margin-left: 40px;
 }
 .phoneDiv img {
   width: 100%;
