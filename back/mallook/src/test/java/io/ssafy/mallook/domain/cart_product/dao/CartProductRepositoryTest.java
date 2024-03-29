@@ -43,7 +43,7 @@ class CartProductRepositoryTest {
     @Autowired
     private EntityManager em;
     private Member member;
-    private Product product;
+    private String products;
     private ShoppingMall shoppingMall;
     private Cart cart;
 
@@ -55,8 +55,7 @@ class CartProductRepositoryTest {
         cartRepository.save(cart);
         shoppingMall = buildShoppingMall();
         shoppingMallRepository.save(shoppingMall);
-        product = buildProduct(shoppingMall);
-        productRepository.save(product);
+        products = "6604f5dd5fc901aa6386394d";
     }
 
     private Cart buildCart(Member member) {
@@ -64,28 +63,15 @@ class CartProductRepositoryTest {
                 .member(member)
                 .totalPrice(10000L)
                 .totalCount(10L)
-                .totalFee(1000)
+                .totalFee(1000L)
                 .build();
     }
 
-    private Product buildProduct(ShoppingMall shoppingMall) {
-        return Product.builder()
-                .mainCategory(MainCategory.TOP)
-                .subCategory(SubCategory.FORMAL)
-                .name("테스트옷")
-                .price(1000)
-                .quantity(10)
-                .size("s")
-                .color("red")
-                .fee(1000)
-                .shopingmall(shoppingMall)
-                .build();
-    }
 
-    private CartProduct buildCartProduct(Cart cart, Product product) {
+    private CartProduct buildCartProduct(Cart cart) {
         return CartProduct.builder()
                 .cart(cart)
-                .product(product)
+                .product(products)
                 .productName("test")
                 .productCount(1)
                 .productPrice(1000)
@@ -113,7 +99,7 @@ class CartProductRepositoryTest {
     void deleteCartProductTest() {
         List<Long> deleteCartList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            CartProduct cartProduct = buildCartProduct(cart, product);
+            CartProduct cartProduct = buildCartProduct(cart);
             var rs = cartProductRepository.save(cartProduct);
             deleteCartList.add(rs.getId());
         }
