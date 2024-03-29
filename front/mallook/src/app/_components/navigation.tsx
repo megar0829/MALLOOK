@@ -12,18 +12,18 @@ import iconCart from "@/assets/img/icons/cart.png";
 import iconProfile from "@/assets/img/icons/profile.png";
 
 export default function Navigation() {
-  const params = useSearchParams();
+  // const params = useSearchParams();
 
-  useEffect(() => {
-    console.log(params);
-  }, [params]);
-
-  console.log(params.get("access-token"));
+  // useEffect(() => {
+  //   console.log(params);
+  // }, [params]);
+  //
+  // console.log(params.get("access-token"));
 
   const path = usePathname();
   const [count, setCount] = useState(0);
 
-  console.log(path);
+  // console.log(path);
   return (
     <nav>
       <div className={styles.container}>
