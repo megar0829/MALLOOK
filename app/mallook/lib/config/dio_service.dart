@@ -102,4 +102,25 @@ class DioService {
       }
     }
   }
+
+  Future<T> convertedGet<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    required T Function(Map<String, dynamic>) fromJsonT,
+  }) async {
+    try {
+      final response =
+          await _authDio!.get(path, queryParameters: queryParameters);
+      if (response.statusCode == 200) {
+        int status = response.data['status'];
+        String message = response.data['message'];
+        T result = fromJsonT(response.data);
+        return result;
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
