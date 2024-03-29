@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -89,7 +90,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     }
 
     @Override
-    public Products getProductDetailWithLimitedReviews(String id) {
+    public ProductsDetailDto getProductDetailWithLimitedReviews(String id) {
         AggregationOperation matchOperation = Aggregation.match(Criteria.where("_id").is(id));
         AggregationOperation projectOperation = Aggregation.project(
                         "main_category", "sub_category", "gender",
@@ -100,8 +101,8 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .and("reviews.average_point").as("reviews.average_point")
                 .and("reviews.reviews").slice(5).as("reviews.reviews");
         TypedAggregation<Products> aggregation = newAggregation(Products.class, matchOperation, projectOperation);
-        AggregationResults<Products> result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
-        return result.getUniqueMappedResult();
+        Products result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class).getUniqueMappedResult();
+        return ProductsDetailDto.toDto(result);
     }
 
     @Override

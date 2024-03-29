@@ -74,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Products getMongoProductsDetail(String id) {
+    public ProductsDetailDto getMongoProductsDetail(String id) {
         var result = productsCustomRepository.getProductDetailWithLimitedReviews(id);
         if (Objects.isNull(result)) {
             throw new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR);

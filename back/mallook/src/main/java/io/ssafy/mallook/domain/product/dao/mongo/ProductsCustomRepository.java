@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -19,7 +20,7 @@ public interface ProductsCustomRepository {
 
     Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 
-    Products getProductDetailWithLimitedReviews(String id);
+    ProductsDetailDto getProductDetailWithLimitedReviews(String id);
 
     Page<ReviewObject> getReviews(String id, Pageable pageable);
 }

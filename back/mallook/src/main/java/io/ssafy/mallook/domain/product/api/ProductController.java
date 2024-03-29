@@ -4,6 +4,7 @@ import com.amazonaws.util.CollectionUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
@@ -91,7 +92,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<Products>> getProductsDetail(
+    public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(
             @PathVariable("id") String id) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
