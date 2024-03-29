@@ -198,7 +198,7 @@ class _OrderScreenState extends State<OrderScreen> {
         ),
         actions: const [
           HomeIconButton(),
-          Gaps.h20,
+          Gaps.h24,
         ],
       ),
       body: SingleChildScrollView(

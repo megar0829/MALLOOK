@@ -230,7 +230,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
             ),
             Gaps.h10,
             const CartIconButton(),
-            Gaps.h20,
+            Gaps.h24,
           ],
         ),
         body: SingleChildScrollView(
@@ -358,7 +358,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                               addKeyword: addSearchKeyword,
                             );
                           }
-                          return const Center(
+                          return Center(
                             child: CustomCircularWaitWidget(),
                           );
                         },
@@ -390,7 +390,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                   itemCount: _products.length, // itemCount 수정
                 ),
               ),
-              if (_isProductLoading) const CustomCircularWaitWidget(),
+              if (_isProductLoading) CustomCircularWaitWidget(),
             ],
           ),
         ),

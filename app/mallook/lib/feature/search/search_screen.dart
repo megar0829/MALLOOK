@@ -152,7 +152,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: Sizes.size20,
+                  fontSize: Sizes.size18,
                 ),
               ),
             ),
@@ -276,7 +276,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           );
                         }
-                        return const Center(
+                        return Center(
                           child: CustomCircularWaitWidget(),
                         );
                       },

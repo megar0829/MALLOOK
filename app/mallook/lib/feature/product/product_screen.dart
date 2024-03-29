@@ -76,7 +76,7 @@ class _ProductScreenState extends State<ProductScreen> {
           HomeIconButton(),
           Gaps.h10,
           CartIconButton(),
-          Gaps.h20,
+          Gaps.h24,
         ],
       ),
       body: SingleChildScrollView(

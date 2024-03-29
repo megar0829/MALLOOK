@@ -238,7 +238,7 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
                 ),
               );
             } else {
-              return const CustomCircularWaitWidget();
+              return CustomCircularWaitWidget();
             }
           },
           separatorBuilder: (context, index) => Gaps.v10,

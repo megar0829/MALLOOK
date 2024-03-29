@@ -91,7 +91,7 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
                 ),
               );
             } else {
-              return const CustomCircularWaitWidget();
+              return CustomCircularWaitWidget();
             }
           },
         ),
