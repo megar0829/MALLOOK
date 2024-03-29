@@ -1,0 +1,43 @@
+.container {
+    width: 90dvw;
+    height: 90dvh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.left__container {
+    width: 40dvw;
+    height: 80dvh;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+.drag__container {
+    width: 40dvw;
+    height: 80dvh;
+    position: relative;
+}
+
+.right__container {
+    width: 45dvw;
+    height: 80dvh;
+    border: 1px solid black;
+    padding: 5px;
+
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 5px;
+
+}
+.imageDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+}
+.image {
+
+}
