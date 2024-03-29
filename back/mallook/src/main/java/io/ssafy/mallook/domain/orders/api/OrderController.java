@@ -19,7 +19,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,7 +39,7 @@ public class OrderController {
                      direction = Sort.Direction.DESC) Pageable pageable,
              @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = cursor != null ? cursor : orderService.findMaxOrderId();
+        cursor = !isNull(cursor) ? cursor : orderService.findMaxOrderId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
