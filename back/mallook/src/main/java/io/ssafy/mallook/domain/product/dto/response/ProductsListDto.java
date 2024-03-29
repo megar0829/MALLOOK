@@ -1,11 +1,11 @@
 package io.ssafy.mallook.domain.product.dto.response;
+
 import io.ssafy.mallook.domain.product.entity.Products;
 import lombok.Builder;
 
 import java.util.List;
-
 @Builder
-public record ProductsListDto (
+public record ProductsListDto(
         String id,
         String mainCategory,
         String subCategory,
@@ -20,7 +20,7 @@ public record ProductsListDto (
         String code,
         String url,
         String image
-){
+) {
 
     public static ProductsListDto toDto(Products products) {
         return ProductsListDto.builder()

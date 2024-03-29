@@ -4,11 +4,16 @@ import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
+import io.ssafy.mallook.domain.product.entity.ReviewObject;
+import io.ssafy.mallook.domain.product.entity.Reviews;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -16,16 +21,18 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
 
 @Repository
 @RequiredArgsConstructor
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     private final MongoTemplate mongoTemplate;
+    private final String COLLECTION_NAME = "hiver";
 
     @Override
-    public Slice<ProductsListDto> findByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
+    public Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
         Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
                 .with(pageable);
 
@@ -80,5 +87,34 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
 
         return new SliceImpl<>(productsList, pageable, hasNext);
+    }
+
+    @Override
+    public ProductsDetailDto getProductDetailWithLimitedReviews(String id) {
+        AggregationOperation matchOperation = Aggregation.match(Criteria.where("_id").is(id));
+        AggregationOperation projectOperation = Aggregation.project(
+                        "main_category", "sub_category", "gender",
+                        "name", "price", "color", "size", "brand_name", "fee",
+                        "image", "code", "url", "tags", "detail_images", "detail_html",
+                        "keywords")
+                .and("reviews.count").as("reviews.count")
+                .and("reviews.average_point").as("reviews.average_point")
+                .and("reviews.reviews").slice(5).as("reviews.reviews");
+        TypedAggregation<Products> aggregation = newAggregation(Products.class, matchOperation, projectOperation);
+        Products result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class).getUniqueMappedResult();
+        return ProductsDetailDto.toDto(result);
+    }
+
+    @Override
+    public Page<ReviewObject> getReviews(String id, Pageable pageable) {
+        AggregationOperation matchOperation = Aggregation.match(Criteria.where("_id").is(id));
+        AggregationOperation sliceOperation = Aggregation.project()
+                .and("reviews.count").as("reviews.count")
+                .and("reviews.average_point").as("reviews.average_point")
+                .and("reviews.reviews").slice(pageable.getPageSize(), (int) (pageable.getOffset())).as("reviews.reviews");
+        TypedAggregation<Products> aggregation = newAggregation(Products.class, matchOperation, sliceOperation);
+        AggregationResults<Products> result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
+        Reviews reviews = Objects.requireNonNull(result.getUniqueMappedResult()).getReviews();
+        return new PageImpl<>(reviews.getReviews(), pageable, reviews.getCount());
     }
 }

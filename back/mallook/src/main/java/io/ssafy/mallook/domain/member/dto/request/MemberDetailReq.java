@@ -8,21 +8,21 @@ import jakarta.validation.constraints.Size;
 
 @Schema(description = "회원 정보 저장시 요청 DTO")
 public record MemberDetailReq(
-        @Schema(description="닉네임")
+        @Schema(description = "닉네임")
         @NotBlank(message = "닉네임은 공백일 수 없습니다.")
         @Size(min = 2, max = 16, message = "닉네임의 길이는 2~16자로 제한됩니다.")
         String nickname,
-        @Schema(description="성별")
+        @Schema(description = "성별")
         @NotBlank(message = "성별은 공백일 수 없습니다.")
         String gender,
         @Pattern(regexp = "^(19|20)\\d{2}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[0-1])$")
-        @Schema(description="생년월일")
+        @Schema(description = "생년월일")
         @NotBlank(message = "생일은 공백일 수 없습니다.")
         String birth,
-        @Schema(description="전화번호")
+        @Schema(description = "전화번호")
         @NotBlank(message = "전화번호는 공백일 수 없습니다.")
         String phone,
-        @Schema(description="시도")
+        @Schema(description = "시도")
         @NotBlank(message = "지역정보('시도')는 공백일 수 없습니다.")
         String city,
         @Schema(description = "시군구")

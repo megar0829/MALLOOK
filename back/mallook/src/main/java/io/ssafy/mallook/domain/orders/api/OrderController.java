@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.orders.api;
 import io.ssafy.mallook.domain.orders.application.OrderService;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
+import io.ssafy.mallook.domain.orders.dto.request.OrderDirectInsertReq;
+import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderListDto;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -57,7 +59,7 @@ public class OrderController {
         );
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<BaseResponse<String>> createOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderCreateDto createDto) {
         UUID id = principal.getId();
@@ -68,7 +70,40 @@ public class OrderController {
         );
     }
 
+
+    @PostMapping
+    public ResponseEntity<BaseResponse<String>> insertOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderInsertReq createDto) {
+        UUID id = principal.getId();
+        orderService.insertOrder(id, createDto);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "성공적으로 주문되었습니다."
+        );
+    }
+    @PostMapping("/direct")
+    public ResponseEntity<BaseResponse<String>> insertDirectOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderDirectInsertReq insertReq) {
+        UUID id = principal.getId();
+        orderService.insertDirectOrder(id, insertReq);
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "성공적으로 주문되었습니다."
+        );
+    }
+
     @DeleteMapping
+    @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
+    public ResponseEntity<BaseResponse<String>> removeOrder(@AuthenticationPrincipal UserSecurityDTO principal,
+                                                            @RequestBody @Valid OrderDeleteDto orderDeleteDto) {
+        orderService.removeOrder(orderDeleteDto);
+        return BaseResponse.success(
+                SuccessCode.DELETE_SUCCESS,
+                "성공적으로 삭제되었습니다."
+        );
+    }
+
+    @DeleteMapping("/delete")
     @PreAuthorize("@authService.authorizeToDeleteOrder(#principal.getId(), #orderDeleteDto)")
     public ResponseEntity<BaseResponse<String>> deleteOrder(@AuthenticationPrincipal UserSecurityDTO principal,
                                                             @RequestBody @Valid OrderDeleteDto orderDeleteDto) {

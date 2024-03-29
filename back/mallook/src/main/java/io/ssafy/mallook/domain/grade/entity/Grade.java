@@ -3,9 +3,10 @@ package io.ssafy.mallook.domain.grade.entity;
 import io.ssafy.mallook.domain.BaseEntity;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -23,13 +24,16 @@ public class Grade extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Level level;
 
-    @NotNull
     @OneToOne
-    @JoinColumn(name="member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
 
     public Grade(Level level) {
         super();
+    }
+
+    public List<Integer> getGradeRange() {
+        return Level.getExpRange(this.level);
     }
 }

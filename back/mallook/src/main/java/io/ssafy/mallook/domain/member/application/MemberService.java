@@ -8,8 +8,11 @@ import java.text.ParseException;
 import java.util.UUID;
 
 public interface MemberService {
-   MemberDetailRes findMemberDetail(UUID memberId);
-   NicknameRes makeRandomNickname();
-   void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException;
-   void updateNickname(UUID memberId, String nickname);
+    MemberDetailRes findMemberDetail(UUID memberId);
+
+    NicknameRes makeRandomNickname();
+
+    void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) throws ParseException;
+
+    void updateNickname(UUID memberId, String nickname);
 }

@@ -10,15 +10,21 @@ import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
+import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
+import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductsRepository mongoProductsRepository;
     private final ProductsCustomRepository productsCustomRepository;
+
     @Override
     public Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory) {
         return productCustomRepository.findAllProduct(cursor, pageable, mainCategory, subCategory);
@@ -63,6 +70,20 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
-        return productsCustomRepository.findByCategory(cursor, pageable, mainCategory, subCategory);
+        return productsCustomRepository.getProductsListByCategory(cursor, pageable, mainCategory, subCategory);
+    }
+
+    @Override
+    public ProductsDetailDto getMongoProductsDetail(String id) {
+        var result = productsCustomRepository.getProductDetailWithLimitedReviews(id);
+        if (Objects.isNull(result)) {
+            throw new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR);
+        }
+        return result;
+    }
+
+    @Override
+    public Page<ReviewObject> getReviewList(String productsId, Pageable pageable) {
+        return productsCustomRepository.getReviews(productsId, pageable);
     }
 }

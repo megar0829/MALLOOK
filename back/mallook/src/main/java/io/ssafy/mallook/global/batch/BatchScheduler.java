@@ -23,14 +23,13 @@ import java.time.LocalDateTime;
 @Component
 public class BatchScheduler {
 
-    private final JobLauncher jobLauncher;
+    private final  JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-    @Scheduled(cron = "0 0 0 * * 1")
+    @Scheduled(cron = "0 */30 * * * *")
     @SchedulerLock(name = "couponTask", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runJob() {
         String time = LocalDateTime.now().toString();
-
         try {
             Job job = jobRegistry.getJob("gradeJob");
             JobParametersBuilder jobParameter = new JobParametersBuilder().addString("time", time);
@@ -39,5 +38,6 @@ public class BatchScheduler {
                  JobInstanceAlreadyCompleteException | JobExecutionAlreadyRunningException e) {
             throw new RuntimeException(e);
         }
+
     }
 }
