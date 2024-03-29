@@ -25,7 +25,7 @@ import java.text.ParseException;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-@Tag(name = "멤버", description = "Member 관련 API")
+@Tag(name = "회원", description = "회원 관련 API")
 @Log4j2
 public class MemberController {
 

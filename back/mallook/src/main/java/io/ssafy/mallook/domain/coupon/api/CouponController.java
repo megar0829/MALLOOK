@@ -9,6 +9,7 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ import java.util.Objects;
 @RequestMapping("/api/coupons")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "쿠폰", description = "쿠폰 관련 API")
 public class CouponController {
     private final CouponService couponService;
     private final MemberCouponService memberCouponService;

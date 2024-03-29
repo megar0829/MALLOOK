@@ -9,6 +9,7 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "장바구니", description = "장바구니 관련 API")
 public class CartController {
     private final CartService cartService;
 

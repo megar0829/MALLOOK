@@ -12,6 +12,7 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +32,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/orders")
+@Tag(name = "주문", description = "주문 관련 API")
 public class OrderController {
 
     private final OrderService orderService;
