@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -38,19 +39,15 @@ public class MemberServiceImpl implements MemberService {
     public MemberDetailRes findMemberDetail(UUID memberId) {
         var memberDetail = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        System.out.println("################" + memberDetail);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return new MemberDetailRes(memberDetail.getNickname(),
-                sdf.format(memberDetail.getBirth()),
-                memberDetail.getGender().toString(),
+                Objects.nonNull(memberDetail.getBirth()) ? sdf.format(memberDetail.getBirth()) : null,
+                Objects.nonNull(memberDetail.getGender()) ? memberDetail.getGender().toString() : null,
                 memberDetail.getPhone(),
                 memberDetail.getPoint(),
                 memberDetail.getExp(),
-                memberDetail.getGrade().getGradeRange(),
-                memberDetail.getAddress().getCity(),
-                memberDetail.getAddress().getDistrict(),
-                memberDetail.getAddress().getAddress(),
-                memberDetail.getAddress().getZipcode());
+                Objects.nonNull(memberDetail.getGender()) ? memberDetail.getGrade().getGradeRange() : List.of(),
+                memberDetail.getAddress());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.member.dto.response;
 
 
+import io.ssafy.mallook.domain.member.entity.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -21,13 +22,7 @@ public record MemberDetailRes(
         Long exp,
         @Schema(description = "경험치 범위")
         List<Integer> expRange,
-        @Schema(description = "시도")
-        String city,
-        @Schema(description = "시군구")
-        String district,
-        @Schema(description = "상세주소")
-        String address,
-        @Schema(description = "우편번호")
-        String zipcode
+        @Schema(description = "주소")
+        Address address
 ) {
 }
