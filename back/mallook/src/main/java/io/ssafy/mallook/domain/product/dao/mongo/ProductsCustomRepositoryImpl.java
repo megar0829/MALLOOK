@@ -4,17 +4,11 @@ import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
-import io.ssafy.mallook.domain.product.entity.ReviewObject;
-import io.ssafy.mallook.domain.product.entity.Reviews;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -23,23 +17,25 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
+import java.util.Objects;
+
+import static java.util.Objects.*;
 
 @Repository
 @RequiredArgsConstructor
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     private final MongoTemplate mongoTemplate;
-    private final String COLLECTION_NAME = "hiver";
 
     @Override
-    public Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
+    public Slice<ProductsListDto> findByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
         Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
                 .with(pageable);
 
-        if (mainCategory != null) {
+        if (!isNull(mainCategory)) {
             query.addCriteria(Criteria.where("mainCategory").is(mainCategory));
         }
-        if (subCategory != null) {
+        if (!isNull(subCategory)) {
             query.addCriteria(Criteria.where("subCategory").is(subCategory));
         }
 
@@ -57,7 +53,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
-        if (cursor != null && !cursor.isEmpty()) {
+        if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 
@@ -76,7 +72,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         List<String> keywords = hotKeywordDto.hotKeywordList();
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
 
-        if (cursor != null && !cursor.isEmpty()) {
+        if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
         }
 
