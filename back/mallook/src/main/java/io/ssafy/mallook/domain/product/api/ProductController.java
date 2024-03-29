@@ -14,6 +14,8 @@ import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.ErrorResponse;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.common.code.SuccessCode;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
@@ -41,7 +43,11 @@ import static java.util.Objects.*;
 public class ProductController {
 
     private final ProductService productService;
-
+    @Operation(summary = "상품 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "상품 리스트 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "상품 리스트 조회 실패")
+            })
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductsList(
             @PageableDefault(size = 20,
@@ -58,7 +64,11 @@ public class ProductController {
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
         );
     }
-
+    @Operation(summary = "상품 검색",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "상품 검색 성공"),
+                    @ApiResponse(responseCode = "404", description = "상품 검색 실패")
+            })
     @GetMapping("/search")
     public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
@@ -90,7 +100,11 @@ public class ProductController {
                 methodToCall.get()
         );
     }
-
+    @Operation(summary = "상품 상세 정보 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "상품 상세 정보 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "상품 상세 정보 조회 실패")
+            })
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(
             @PathVariable("id") String id) {
@@ -99,7 +113,11 @@ public class ProductController {
                 productService.getMongoProductsDetail(id)
         );
     }
-
+    @Operation(summary = "리뷰 다음 페이지 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "리뷰 다음 페이지 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "리뷰 다음 페이지 조회 실패")
+            })
     @GetMapping("/reviews")
     public ResponseEntity<BaseResponse<Page<ReviewObject>>> getReviewList(
             @RequestParam(name = "id") String id,
