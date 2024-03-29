@@ -1,32 +1,54 @@
+import os
+import re
 import pymongo
 from dotenv import load_dotenv
-import os
-from konlpy.tag import Kkma
-from konlpy.tag import Okt
-import re
 from pykospacing import Spacing
+from soynlp.word import WordExtractor
+from soynlp.tokenizer import LTokenizer
+from soynlp.noun import LRNounExtractor
 
-def review_preprocessing(reviews):
-    keywords = []
+# PyKoSpacing 인스터스 생성
+spacing = Spacing()         
 
-    tokenizer = Okt()       # Okt 형태소 분석기
-    spacing = Spacing()     # PyKoSpacing 패키지
+# WordExtractor 인스턴스 생성
+word_extractor = WordExtractor()
 
-    for review in reviews:
-        # 숫자, 영어 알파벳, 특수 문자, 구두점 및 개행 문자, 줄바꿈, 초성 제거
-        cleaned_review = re.sub(r'[a-zA-Z\s\W_]+|[^ㄱ-ㅎㅏ-ㅣ가-힣]+|\n+', '', review)
+# 토크나이저 생성
+word_scores = word_extractor.word_scores()
+tokenizer = LTokenizer(scores=word_scores)
 
-        # 띄어쓰기
-        cleaned_review = spacing(cleaned_review)  
-        print(cleaned_review)
 
-        # 형태소 분석을 통해 명사만 추출
-        tokens = tokenizer.morphs(cleaned_review)
+# 불용어 셋
+current_directory = os.path.dirname(os.path.abspath(__file__))
+stopwords_file = os.path.join(current_directory, "stopword.txt")
+
+with open(stopwords_file, 'r', encoding='utf-8') as file:
+    stopwords = [line.strip() for line in file]
+
+
+def review_preprocessing(corpus):
+    # 전처리
+    corpus = re.sub(r'[^가-힣]+', ' ', corpus)
+    corpus = spacing(corpus)
+
+    # 토큰화
+    tokens = tokenizer.tokenize(corpus)
+
+    # 불용어 셋
+    
+
+    for token in tokens:
+        # 한 글자 제거
+        if len(token) == 1:
+            continue
         
-        # 키워드를 고유한 토큰으로 업데이트
-        keywords += tokens
+        # 불용어 제거
+        if token in stopwords:
+            continue
         
-    return keywords
+        # 키워드 셋에 포함되어 있는지 확인하고 카운트
+
+    return tokens
 
 
 load_dotenv()
@@ -39,10 +61,12 @@ collection = db["products"]
 
 cursor = collection.find()
 
+i = 0
 for document in cursor:
-    reviews = set()
+    i += 1
+    reviews = ''
 
-  # 리뷰 없는 상품은 건너뜀
+    # 리뷰 없는 상품은 건너뜀
     if not document['reviews']['reviews']:
         continue
 
@@ -51,14 +75,16 @@ for document in cursor:
         if not review.get('contents', False):
             continue
             
-        reviews.add(review['contents'])
+        reviews += f" {review['contents']}"
 
     if not reviews:
         continue
     
     keywords = review_preprocessing(reviews)
     print(keywords)
-    break
+
+    if i == 4:
+        break
 
   # 추출된 키워드 저장
   # document['test_keywords'] = keywords
