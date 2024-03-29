@@ -1,17 +1,17 @@
 package io.ssafy.mallook.domain.product.api;
 
 import io.ssafy.mallook.domain.product.application.ProductService;
+import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
-import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -40,6 +40,23 @@ public class ProductController {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
+        );
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductDetail(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String cursor,
+            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
+        cursor = cursor != null ? cursor : productService.getLastMongoProductsId();
+        String finalCursor = cursor;
+        Supplier<Slice<ProductsListDto>> methodToCall = (hotKeywordDto == null || hotKeywordDto.hotKeywordList() == null || hotKeywordDto.hotKeywordList().isEmpty())
+                ? () -> productService.getProductDetail(name, finalCursor)
+                : () -> productService.getProductDetail(hotKeywordDto, finalCursor);
+
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                methodToCall.get()
         );
     }
 

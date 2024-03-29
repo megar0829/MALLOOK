@@ -5,34 +5,36 @@ import lombok.Builder;
 
 import java.util.List;
 
-public record ProductsListDto(
-
 @Builder
-public record ProductsListDto (
+public record ProductsDetailDto(
         String id,
         String mainCategory,
         String subCategory,
         String gender,
         String name,
         Integer price,
-        String brandName,
+        List<String> color,
         List<String> size,
+        String brandName,
         Integer fee,
-        List<String> tags,
-        List<String> detailImages,
+        String image,
         String code,
         String url,
-        String image
+        List<String> tags,
+        List<String> detailImages,
+        String detailHtml,
+        List<String> keywords
 ) {
-
-    public static ProductsListDto toDto(Products products) {
-        return ProductsListDto.builder()
+    public static ProductsDetailDto toDto(Products products) {
+        return ProductsDetailDto.builder()
                 .id(products.getId().toString())
                 .mainCategory(products.getMainCategory())
                 .subCategory(products.getSubCategory())
                 .gender(products.getGender())
                 .name(products.getName())
                 .price(products.getPrice())
+                .color(products.getColor())
+                .size(products.getSize())
                 .brandName(products.getBrandName())
                 .fee(products.getFee())
                 .image(products.getImage())
@@ -40,6 +42,8 @@ public record ProductsListDto (
                 .url(products.getUrl())
                 .tags(products.getTags())
                 .detailImages(products.getDetailImages())
+                .detailHtml(products.getDetailHtml())
+                .keywords(products.getKeywords())
                 .build();
     }
 }

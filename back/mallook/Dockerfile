@@ -7,4 +7,4 @@ ARG JAR_FILE=build/libs/mallook-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} mallook-api.jar
 
 # 실행 명령어
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/mallook-api.jar", "--spring.profiles.active=dev"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/mallook-api.jar", "--spring.profiles.active=dev,batch"]

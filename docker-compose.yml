@@ -12,6 +12,17 @@ services:
     volumes:
       - /home/ec2-user/logs:/logs
 
+  mallook-batch:
+    container_name: mallook-batch
+    image: duckbill413/mallook-docker-batch:latest
+    environment:
+      - "127.0.0.1:8082:8082"
+      - TZ=Asia/Seoul
+    networks:
+      - mallook_net
+    depends_on:
+      - springboot
+
   redis:
     image: redis:alpine
     container_name: mallook-redis
