@@ -1,15 +1,12 @@
 package io.ssafy.mallook.global.batch.dao;
 
 import com.google.gson.Gson;
-import io.ssafy.mallook.domain.script.entity.Script;
-import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.global.batch.dto.TopScriptDto;
 import io.ssafy.mallook.global.batch.dto.TopStyleDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Repository
