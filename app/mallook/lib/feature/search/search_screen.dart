@@ -276,7 +276,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           );
                         }
-                        return const Center(
+                        return Center(
                           child: CustomCircularWaitWidget(),
                         );
                       },

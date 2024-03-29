@@ -51,6 +51,11 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
     }
   }
 
+  void _deleteCoupon(Coupon coupon) {
+    coupons.remove(coupon);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -130,27 +135,16 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
                               fontSize: Sizes.size14,
                             ),
                           ),
-                          Gaps.v4,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                coupons[index].type,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Sizes.size16,
-                                ),
-                              ),
-                              Text(
-                                '${coupons[index].discount}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Sizes.size16,
-                                ),
-                              ),
-                            ],
+                          Gaps.v10,
+                          Text(
+                            coupons[index].type == 'amount'
+                                ? '${coupons[index].discount} ₩'
+                                : '${coupons[index].discount} %',
+                            style: const TextStyle(
+                              color: Colors.pink,
+                              fontSize: Sizes.size28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )
                         ],
                       ),
@@ -168,8 +162,9 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
                             fontSize: Sizes.size10,
                           ),
                         ),
+                        Gaps.v4,
                         ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => _deleteCoupon(coupons[index]),
                           child: const Text("쿠폰 삭제"),
                         ),
                       ],
@@ -178,7 +173,9 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
                 ),
               );
             } else {
-              return const CustomCircularWaitWidget();
+              return CustomCircularWaitWidget(
+                onTap: () => _loadMoreCoupons(),
+              );
             }
           },
           separatorBuilder: (context, index) => Gaps.v10,

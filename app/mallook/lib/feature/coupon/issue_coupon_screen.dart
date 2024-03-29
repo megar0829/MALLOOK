@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
@@ -52,6 +50,12 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
         });
       }
     }
+  }
+
+  void _issueCoupon(Coupon coupon) {
+    // 발급된 경우 화면에서 해당 쿠폰 삭제
+    coupons.remove(coupon);
+    setState(() {});
   }
 
   @override
@@ -133,27 +137,16 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                               fontSize: Sizes.size14,
                             ),
                           ),
-                          Gaps.v4,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                coupons[index].type,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Sizes.size16,
-                                ),
-                              ),
-                              Text(
-                                '${coupons[index].discount}',
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: Sizes.size16,
-                                ),
-                              ),
-                            ],
+                          Gaps.v10,
+                          Text(
+                            coupons[index].type == 'amount'
+                                ? '${coupons[index].discount} ₩'
+                                : '${coupons[index].discount} %',
+                            style: const TextStyle(
+                              color: Colors.pink,
+                              fontSize: Sizes.size28,
+                              fontWeight: FontWeight.bold,
+                            ),
                           )
                         ],
                       ),
@@ -161,7 +154,7 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                     Gaps.h20,
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => _issueCoupon(coupons[index]),
                         child: const Text("쿠폰 발급"),
                       ),
                     )
@@ -169,7 +162,9 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                 ),
               );
             } else {
-              return const CustomCircularWaitWidget();
+              return CustomCircularWaitWidget(
+                onTap: () => _loadMoreCoupons(),
+              );
             }
           },
           separatorBuilder: (context, index) => Gaps.v10,

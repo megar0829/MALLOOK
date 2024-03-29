@@ -183,13 +183,13 @@ class _ScriptScreenState extends State<ScriptScreen>
                       separatorBuilder: (context, index) => Gaps.v8,
                       itemCount: _products.length,
                     ),
-                    if (_isProductLoading) const CustomCircularWaitWidget(),
+                    if (_isProductLoading) CustomCircularWaitWidget(),
                   ],
                 ),
               ),
             );
           } else {
-            return const CustomCircularWaitWidget();
+            return CustomCircularWaitWidget();
           }
         },
       ),

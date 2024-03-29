@@ -102,7 +102,7 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
                 child: MyScriptListBox(script: _scripts[index]),
               );
             } else {
-              return const CustomCircularWaitWidget();
+              return CustomCircularWaitWidget();
             }
           },
         ),

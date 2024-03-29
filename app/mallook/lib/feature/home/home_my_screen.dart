@@ -96,7 +96,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                     ProductWidget(product: _products[index]),
                 itemCount: _products.length, // itemCount 수정
               ),
-              if (_isProductLoading) const CustomCircularWaitWidget(),
+              if (_isProductLoading) CustomCircularWaitWidget(),
             ],
           ),
         ),

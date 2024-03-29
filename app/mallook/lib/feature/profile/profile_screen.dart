@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/profile/widget/coupon_icon_button.dart';
@@ -65,11 +66,11 @@ class ProfileScreen extends StatelessWidget {
                   percentage: percentage,
                 ),
                 Gaps.v12,
-                const MyProfileControllerWidget(
-                  order: 7,
-                  deliver: 3,
-                  coupon: 12,
-                  point: 2633,
+                MyProfileControllerWidget(
+                  order: Random().nextInt(10),
+                  deliver: Random().nextInt(10),
+                  coupon: Random().nextInt(100),
+                  point: Random().nextInt(30000),
                 ),
                 Gaps.v20,
                 const FashionTileWidget(),

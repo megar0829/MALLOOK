@@ -18,7 +18,7 @@ class CouponApiService {
       );
     }
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 4));
     return coupons;
   }
 
@@ -37,7 +37,7 @@ class CouponApiService {
       );
     }
 
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 4));
     return coupons;
   }
 }

@@ -85,7 +85,7 @@ class OrderedScreen extends StatelessWidget {
                         itemCount: snapshot.data!.items.length,
                       );
                     } else {
-                      return const CustomCircularWaitWidget();
+                      return CustomCircularWaitWidget();
                     }
                   },
                 ),
