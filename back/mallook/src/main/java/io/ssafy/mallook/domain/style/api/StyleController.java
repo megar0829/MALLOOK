@@ -55,7 +55,13 @@ public class StyleController {
                 result
         );
     }
-
+    @Operation(
+            summary = "월드컵 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "월드컵 리스트 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "월드컵 리스트 조회 실패")
+            }
+    )
     @GetMapping("/world-cup")
     public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
     ) {
