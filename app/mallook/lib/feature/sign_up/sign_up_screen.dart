@@ -5,6 +5,8 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/gender.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/onboarding/interests_screen.dart';
+import 'package:mallook/feature/sign_up/api/signup_api_service.dart';
+import 'package:mallook/feature/sign_up/model/random_nickname_model.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 import 'package:mallook/feature/sign_up/widgets/gender_radio_button.dart';
 import 'package:mallook/feature/sign_up/widgets/phone_input_formatter.dart';
@@ -26,7 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       TextEditingController();
   DateTime? _currentBackPressTime;
   String _nickname = "";
-  bool _nicknameStatus = false;
   String _phone = "";
   bool _phoneStatus = false;
   late DateTime _birthDate;
@@ -38,9 +39,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _buildingName = "";
   String _additionalAddress = "";
   bool _additionalAddressInputEnable = false;
+  late RandomNicknameModel randomNicknameModel;
 
   bool _isAvailable() {
-    if (!_nicknameStatus) return false;
     if (!_phoneStatus) return false;
     if (_gender == null) return false;
     if (kopoModel == null) return false;
@@ -56,6 +57,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _nickname = _nicknameController.text;
       });
     });
+    _setRandomNickname();
+
     _phoneController.text = "010-";
     _phoneController.addListener(() {
       setState(() {
@@ -90,17 +93,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
+  void _setRandomNickname() async {
+    randomNicknameModel = await SignupApiService.getRandomNickname();
+    if (randomNicknameModel.nickname != null) {
+      _nickname = _nicknameController.text = randomNicknameModel.nickname!;
+    }
+  }
+
   void setDate(DateTime dateTime) {
     setState(() {
       _year = dateTime.year;
       _month = dateTime.month;
       _day = dateTime.day;
-    });
-  }
-
-  void _isNicknameValid() {
-    setState(() {
-      _nicknameStatus = true;
     });
   }
 
@@ -605,7 +609,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             Text(
-              "입력하지 않으면 자동으로 생성되요",
+              "닉네임 추천 받을까요?",
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontSize: Sizes.size14,
@@ -646,7 +650,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
             ElevatedButton(
-              onPressed: _isNicknameValid,
+              onPressed: _setRandomNickname,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).primaryColorLight,
                 shape: RoundedRectangleBorder(
@@ -659,7 +663,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               child: Text(
-                "중복검사",
+                "재생성",
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.w500,
@@ -669,18 +673,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             )
           ],
         ),
-        Gaps.v3,
-        if (_nickname.isNotEmpty && !_nicknameStatus)
-          Text(
-            _nicknameStatus ? "사용 가능한 닉네임입니다." : "사용할 수 없는 닉네임 입니다.",
-            style: TextStyle(
-              fontSize: Sizes.size14,
-              color: _nicknameStatus
-                  ? Theme.of(context).primaryColorDark
-                  : Colors.red.shade600,
-              fontWeight: FontWeight.w500,
-            ),
-          )
       ],
     );
   }

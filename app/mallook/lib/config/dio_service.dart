@@ -40,6 +40,7 @@ class DioService {
           }
 
           options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+          print('Access Token: ${token.accessToken}');
           return handler.next(options);
         },
         onResponse: (response, handler) async {
@@ -114,7 +115,7 @@ class DioService {
     }
   }
 
-  Future<T> convertedGet<T>(
+  Future<T> baseGet<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     required T Function(Map<String, dynamic>) fromJsonT,
@@ -122,10 +123,11 @@ class DioService {
     try {
       final response =
           await _authDio!.get(path, queryParameters: queryParameters);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
         int status = response.data['status'];
         String message = response.data['message'];
-        T result = fromJsonT(response.data);
+        T result = fromJsonT(response.data['result']);
         return result;
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');
