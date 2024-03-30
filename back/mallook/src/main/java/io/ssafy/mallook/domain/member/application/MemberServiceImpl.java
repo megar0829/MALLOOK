@@ -86,6 +86,7 @@ public class MemberServiceImpl implements MemberService {
                     .build();
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
+            member.getRole().add(MemberRole.USER);
             memberRepository.save(member);
         } catch (ParseException e) {
             throw new BaseExceptionHandler(ErrorCode.INVALID_TYPE_VALUE);
