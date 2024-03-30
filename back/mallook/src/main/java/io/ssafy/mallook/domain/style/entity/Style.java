@@ -58,4 +58,8 @@ public class Style extends BaseEntity {
         this.heartCount--;
         this.totalLike--;
     }
+
+    public void resetTotalLike() {
+        this.totalLike = 0;
+    }
 }
