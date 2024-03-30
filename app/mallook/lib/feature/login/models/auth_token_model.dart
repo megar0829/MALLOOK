@@ -21,7 +21,6 @@ class AuthTokenModel {
       if (json['roles'] is String) {
         _roles = [json['roles']];
       } else {
-        print('bbbbbbbbbbb');
         _roles = List<String>.from(json['roles']);
       }
     }

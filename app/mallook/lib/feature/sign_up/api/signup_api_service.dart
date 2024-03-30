@@ -10,4 +10,8 @@ class SignupApiService {
       fromJsonT: (json) => RandomNicknameModel.fromJson(json),
     );
   }
+
+  static Future<String> registerMemberInfo(dynamic data) async {
+    return await _dio.basePost("/api/members", postData: data);
+  }
 }

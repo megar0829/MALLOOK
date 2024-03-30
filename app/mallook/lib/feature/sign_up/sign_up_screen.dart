@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
-import 'package:mallook/constants/gender.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/login/api/login_api_servcie.dart';
 import 'package:mallook/feature/onboarding/interests_screen.dart';
 import 'package:mallook/feature/sign_up/api/signup_api_service.dart';
 import 'package:mallook/feature/sign_up/model/random_nickname_model.dart';
@@ -32,12 +33,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _phoneStatus = false;
   late DateTime _birthDate;
   late int _year, _month, _day;
-  Gender? _gender;
+  String? _gender;
   KopoModel? kopoModel = null;
-  String _zipCode = "";
+  String _city = "";
+  String _district = "";
+  String? _zipcode;
   String _address = "";
-  String _buildingName = "";
-  String _additionalAddress = "";
   bool _additionalAddressInputEnable = false;
   late RandomNicknameModel randomNicknameModel;
 
@@ -45,7 +46,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_phoneStatus) return false;
     if (_gender == null) return false;
     if (kopoModel == null) return false;
-    if (_additionalAddress.isEmpty) return false;
+    if (_district.isEmpty || _address.isEmpty) return false;
     return true;
   }
 
@@ -79,7 +80,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
     _additionalAddressController.addListener(() {
       setState(() {
-        _additionalAddress = _additionalAddressController.text;
+        _address = _additionalAddressController.text;
       });
     });
   }
@@ -126,7 +127,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void _setGender(Gender gender) {
+  void _setGender(String gender) {
     _gender = gender;
     setState(() {});
   }
@@ -155,20 +156,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
     _addressController.text = model.address!;
     kopoModel = model;
-    _zipCode = model.zonecode!;
-    _address = model.address!;
-    _buildingName = model.buildingName!;
+    _city = '${model.sido} ${model.sigungu}';
+    _district = '${model.query}';
+    _zipcode = model.zonecode;
   }
 
-  void _onSubmit() {
+  String formatDate(DateTime dateTime) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(dateTime);
+  }
+
+  void _onSubmit() async {
     if (!_isAvailable()) {
       return;
     }
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const InterestsScreen(),
-      ),
-    );
+
+    SignupApiService.registerMemberInfo(<String, String>{
+      "nickname": _nickname,
+      "gender": _gender!,
+      "birth": formatDate(_birthDate),
+      "phone": _phone,
+      "city": _city,
+      "district": _district,
+      "address": _address,
+      "zipcode": _zipcode!
+    }).then((value) {
+      if (value.contains("성공")) {
+        var token = LoginApiService.refreshAuthToken();
+        print(token);
+      }
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(
+      //     builder: (context) => const InterestsScreen(),
+      //   ),
+      // );
+    });
   }
 
   @override
@@ -426,14 +448,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             children: [
               GenderRadioButton(
                 text: '남자',
-                isSelected: Gender.man == _gender,
-                onTap: () => _setGender(Gender.man),
+                isSelected: "MAN" == _gender,
+                onTap: () => _setGender("MAN"),
               ),
               Gaps.h12,
               GenderRadioButton(
                 text: '여자',
-                isSelected: Gender.woman == _gender,
-                onTap: () => _setGender(Gender.woman),
+                isSelected: "WOMAN" == _gender,
+                onTap: () => _setGender("WOMAN"),
               )
             ],
           ),
