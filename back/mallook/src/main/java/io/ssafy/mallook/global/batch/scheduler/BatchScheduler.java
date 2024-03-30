@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch;
+package io.ssafy.mallook.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

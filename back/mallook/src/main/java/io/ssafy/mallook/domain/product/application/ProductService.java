@@ -13,14 +13,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import java.util.List;
-
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 
-    Slice<ProductsListDto> getProductDetail(String name, String cursor);
+    Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor);
+    Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
 
     Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 

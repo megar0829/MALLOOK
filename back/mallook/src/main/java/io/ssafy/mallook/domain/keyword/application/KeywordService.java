@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface KeywordService {
     List<KeywordListRes> getKeywordList();
+
+    List<KeywordListRes> getTopTenKeywordList();
 }

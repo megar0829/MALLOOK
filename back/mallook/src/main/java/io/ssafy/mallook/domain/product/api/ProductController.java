@@ -81,6 +81,7 @@ public class ProductController {
                 productService.getProductsWithManyReviews(pageable)
         );
     }
+
     @Operation(summary = "상품 검색",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 검색 성공"),
@@ -90,7 +91,11 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
-            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
+            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto,
+            @PageableDefault(size = 20,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         if (isNull(name) && isNull(hotKeywordDto)) {
             List<FieldError> errors = new ArrayList<>();
             FieldError fieldError = new FieldError("검색어", "name", "FAIL");
@@ -109,14 +114,15 @@ public class ProductController {
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         String finalCursor = cursor;
         Supplier<Slice<ProductsListDto>> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
-                ? () -> productService.getProductDetail(name, finalCursor)
-                : () -> productService.getProductDetail(hotKeywordDto, finalCursor);
+                ? () -> productService.getProductDetail(name, finalCursor, pageable)
+                : () -> productService.getProductDetail(hotKeywordDto, finalCursor, pageable);
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 methodToCall.get()
         );
     }
+
     @Operation(summary = "상품 상세 정보 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 상세 정보 조회 성공"),
@@ -130,6 +136,7 @@ public class ProductController {
                 productService.getMongoProductsDetail(id)
         );
     }
+
     @Operation(summary = "리뷰 다음 페이지 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "리뷰 다음 페이지 조회 성공"),

@@ -10,12 +10,15 @@ public record ScriptDetailDto(
         @Schema(description = "스크립트 제목")
         String name,
         @Schema(description = "좋아요 수")
-        Integer heartCount) {
-
+        Integer heartCount,
+        @Schema(description = "작성자 닉네임")
+        String nickname)
+{
     public static ScriptDetailDto toDto(Script script) {
         return ScriptDetailDto.builder()
                 .name(script.getName())
                 .heartCount(script.getHeartCount())
+                .nickname(script.getMember().getNickname())
                 .build();
     }
 }
