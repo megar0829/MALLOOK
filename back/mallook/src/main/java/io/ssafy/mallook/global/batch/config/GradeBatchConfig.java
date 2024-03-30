@@ -29,6 +29,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
+import static io.ssafy.mallook.global.common.code.ErrorCode.*;
+
 @Configuration
 @Slf4j
 @RequiredArgsConstructor
@@ -129,7 +131,7 @@ public class GradeBatchConfig {
     private ItemWriter<? super Member> changeMemberGradeData() {
         return members -> members.forEach(member -> {
             var grade = gradeRepository.findByMember(member)
-                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_ERROR));
             grade.setLevel(Level.getNextGrade(member.getExp()));
             gradeRepository.save(grade);
         });
