@@ -23,9 +23,11 @@ class _CustomCircularWaitWidgetState extends State<CustomCircularWaitWidget> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
-      setState(() {
-        _showWaitWidget = false;
-      });
+      if (mounted) {
+        setState(() {
+          _showWaitWidget = false;
+        });
+      }
     });
   }
 
@@ -67,9 +69,11 @@ class _CustomCircularWaitWidgetState extends State<CustomCircularWaitWidget> {
                     child: ElevatedButton(
                       onPressed: () {
                         widget.onTap!();
-                        setState(() {
-                          _showButton = false;
-                        });
+                        if (mounted) {
+                          setState(() {
+                            _showButton = false;
+                          });
+                        }
                       },
                       child: const Text('더보기'),
                     ),

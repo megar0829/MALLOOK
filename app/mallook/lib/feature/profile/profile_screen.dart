@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/profile/api/profile_api_service.dart';
 import 'package:mallook/feature/profile/widget/coupon_icon_button.dart';
 import 'package:mallook/feature/profile/widget/fashion_tile_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_controller_widget.dart';
@@ -11,12 +12,15 @@ import 'package:mallook/feature/profile/widget/my_script_tile_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 
 class ProfileScreen extends StatelessWidget {
-  final String username = '정우현';
-  final String hashcode = "O12AB2";
-  final String level = '3';
-  final percentage = 82.3;
+  ProfileScreen({super.key});
 
-  const ProfileScreen({super.key});
+  final String username = '정우현';
+
+  final String hashcode = "O12AB2";
+
+  final String level = '3';
+
+  final percentage = 82.3;
 
   @override
   Widget build(BuildContext context) {
