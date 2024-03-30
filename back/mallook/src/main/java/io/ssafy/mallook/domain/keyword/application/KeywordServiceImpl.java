@@ -3,6 +3,8 @@ package io.ssafy.mallook.domain.keyword.application;
 import io.ssafy.mallook.domain.keyword.dto.response.KeywordListRes;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.entity.Script;
+import io.ssafy.mallook.global.batch.dao.Top50RedisDao;
+import io.ssafy.mallook.global.batch.dto.TopScriptDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +23,12 @@ import static java.util.stream.Collectors.*;
 public class KeywordServiceImpl implements KeywordService {
 
     private final ScriptRepository scriptRepository;
+    private final Top50RedisDao top50RedisDao;
 
     @Override
     public List<KeywordListRes> getKeywordList() {
-        List<Script> top50Script = scriptRepository.findTop50ScriptsOrderByTotalLikeDesc();
+        List<Long> topScriptPkList = top50RedisDao.getScriptsDto().scriptIdList();
+        List<Script> top50Script = scriptRepository.findAllById(topScriptPkList);
 
         // 키워드 리스트에서 중복을 제거하기 위해 Set 사용
         Set<String> uniqueKeywords = top50Script.stream()

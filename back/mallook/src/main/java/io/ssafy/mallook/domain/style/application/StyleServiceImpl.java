@@ -13,6 +13,7 @@ import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.dao.StyleProductRepository;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
+import io.ssafy.mallook.global.batch.dao.Top50RedisDao;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,7 @@ public class StyleServiceImpl implements StyleService {
     private final StyleRepository styleRepository;
     private final StyleProductRepository styleProductRepository;
     private final ProductsRepository productsRepository;
+    private final Top50RedisDao top50RedisDao;
 
     @Override
     public Slice<StyleRes> findStyleListFirst(Pageable pageable) {
@@ -54,7 +56,8 @@ public class StyleServiceImpl implements StyleService {
 
     @Override
     public List<StyledWorldCupDto> getWorldCupList() {
-        List<Style> top50StyleList = styleRepository.findTop50StylesOrderByTotalLikeDesc();
+        List<Long> topStylePkList = top50RedisDao.getStylesDto().styleIdList();
+        List<Style> top50StyleList = styleRepository.findAllById(topStylePkList);
         Collections.shuffle(top50StyleList);
 
         return top50StyleList.stream()
