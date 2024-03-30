@@ -84,4 +84,9 @@ public class ProductServiceImpl implements ProductService {
     public Page<ReviewObject> getReviewList(String productsId, Pageable pageable) {
         return productsCustomRepository.getReviews(productsId, pageable);
     }
+
+    @Override
+    public Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable) {
+        return productsCustomRepository.getProductsWithManyReviews(pageable.getPageNumber(), pageable.getPageSize());
+    }
 }

@@ -42,10 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onLoginSuccess(BuildContext context, AuthTokenModel token) {
     // TODO: 유저 정보 불러오기
-    // if (token.roles!.contains(MemberRole.basicUser)) {
-    //   _signUpUser(context);
-    //   return;
-    // }
+    if (token.roles!.contains("BASIC_USER")) {
+      _signUpUser(context);
+      return;
+    }
     _loginUser(context);
   }
 

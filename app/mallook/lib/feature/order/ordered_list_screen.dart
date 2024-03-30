@@ -5,6 +5,7 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/order/api/order_api_service.dart';
 import 'package:mallook/feature/order/model/order_detail_model.dart';
+import 'package:mallook/feature/order/ordered_screen.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class OrderedListScreen extends StatefulWidget {
@@ -42,6 +43,16 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _moveToOrderDetailScreen(OrderDetail orderedList) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => OrderedScreen(
+          orderId: orderedList.id,
+        ),
+      ),
+    );
   }
 
   void _loadMoreOrderedList() async {
@@ -92,149 +103,152 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
           controller: _scrollController,
           itemBuilder: (context, index) {
             if (index < _orderedList.length) {
-              return Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.shade400,
-                    width: Sizes.size1,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    Sizes.size16,
-                  ),
-                ),
-                padding: const EdgeInsets.symmetric(
-                  vertical: Sizes.size10,
-                  horizontal: Sizes.size12,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        FaIcon(
-                          FontAwesomeIcons.calendarDays,
-                          color: Colors.grey.shade800,
-                          size: Sizes.size20,
-                        ),
-                        Gaps.h10,
-                        Text(
-                          '2023-10-12 16:33:12',
-                          style: TextStyle(
-                            color: Colors.grey.shade800,
-                            fontSize: Sizes.size14,
-                          ),
-                        ),
-                      ],
+              return GestureDetector(
+                onTap: () => _moveToOrderDetailScreen(_orderedList[index]),
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade400,
+                      width: Sizes.size1,
                     ),
-                    const Divider(),
-                    Row(
-                      children: [
-                        Image.network(
-                          '${_orderedList[index].items.first.product.image}',
-                          fit: BoxFit.cover,
-                          height: 120,
-                        ),
-                        Gaps.h12,
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '수량',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${_orderedList[index].totalCount}',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Gaps.v6,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '배송료',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${numberFormat.format(_orderedList[index].totalFee)} ₩',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Gaps.v6,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '상품 가격',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${numberFormat.format(_orderedList[index].totalPrice)} ₩',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Gaps.v6,
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    '총 구매금액',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                  Text(
-                                    '${numberFormat.format(_orderedList[index].totalFee + _orderedList[index].totalPrice)} ₩',
-                                    style: TextStyle(
-                                      color: Colors.grey.shade700,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                    borderRadius: BorderRadius.circular(
+                      Sizes.size16,
+                    ),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size10,
+                    horizontal: Sizes.size12,
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.calendarDays,
+                            color: Colors.grey.shade800,
+                            size: Sizes.size20,
                           ),
-                        ),
-                      ],
-                    )
-                  ],
+                          Gaps.h10,
+                          Text(
+                            '2023-10-12 16:33:12',
+                            style: TextStyle(
+                              color: Colors.grey.shade800,
+                              fontSize: Sizes.size14,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Divider(),
+                      Row(
+                        children: [
+                          Image.network(
+                            '${_orderedList[index].items.first.product.image}',
+                            fit: BoxFit.cover,
+                            height: 120,
+                          ),
+                          Gaps.h12,
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      '수량',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${_orderedList[index].totalCount}',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Gaps.v6,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      '배송료',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${numberFormat.format(_orderedList[index].totalFee)} ₩',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Gaps.v6,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      '상품 가격',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${numberFormat.format(_orderedList[index].totalPrice)} ₩',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                Gaps.v6,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      '총 구매금액',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    ),
+                                    Text(
+                                      '${numberFormat.format(_orderedList[index].totalFee + _orderedList[index].totalPrice)} ₩',
+                                      style: TextStyle(
+                                        color: Colors.grey.shade700,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: Sizes.size14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               );
             } else {

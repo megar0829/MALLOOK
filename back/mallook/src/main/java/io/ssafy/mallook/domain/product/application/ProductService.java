@@ -26,6 +26,8 @@ public interface ProductService {
 
     Page<ReviewObject> getReviewList(String productsId, Pageable pageable);
 
+    Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable);
+
     Long getLastProductId();
 
     Slice<Products> findByName(Pageable pageable);

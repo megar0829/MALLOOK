@@ -115,4 +115,16 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Reviews reviews = Objects.requireNonNull(result.getUniqueMappedResult()).getReviews();
         return new PageImpl<>(reviews.getReviews(), pageable, reviews.getCount());
     }
+
+    @Override
+    public Page<ProductsListDto> getProductsWithManyReviews(int page, int size) {
+        page = page > 9 ? 9 : Math.max(page, 0) ;
+        Long maxProducts = 100L;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "reviews.count"));
+        Query query = new Query().with(pageable);
+        List<ProductsListDto> productsList = mongoTemplate.find(query, Products.class).stream()
+                .map(ProductsListDto::toDto).toList();
+
+        return new PageImpl<>(productsList, pageable, maxProducts);
+    }
 }

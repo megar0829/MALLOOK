@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.member.api;
 
 import io.ssafy.mallook.domain.member.application.MemberService;
 import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
+import io.ssafy.mallook.domain.member.dto.request.MemberNicknameReq;
 import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
 import io.ssafy.mallook.domain.member.dto.response.NicknameRes;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -88,8 +89,8 @@ public class MemberController {
     @PatchMapping("/nickname")
     public ResponseEntity<BaseResponse<String>> updateNickname(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @NotNull @Size(min = 2, max = 16) @RequestBody String nickname) {
-        memberService.updateNickname(userSecurityDTO.getId(), nickname);
+            @Valid @RequestBody MemberNicknameReq memberNicknameReq) {
+        memberService.updateNickname(userSecurityDTO.getId(), memberNicknameReq.nickname());
         return BaseResponse.success(
                 SuccessCode.UPDATE_SUCCESS,
                 "닉네임 변경 성공"

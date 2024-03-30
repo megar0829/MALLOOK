@@ -45,7 +45,6 @@ import static java.util.Objects.*;
 public class ProductController {
 
     private final ProductService productService;
-
     @Operation(summary = "상품 리스트 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 리스트 조회 성공"),
@@ -65,6 +64,21 @@ public class ProductController {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
+        );
+    }
+    @Operation(
+            summary = "리뷰순 top100 상품 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "리뷰순 top100 상품 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "리뷰순 top100 상품 조회 실패")
+            })
+    @GetMapping("/popular")
+    public ResponseEntity<BaseResponse<Page<ProductsListDto>>> getProductsListWithManyReviews(
+            @PageableDefault(size = 10) Pageable pageable
+    ) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                productService.getProductsWithManyReviews(pageable)
         );
     }
 
