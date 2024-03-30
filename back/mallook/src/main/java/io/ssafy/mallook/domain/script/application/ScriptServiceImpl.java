@@ -46,6 +46,12 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Override
+    public Slice<ScriptListDto> getScriptList(Long cursor, Pageable pageable) {
+        return scriptRepository.findByIdLessThanOrderByIdDesc(cursor, pageable)
+                .map(ScriptListDto::toDto);
+    }
+
+    @Override
     public ScriptDetailDto getScriptDetail(Long scriptId) {
         return scriptRepository.findById(scriptId)
                 .map(ScriptDetailDto::toDto)

@@ -15,6 +15,8 @@ public interface ScriptService {
 
     Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable);
 
+    Slice<ScriptListDto> getScriptList(Long cursor, Pageable pageable);
+
     ScriptDetailDto getScriptDetail(Long scriptId);
 
     void createScript(ScriptCreatDto scriptCreateDto, UUID id);

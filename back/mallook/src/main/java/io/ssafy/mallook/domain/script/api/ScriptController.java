@@ -37,7 +37,29 @@ public class ScriptController {
     private final ScriptService scriptService;
 
     @Operation(
-            summary = "스크립트 목록 조회",
+            summary = "전체 스크립트 목록 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 목록 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 목록 조회 실패")
+            }
+    )
+    @GetMapping("/all")
+    public ResponseEntity<BaseResponse<Slice<ScriptListDto>>> getScriptList(
+            @PageableDefault(size = 20,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(required = false) Long cursor) {
+        cursor = !Objects.isNull(cursor) ? cursor : scriptService.getMaxScriptId() + 1;
+
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getScriptList(cursor, pageable)
+        );
+    }
+
+
+    @Operation(
+            summary = "자신이 작성한 스크립트 목록 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "스크립트 목록 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "스크립트 목록 조회 실패")
@@ -67,7 +89,6 @@ public class ScriptController {
             }
     )
     @GetMapping("/{id}")
-    @PreAuthorize("@authService.authorizeToReadScriptDetail(#principal.getId(), #id)")
     public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
                                                                          @PathVariable Long id) {
         return BaseResponse.success(
@@ -94,6 +115,7 @@ public class ScriptController {
                 "스크립트가 생성되었습니다."
         );
     }
+
     @Operation(
             summary = "스크립트 삭제",
             responses = {
