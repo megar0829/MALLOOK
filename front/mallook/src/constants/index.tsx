@@ -124,6 +124,86 @@ export interface ProfileSampleData {
     profileImg: string | StaticImageData;
 }
 
+export interface ReviewData {
+    content: string;
+    created_at: string | Date;
+    images: string | StaticImageData;
+    point: string | null;
+    product_option: any [];
+    user_size: number [];
+}
+
+export const ReviewList: ReviewData[] = [
+    {
+        "content": "품질이 생각보다 좋고,\n만족스러워서 가성비가 좋아요!!",
+        "created_at": "1709521906",
+        "images": "https://image.brandi.me/user/2023/04/12/2745488802_1681270328_L.jpg",
+        "point": null,
+        "product_option": [
+            [
+                "플리츠 긴팔 셔츠_베이지",
+                "2XL",
+                "단품구매"
+            ]
+        ],
+        "user_size": [
+            174,
+            0
+        ]
+    },
+    {
+        "content": "사이즈가.. 좀 크네요 ㅠㅠ 그리규 많이 얇아요.. 한여름에 입어야될듯..\n잘입을게여 ",
+        "created_at": "1696679693",
+        "images": "https://image.brandi.me/user/2019/05/18/249541332666728_1558127295_L.jpg",
+        "point": null,
+        "product_option": [
+            [
+                "플리츠 긴팔 셔츠_화이트",
+                "L",
+                "단품구매"
+            ]
+        ],
+        "user_size": [
+            170,
+            65
+        ]
+    },
+    {
+        "content": "찰랑 찰랑 거리는 원단에 하얀색이라 비치긴 한데 세로 줄로  포인트가 있어 일반 셔츠 보다 예뻐요",
+        "created_at": "1693609075",
+        "images": "https://image.brandi.me/user/2023/01/01/2604668272_1672573740_L.jpg",
+        "point": null,
+        "product_option": [
+            [
+                "플리츠 긴팔 셔츠_화이트",
+                "2XL",
+                "단품구매"
+            ]
+        ],
+        "user_size": [
+            174,
+            67
+        ]
+    },
+    {
+        "content": "핏 겁나 이뻐요 소재도 뭔가 그 뽀송뽀송한 느낌이라해야하나 암튼 비침도 없고 착용감 너무 부드러워서 좋네요 ㅜㅜ맨날 이거만 입어요 사가성비 ㄹㅈㄷ",
+        "created_at": "1688757651",
+        "images": "https://image.brandi.me/user/2021/01/05/105376015725155624779_1609852307_L.jpg",
+        "point": null,
+        "product_option": [
+            [
+                "플리츠 긴팔 셔츠_화이트",
+                "XL",
+                "단품구매"
+            ]
+        ],
+        "user_size": [
+            172,
+            58
+        ]
+    }
+]
+
 export const ProductList: Product[] = [
     {
         productImg: imgCody10_1,

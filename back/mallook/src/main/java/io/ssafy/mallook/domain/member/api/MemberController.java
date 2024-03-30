@@ -3,7 +3,6 @@ package io.ssafy.mallook.domain.member.api;
 
 import io.ssafy.mallook.domain.member.application.MemberService;
 import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
-import io.ssafy.mallook.domain.member.dto.request.MemberNicknameReq;
 import io.ssafy.mallook.domain.member.dto.response.MemberDetailRes;
 import io.ssafy.mallook.domain.member.dto.response.NicknameRes;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -26,11 +25,12 @@ import java.text.ParseException;
 @RestController
 @RequestMapping("/api/members")
 @RequiredArgsConstructor
-@Tag(name = "멤버", description = "Member 관련 API")
+@Tag(name = "회원", description = "회원 관련 API")
 @Log4j2
 public class MemberController {
 
     private final MemberService memberService;
+
     @Operation(summary = "회원 정보 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
@@ -38,13 +38,14 @@ public class MemberController {
             })
     @GetMapping
     public ResponseEntity<BaseResponse<MemberDetailRes>> findMemberDetail(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO){
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO) {
         var result = memberService.findMemberDetail(userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
     }
+
     @Operation(summary = "랜덤 닉네임 생성",
             responses = {
                     @ApiResponse(responseCode = "200", description = "랜덤 닉네임 생성 성공"),
@@ -53,25 +54,26 @@ public class MemberController {
     @GetMapping("/random")
     public ResponseEntity<BaseResponse<NicknameRes>> getRandomNickname(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO
-    ){
+    ) {
         var result = memberService.makeRandomNickname();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
     }
+
     @Operation(
             summary = "회원 정보 저장",
             responses = {
                     @ApiResponse(responseCode = "200", description = "추가 정보 저장 성공"),
                     @ApiResponse(responseCode = "404", description = "추가 정보 저장 실패")
-                    }
+            }
     )
     @PostMapping
     public ResponseEntity<BaseResponse<String>> saveMemberDetail(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @Valid @RequestBody MemberDetailReq memberDetailReq) throws ParseException {
-        memberService.saveMemberDetail(userSecurityDTO.getId(), memberDetailReq );
+        memberService.saveMemberDetail(userSecurityDTO.getId(), memberDetailReq);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "추가 정보 저장 성공"

@@ -9,6 +9,9 @@ import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,10 +31,18 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping("/api/scripts")
 @Log4j2
+@Tag(name = "스크립트", description = "스크립트 관련 API")
 public class ScriptController {
 
     private final ScriptService scriptService;
 
+    @Operation(
+            summary = "스크립트 목록 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 목록 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 목록 조회 실패")
+            }
+    )
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<ScriptListDto>>> getScriptList(
             @AuthenticationPrincipal UserSecurityDTO principal,
@@ -48,6 +59,13 @@ public class ScriptController {
         );
     }
 
+    @Operation(
+            summary = "스크립트 상세 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 상세 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 상세 조회 실패")
+            }
+    )
     @GetMapping("/{id}")
     @PreAuthorize("@authService.authorizeToReadScriptDetail(#principal.getId(), #id)")
     public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
@@ -58,6 +76,13 @@ public class ScriptController {
         );
     }
 
+    @Operation(
+            summary = "스크립트 생성",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 생성 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 생성 실패")
+            }
+    )
     @PostMapping
     public ResponseEntity<BaseResponse<String>> createScript(@AuthenticationPrincipal UserSecurityDTO principal,
                                                              @RequestBody @Valid ScriptCreatDto scriptCreateDto) {
@@ -69,7 +94,13 @@ public class ScriptController {
                 "스크립트가 생성되었습니다."
         );
     }
-
+    @Operation(
+            summary = "스크립트 삭제",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 삭제 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 삭제 실패")
+            }
+    )
     @DeleteMapping
     @PreAuthorize("@authService.authorizeToDeleteScript(#principal.getId(), #scriptDeleteListDto)")
     public ResponseEntity<BaseResponse<String>> deleteScript(@AuthenticationPrincipal UserSecurityDTO principal,

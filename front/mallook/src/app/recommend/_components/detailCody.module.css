@@ -1,6 +1,6 @@
 .cody__container {
-    width: 80dvw;
-    height: 400px;
+    width: 60dvw;
+    height: 60dvh;
     border: 1px solid lightgray;
     border-radius: 25px;
     display: flex;
@@ -10,7 +10,7 @@
 
 .cody__leftDiv {
     width: 30dvw;
-    height: 350px;
+    height: 55dvh;
     margin-left: 30px;
     border-radius: 25px;
     border: 2px solid lightgray;
@@ -20,20 +20,20 @@
 }
 .cody__leftDiv__image {
     width: 30dvw;
-    height: 350px;
+    height: 55dvh;
     border-radius: 25px;
 }
 
 .cody__rightDiv {
-    width: 45dvw;
-    height: 350px;
+    width: 23dvw;
+    height: 55dvh;
     padding-left: 50px;
     display: flex;
     flex-direction: column;
 }
 .cody__rightDiv__topDiv {
-    width: 45dvw;
-    height: 50px;
+    width: 23dvw;
+    height: 10dvh;
     display: flex;
     align-items: center;
     margin-top: 20px;
@@ -50,8 +50,8 @@
     margin-left: 10px;
 }
 .cody__rightDiv__bottomDiv {
-    width: 45dvw;
-    height: 300px;
+    width: 23dvw;
+    height: 30dvh;
     display: flex;
     flex-direction: column;
     justify-content: space-around;

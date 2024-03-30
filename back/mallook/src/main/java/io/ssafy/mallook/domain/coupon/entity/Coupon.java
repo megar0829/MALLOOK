@@ -40,7 +40,7 @@ public class Coupon extends BaseEntity {
     @Column(name = "expired_time")
     private LocalDateTime expiredTime;  //todo: expiredtime  되면 쿠폰 삭제하기
 
-    private Long stock;
+    private Integer stock;
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     @Builder.Default

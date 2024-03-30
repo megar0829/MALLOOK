@@ -45,7 +45,7 @@ public class Member extends BaseEntity {
 
     private Long exp;
 
-    @OneToOne
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
     private Grade grade;
 
     @Builder.Default
@@ -65,7 +65,6 @@ public class Member extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberCoupon> myCouponList = new ArrayList<>();
-
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }

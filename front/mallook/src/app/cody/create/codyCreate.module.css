@@ -1,0 +1,56 @@
+.codyCreate__background {
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.codyCreate__container {
+    width: 80dvw;
+    height: 90dvh;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: lightgray;
+}
+.codyCreate__leftDiv {
+    width: 37dvw;
+    height: 80dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.codyCreate__leftDiv__container {
+    width: 35dvw;
+    height: 78dvh;
+    background-color: white;
+    position: relative;
+}
+
+.codyCreate__rightDiv {
+    width: 37dvw;
+    height: 80dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.codyCreate__rightDiv__imageList {
+    width: 35dvw;
+    height: 78dvh;
+    background-color: white;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(auto-fill, 26dvh);
+    gap: 10px 10px;
+}
+.codyCreate__rightDiv__imageDiv {
+    border: 1px solid lightgray;
+    box-shadow: 1px 1px lightgray;
+    position: relative;
+}
+.codyCreate__rightDiv__image {
+    width: 95%;
+    height: 95%;
+    position: absolute;
+}

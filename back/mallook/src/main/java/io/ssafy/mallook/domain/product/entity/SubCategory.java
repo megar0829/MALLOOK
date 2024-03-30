@@ -5,5 +5,8 @@ public enum SubCategory {
     FORMAL("정장"),
     ;
     final String korean;
-    SubCategory(String korean) {this.korean = korean;}
+
+    SubCategory(String korean) {
+        this.korean = korean;
+    }
 }

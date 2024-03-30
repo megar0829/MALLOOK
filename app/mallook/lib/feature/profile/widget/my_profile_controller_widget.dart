@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/coupon/issue_coupon_screen.dart';
+import 'package:mallook/feature/order/ordered_list_screen.dart';
 import 'package:mallook/feature/profile/widget/profile_selector_widget.dart';
 
 class MyProfileControllerWidget extends StatelessWidget {
@@ -16,6 +18,22 @@ class MyProfileControllerWidget extends StatelessWidget {
     required this.coupon,
     required this.point,
   });
+
+  void _moveToIssueCouponScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const IssueCouponScreen(),
+      ),
+    );
+  }
+
+  void _moveToOrderedListScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const OrderedListScreen(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +63,7 @@ class MyProfileControllerWidget extends StatelessWidget {
             icon: FontAwesomeIcons.boxArchive,
             title: "주문",
             count: order,
-            onTap: () {},
+            onTap: () => _moveToOrderedListScreen(context),
           ),
           ProfileSelectorWidget(
             icon: FontAwesomeIcons.truckFast,
@@ -57,7 +75,7 @@ class MyProfileControllerWidget extends StatelessWidget {
             icon: FontAwesomeIcons.ticket,
             title: "쿠폰",
             count: coupon,
-            onTap: () {},
+            onTap: () => _moveToIssueCouponScreen(context),
           ),
           ProfileSelectorWidget(
             icon: FontAwesomeIcons.coins,

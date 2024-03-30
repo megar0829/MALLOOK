@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 
-class CustomCircularWaitWidget extends StatelessWidget {
-  const CustomCircularWaitWidget({
+class CustomCircularWaitBoldWidget extends StatelessWidget {
+  const CustomCircularWaitBoldWidget({
     super.key,
   });
 
@@ -17,14 +17,14 @@ class CustomCircularWaitWidget extends StatelessWidget {
         child: Column(
           children: [
             CircularProgressIndicator(
-              color: Theme.of(context).primaryColorLight,
+              color: Theme.of(context).primaryColorDark,
             ),
             Gaps.v10,
             Text(
-              '쪼매 기다리쇼 금방 돼여',
+              '잠시만 기다료~',
               style: TextStyle(
-                fontSize: Sizes.size14,
-                color: Theme.of(context).primaryColor,
+                fontSize: Sizes.size16,
+                color: Theme.of(context).primaryColorDark,
                 fontWeight: FontWeight.bold,
               ),
             )

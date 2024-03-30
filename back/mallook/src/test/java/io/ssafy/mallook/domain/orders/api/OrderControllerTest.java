@@ -69,7 +69,7 @@ class OrderControllerTest {
     void createOrder() throws Exception {
         OrderCreateDto orderCreateDto = new OrderCreateDto(1000L, 100L, 10L);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
+        mockMvc.perform(MockMvcRequestBuilders.post(url + "/create")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderCreateDto))
@@ -88,7 +88,7 @@ class OrderControllerTest {
         toDeleteList.add(id);
         OrderDeleteDto orderDeleteDto = new OrderDeleteDto(toDeleteList);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete(url)
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + "/delete")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(orderDeleteDto))
                         .with(csrf()))

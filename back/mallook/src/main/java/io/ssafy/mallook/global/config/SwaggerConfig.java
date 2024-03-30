@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .version("v0.0.1");
 
         var localServer = new Server().description("local server").url("http://localhost:8080");
-        var webServer = new Server().description("web server").url("https://i10a702.p.ssafy.io");
+        var webServer = new Server().description("web server").url("https://j10a606.p.ssafy.io/");
 
 //        return new OpenAPI()
 //                .info(info);

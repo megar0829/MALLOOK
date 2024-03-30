@@ -18,7 +18,11 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
     Slice<Orders> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     @Modifying(clearAutomatically = true)
-    @Query("update Orders o set o.status = false where o.id in :deleteList and o.status = true ")
+    @Query("""
+            update Orders o
+            set o.status = false
+            where o.id in :deleteList and o.status = true 
+            """)
     void deleteOrder(@Param("deleteList") List<Long> deleteList);
 
     @Query("SELECT max (o.id) from Orders o")
