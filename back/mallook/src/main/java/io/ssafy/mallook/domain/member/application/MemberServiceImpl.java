@@ -65,25 +65,25 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
+        var member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Member member = Member.builder()
-                    .id(memberId)
-                    .nickname(memberDetailReq.nickname())
-                    .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
-                    .birth(sdf.parse(memberDetailReq.birth()))
-                    .phone(memberDetailReq.phone())
-                    .point(0L)
-                    .grade(Grade.builder()
-                            .member(Member.builder().id(memberId).build())
-                            .level(Level.LEVEL1)
-                            .build())
-                    .exp(0L)
-                    .address(new Address(memberDetailReq.city(),
+            Grade grade = Grade.builder()
+                    .member(member)
+                    .level(Level.LEVEL1)
+                    .build();
+
+            member.setNickname(memberDetailReq.nickname());
+            member.setGender(Gender.valueOf(Gender.class, memberDetailReq.gender()));
+            member.setBirth(sdf.parse(memberDetailReq.birth()));
+            member.setPoint(0L);
+            member.setGrade(grade);
+            member.setExp(0L);
+            member.setAddress(new Address(memberDetailReq.city(),
                             memberDetailReq.district(),
                             memberDetailReq.address(),
-                            memberDetailReq.zipcode()))
-                    .build();
+                            memberDetailReq.zipcode()));
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
             member.getRole().add(MemberRole.USER);
