@@ -8,7 +8,6 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.global.common.code.ErrorCode;
@@ -29,7 +28,6 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartProductRepository cartProductRepository;
-    private final ProductRepository productRepository;
     private final ProductsRepository productsRepository;
 
     @Override

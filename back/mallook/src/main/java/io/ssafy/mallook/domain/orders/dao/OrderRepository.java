@@ -11,11 +11,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     Slice<Orders> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
+
+    Long countByMember(Member member);
 
     @Modifying(clearAutomatically = true)
     @Query("""
@@ -27,4 +30,5 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     @Query("SELECT max (o.id) from Orders o")
     Long findMaxOrderId();
+
 }
