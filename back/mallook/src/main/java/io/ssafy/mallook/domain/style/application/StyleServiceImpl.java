@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.style.application;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
+import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
@@ -19,13 +20,11 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.ssafy.mallook.global.common.code.ErrorCode.NOT_FOUND_PRODUCT;
@@ -46,12 +45,30 @@ public class StyleServiceImpl implements StyleService {
     @Override
     public Slice<StyleRes> findStyleListFirst(Pageable pageable) {
         Long maxId = styleRepository.findMaxId();
-        return styleRepository.findStylesByIdLessThan(pageable, maxId + 1);
+        // Style 객체의 Slice를 조회
+        Slice<Style> styleSlice = styleRepository.findStylesByIdLessThan(pageable, maxId + 1);
+
+        // Style 객체를 StyleRes 객체로 변환
+        List<StyleRes> convertedList = styleSlice.getContent().stream()
+                .map(this::toResDto) // Style -> StyleRes 변환
+                .collect(toList());
+
+        // 변환된 List<StyleRes>를 사용하여 새로운 Slice<StyleRes> 생성
+        return new SliceImpl<>(convertedList, pageable, styleSlice.hasNext());
     }
 
     @Override
     public Slice<StyleRes> findStyleList(Pageable pageable, Long cursor) {
-        return styleRepository.findStylesByIdLessThan(pageable, cursor + 1);
+        // Style 객체의 Slice를 조회
+        Slice<Style> styleSlice = styleRepository.findStylesByIdLessThan(pageable, cursor + 1);
+
+        // Style 객체를 StyleRes 객체로 변환
+        List<StyleRes> convertedList = styleSlice.getContent().stream()
+                .map(this::toResDto) // Style -> StyleRes 변환
+                .collect(toList());
+
+        // 변환된 List<StyleRes>를 사용하여 새로운 Slice<StyleRes> 생성
+        return new SliceImpl<>(convertedList, pageable, styleSlice.hasNext());
     }
 
     @Override
@@ -134,6 +151,26 @@ public class StyleServiceImpl implements StyleService {
                         .stream()
                         .limit(5)
                         .collect(toList()))
+                .build();
+    }
+
+    public StyleRes toResDto(Style style) {
+        List<ProductsListDto> productsListDtoList = new ArrayList<>();
+
+        for (StyleProduct styleProduct : style.getStyleProductList()) {
+            // StyleProduct의 product 필드로 MongoDB에서 Products 객체를 조회
+            productsRepository.findById(styleProduct.getProduct()).ifPresent(products -> {
+                // 조회된 Products 객체를 ProductsListDto로 변환하여 목록에 추가
+                productsListDtoList.add(ProductsListDto.toDto(products));
+            });
+        }
+
+        return StyleRes.builder()
+                .id(style.getId())
+                .name(style.getName())
+                .heartCount(style.getHeartCount())
+                .memberNickname(style.getMember().getNickname())
+                .productsListDtoList(productsListDtoList)
                 .build();
     }
 }
