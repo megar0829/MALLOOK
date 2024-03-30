@@ -23,6 +23,8 @@ import java.time.LocalDateTime;
 @Component
 public class BatchScheduler {
 
+    @Value("${server.role}")
+    private String serverRole;
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
@@ -30,6 +32,10 @@ public class BatchScheduler {
     @Scheduled(cron = "0 0 0 * * 1")
     @SchedulerLock(name = "couponSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runJob() {
+        if (!"batch".equals(serverRole)) {
+            return; // 서버 역할이 batch가 아니면 작업을 실행하지 않음
+        }
+
         String time = LocalDateTime.now().toString();
 
         try {
@@ -46,6 +52,10 @@ public class BatchScheduler {
     @Scheduled(cron = "0 0/30 * * * *") // 매 30분마다 실행
     @SchedulerLock(name = "heartSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runSecondJob() {
+        if (!"batch".equals(serverRole)) {
+            return; // 서버 역할이 batch가 아니면 작업을 실행하지 않음
+        }
+
         String time = LocalDateTime.now().toString();
 
         try {
