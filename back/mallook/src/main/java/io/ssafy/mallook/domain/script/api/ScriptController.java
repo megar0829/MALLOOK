@@ -1,11 +1,15 @@
 package io.ssafy.mallook.domain.script.api;
 
 import com.theokanning.openai.service.OpenAiService;
+import io.ssafy.mallook.domain.product.application.ProductService;
+import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
+import io.ssafy.mallook.domain.script.dto.request.ScriptKeywordDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
+import io.ssafy.mallook.domain.script.dto.response.ScriptProductDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -24,8 +28,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +42,7 @@ import java.util.UUID;
 public class ScriptController {
 
     private final ScriptService scriptService;
+    private final ProductService productService;
 
     @Operation(
             summary = "전체 스크립트 목록 조회",
@@ -78,6 +86,43 @@ public class ScriptController {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 scriptService.getScriptList(cursor, principal.getId(), pageable)
+        );
+    }
+
+    @Operation(
+            summary = "스크립트 리스트 시 상품 추천(6개)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 상품 추천 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 상품 추천 실패")
+            }
+    )
+    @GetMapping("/{scriptId}/product-list")
+    public ResponseEntity<BaseResponse<List<ScriptProductDto>>> getScriptRecommend(
+            @PathVariable Long scriptId){
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getRecommendProductById(scriptId)
+        );
+    }
+
+    @Operation(
+            summary = "스크립트 디테일 시 상품 추천(무한 스크롤)",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 상품 추천 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 상품 추천 실패")
+            }
+    )
+    @GetMapping("/{scriptId}/product-detail")
+    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getScriptDetailRecommend(
+            @PathVariable Long scriptId,
+            @RequestParam(required = false) String cursor
+            ) {
+        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        String finalCursor = cursor;
+
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getRecommendProductDetail(scriptId, finalCursor)
         );
     }
 
