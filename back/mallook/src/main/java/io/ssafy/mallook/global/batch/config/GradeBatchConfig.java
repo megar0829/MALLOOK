@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch;
+package io.ssafy.mallook.global.batch.config;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
 import io.ssafy.mallook.domain.grade.dao.GradeRepository;
@@ -6,7 +6,7 @@ import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
-import io.ssafy.mallook.global.common.code.ErrorCode;
+import io.ssafy.mallook.global.batch.MemberExpDto;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +27,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+
+import static io.ssafy.mallook.global.common.code.ErrorCode.*;
 
 @Configuration
 @Slf4j
@@ -128,7 +130,7 @@ public class GradeBatchConfig {
     private ItemWriter<? super Member> changeMemberGradeData() {
         return members -> members.forEach(member -> {
             var grade = gradeRepository.findByMember(member)
-                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_ERROR));
             grade.setLevel(Level.getNextGrade(member.getExp()));
             gradeRepository.save(grade);
         });
