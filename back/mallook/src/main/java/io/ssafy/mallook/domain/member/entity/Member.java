@@ -49,7 +49,7 @@ public class Member extends BaseEntity {
     private Grade grade;
 
     @Builder.Default
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "member", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SocialMember> socialMembers = new HashSet<>();
 
     @Embedded
