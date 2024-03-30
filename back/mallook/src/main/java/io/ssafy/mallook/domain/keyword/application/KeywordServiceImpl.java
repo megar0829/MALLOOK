@@ -43,4 +43,20 @@ public class KeywordServiceImpl implements KeywordService {
                 .limit(8)
                 .collect(toList());
     }
+
+    @Override
+    public List<KeywordListRes> getTopTenKeywordList() {
+        List<Long> topScriptPkList = top50RedisDao.getScriptsDto().scriptIdList();
+        List<Script> top50Script = scriptRepository.findAllById(topScriptPkList);
+
+        // 키워드 리스트에서 중복을 제거하기 위해 Set 사용
+        Set<String> uniqueKeywords = top50Script.stream()
+                .flatMap(script -> script.getKeywordList().stream())
+                .collect(toSet()); // Set으로 수집하여 중복 제거
+
+        return uniqueKeywords.stream()
+                .map(KeywordListRes::toDto)
+                .limit(10)
+                .collect(toList());
+    }
 }

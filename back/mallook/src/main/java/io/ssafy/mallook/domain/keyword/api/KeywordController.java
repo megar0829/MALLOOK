@@ -29,11 +29,17 @@ public class KeywordController {
                     @ApiResponse(responseCode = "404", description = "키워드 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<List<KeywordListRes>>> getKeywordList(
-    ) {
+    public ResponseEntity<BaseResponse<List<KeywordListRes>>> getKeywordList() {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 keywordService.getKeywordList()
         );
+    }
+
+    @GetMapping("/top-ten")
+    public ResponseEntity<BaseResponse<List<KeywordListRes>>> getTopTenKeywordList() {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                keywordService.getTopTenKeywordList());
     }
 }
