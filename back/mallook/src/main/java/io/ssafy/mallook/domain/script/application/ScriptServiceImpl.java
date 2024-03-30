@@ -12,7 +12,6 @@ import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
-import io.ssafy.mallook.domain.script.dto.request.ScriptKeywordDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptProductDto;
@@ -28,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -64,7 +62,7 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Override
-    public List<ScriptProductDto> getRecommendProductById(Long scriptId) {
+    public List<ScriptProductDto> getRecommendProductById(Long scriptId, Pageable pageable) {
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
         List<String> scriptKeyword = proxyScript.getKeywordList();
         ProductHotKeywordDto productHotKeywordDto = ProductHotKeywordDto.builder()
@@ -72,22 +70,21 @@ public class ScriptServiceImpl implements ScriptService {
                 .build();
         String cursor = mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor)
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable)
                 .stream()
                 .map(ScriptProductDto::toScriptProductDto)
-                .limit(6)
                 .collect(toList());
     }
 
     @Override
-    public Slice<ProductsListDto> getRecommendProductDetail(Long scriptId, String cursor) {
+    public Slice<ProductsListDto> getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable) {
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
         List<String> scriptKeyword = proxyScript.getKeywordList();
         ProductHotKeywordDto productHotKeywordDto = ProductHotKeywordDto.builder()
                 .hotKeywordList(scriptKeyword)
                 .build();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor);
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable);
     }
 
     @Override

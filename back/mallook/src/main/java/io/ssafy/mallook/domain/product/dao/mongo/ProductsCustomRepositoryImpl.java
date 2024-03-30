@@ -53,8 +53,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     }
 
     @Override
-    public Slice<ProductsListDto> findByProductName(String name, String cursor) {
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
+    public Slice<ProductsListDto> findByProductName(String name, String cursor, Pageable pageable) {
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
         if (!isNull(cursor) && !cursor.isEmpty()) {
@@ -71,8 +70,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     }
 
     @Override
-    public Slice<ProductsListDto> findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor) {
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
+    public Slice<ProductsListDto> findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
         List<String> keywords = hotKeywordDto.hotKeywordList();
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
 

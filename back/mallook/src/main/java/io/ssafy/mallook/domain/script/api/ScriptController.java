@@ -98,10 +98,14 @@ public class ScriptController {
     )
     @GetMapping("/{scriptId}/product-list")
     public ResponseEntity<BaseResponse<List<ScriptProductDto>>> getScriptRecommend(
-            @PathVariable Long scriptId){
+            @PathVariable Long scriptId,
+            @PageableDefault(size = 6,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                scriptService.getRecommendProductById(scriptId)
+                scriptService.getRecommendProductById(scriptId, pageable)
         );
     }
 
@@ -115,14 +119,17 @@ public class ScriptController {
     @GetMapping("/{scriptId}/product-detail")
     public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getScriptDetailRecommend(
             @PathVariable Long scriptId,
-            @RequestParam(required = false) String cursor
-            ) {
+            @RequestParam(required = false) String cursor,
+            @PageableDefault(size = 12,
+                    sort = "id",
+                    direction = Sort.Direction.DESC) Pageable pageable
+    ) {
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         String finalCursor = cursor;
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                scriptService.getRecommendProductDetail(scriptId, finalCursor)
+                scriptService.getRecommendProductDetail(scriptId, finalCursor, pageable)
         );
     }
 
