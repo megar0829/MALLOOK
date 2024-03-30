@@ -6,7 +6,6 @@ class ProfileApiService {
 
   static Future<void> getMemberDetail() async {
     print('hihihihihihihihihih');
-    print('hihihihihihihihihih');
     var response = await _dio.convertedGet<MemberDetail>(
       "/api/members",
       fromJsonT: (json) => MemberDetail.fromJson(json),

@@ -14,8 +14,6 @@ import 'package:mallook/global/widget/cart_icon_button.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
-  final r = ProfileApiService.getMemberDetail();
-
   final String username = '정우현';
 
   final String hashcode = "O12AB2";

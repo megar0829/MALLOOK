@@ -10,6 +10,8 @@ import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
+import '../profile/api/profile_api_service.dart';
+
 const List<TabItem> items = [
   TabItem(
     icon: FontAwesomeIcons.solidStar,
@@ -41,6 +43,7 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
+  var i = ProfileApiService.getMemberDetail();
   DateTime? _currentBackPressTime;
   int _selectedIndex = 0;
 
