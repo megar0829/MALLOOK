@@ -36,6 +36,11 @@ public class KeywordController {
         );
     }
 
+    @Operation(summary = "탑 10 키워드 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "키워드 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "키워드 조회 실패")
+            })
     @GetMapping("/top-ten")
     public ResponseEntity<BaseResponse<List<KeywordListRes>>> getTopTenKeywordList() {
         return BaseResponse.success(
