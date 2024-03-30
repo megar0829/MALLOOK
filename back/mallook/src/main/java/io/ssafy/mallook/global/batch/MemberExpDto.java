@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch.dto;
+package io.ssafy.mallook.global.batch;
 
 import io.ssafy.mallook.domain.member.entity.Member;
 

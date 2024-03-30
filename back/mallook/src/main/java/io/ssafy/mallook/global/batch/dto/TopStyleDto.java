@@ -7,6 +7,6 @@ import java.util.List;
 
 @Builder
 public record TopStyleDto(
-        List<Style> styles
+        List<Long> styleIdList
 ) {
 }

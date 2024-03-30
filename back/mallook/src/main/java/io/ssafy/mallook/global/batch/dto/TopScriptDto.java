@@ -7,6 +7,6 @@ import java.util.List;
 
 @Builder
 public record TopScriptDto(
-        List<Script> scripts
+        List<Long> scriptIdList
 ) {
 }
