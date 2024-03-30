@@ -1,9 +1,7 @@
 package io.ssafy.mallook.domain.member.application;
 
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
-import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
-import io.ssafy.mallook.domain.grade.dao.GradeRepository;
 import io.ssafy.mallook.domain.grade.entity.Grade;
 import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
@@ -56,10 +54,10 @@ public class MemberServiceImpl implements MemberService {
                 .address(memberDetail.getAddress())
                 .point(memberDetail.getPoint())
                 .exp(memberDetail.getExp())
-                .grade(Objects.nonNull(memberDetail.getGrade())?memberDetail.getGrade().toString():null)
-                .expRange(Objects.nonNull(memberDetail.getGrade())? memberDetail.getGrade().getGradeRange() : List.of())
-                .cartProduct(Objects.nonNull(cart)?cart.getCartProductList().size():0L)
-                .memberCoupon(Objects.nonNull(memberDetail.getMyCouponList())?memberDetail.getMyCouponList().size() : 0L)
+                .grade(Objects.nonNull(memberDetail.getGrade()) ? memberDetail.getGrade().toString() : null)
+                .expRange(Objects.nonNull(memberDetail.getGrade()) ? memberDetail.getGrade().getGradeRange() : List.of())
+                .cartProduct(Objects.nonNull(cart) ? cart.getCartProductList().size() : 0L)
+                .memberCoupon(Objects.nonNull(memberDetail.getMyCouponList()) ? memberDetail.getMyCouponList().size() : 0L)
                 .coupon(couponRepository.countBy())
                 .orders(orderRepository.countByMember(memberDetail)) // null 체크?
                 .build();
