@@ -66,7 +66,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public NicknameRes makeRandomNickname() {
         String randomName = nicknameAdjective.get((int) (Math.random() * nicknameAdjective.size()))
-                + nicknameNoun.get((int) (Math.random() * nicknameNoun.size()));
+                            + nicknameNoun.get((int) (Math.random() * nicknameNoun.size()));
         return new NicknameRes(randomName);
     }
 
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         String randomTag = RandomStringUtils.random(6, true, true);
         while (memberRepository.existsByNicknameTag(randomTag)) {
             randomTag = RandomStringUtils.random(6, true, true);
@@ -86,18 +86,20 @@ public class MemberServiceImpl implements MemberService {
             member.setNicknameTag(randomTag);
             member.setGender(Gender.valueOf(Gender.class, memberDetailReq.gender()));
             member.setBirth(sdf.parse(memberDetailReq.birth()));
-            member.setAddress(Address.builder()
-                                    .city(memberDetailReq.city())
-                                    .district(memberDetailReq.district())
-                                    .address(memberDetailReq.address())
-                                    .zipcode(memberDetailReq.zipcode()).build());;
+            member.setAddress(
+                    Address.builder()
+                            .city(memberDetailReq.city())
+                            .district(memberDetailReq.district())
+                            .address(memberDetailReq.address())
+                            .zipcode(memberDetailReq.zipcode()).build()
+            );
             member.setPhone(memberDetailReq.phone());
             member.setExp(0L);
             member.setPoint(0L);
             member.setGrade(Grade.builder()
-                            .member(Member.builder().id(memberId).build())
-                            .level(Level.LEVEL1)
-                            .build());
+                    .member(Member.builder().id(memberId).build())
+                    .level(Level.LEVEL1)
+                    .build());
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
             member.getRole().add(MemberRole.USER);
