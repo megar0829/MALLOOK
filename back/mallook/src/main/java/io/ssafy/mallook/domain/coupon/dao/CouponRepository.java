@@ -20,4 +20,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
                     WHERE mc.member.id = :memberId AND mc.id < :cursor
             """)
     Slice<CouponRes> findAllByMemberId(Pageable pageable, @Param("memberId") UUID memberId, @Param("cursor") Long cursor);
+
+    Long countBy();
+
 }

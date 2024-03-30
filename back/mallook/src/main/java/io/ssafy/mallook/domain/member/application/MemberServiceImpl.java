@@ -1,5 +1,8 @@
 package io.ssafy.mallook.domain.member.application;
 
+import io.ssafy.mallook.domain.cart.dao.CartRepository;
+import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
+import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
 import io.ssafy.mallook.domain.grade.dao.GradeRepository;
 import io.ssafy.mallook.domain.grade.entity.Grade;
 import io.ssafy.mallook.domain.grade.entity.Level;
@@ -11,6 +14,7 @@ import io.ssafy.mallook.domain.member.entity.Address;
 import io.ssafy.mallook.domain.member.entity.Gender;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member.entity.MemberRole;
+import io.ssafy.mallook.domain.orders.dao.OrderRepository;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +33,9 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
-    private final GradeRepository gradeRepository;
+    private final CouponRepository couponRepository;
+    private final CartRepository cartRepository;
+    private final OrderRepository orderRepository;
     public static final List<String> nicknameAdjective = List.of("예쁜", "화난", "귀여운", "배고픈", "철학적인", "현학적인",
             "슬픈", "푸른", "비싼", "밝은");
     public static final List<String> nicknameNoun = List.of("호랑이", "비버", "강아지", "부엉이", "여우", "치타",
@@ -40,25 +46,30 @@ public class MemberServiceImpl implements MemberService {
         var memberDetail = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return new MemberDetailRes(memberDetail.getNickname(),
-                Objects.nonNull(memberDetail.getBirth()) ? sdf.format(memberDetail.getBirth()) : null,
-                Objects.nonNull(memberDetail.getGender()) ? memberDetail.getGender().toString() : null,
-                memberDetail.getPhone(),
-                memberDetail.getPoint(),
-                memberDetail.getExp(),
-                Objects.nonNull(memberDetail.getGender()) ? memberDetail.getGrade().getGradeRange() : List.of(),
-                memberDetail.getAddress());
+        var cart = cartRepository.findMyCartByMember(memberDetail).orElseGet(null);
+        return MemberDetailRes.builder()
+                .nickname(memberDetail.getNickname())
+                .nicknameTag((memberDetail.getNicknameTag()))
+                .birth(Objects.nonNull(memberDetail.getBirth()) ? sdf.format(memberDetail.getBirth()) : null)
+                .gender(Objects.nonNull(memberDetail.getGender()) ? memberDetail.getGender().toString() : null)
+                .phone(memberDetail.getPhone())
+                .address(memberDetail.getAddress())
+                .point(memberDetail.getPoint())
+                .exp(memberDetail.getExp())
+                .grade(Objects.nonNull(memberDetail.getGrade())?memberDetail.getGrade().toString():null)
+                .expRange(Objects.nonNull(memberDetail.getGrade())? memberDetail.getGrade().getGradeRange() : List.of())
+                .cartProduct(Objects.nonNull(cart)?cart.getCartProductList().size():0L)
+                .memberCoupon(Objects.nonNull(memberDetail.getMyCouponList())?memberDetail.getMyCouponList().size() : 0L)
+                .coupon(couponRepository.countBy())
+                .orders(orderRepository.countByMember(memberDetail)) // null 체크?
+                .build();
     }
 
     @Override
     public NicknameRes makeRandomNickname() {
         String randomName = nicknameAdjective.get((int) (Math.random() * nicknameAdjective.size()))
                 + nicknameNoun.get((int) (Math.random() * nicknameNoun.size()));
-        String randomTag = RandomStringUtils.random(6, true, true);
-        while (memberRepository.existsByNicknameTag(randomTag)) {
-            randomTag = RandomStringUtils.random(6, true, true);
-        }
-        return new NicknameRes(randomName, randomTag);
+        return new NicknameRes(randomName);
     }
 
 
@@ -66,10 +77,15 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String randomTag = RandomStringUtils.random(6, true, true);
+        while (memberRepository.existsByNicknameTag(randomTag)) {
+            randomTag = RandomStringUtils.random(6, true, true);
+        }
         try {
             Member member = Member.builder()
                     .id(memberId)
                     .nickname(memberDetailReq.nickname())
+                    .nicknameTag(randomTag)
                     .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
                     .birth(sdf.parse(memberDetailReq.birth()))
                     .phone(memberDetailReq.phone())
