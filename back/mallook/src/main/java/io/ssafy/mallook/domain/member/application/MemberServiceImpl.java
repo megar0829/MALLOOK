@@ -44,7 +44,7 @@ public class MemberServiceImpl implements MemberService {
         var memberDetail = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        var cart = cartRepository.findMyCartByMember(memberDetail).orElseGet(null);
+        var cart = cartRepository.findMyCartByMember(memberDetail).orElse(null);
         return MemberDetailRes.builder()
                 .nickname(memberDetail.getNickname())
                 .nicknameTag((memberDetail.getNicknameTag()))
@@ -75,29 +75,29 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public void saveMemberDetail(UUID memberId, MemberDetailReq memberDetailReq) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         String randomTag = RandomStringUtils.random(6, true, true);
         while (memberRepository.existsByNicknameTag(randomTag)) {
             randomTag = RandomStringUtils.random(6, true, true);
         }
         try {
-            Member member = Member.builder()
-                    .id(memberId)
-                    .nickname(memberDetailReq.nickname())
-                    .nicknameTag(randomTag)
-                    .gender(Gender.valueOf(Gender.class, memberDetailReq.gender()))
-                    .birth(sdf.parse(memberDetailReq.birth()))
-                    .phone(memberDetailReq.phone())
-                    .point(0L)
-                    .grade(Grade.builder()
+            member.setNickname(memberDetailReq.nickname());
+            member.setNicknameTag(randomTag);
+            member.setGender(Gender.valueOf(Gender.class, memberDetailReq.gender()));
+            member.setBirth(sdf.parse(memberDetailReq.birth()));
+            member.setAddress(Address.builder()
+                                    .city(memberDetailReq.city())
+                                    .district(memberDetailReq.district())
+                                    .address(memberDetailReq.address())
+                                    .zipcode(memberDetailReq.zipcode()).build());;
+            member.setPhone(memberDetailReq.phone());
+            member.setExp(0L);
+            member.setPoint(0L);
+            member.setGrade(Grade.builder()
                             .member(Member.builder().id(memberId).build())
                             .level(Level.LEVEL1)
-                            .build())
-                    .exp(0L)
-                    .address(new Address(memberDetailReq.city(),
-                            memberDetailReq.district(),
-                            memberDetailReq.address(),
-                            memberDetailReq.zipcode()))
-                    .build();
+                            .build());
             // 최초 권한만 가진 유저에게 추가 권한 부여
             member.getRole().remove(MemberRole.BASIC_USER);
             memberRepository.save(member);
