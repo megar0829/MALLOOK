@@ -5,6 +5,7 @@ services:
     image: duckbill413/mallook-docker-api:latest
     ports:
       - "127.0.0.1:8080:8080"
+      - "8081:8081"
     environment:
       TZ: "Asia/Seoul"
     networks:
@@ -16,8 +17,7 @@ services:
     container_name: mallook-batch
     image: duckbill413/mallook-docker-batch:latest
     environment:
-      - "127.0.0.1:8082:8082"
-      - TZ=Asia/Seoul
+      TZ: Asia/Seoul
     networks:
       - mallook_net
     depends_on:
@@ -61,3 +61,4 @@ services:
 networks:
   mallook_net:
     driver: bridge
+
