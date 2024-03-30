@@ -39,10 +39,10 @@ public class OrderServiceImpl implements OrderService {
     private final ProductsRepository productsRepository;
     private final CartProductRepository cartProductRepository;
     private final CartRepository cartRepository;
+
     @Override
     public Slice<OrderListDto> getOrderList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
-
         return orderRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
                 .map(OrderListDto::toDto);
     }
@@ -92,6 +92,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void insertOrder(UUID id, OrderInsertReq orderInsertReq) {
         Member proxyMember = memberRepository.getReferenceById(id);
+
         // order 저장
         var order = orderRepository.save(Orders.builder()
                 .totalFee(orderInsertReq.totalFee())
@@ -101,9 +102,9 @@ public class OrderServiceImpl implements OrderService {
                 .build());
         // producthistory 저장
         orderInsertReq.cartProductList().forEach((cartProductId) -> {
-            System.out.println("tt" + cartProductId);
+
             CartProduct cartProduct = cartProductRepository.findById(cartProductId)
-                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
             productHistoryRepository.save(ProductHistory.builder()
                     .productCount(cartProduct.getProductCount())
                     .productPrice(cartProduct.getProductPrice())
@@ -116,10 +117,9 @@ public class OrderServiceImpl implements OrderService {
             // cartProduct 삭제
             cartProductRepository.deleteCartProduct(cartProductId);
         });
-        System.out.println("$$$$$$$$$$$4");
+
         Cart cart = cartRepository.findMyCartByMember(proxyMember)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        System.out.println("dfdfdf");
         // cart 업데이트..
         cart.setTotalCount(cart.getTotalCount() - orderInsertReq.totalCount());
         cart.setTotalFee(cart.getTotalFee() - orderInsertReq.totalFee());

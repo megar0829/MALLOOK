@@ -23,4 +23,5 @@ public interface ProductsCustomRepository {
     ProductsDetailDto getProductDetailWithLimitedReviews(String id);
 
     Page<ReviewObject> getReviews(String id, Pageable pageable);
+    Page<ProductsListDto> getProductsWithManyReviews(int page, int size);
 }
