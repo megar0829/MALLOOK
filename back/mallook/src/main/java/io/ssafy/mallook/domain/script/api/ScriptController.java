@@ -89,8 +89,7 @@ public class ScriptController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                                         @PathVariable Long id) {
+    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@PathVariable Long id) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 scriptService.getScriptDetail(id)
