@@ -5,6 +5,8 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/gender.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/onboarding/interests_screen.dart';
+import 'package:mallook/feature/sign_up/api/signup_api_service.dart';
+import 'package:mallook/feature/sign_up/model/random_nickname_model.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
 import 'package:mallook/feature/sign_up/widgets/gender_radio_button.dart';
 import 'package:mallook/feature/sign_up/widgets/phone_input_formatter.dart';
@@ -38,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _buildingName = "";
   String _additionalAddress = "";
   bool _additionalAddressInputEnable = false;
+  late RandomNicknameModel randomNicknameModel;
 
   bool _isAvailable() {
     if (!_nicknameStatus) return false;
@@ -56,6 +59,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _nickname = _nicknameController.text;
       });
     });
+    setRandomNickname();
+
     _phoneController.text = "010-";
     _phoneController.addListener(() {
       setState(() {
@@ -88,6 +93,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _addressController.dispose();
     _additionalAddressController.dispose();
     super.dispose();
+  }
+
+  void setRandomNickname() async {
+    randomNicknameModel = await SignupApiService.getRandomNickname();
+    if (randomNicknameModel.nickname != null) {
+      _nickname = _nicknameController.text = randomNicknameModel.nickname!;
+      setState(() {
+        _nicknameStatus = true;
+      });
+    }
   }
 
   void setDate(DateTime dateTime) {
