@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.member.entity.SocialType;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.application.AuthService;
+import io.ssafy.mallook.global.security.dto.AuthTokenReq;
 import io.ssafy.mallook.global.security.dto.KakaoAuthTokenReq;
 import io.ssafy.mallook.global.security.dto.KakaoAuthTokenRes;
 import io.ssafy.mallook.global.security.dto.TokenDto;
@@ -19,7 +20,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RestController
@@ -52,8 +56,8 @@ public class AuthController {
     @Operation(summary = "액세스 토큰 재발급 요청하기", description = "액세스 토큰 없거나 만료됐으면 재발급 요청하기")
     @PostMapping("/token/refresh")
     public ResponseEntity<BaseResponse<TokenDto>> rotateJwtTokensRequest(
-            @Valid @NotNull @CookieValue(value = "refresh-token") String refreshToken) throws RefreshTokenException {
-        TokenDto tokenDto = jwtService.rotateJwtTokens(refreshToken);
+            @Valid @NotNull @RequestBody AuthTokenReq authTokenReq) throws RefreshTokenException {
+        TokenDto tokenDto = jwtService.rotateJwtTokens(authTokenReq.refreshToken());
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
