@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
                 .build());
         // producthistory 저장
         orderInsertReq.cartProductList().forEach((cartProductId) -> {
-            System.out.println("tt" + cartProductId);
+
             CartProduct cartProduct = cartProductRepository.findById(cartProductId)
                     .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
             productHistoryRepository.save(ProductHistory.builder()
@@ -116,10 +116,9 @@ public class OrderServiceImpl implements OrderService {
             // cartProduct 삭제
             cartProductRepository.deleteCartProduct(cartProductId);
         });
-        System.out.println("$$$$$$$$$$$4");
+
         Cart cart = cartRepository.findMyCartByMember(proxyMember)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
-        System.out.println("dfdfdf");
         // cart 업데이트..
         cart.setTotalCount(cart.getTotalCount() - orderInsertReq.totalCount());
         cart.setTotalFee(cart.getTotalFee() - orderInsertReq.totalFee());

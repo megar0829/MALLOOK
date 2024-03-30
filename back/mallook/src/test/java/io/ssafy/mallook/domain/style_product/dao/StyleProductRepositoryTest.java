@@ -101,7 +101,6 @@ class StyleProductRepositoryTest {
             Product pd = buildProduct(shoppingMall);
             productRepository.save(pd);
             var result = styleProductRepository.save(buildStyleProduct(style, "66021cc8a57f1a18f0b8edd0"));
-            System.out.println("#####################" + result.getId());
             deleteList.add(result.getId());
         }
         styleProductRepository.deleteMyStyleProduct(deleteList);
