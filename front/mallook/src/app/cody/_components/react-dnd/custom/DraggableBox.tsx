@@ -8,6 +8,7 @@ import { Box } from './Box'
 import { ItemTypes } from './ItemTypes'
 import Image, {StaticImageData} from "next/image";
 import styles from "@/app/cody/_components/react-dnd/custom/dnd.module.css";
+import {images} from "next/dist/build/webpack/config/blocks/images";
 
 function getStyles(
 	left: number,
@@ -58,12 +59,14 @@ export const DraggableBox: FC<DraggableBoxProps> = memo(function DraggableBox(
 			style={getStyles(left, top, isDragging)}
 			role="DraggableBox"
 		>
-			<div
-				className={styles.imageDiv}
-				role={'Box'}
-			>
-				<Image className={styles.image} src={url} alt="상품이미지"/>
-			</div>
+			{url &&
+				<div
+					className={styles.imageDiv}
+					role={'Box'}
+				>
+					<Image className={styles.image} src={url} alt="상품이미지"/>
+				</div>
+			}
 		</div>
 	)
 })

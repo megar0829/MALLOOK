@@ -20,10 +20,15 @@ export interface ContainerProps {
 
 export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 
-	const [images, setImages] = useState<ItemData[]>(dragItems);
+	const [images, setImages] = useState<ItemData[]>([]);
 
 	useEffect(() => {
-		setImages(dragItems)
+		console.log(images)
+	}, []);
+
+	useEffect(() => {
+		setImages([...images, dragItems[dragItems.length - 1]])
+		console.log(images)
 	}, [dragItems])
 
 	const moveBox = useCallback(
@@ -63,7 +68,7 @@ export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 
 	return (
 		<div ref={drop} className={styles.drag__container}>
-			{images.map((item, index ) => (
+			{images.length && images.map((item, index ) => (
 				<DraggableBox
 					key={index}
 					id={index}
