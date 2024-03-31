@@ -1,14 +1,12 @@
+import re
+import os
 import requests
+import pymongo
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
-import re
-import os
-from dotenv import load_dotenv
-import pymongo
 
 
 class TwentyNineScraper:
@@ -20,19 +18,20 @@ class TwentyNineScraper:
         self.connect_to_mongodb()
 
 
+    # 크롬 웹드라이버 초기화
     def load_webdriver(self):
-        # 크롬 웹드라이버 초기화
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
 
 
+    # 웹드라이버 종료
     def close_webdriver(self):
-        # 웹드라이버 종료
         if self.driver:
             self.driver.quit()
 
 
+    # 상품 전체 리스트
     def get_twentyninecm_products_list(self, categoryLargeCode, categoryMediumCode, categorySmallCode, mainCategory, subCategory):
         print(f"{subCategory}")
         url = 'https://search-api.29cm.co.kr/api/v4/products/category/'
@@ -58,7 +57,6 @@ class TwentyNineScraper:
             return
         
         results = response.json()
-
         params['count'] = results.get('data', {}).get('productsTotalCount', 0)
 
         # 전체 상품 조회
@@ -81,7 +79,7 @@ class TwentyNineScraper:
                 continue
 
             reviewCount = product.get('reviewCount', None)
-            print(f"{subCategory}({itemNo}) 크롤링 중...")
+            print(f"{subCategory}({itemNo}) crawing...")
 
             # 상품 상세 정보 크롤링
             detail_info = self.crawling_twentyninecm_product_info(itemNo)
@@ -118,6 +116,7 @@ class TwentyNineScraper:
             self.save_to_mongodb(product_info)
 
 
+    # 상품 하나의 디테일 정보 크롤링
     def crawling_twentyninecm_product_info(self, itemNo):
         detail_info = {'color': [], 'size': [], 'detail_images': [], 'detail_html': ''}
         url = f'https://product.29cm.co.kr/catalog/{itemNo}'
@@ -164,15 +163,19 @@ class TwentyNineScraper:
                 option_values = list(map(lambda x: x.text, li_elements[1:]))
                 if option_name in ('color', 'size'):
                     detail_info[option_name] = option_values
+
                 elif option_name == 'color:size':
                     color_set = set()
                     size_set = set()
+
                     for option_value in option_values:
                         color, size = option_value.split(':')
                         color_set.add(color)
                         size_set.add(size)
+                        
                     detail_info['color'] = list(color_set)
                     detail_info['size'] = list(size_set)
+
                 elif 'color' in option_name:
                     detail_info['color'] = option_values
                 else:
@@ -190,8 +193,7 @@ class TwentyNineScraper:
                 else:
                     # dropdown 닫음
                     option_element.click()
-
-            # 요소
+            # 요소가 더이상 없는 경우
             except:
                 break
 
@@ -225,6 +227,7 @@ class TwentyNineScraper:
         return detail_info
 
 
+    # 리뷰 목록
     def get_twentyninecm_reviews_list(self, itemNo, reviewCount):
         url = 'https://review-api.29cm.co.kr/api/v4/reviews/'
         params = {
@@ -290,6 +293,7 @@ class TwentyNineScraper:
         return product_reviews
 
 
+    # MongoDB 연결
     def connect_to_mongodb(self):
         self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
                                           f"?retryWrites=true&w=majority&appName=Cluster")
@@ -297,6 +301,7 @@ class TwentyNineScraper:
         self.collection = self.db["products"]
 
 
+    # MongoDB 데이터 저장
     def save_to_mongodb(self, product_info):
         try:
             self.collection.insert_one(product_info)
@@ -305,7 +310,7 @@ class TwentyNineScraper:
             print(f"MongoDB에 저장하는 중 오류가 발생했습니다: {e}")
 
 
+    # MongoDB에 이미 저장된 데이터인지 확인
     def check_if_product_in_mongodb(self, product_id):
         result = self.collection.find_one({'product_id': product_id})
-
         return result is not None

@@ -1,5 +1,6 @@
 from konlpy.tag import Kkma
 
+
 def compare_word_meaning(word1, word2):
     kkma = Kkma()
     morphs1 = kkma.morphs(word1)
