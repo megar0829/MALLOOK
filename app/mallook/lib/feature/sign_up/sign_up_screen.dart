@@ -170,7 +170,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_isAvailable()) {
       return;
     }
-
     SignupApiService.registerMemberInfo(<String, String>{
       "nickname": _nickname,
       "gender": _gender!,
@@ -180,16 +179,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       "district": _district,
       "address": _address,
       "zipcode": _zipcode!
-    }).then((value) {
-      if (value.contains("성공")) {
-        var token = LoginApiService.refreshAuthToken();
-        print(token);
+    }).then((value) async {
+      var token = await LoginApiService.refreshAuthToken();
+      return token;
+    }).then((token) {
+      if (!token.roles!.contains("BASIC_USER")) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const InterestsScreen(),
+          ),
+          (route) => false,
+        );
       }
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => const InterestsScreen(),
-      //   ),
-      // );
     });
   }
 
