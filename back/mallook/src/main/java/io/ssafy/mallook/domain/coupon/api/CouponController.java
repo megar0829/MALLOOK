@@ -58,12 +58,29 @@ public class CouponController {
         couponService.saveNewCoupon();
     }
 
+    @Operation(summary = "선착순 쿠폰 등록",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "선착순 쿠폰 등록 성공"),
+                    @ApiResponse(responseCode = "404", description = "선착순 쿠폰 등록 실패")
+            })
+    @PostMapping
+    public ResponseEntity<BaseResponse<String>> getEventCoupon(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @Valid @NotNull @RequestBody Long couponId) {
+        couponService.decreaseCoupon(couponId, userSecurityDTO.getId());
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "쿠폰 등록 완료"
+        );
+    }
+
+
     @Operation(summary = "내 쿠폰 등록",
             responses = {
                     @ApiResponse(responseCode = "200", description = "쿠폰 등록 성공"),
                     @ApiResponse(responseCode = "404", description = "쿠폰 등록 실패")
             })
-    @PostMapping
+    @PostMapping("/event")
     public ResponseEntity<BaseResponse<String>> saveMyCoupon(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @Valid @NotNull @RequestBody Long couponId) {

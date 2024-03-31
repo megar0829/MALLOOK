@@ -13,5 +13,5 @@ public interface CouponService {
 
     void saveNewCoupon();
 
-    void decreaseCoupon(String key, UUID memberId);
+    void decreaseCoupon(Long couponId, UUID memberId);
 }
