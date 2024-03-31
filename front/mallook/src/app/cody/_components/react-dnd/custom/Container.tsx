@@ -31,8 +31,8 @@ export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 			setImages(
 				update(images, {
 					[id]: {
-						$merge: { left, top },
-					},
+						$merge: {left, top,},
+					}
 				}),
 			)
 		},
@@ -47,7 +47,7 @@ export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 					x: number
 					y: number
 				}
-
+				console.log(item)
 				let left = Math.round(item.left + delta.x)
 				let top = Math.round(item.top + delta.y)
 				if (snapToGrid) {
@@ -63,11 +63,11 @@ export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 
 	return (
 		<div ref={drop} className={styles.drag__container}>
-			{Object.keys(images).map((key ) => (
+			{images.map((item, index ) => (
 				<DraggableBox
-					key={Number(key)}
-					id={Number(key)}
-					{...(images[Number(key)] as { top: number; left: number; url: string | StaticImageData })}
+					key={index}
+					id={index}
+					{...(images[index] as { top: number; left: number; url: string | StaticImageData })}
 				/>
 			))}
 		</div>

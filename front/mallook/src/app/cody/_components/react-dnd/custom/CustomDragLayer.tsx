@@ -5,6 +5,7 @@ import { useDragLayer } from 'react-dnd'
 import { BoxDragPreview } from './BoxDragPreview'
 import { ItemTypes } from './ItemTypes'
 import { snapToGrid } from './snapToGrid'
+import {ItemData} from "@/app/cody/_components/react-dnd/custom/Dnd";
 
 const layerStyles: CSSProperties = {
 	position: 'fixed',
@@ -45,7 +46,8 @@ function getItemStyles(
 }
 
 export interface CustomDragLayerProps {
-	snapToGrid: boolean
+	snapToGrid: boolean;
+	dragItems: ItemData;
 }
 
 export const CustomDragLayer: FC<CustomDragLayerProps> = (props) => {
@@ -61,7 +63,7 @@ export const CustomDragLayer: FC<CustomDragLayerProps> = (props) => {
 	function renderItem() {
 		switch (itemType) {
 			case ItemTypes.BOX:
-				return <BoxDragPreview title={item.title} />
+				return <BoxDragPreview url={item.url} />
 			default:
 				return null
 		}

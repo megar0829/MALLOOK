@@ -6,6 +6,8 @@ import { getEmptyImage } from 'react-dnd-html5-backend'
 
 import { Box } from './Box'
 import { ItemTypes } from './ItemTypes'
+import Image, {StaticImageData} from "next/image";
+import styles from "@/app/cody/_components/react-dnd/custom/dnd.module.css";
 
 function getStyles(
 	left: number,
@@ -26,7 +28,7 @@ function getStyles(
 
 export interface DraggableBoxProps {
 	id: number
-	title: string
+	url: string | StaticImageData
 	left: number
 	top: number
 }
@@ -34,16 +36,16 @@ export interface DraggableBoxProps {
 export const DraggableBox: FC<DraggableBoxProps> = memo(function DraggableBox(
 	props,
 ) {
-	const { id, title, left, top } = props
+	const { id, url, left, top } = props
 	const [{ isDragging }, drag, preview] = useDrag(
 		() => ({
 			type: ItemTypes.BOX,
-			item: { id, left, top, title },
+			item: { id, left, top, url },
 			collect: (monitor: DragSourceMonitor) => ({
 				isDragging: monitor.isDragging(),
 			}),
 		}),
-		[id, left, top, title],
+		[id, left, top, url],
 	)
 
 	useEffect(() => {
@@ -56,7 +58,12 @@ export const DraggableBox: FC<DraggableBoxProps> = memo(function DraggableBox(
 			style={getStyles(left, top, isDragging)}
 			role="DraggableBox"
 		>
-			<Box title={title} />
+			<div
+				className={styles.imageDiv}
+				role={'Box'}
+			>
+				<Image className={styles.image} src={url} alt="상품이미지"/>
+			</div>
 		</div>
 	)
 })

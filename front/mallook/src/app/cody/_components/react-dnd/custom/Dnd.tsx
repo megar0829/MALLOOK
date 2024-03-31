@@ -8,11 +8,9 @@ import {ProductList} from "@/constants";
 import Image, {StaticImageData} from "next/image";
 
 export interface ItemData {
-	[key: number] : {
-		top: number;
-		left: number;
-		url: string | StaticImageData
-	}
+	top: number;
+	left: number;
+	url: string | StaticImageData
 }
 
 export const Dnd: FC = () => {
@@ -37,11 +35,9 @@ export const Dnd: FC = () => {
 	const addItem = (idx: number) => {
 		setDragItems([...dragItems,
 			{
- 				[idx] : {
-						top: 100,
-						left: 100,
-						url: products[idx]
-				}
+				top: 100,
+				left: 100,
+				url: products[idx]
 			}
 		])
 	}
@@ -52,7 +48,7 @@ export const Dnd: FC = () => {
 			<div className={styles.left__container}>
 				<Container snapToGrid={snapToGridAfterDrop} dragItems={dragItems} />
 				{/*드래깅 중 아이템을 보여주는 컴포넌트 */}
-				<CustomDragLayer snapToGrid={snapToGridWhileDragging} />
+				<CustomDragLayer snapToGrid={snapToGridWhileDragging} dragItems={dragItems} />
 			</div>
 			<div className={styles.right__container}>
 				{products.map((url, index) => {

@@ -32,6 +32,8 @@
 
 }
 .imageDiv {
+    width: 14dvw;
+    height: 25dvh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -39,5 +41,8 @@
     border-radius: 0.75rem;
 }
 .image {
-
+    width: 14dvw;
+    height: 25dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
 }

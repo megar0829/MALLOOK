@@ -1,26 +1,24 @@
 import type { CSSProperties, FC } from 'react'
 import { memo } from 'react'
+import Image, {StaticImageData} from "next/image";
+import styles from "./dnd.module.css";
 
-const styles: CSSProperties = {
-	border: '1px dashed gray',
-	padding: '0.5rem 1rem',
-	cursor: 'move',
-}
 
 export interface BoxProps {
-	title: string
+	url: string | StaticImageData
 	yellow?: boolean
 	preview?: boolean
 }
 
-export const Box: FC<BoxProps> = memo(function Box({ title, yellow, preview }) {
+export const Box: FC<BoxProps> = memo(function Box({ url, yellow, preview }) {
 	const backgroundColor = yellow ? 'yellow' : 'white'
 	return (
 		<div
-			style={{ ...styles, backgroundColor }}
+			style={{ backgroundColor }}
+			className={styles.imageDiv}
 			role={preview ? 'BoxPreview' : 'Box'}
 		>
-			{title}
+			<Image className={styles.image} src={url} alt="상품이미지" />
 		</div>
 	)
 })

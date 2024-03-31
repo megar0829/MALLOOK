@@ -2,15 +2,12 @@ import type { CSSProperties, FC } from 'react'
 import { memo, useEffect, useState } from 'react'
 
 import { Box } from './Box'
+import Image, {StaticImageData} from "next/image";
 
-const styles: CSSProperties = {
-	display: 'inline-block',
-	transform: 'rotate(-7deg)',
-	WebkitTransform: 'rotate(-7deg)',
-}
+import styles from "./dnd.module.css";
 
 export interface BoxDragPreviewProps {
-	title: string
+	url: string | StaticImageData
 }
 
 export interface BoxDragPreviewState {
@@ -18,7 +15,7 @@ export interface BoxDragPreviewState {
 }
 
 export const BoxDragPreview: FC<BoxDragPreviewProps> = memo(
-	function BoxDragPreview({ title }) {
+	function BoxDragPreview({ url }) {
 		const [tickTock, setTickTock] = useState(false)
 
 		useEffect(
@@ -30,8 +27,13 @@ export const BoxDragPreview: FC<BoxDragPreviewProps> = memo(
 		)
 
 		return (
-			<div style={styles}>
-				<Box title={title} yellow={tickTock} preview />
+			<div>
+				<div
+					className={styles.imageDiv}
+					role={'BoxPreview'}
+				>
+					<Image className={styles.image} src={url} alt="상품이미지"/>
+				</div>
 			</div>
 		)
 	},
