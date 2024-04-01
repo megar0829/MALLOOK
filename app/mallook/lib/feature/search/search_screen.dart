@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
+import 'package:mallook/feature/search/models/popular_keyword.dart';
 import 'package:mallook/feature/search/search_product_screen.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
@@ -17,7 +18,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _appBarScrollController = ScrollController();
-  final Future<List<String>> _hotKeywords = SearchApiService.getHotKeywords();
+  final Future<List<PopularKeyword>> _hotKeywords =
+      SearchApiService.getHotKeywords();
   final Set<String> _searchKeywords = {};
 
   String _searchWord = "";
@@ -172,49 +174,29 @@ class _SearchScreenState extends State<SearchScreen> {
               child: ListView.separated(
                 controller: _appBarScrollController,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Sizes.size4,
-                    horizontal: Sizes.size10,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => _removeSearchKeyword(
+                    _searchKeywords.elementAt(index),
                   ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.circular(
-                      Sizes.size20,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size6,
+                      horizontal: Sizes.size16,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        '# ${_searchKeywords.elementAt(index)}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Sizes.size14,
-                        ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
+                      borderRadius: BorderRadius.circular(
+                        Sizes.size20,
                       ),
-                      Gaps.h4,
-                      GestureDetector(
-                        onTap: () => _removeSearchKeyword(
-                            _searchKeywords.elementAt(index)),
-                        child: Container(
-                          padding: const EdgeInsets.all(
-                            Sizes.size2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.circular(
-                              Sizes.size10,
-                            ),
-                          ),
-                          child: FaIcon(
-                            FontAwesomeIcons.xmark,
-                            color: Colors.grey.shade700,
-                            size: Sizes.size14,
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
+                    child: Text(
+                      '# ${_searchKeywords.elementAt(index)}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Sizes.size14,
+                      ),
+                    ),
                   ),
                 ),
                 separatorBuilder: (context, index) => Gaps.h10,
