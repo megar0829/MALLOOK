@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -42,6 +42,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
   final Future<List<String>> _hotKeywords = SearchApiService.getHotKeywords();
   final List<Product> _products = [];
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
   late Set<String> _searchKeywords;
   late String _searchWord;
@@ -74,17 +75,21 @@ class _SearchProductScreenState extends State<SearchProductScreen>
   }
 
   void _loadMoreProducts() async {
+    if (_productPage > _totalPage) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
           _isProductLoading = true;
         });
       }
-      var loadedProducts = await HomeApiService.getProducts(_productPage);
+      var loadedProducts =
+          await HomeApiService.getPopularProducts(_productPage);
       if (mounted) {
         setState(() {
-          _products.addAll(loadedProducts); // 기존 _products List에 새로운 제품 추가
-          _productPage++;
+          _productPage = loadedProducts.currentPage! + 1;
+          _totalPage = loadedProducts.totalPage!;
+          _products
+              .addAll(loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
           _isProductLoading = false;
         });
       }

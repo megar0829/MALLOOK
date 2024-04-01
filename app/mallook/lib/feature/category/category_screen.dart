@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
@@ -58,6 +58,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Product> _products = [];
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
   String primary = categorys.keys.first;
   late String secondary = "";
@@ -84,6 +85,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _loadMoreProducts() async {
+    if (_productPage > _totalPage) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
@@ -91,10 +93,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
         });
       }
 
-      var loadedProducts = await HomeApiService.getProducts(_productPage);
+      var loadedProducts =
+          await HomeApiService.getPopularProducts(_productPage);
       if (mounted) {
         setState(() {
-          _products.addAll(loadedProducts);
+          _productPage = loadedProducts.currentPage! + 1;
+          _totalPage = loadedProducts.totalPage!;
+          _products.addAll(loadedProducts.content!);
           _productPage++;
           _isProductLoading = false;
         });

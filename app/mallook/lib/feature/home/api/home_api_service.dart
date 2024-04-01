@@ -1,9 +1,12 @@
 import 'dart:math';
 
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/config/dio_service.dart';
 import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_page_response.dart';
 
 class HomeApiService {
+  static final _dio = DioService();
   static const String baseUrl = "";
   static List<Product> sampleProducts = [
     Product(
@@ -82,7 +85,6 @@ class HomeApiService {
   ];
 
   static Future<Script> getMySingleScript() async {
-    final url = Uri.parse('$baseUrl');
     Script script = Script(
       id: Random().nextInt(200),
       name: "하늘하늘 한 봄 나들이 패션",
@@ -94,15 +96,14 @@ class HomeApiService {
     return script;
   }
 
-  static Future<List<Product>> getProducts(int page) async {
-    List<Product> productInstances = [];
-    final url = Uri.parse('$baseUrl');
-
-    for (int i = 0; i < 20; i++) {
-      productInstances.add(sampleProducts[i % sampleProducts.length]);
-    }
-    await Future.delayed(const Duration(milliseconds: 500)); // 예시로 1초 대기
-    return productInstances;
+  static Future<ProductPageResponse> getPopularProducts(int page) async {
+    return await _dio.baseGet<ProductPageResponse>(
+      path: "/api/products/popular",
+      queryParameters: <String, num>{
+        "page": page,
+      },
+      fromJsonT: (json) => ProductPageResponse.fromJson(json),
+    );
   }
 
   /// 랭킹에 따른 스크립트

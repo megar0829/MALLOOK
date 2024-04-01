@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
-import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/cart_item.dart';
 
 import '../../../constants/sizes.dart';
 
@@ -39,7 +39,9 @@ class OrderProductWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.network(
-                cartItem.product.image!,
+                cartItem.image == null
+                    ? "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                    : cartItem.image!,
                 height: 120,
                 fit: BoxFit.cover,
               ),
@@ -51,7 +53,7 @@ class OrderProductWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        cartItem.product.name,
+                        cartItem.name!,
                         maxLines: 5,
                         style: const TextStyle(
                           color: Colors.black,
@@ -68,7 +70,7 @@ class OrderProductWidget extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '수량 ${cartItem.quantity}',
+                              '수량 ${cartItem.count!}',
                               style: TextStyle(
                                 color: Colors.grey.shade700,
                                 fontSize: Sizes.size16,
@@ -76,7 +78,7 @@ class OrderProductWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              cartItem.size,
+                              cartItem.size!,
                               maxLines: 3,
                               style: TextStyle(
                                 color: Colors.grey.shade700,
@@ -91,7 +93,7 @@ class OrderProductWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            '${numberFormat.format(cartItem.product.price * cartItem.quantity)} ₩',
+                            '${numberFormat.format(cartItem.price! * cartItem.count!)} ₩',
                             style: TextStyle(
                               color: Theme.of(context).primaryColorDark,
                               fontSize: Sizes.size18,

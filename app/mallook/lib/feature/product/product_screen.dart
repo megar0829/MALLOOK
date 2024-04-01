@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
 import 'package:mallook/feature/product/widget/product_img_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -96,7 +96,7 @@ class _ProductScreenState extends State<ProductScreen> {
               child: Column(
                 children: [
                   Text(
-                    widget.product.name,
+                    widget.product.name!,
                     maxLines: 5,
                     style: const TextStyle(
                       color: Colors.black,

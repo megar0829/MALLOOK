@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductImgWidget extends StatefulWidget {

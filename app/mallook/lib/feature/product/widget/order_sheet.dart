@@ -3,10 +3,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/order/cart_screen.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 class OrderSheet extends StatefulWidget {
@@ -46,7 +47,7 @@ class _OrderSheetState extends State<OrderSheet> {
       if (_selectedSize == null || _selectedColor == null) return;
       CartItem cartItem = CartItem(
         product: widget.product,
-        quantity: 1,
+        count: 1,
         size: _selectedSize!,
         color: _selectedColor!,
       );
@@ -87,7 +88,7 @@ class _OrderSheetState extends State<OrderSheet> {
     }
     for (var cartItem in _cartItems) {
       cartController.addItem(
-        productId: cartItem.product.name,
+        productId: cartItem.name!,
         cartItem: cartItem,
       );
     }
@@ -228,7 +229,7 @@ class _OrderSheetState extends State<OrderSheet> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          _cartItems[index].size,
+                          _cartItems[index].size!,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: Sizes.size16,
@@ -236,7 +237,7 @@ class _OrderSheetState extends State<OrderSheet> {
                           ),
                         ),
                         Text(
-                          _cartItems[index].color,
+                          _cartItems[index].color!,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: Sizes.size16,
@@ -260,9 +261,10 @@ class _OrderSheetState extends State<OrderSheet> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              if (_cartItems[index].quantity > 1) {
+                              if (_cartItems[index].count! > 1) {
                                 setState(() {
-                                  _cartItems[index].quantity -= 1;
+                                  _cartItems[index].count =
+                                      _cartItems[index].count! - 1;
                                 });
                               } else {
                                 setState(() {
@@ -283,7 +285,7 @@ class _OrderSheetState extends State<OrderSheet> {
                               horizontal: Sizes.size10,
                             ), // Sizes.size12 대신 사용
                             child: Text(
-                              '${_cartItems[index].quantity}',
+                              '${_cartItems[index].count}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size14,
@@ -305,7 +307,8 @@ class _OrderSheetState extends State<OrderSheet> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                _cartItems[index].quantity += 1;
+                                _cartItems[index].count =
+                                    _cartItems[index].count! + 1;
                               });
                             },
                             child: const Icon(

@@ -1,4 +1,4 @@
-import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/cart_item.dart';
 
 class OrderDetail {
   final num id;
@@ -7,10 +7,11 @@ class OrderDetail {
   final int totalFee;
   final int totalCount;
 
-  OrderDetail(
-      {required this.id,
-      required this.items,
-      required this.totalPrice,
-      required this.totalFee,
-      required this.totalCount});
+  OrderDetail({
+    required this.id,
+    required this.items,
+    required this.totalPrice,
+    required this.totalFee,
+    required this.totalCount,
+  });
 }

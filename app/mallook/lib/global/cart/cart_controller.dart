@@ -1,25 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mallook/feature/home/models/product.dart';
-
-class CartItem {
-  Product product;
-  int quantity;
-  String size;
-  String color;
-  bool selected = true;
-
-  CartItem({
-    required this.product,
-    required this.quantity,
-    required this.size,
-    required this.color,
-  });
-
-  @override
-  String toString() {
-    return 'CartItem{product: $product, quantity: $quantity, size: $size, color: $color}';
-  }
-}
+import 'package:mallook/global/cart/model/cart_item.dart';
 
 class CartController extends GetxController {
   final _items = <CartItem>[].obs;
@@ -38,14 +18,14 @@ class CartController extends GetxController {
   }) {
     _items.add(cartItem);
     totalQuantity.value += 1;
-    totalPrice.value += cartItem.product.price * cartItem.quantity;
+    totalPrice.value += cartItem.price! * cartItem.count!;
     update(); // 상태 업데이트
   }
 
   void removeItem({required CartItem cartItem}) {
     var removedCartItem = _items.remove(cartItem);
     totalQuantity.value -= 1;
-    totalPrice.value -= cartItem.product.price * cartItem.quantity;
+    totalPrice.value -= cartItem.price! * cartItem.count!;
     update(); // 상태 업데이트
   }
 }

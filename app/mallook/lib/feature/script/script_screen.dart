@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/script/widget/script_img_widget.dart';
 import 'package:mallook/feature/script/widget/script_product_widget.dart';
@@ -28,6 +27,7 @@ class _ScriptScreenState extends State<ScriptScreen>
       ScriptService.getScriptDetail(widget.script.id!);
   final List<Product> _products = [];
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
 
   @override
@@ -51,23 +51,26 @@ class _ScriptScreenState extends State<ScriptScreen>
   }
 
   void _loadMoreProducts() async {
-    List<String> keywords = ["예쁜", "섹시"]; // TODO: script keyword
-    if (!_isProductLoading && keywords.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          _isProductLoading = true;
-        });
-
-        var loadedProducts = await HomeApiService.getProducts(_productPage);
-        if (mounted) {
-          setState(() {
-            _products.addAll(loadedProducts);
-            _productPage++;
-            _isProductLoading = false;
-          });
-        }
-      }
-    }
+    return;
+    // if (!_isProductLoading && keywords.isNotEmpty) {
+    //   if (mounted) {
+    //     setState(() {
+    //       _isProductLoading = true;
+    //     });
+    //
+    //     var loadedProducts =
+    //     await HomeApiService.getPopularProducts(_productPage);
+    //     if (mounted) {
+    //       setState(() {
+    //         _productPage = loadedProducts.currentPage! + 1;
+    //         _totalPage = loadedProducts.totalPage!;
+    //         _products.addAll(loadedProducts.content!);
+    //         _productPage++;
+    //         _isProductLoading = false;
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   @override

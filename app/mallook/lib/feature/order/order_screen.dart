@@ -9,6 +9,7 @@ import 'package:mallook/feature/order/ordered_screen.dart';
 import 'package:mallook/feature/order/widget/cart_coupon_dropdown_widget.dart';
 import 'package:mallook/feature/order/widget/order_product_widget.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/custom_circular_wait_bold_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
@@ -56,7 +57,7 @@ class _OrderScreenState extends State<OrderScreen> {
   int _getTotalQuantity() {
     int total = 0;
     for (var item in widget.orderItems) {
-      total += item.quantity;
+      total += item.count!;
     }
     return total;
   }
@@ -81,7 +82,7 @@ class _OrderScreenState extends State<OrderScreen> {
   int _getTotalPrice() {
     int total = 0;
     for (var item in widget.orderItems) {
-      total += item.quantity * item.product.price;
+      total += item.price! * item.count!;
     }
     return total;
   }

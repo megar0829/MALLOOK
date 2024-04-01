@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/my_main_script_widget.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class HomeMyScreen extends StatefulWidget {
@@ -23,6 +23,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
   final Future<Script> _script = HomeApiService.getMySingleScript();
 
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
 
   @override
@@ -46,17 +47,21 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
   }
 
   void _loadMoreProducts() async {
+    if (_productPage > _totalPage) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
           _isProductLoading = true;
         });
       }
-      var loadedProducts = await HomeApiService.getProducts(_productPage);
+      var loadedProducts =
+          await HomeApiService.getPopularProducts(_productPage);
       if (mounted) {
         setState(() {
-          _products.addAll(loadedProducts); // 기존 _products List에 새로운 제품 추가
-          _productPage++;
+          _productPage = loadedProducts.currentPage! + 1;
+          _totalPage = loadedProducts.totalPage!;
+          _products
+              .addAll(loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
           _isProductLoading = false;
         });
       }

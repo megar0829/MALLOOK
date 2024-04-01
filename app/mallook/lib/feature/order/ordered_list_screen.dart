@@ -142,7 +142,7 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
                       Row(
                         children: [
                           Image.network(
-                            '${_orderedList[index].items.first.product.image}',
+                            '${_orderedList[index].items.first.image}',
                             fit: BoxFit.cover,
                             height: 120,
                           ),

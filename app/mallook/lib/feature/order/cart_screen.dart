@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/order/order_screen.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -89,7 +90,7 @@ class _CartScreenState extends State<CartScreen> {
     int totalPrice = 0;
     for (var item in _cartItems) {
       if (item.selected) {
-        totalPrice += item.product.price * item.quantity;
+        totalPrice += item.price! * item.count!;
       }
     }
     return totalPrice;
@@ -99,7 +100,7 @@ class _CartScreenState extends State<CartScreen> {
     int totalQuantity = 0;
     for (var item in _cartItems) {
       if (item.selected) {
-        totalQuantity += item.quantity;
+        totalQuantity += item.count!;
       }
     }
     return totalQuantity;
@@ -309,13 +310,13 @@ class _CartScreenState extends State<CartScreen> {
                         Gaps.v8,
                         GestureDetector(
                           onTap: () =>
-                              _moveToProductScreen(_cartItems[index].product),
+                              _moveToProductScreen(_cartItems[index].product!),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Image.network(
-                                _cartItems[index].product.image!,
+                                _cartItems[index].image!,
                                 height: 150,
                                 fit: BoxFit.cover,
                               ),
@@ -328,7 +329,7 @@ class _CartScreenState extends State<CartScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        _cartItems[index].product.name,
+                                        _cartItems[index].name!,
                                         maxLines: 5,
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -346,7 +347,7 @@ class _CartScreenState extends State<CartScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
-                                              '수량 ${_cartItems[index].quantity}',
+                                              '수량 ${_cartItems[index].count!}',
                                               style: TextStyle(
                                                 color: Colors.grey.shade700,
                                                 fontSize: Sizes.size16,
@@ -354,7 +355,7 @@ class _CartScreenState extends State<CartScreen> {
                                               ),
                                             ),
                                             Text(
-                                              _cartItems[index].size,
+                                              _cartItems[index].size!,
                                               maxLines: 3,
                                               style: TextStyle(
                                                 color: Colors.grey.shade700,
@@ -370,7 +371,7 @@ class _CartScreenState extends State<CartScreen> {
                                             MainAxisAlignment.end,
                                         children: [
                                           Text(
-                                            '${numberFormat.format(_cartItems[index].product.price * _cartItems[index].quantity)} ₩',
+                                            '${numberFormat.format(_cartItems[index].price! * _cartItems[index].count!)} ₩',
                                             style: TextStyle(
                                               color: Theme.of(context)
                                                   .primaryColorDark,

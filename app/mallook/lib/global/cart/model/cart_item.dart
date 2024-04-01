@@ -1,3 +1,5 @@
+import 'package:mallook/feature/product/model/product.dart';
+
 class CartItem {
   CartItem({
     this.cartId,
@@ -10,6 +12,7 @@ class CartItem {
     this.size,
     this.color,
     this.fee,
+    this.product,
   });
 
   CartItem.fromJson(dynamic json) {
@@ -26,8 +29,8 @@ class CartItem {
   }
 
   int? cartId;
-  int? cartProductId;
-  String? productId;
+  int? cartProductId; // 장바구니 내 상품 id
+  String? productId; // 상품 id
   int? price;
   int? count;
   String? name;
@@ -35,6 +38,8 @@ class CartItem {
   String? size;
   String? color;
   int? fee;
+  Product? product;
+  bool selected = true;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
