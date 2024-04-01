@@ -18,10 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -50,7 +47,7 @@ public class ProductController {
             })
     @GetMapping
     public ResponseEntity<BaseResponse<ProductsPageRes>> getProductsList(
-            @PageableDefault(size = 21,
+            @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
@@ -58,6 +55,7 @@ public class ProductController {
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
@@ -109,10 +107,11 @@ public class ProductController {
         }
 
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        final Pageable page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         String finalCursor = cursor;
-        Supplier<Slice<ProductsListDto>> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
-                ? () -> productService.getProductDetail(name, finalCursor, pageable)
-                : () -> productService.getProductDetail(hotKeywordDto, finalCursor, pageable);
+        Supplier<ProductsPageRes> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
+                ? () -> productService.getProductDetail(name, finalCursor, page)
+                : () -> productService.getProductDetail(hotKeywordDto, finalCursor, page);
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

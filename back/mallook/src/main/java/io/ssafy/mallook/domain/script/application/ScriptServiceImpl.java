@@ -3,12 +3,13 @@ package io.ssafy.mallook.domain.script.application;
 import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.service.GptService;
+import io.ssafy.mallook.domain.heart.script_heart.dao.ScriptHeartRepository;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static io.ssafy.mallook.global.common.code.ErrorCode.*;
 import static java.util.stream.Collectors.*;
 
 @Service
@@ -40,6 +42,7 @@ public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
     private final ProductsRepository mongoProductsRepository;
     private final ProductsCustomRepository productsCustomRepository;
+    private final ScriptHeartRepository scriptHeartRepository;
     private final GptService gptService;
 
     @Override
@@ -70,14 +73,14 @@ public class ScriptServiceImpl implements ScriptService {
                 .build();
         String cursor = mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable)
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable).content()
                 .stream()
                 .map(ScriptProductDto::toScriptProductDto)
                 .collect(toList());
     }
 
     @Override
-    public Slice<ProductsListDto> getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable) {
+    public ProductsPageRes getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable) {
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
         List<String> scriptKeyword = proxyScript.getKeywordList();
         ProductHotKeywordDto productHotKeywordDto = ProductHotKeywordDto.builder()
@@ -90,8 +93,26 @@ public class ScriptServiceImpl implements ScriptService {
     @Override
     public ScriptDetailDto getScriptDetail(Long scriptId) {
         return scriptRepository.findById(scriptId)
-                .map(ScriptDetailDto::toDto)
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT));
+                .map(ScriptDetailDto::toDtoNotLogin)
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
+    }
+
+    @Override
+    public ScriptListDto getLatestScript(UUID id) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        return scriptRepository.findTopByMemberOrderByIdDesc(proxyMember)
+                .map(ScriptListDto::toDto)
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
+    }
+
+    @Override
+    public ScriptDetailDto getScriptDetail(UUID memberId, Long scriptId) {
+        Member proxyMember = memberRepository.getReferenceById(memberId);
+        Script proxyScript = scriptRepository.getReferenceById(scriptId);
+        boolean hasLike = scriptHeartRepository.findByMemberAndScript(proxyMember, proxyScript).isPresent();
+        return scriptRepository.findById(scriptId)
+                .map((Script script) -> ScriptDetailDto.toDto(script, hasLike))
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
     }
 
     @Override

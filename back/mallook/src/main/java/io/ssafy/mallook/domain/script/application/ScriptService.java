@@ -1,6 +1,6 @@
 package io.ssafy.mallook.domain.script.application;
 
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
@@ -22,9 +22,13 @@ public interface ScriptService {
 
     List<ScriptProductDto> getRecommendProductById(Long scriptId, Pageable pageable);
 
-    Slice<ProductsListDto> getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable);
+    ProductsPageRes getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable);
 
     ScriptDetailDto getScriptDetail(Long scriptId);
+
+    ScriptListDto getLatestScript(UUID id);
+
+    ScriptDetailDto getScriptDetail(UUID memberId,Long scriptId);
 
     void createScript(ScriptCreatDto scriptCreateDto, UUID id);
 

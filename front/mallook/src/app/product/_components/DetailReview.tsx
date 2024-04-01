@@ -1,5 +1,5 @@
 import styles from "./detailReview.module.css";
-import {ReviewData} from "@/constants";
+import {ReviewData} from "@/types";
 import Image from "next/image";
 
 

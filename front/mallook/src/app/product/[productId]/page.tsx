@@ -30,7 +30,7 @@ export default async function ProductDetailPage({params: {productId}} : IParams)
       <div className={styles.bottomDiv}>
         <span>이 상품과 유사한 상품들</span>
       </div>
-      <ProductListComponent/>
+      <ProductListComponent productList={[]} />
     </div>
   );
 }

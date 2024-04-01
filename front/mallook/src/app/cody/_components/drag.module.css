@@ -1,0 +1,22 @@
+.box {
+    width: 100%;
+    height: 100%;
+    cursor: move;
+    border-radius: 0.75rem;
+    background-color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f3f4f6;
+    transition: shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+.box :active {
+    transform: scale(0.95);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.boundary {
+    position: relative;
+    height: 16rem;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background-color: #e5e7eb;
+}

@@ -6,10 +6,12 @@ from collections import Counter
 from pykospacing import Spacing
 from soynlp.word import WordExtractor
 from soynlp.tokenizer import LTokenizer
-from konlpy.tag import Kkma
+import time
 
 
-kkma = Kkma()   # Kkma 인스터스 생성
+# 시작 시간 기록
+start_time = time.time()
+
 spacing = Spacing()     # PyKoSpacing 인스턴스 생성
 word_extractor = WordExtractor()    # WordExtractor 인스턴스 생성
 
@@ -29,17 +31,6 @@ with open(stopword_file, 'r', encoding='utf-8') as file:
 keyword_file = os.path.join(current_directory, "keyword.txt")
 with open(keyword_file, 'r', encoding='utf-8') as file:
     keyword_data = [line.strip() for line in file]
-
-
-def compare_word_meaning(word1, word2):
-    # 두 단어의 형태소 분석 결과 비교
-    morphs1 = kkma.morphs(word1)
-    morphs2 = kkma.morphs(word2)
-
-    if morphs1[0] == morphs2[0]:
-        return True
-    else:
-        return False
 
 
 def review_preprocessing(corpus):
