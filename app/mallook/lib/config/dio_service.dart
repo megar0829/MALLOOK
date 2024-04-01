@@ -115,8 +115,8 @@ class DioService {
     }
   }
 
-  Future<T> baseGet<T>(
-    String path, {
+  Future<dynamic> baseGet<T>({
+    required String path,
     Map<String, dynamic>? queryParameters,
     T Function(Map<String, dynamic>)? fromJsonT,
   }) async {
@@ -144,8 +144,8 @@ class DioService {
     }
   }
 
-  Future<T> basePost<T>(
-    String path, {
+  Future<dynamic> basePost<T>({
+    required String path,
     Map<String, dynamic>? queryParameters,
     dynamic postData,
     T Function(Map<String, dynamic>)? fromJsonT,

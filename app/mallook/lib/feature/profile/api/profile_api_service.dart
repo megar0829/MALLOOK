@@ -7,7 +7,7 @@ class ProfileApiService {
   static Future<MemberDetail> getMemberDetail() async {
     print('getMemberDetail');
     return await _dio.baseGet<MemberDetail>(
-      "/api/members",
+      path: "/api/members",
       fromJsonT: (json) => MemberDetail.fromJson(json),
     );
   }

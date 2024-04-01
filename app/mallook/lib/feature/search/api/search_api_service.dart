@@ -1,25 +1,14 @@
-import 'dart:math';
-
-import 'package:mallook/feature/search/models/hot_keyword.dart';
+import 'package:mallook/config/dio_service.dart';
 
 class SearchApiService {
-  static Future<List<HotKeyword>> getHotKeywords() async {
-    List<HotKeyword> hotKeywords = [];
+  static final _dio = DioService();
 
-    for (int i = 0; i < 10; i++) {
-      hotKeywords.add(
-        HotKeyword(
-          id: Random().nextInt(1000),
-          rank: i + 1,
-          change: Random().nextInt(100) - 50,
-          name: "핫 키워드 $i",
-        ),
-      );
-    }
+  static Future<List<String>> getHotKeywords() async {
+    var result = await _dio.baseGet(
+      path: '/api/keywords/top-ten',
+    );
+    print('getHotKeywords $result');
 
-    hotKeywords.sort((a, b) => a.rank.compareTo(b.rank));
-    Future.delayed(const Duration(milliseconds: 500));
-
-    return hotKeywords;
+    return [];
   }
 }

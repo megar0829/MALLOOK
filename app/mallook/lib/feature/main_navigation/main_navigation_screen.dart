@@ -48,6 +48,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
   Future<MemberDetail> memberDetail = ProfileApiService.getMemberDetail();
 
+  // Future<List<String>> hotKeywords = SearchApiService.getHotKeywords();
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

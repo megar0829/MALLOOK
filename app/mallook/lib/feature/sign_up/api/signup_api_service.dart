@@ -6,12 +6,15 @@ class SignupApiService {
 
   static Future<RandomNicknameModel> getRandomNickname() async {
     return await _dio.baseGet<RandomNicknameModel>(
-      "/api/members/random",
+      path: "/api/members/random",
       fromJsonT: (json) => RandomNicknameModel.fromJson(json),
     );
   }
 
   static Future<String> registerMemberInfo(dynamic data) async {
-    return await _dio.basePost("/api/members", postData: data);
+    return await _dio.basePost(
+      path: "/api/members",
+      postData: data,
+    );
   }
 }
