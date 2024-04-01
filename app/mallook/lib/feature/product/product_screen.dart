@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/product/api/product_api_service.dart';
@@ -21,13 +23,15 @@ class ProductScreen extends StatefulWidget {
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
+class _ProductScreenState extends State<ProductScreen>
+    with SingleTickerProviderStateMixin {
   late Future<ProductDetail> _productDetail;
-  final ScrollController _storeController = ScrollController();
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _productDetail = ProductApiService.getProductDetail(widget.product.id!);
     print('hihih   $_productDetail');
   }
@@ -35,7 +39,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void dispose() {
     super.dispose();
-    _storeController.dispose();
+    _tabController.dispose();
   }
 
   void _onClosePressed() {
@@ -74,30 +78,169 @@ class _ProductScreenState extends State<ProductScreen> {
           Gaps.h24,
         ],
       ),
-      body: SingleChildScrollView(
-        child: FutureBuilder<ProductDetail>(
-          future: _productDetail,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              var product = snapshot.data!;
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ProductImgWidget(
+      body: FutureBuilder<ProductDetail>(
+        future: _productDetail,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var product = snapshot.data!;
+            return NestedScrollView(
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverToBoxAdapter(
+                      child: Column(
+                    children: [
+                      ProductImgWidget(
+                        images: [
+                          product.image ??
+                              "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Sizes.size10,
+                          horizontal: Sizes.size24,
+                        ),
+                        child: Text(
+                          product.name!,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  SliverToBoxAdapter(
+                    child: TabBar(
+                      controller: _tabController,
+                      labelStyle: const TextStyle(
+                        fontSize: Sizes.size16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      labelColor: Theme.of(context).primaryColorDark,
+                      indicatorColor: Theme.of(context).primaryColorDark,
+                      tabs: const [
+                        Tab(
+                          height: Sizes.size36,
+                          text: "상세보기",
+                        ),
+                        Tab(
+                          height: Sizes.size36,
+                          text: "리뷰",
+                        ),
+                      ],
+                    ),
+                  ),
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.size10,
+                  horizontal: Sizes.size20,
+                ),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    ListView.separated(
+                      itemBuilder: (context, index) => Image.network(
+                        product.detailImages![index],
+                        filterQuality: FilterQuality.low,
+                      ),
+                      separatorBuilder: (context, index) => Gaps.v8,
+                      itemCount: (product.detailImages ?? []).length,
+                    ),
+                    ListView.separated(
+                      itemBuilder: (context, index) => Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Sizes.size10,
+                          horizontal: Sizes.size14,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey.shade300,
+                            width: Sizes.size1,
+                          ),
+                          borderRadius: BorderRadius.circular(
+                            Sizes.size14,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              product.review!.reviewList![index].createdAt!,
+                              style: TextStyle(
+                                color: Colors.grey.shade600,
+                                fontSize: Sizes.size12,
+                              ),
+                            ),
+                            const Divider(),
+                            Text(
+                              product.review!.reviewList![index].contents!,
+                              maxLines: 5,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: Sizes.size14,
+                              ),
+                            ),
+                            const Divider(),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (product.review!.reviewList![index].userSize!
+                                        .height !=
+                                    null)
+                                  Text(
+                                    "신장 ${product.review!.reviewList![index].userSize!.height}",
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size12,
+                                    ),
+                                  ),
+                                if (product.review!.reviewList![index].userSize!
+                                        .weight !=
+                                    null)
+                                  Text(
+                                    "체중 ${product.review!.reviewList![index].userSize!.weight}",
+                                    style: const TextStyle(
+                                      color: Colors.black87,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size12,
+                                    ),
+                                  ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      separatorBuilder: (context, index) => Gaps.v8,
+                      itemCount: (product.review?.reviewList ?? []).length,
+                    ),
+                  ],
+                ),
+              ),
+            );
+            return ListView.builder(
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return ProductImgWidget(
                     images: [
                       product.image ??
                           "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
                     ],
-                  ),
-                  Gaps.v10,
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Sizes.size8,
-                      horizontal: Sizes.size32,
+                  );
+                } else if (index == 1) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: Sizes.size12,
+                      horizontal: Sizes.size24,
                     ),
                     child: Column(
                       children: [
+                        Gaps.v10,
                         Text(
                           product.name!,
                           maxLines: 5,
@@ -107,22 +250,114 @@ class _ProductScreenState extends State<ProductScreen> {
                             fontSize: Sizes.size18,
                           ),
                         ),
+                        Gaps.v10,
                       ],
                     ),
+                  );
+                } else if (index == 2) {
+                  return TabBar(
+                    controller: _tabController,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: Sizes.size10,
+                    ),
+                    splashFactory: NoSplash.splashFactory,
+                    isScrollable: true,
+                    labelColor: Theme.of(context).primaryColorDark,
+                    unselectedLabelColor: Colors.grey.shade500,
+                    labelStyle: const TextStyle(
+                      fontSize: Sizes.size18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    indicatorColor: Theme.of(context).primaryColorDark,
+                    indicatorWeight: 0.1,
+                    tabAlignment: TabAlignment.center,
+                    tabs: const [
+                      Tab(
+                        height: Sizes.size36,
+                        text: "상세보기",
+                      ),
+                      Tab(
+                        height: Sizes.size36,
+                        text: "리뷰",
+                      )
+                    ],
+                  );
+                }
+                return TabBarView(
+                  controller: _tabController,
+                  children: const [
+                    Text('osfnsfsf'),
+                    Text('osfnsfsf'),
+                  ],
+                );
+              },
+              itemCount: 4,
+            );
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Gaps.v10,
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: Sizes.size8,
+                    horizontal: Sizes.size32,
                   ),
-                  Gaps.v10,
-                  Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) => Container(),
-                        separatorBuilder: (context, index) => Gaps.v8,
-                        itemCount: (product.detailImages ?? []).length),
+                  child: Column(
+                    children: [
+                      Text(
+                        product.name!,
+                        maxLines: 5,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Sizes.size18,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              );
-            }
-            return const CircularProgressIndicator();
-          },
-        ),
+                ),
+                Gaps.v10,
+                TabBar(
+                  controller: _tabController,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: Sizes.size10,
+                  ),
+                  splashFactory: NoSplash.splashFactory,
+                  isScrollable: true,
+                  labelColor: Theme.of(context).primaryColorDark,
+                  unselectedLabelColor: Colors.grey.shade500,
+                  labelStyle: const TextStyle(
+                    fontSize: Sizes.size18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  indicatorColor: Theme.of(context).primaryColorDark,
+                  indicatorWeight: 0.1,
+                  tabAlignment: TabAlignment.center,
+                  tabs: const [
+                    Tab(
+                      height: Sizes.size36,
+                      text: "상세보기",
+                    ),
+                    Tab(
+                      height: Sizes.size36,
+                      text: "리뷰",
+                    )
+                  ],
+                ),
+                Gaps.v12,
+                TabBarView(
+                  controller: _tabController,
+                  children: [
+                    Text('osfnsfsf'),
+                    Text('osfnsfsf'),
+                  ],
+                ),
+              ],
+            );
+          }
+          return const CircularProgressIndicator();
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.symmetric(

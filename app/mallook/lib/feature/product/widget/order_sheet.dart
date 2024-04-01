@@ -11,7 +11,7 @@ import 'package:mallook/global/cart/model/cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 class OrderSheet extends StatefulWidget {
-  final Product product; // TODO: API를 통해 상품 정보 로딩 필요
+  final Product product;
   final String? title;
   final List<String> sizes;
   final List<String> colors;
