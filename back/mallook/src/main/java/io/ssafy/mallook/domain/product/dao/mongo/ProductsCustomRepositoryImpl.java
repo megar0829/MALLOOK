@@ -49,8 +49,6 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .stream()
                 .map(ProductsListDto::toDto)
                 .collect(Collectors.toList());
-        System.out.println(mongoTemplate.count(query, Products.class));
-        System.out.println((pageable.getPageNumber()) * pageable.getPageSize());
         boolean hasNext = mongoTemplate.count(query, Products.class) >= pageable.getPageSize();
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
         productsList.remove(productsList.size() - 1);

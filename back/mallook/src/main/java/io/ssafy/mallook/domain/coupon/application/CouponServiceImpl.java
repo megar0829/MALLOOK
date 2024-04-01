@@ -83,7 +83,6 @@ public class CouponServiceImpl implements CouponService {
     public void decreaseCoupon(Long couponId, UUID memberId) {
         // 같은 쿠폰이 재고보다 많이 발급되지 않도록
         // 한 사람 당 한번만 등록 가능
-        System.out.println("$$$$$$$$$$$$$$$$$$$" + couponId);
         boolean usingLock;
         Long waitTime = 1L;
         Long leaseTime = 3L;
