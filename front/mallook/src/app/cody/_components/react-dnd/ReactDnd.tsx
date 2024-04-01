@@ -8,7 +8,7 @@ import {HTML5Backend, NativeTypes} from 'react-dnd-html5-backend'
 import { Box } from './Box'
 import {Dustbin, DustbinProps} from './Dustbin'
 import {string} from "prop-types";
-import {Product} from "@/constants";
+import {Product} from "@/types";
 import {StaticImageData} from "next/image";
 
 import styles from "./reactDnd.module.css";
@@ -32,7 +32,12 @@ export interface ContainerState {
 }
 
 export interface  ProductProps {
-	products: Product[]
+	products: {
+		productImg: string | StaticImageData;
+		name: string;
+		brand: string;
+		price: number;
+	}[]
 }
 
 export const Container: FC<ProductProps> = memo(function ReactDnd( { products } ) {

@@ -1,9 +1,9 @@
 
 import styles from "./detailProduct.module.css";
-import {Product} from "@/constants";
+import {SampleProduct} from "@/types";
 import Image from "next/image";
 
-export default function DetailProduct(props: {productData:Product}) {
+export default function DetailProduct(props: {productData:SampleProduct}) {
 	return (
 		<div className={styles.detailProduct__container}>
 			<div className={styles.detailProduct__leftDiv}>

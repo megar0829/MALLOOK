@@ -63,7 +63,7 @@ import iconOnepiece from "@/assets/img/category/onepiece.jpg";
 import iconBag from "@/assets/img/category/bag.jpg";
 import iconShoe from "@/assets/img/category/shoe.jpg";
 import iconHat from "@/assets/img/category/hat.jpg";
-import {CodyBookData, CodyData, MainCategoryData, Product, ProfileSampleData, ReviewData} from "@/types";
+import {CodyBookData, CodyData, MainCategoryData, Product, ProfileSampleData, ReviewData, SampleProduct} from "@/types";
 
 
 
@@ -140,7 +140,7 @@ export const ReviewList: ReviewData[] = [
     }
 ]
 
-export const ProductList: Product[] = [
+export const ProductList: SampleProduct[] = [
     {
         productImg: imgCody10_1,
         name: "빅 트위치 로고 티셔츠 화이트",

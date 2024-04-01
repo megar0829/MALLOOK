@@ -7,13 +7,20 @@ export interface Product {
 	price: number;
 }
 
+export interface SampleProduct {
+	productImg: string | StaticImageData;
+	name: string;
+	brand: string;
+	price: number;
+}
+
 export interface CodyData {
 	codyImg: string | StaticImageData;
 	codyName: string;
 	profileImg: string | StaticImageData;
 	username: string;
-	productLeft: Product[];
-	productRight: Product[];
+	productLeft: SampleProduct[];
+	productRight: SampleProduct[];
 }
 
 export interface ProductListProps {
