@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.application;
 import io.ssafy.mallook.domain.chatgpt.dto.request.QuestionDto;
 import io.ssafy.mallook.domain.chatgpt.dto.response.GptResponseDto;
 import io.ssafy.mallook.domain.chatgpt.service.GptService;
+import io.ssafy.mallook.domain.heart.script_heart.dao.ScriptHeartRepository;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
@@ -28,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+import static io.ssafy.mallook.global.common.code.ErrorCode.*;
 import static java.util.stream.Collectors.*;
 
 @Service
@@ -40,6 +42,7 @@ public class ScriptServiceImpl implements ScriptService {
     private final ScriptRepository scriptRepository;
     private final ProductsRepository mongoProductsRepository;
     private final ProductsCustomRepository productsCustomRepository;
+    private final ScriptHeartRepository scriptHeartRepository;
     private final GptService gptService;
 
     @Override
@@ -90,8 +93,18 @@ public class ScriptServiceImpl implements ScriptService {
     @Override
     public ScriptDetailDto getScriptDetail(Long scriptId) {
         return scriptRepository.findById(scriptId)
-                .map(ScriptDetailDto::toDto)
-                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT));
+                .map(ScriptDetailDto::toDtoNotLogin)
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
+    }
+
+    @Override
+    public ScriptDetailDto getScriptDetail(UUID memberId, Long scriptId) {
+        Member proxyMember = memberRepository.getReferenceById(memberId);
+        Script proxyScript = scriptRepository.getReferenceById(scriptId);
+        boolean hasLike = scriptHeartRepository.findByMemberAndScript(proxyMember, proxyScript).isPresent();
+        return scriptRepository.findById(scriptId)
+                .map((Script script) -> ScriptDetailDto.toDto(script, hasLike))
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
     }
 
     @Override

@@ -142,10 +142,19 @@ public class ScriptController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PathVariable Long id) {
+        if (Objects.isNull(principal)) {
+            return BaseResponse.success(
+                    SuccessCode.SELECT_SUCCESS,
+                    scriptService.getScriptDetail(id)
+            );
+        }
+        UUID memberId = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                scriptService.getScriptDetail(id)
+                scriptService.getScriptDetail(memberId, id)
         );
     }
 
