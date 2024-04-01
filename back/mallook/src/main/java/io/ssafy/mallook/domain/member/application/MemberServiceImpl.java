@@ -53,6 +53,7 @@ public class MemberServiceImpl implements MemberService {
                 .phone(memberDetail.getPhone())
                 .address(memberDetail.getAddress())
                 .point(memberDetail.getPoint())
+                .level(memberDetail.getGrade().getLevel())
                 .exp(memberDetail.getExp())
                 .grade(Objects.nonNull(memberDetail.getGrade()) ? memberDetail.getGrade().toString() : null)
                 .expRange(Objects.nonNull(memberDetail.getGrade()) ? memberDetail.getGrade().getGradeRange() : List.of())
