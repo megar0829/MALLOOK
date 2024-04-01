@@ -50,6 +50,8 @@ class ScriptHeartRepositoryTest {
         memberRepository.save(member2);
         script = buildScript(member);
         scriptRepository.save(script);
+        entityManager.flush();
+        entityManager.clear();
     }
 
     @Test
@@ -66,7 +68,7 @@ class ScriptHeartRepositoryTest {
                 .build();
         scriptHeartRepository.save(scriptHeart2);
 
-        Long searchId = scriptHeart2.getId() + 1; // scriptHeart2의 ID보다 큰 값을 검색 조건으로 사용합니다.
+        Long searchId = scriptHeart2.getId() + 1;
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
 
         // When
@@ -74,7 +76,7 @@ class ScriptHeartRepositoryTest {
 
         // Then
         assertThat(resultSlice.hasContent()).isTrue();
-        assertThat(resultSlice.getContent()).containsExactly(scriptHeart2, scriptHeart1); // ID 내림차순으로 정렬되어 있어야 합니다.
+        assertThat(resultSlice.getContent()).containsExactly(scriptHeart2, scriptHeart1);
     }
 
     @Test
@@ -106,6 +108,8 @@ class ScriptHeartRepositoryTest {
                 .script(script)
                 .build();
         scriptHeartRepository.save(scriptHeart2);
+        entityManager.flush();
+        entityManager.clear();
 
         // When
         Long maxId = scriptHeartRepository.findMaxHeartId();
