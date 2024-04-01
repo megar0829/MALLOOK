@@ -11,8 +11,7 @@ import { snapToGrid as doSnapToGrid } from './snapToGrid'
 import styles from "./dnd.module.css";
 import {StaticImageData} from "next/image";
 import {ItemData} from "@/app/cody/_components/react-dnd/custom/Dnd";
-import {Simulate} from "react-dom/test-utils";
-import drag = Simulate.drag;
+
 export interface ContainerProps {
 	snapToGrid: boolean;
 	dragItems: ItemData[];
@@ -21,10 +20,6 @@ export interface ContainerProps {
 export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 
 	const [images, setImages] = useState<ItemData[]>([]);
-
-	useEffect(() => {
-		console.log(images)
-	}, []);
 
 	useEffect(() => {
 		setImages([...images, dragItems[dragItems.length - 1]])

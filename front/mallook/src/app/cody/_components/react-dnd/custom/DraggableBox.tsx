@@ -4,11 +4,9 @@ import type { DragSourceMonitor } from 'react-dnd'
 import { useDrag } from 'react-dnd'
 import { getEmptyImage } from 'react-dnd-html5-backend'
 
-import { Box } from './Box'
 import { ItemTypes } from './ItemTypes'
 import Image, {StaticImageData} from "next/image";
 import styles from "@/app/cody/_components/react-dnd/custom/dnd.module.css";
-import {images} from "next/dist/build/webpack/config/blocks/images";
 
 function getStyles(
 	left: number,
