@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
 import 'package:mallook/feature/product/widget/product_img_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
+import 'package:mallook/global/widget/home_icon_button.dart';
 
 class ProductScreen extends StatefulWidget {
   final Product product;
@@ -50,14 +49,6 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _clickHeartIcon() {}
 
-  void _moveToHomeScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const MainNavigationScreen(),
-      ),
-    );
-  }
-
   void _showOrderBottomSheet() async {
     await showModalBottomSheet(
       backgroundColor: Colors.transparent,
@@ -81,17 +72,11 @@ class _ProductScreenState extends State<ProductScreen> {
         surfaceTintColor: Colors.grey.shade50,
         elevation: 1,
         shadowColor: Colors.grey.shade300,
-        actions: [
-          IconButton(
-            onPressed: _moveToHomeScreen,
-            icon: const FaIcon(
-              FontAwesomeIcons.house,
-              size: Sizes.size24,
-              color: Colors.black,
-            ),
-          ),
-          const CartIconButton(),
-          Gaps.h20,
+        actions: const [
+          HomeIconButton(),
+          Gaps.h10,
+          CartIconButton(),
+          Gaps.h24,
         ],
       ),
       body: SingleChildScrollView(

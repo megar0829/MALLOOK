@@ -16,7 +16,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.UUID;
+
+import static java.util.Objects.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +36,7 @@ public class StyleHeartController {
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         UUID id = principal.getId();
-        cursor = cursor != null ? cursor : styleHeartService.findMaxHeartId();
+        cursor = !isNull(cursor) ? cursor : styleHeartService.findMaxHeartId();
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

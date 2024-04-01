@@ -4,12 +4,12 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/models/hot_keyword.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class SearchProductScreen extends StatefulWidget {
   final String searchWord;
@@ -230,7 +230,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
             ),
             Gaps.h10,
             const CartIconButton(),
-            Gaps.h20,
+            Gaps.h24,
           ],
         ),
         body: SingleChildScrollView(
@@ -358,7 +358,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                               addKeyword: addSearchKeyword,
                             );
                           }
-                          return const Center(
+                          return Center(
                             child: CustomCircularWaitWidget(),
                           );
                         },
@@ -390,7 +390,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                   itemCount: _products.length, // itemCount 수정
                 ),
               ),
-              if (_isProductLoading) const CustomCircularWaitWidget(),
+              if (_isProductLoading) CustomCircularWaitWidget(),
             ],
           ),
         ),

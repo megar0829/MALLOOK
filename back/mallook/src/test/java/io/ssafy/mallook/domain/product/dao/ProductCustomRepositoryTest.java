@@ -1,6 +1,8 @@
 package io.ssafy.mallook.domain.product.dao;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductCustomRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
@@ -12,7 +14,6 @@ import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
@@ -20,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(QueryDSLConfig.class)
 @ActiveProfiles(profiles = "test")
-@ComponentScan(basePackages = "io.ssafy.mallook.domain.product.dao")
+@ComponentScan(basePackages = "io.ssafy.mallook.domain.product.dao.jpa")
 class ProductCustomRepositoryTest {
 
     @Autowired

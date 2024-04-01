@@ -2,7 +2,7 @@ package io.ssafy.mallook.domain.style.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
@@ -16,7 +16,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
@@ -44,16 +42,13 @@ class StyleRepositoryTest {
     @Autowired
     ShoppingMallRepository shoppingMallRepository;
     private Member member;
-    private Product product;
-    private ShoppingMall shoppingMall;
+    private String product;
+
     @BeforeEach
     void setUp() {
         member = Mockito.mock(Member.class);
         memberRepository.save(member);
-        shoppingMall = buildShoppingMall();
-        shoppingMallRepository.save(shoppingMall);
-        product = buildProduct(shoppingMall);
-        productRepository.save(product);
+        product = "6604f5dd5fc901aa6386394d";
 
     }
 
@@ -65,32 +60,13 @@ class StyleRepositoryTest {
                 .totalLike(0)
                 .build();
     }
-    private StyleProduct buildStyleProduct(Style style, Product product){
+    private StyleProduct buildStyleProduct(Style style){
         return StyleProduct.builder()
                 .style(style)
                 .product(product)
                 .build();
     }
 
-    private Product buildProduct(ShoppingMall shoppingMall) {
-        return Product.builder()
-                .mainCategory(MainCategory.TOP)
-                .subCategory(SubCategory.FORMAL)
-                .name("테스트옷")
-                .price(1000)
-                .quantity(10)
-                .size("s")
-                .color("red")
-                .fee(1000)
-                .shopingmall(shoppingMall)
-                .build();
-    }
-    private ShoppingMall buildShoppingMall() {
-        return ShoppingMall.builder()
-                .name("testshop")
-                .url("www.test.com")
-                .build();
-    }
     @Test
     @DisplayName("페이지를 적용하여 스타일 전체 조회")
     void findAllTest() {
@@ -100,7 +76,7 @@ class StyleRepositoryTest {
             styleRepository.save(style);
             // style product 저장
             for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = buildStyleProduct(style, product);
+                StyleProduct sp = buildStyleProduct(style);
                 styleProductRepository.save(sp);
             }
         }
@@ -120,7 +96,7 @@ class StyleRepositoryTest {
             deleteList.add(rs.getId());
             // 스타일에 속하는 상품 리스트
             for (int j = 0 ; j < 2; j ++) {
-                StyleProduct sp = buildStyleProduct(style, product);
+                StyleProduct sp = buildStyleProduct(style);
                 styleProductRepository.save(sp);
             }
         }

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/widgets/custom_circular_wait_widget.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
 import 'package:mallook/feature/search/models/hot_keyword.dart';
 import 'package:mallook/feature/search/search_product_screen.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -152,7 +152,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 style: TextStyle(
                   color: Theme.of(context).primaryColorDark,
                   fontWeight: FontWeight.bold,
-                  fontSize: Sizes.size20,
+                  fontSize: Sizes.size18,
                 ),
               ),
             ),
@@ -276,7 +276,7 @@ class _SearchScreenState extends State<SearchScreen> {
                             ),
                           );
                         }
-                        return const Center(
+                        return Center(
                           child: CustomCircularWaitWidget(),
                         );
                       },

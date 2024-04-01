@@ -9,7 +9,7 @@ public record CartDetailRes(
         @Schema(description = "장바구니 내 상품 id")
         Long cartProductId,
         @Schema(description = "상품id")
-        Long productId,
+        String productId,
         @Schema(description = "상품 가격")
         Integer price,
         @Schema(description = "상품개수")

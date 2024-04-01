@@ -1,11 +1,13 @@
 package io.ssafy.mallook.domain.member.dao;
 
+import io.ssafy.mallook.domain.grade.entity.Grade;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member.entity.SocialType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,5 +21,8 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     Optional<Member> findBySocialTypeAndSocialId(@Param("socialType") SocialType socialType, @Param("socialId") String socialId);
 
     Optional<Member> findByPhone(String phone);
-    boolean existsByNickname(String nickname);
+
+    boolean existsByNicknameTag(String nickname);
+
+    List<Member> findMembersByGrade(Grade grade);
 }

@@ -28,8 +28,7 @@ class RankScriptBox extends StatelessWidget {
         children: [
           ColorFiltered(
             colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3),
-              // 이미지에 적용할 투명도 및 어두운 정도 조절
+              Colors.black.withOpacity(0.4),
               BlendMode.srcOver,
             ),
             child: FadeInImage.assetNetwork(
@@ -59,24 +58,47 @@ class RankScriptBox extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: FaIcon(
-                          FontAwesomeIcons.solidUser,
-                          color: Theme.of(context).primaryColorDark,
-                          size: Sizes.size24,
-                        ),
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            backgroundColor: Colors.white.withOpacity(0.7),
+                            child: FaIcon(
+                              FontAwesomeIcons.solidUser,
+                              color: Theme.of(context).primaryColorDark,
+                              size: Sizes.size24,
+                            ),
+                          ),
+                          Gaps.h12,
+                          Text(
+                            "아바타",
+                            maxLines: 2,
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: Sizes.size18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
-                      Gaps.h12,
-                      const Text(
-                        "아바타",
-                        maxLines: 2,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: Sizes.size18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        children: [
+                          const FaIcon(
+                            FontAwesomeIcons.heart,
+                            color: Colors.red,
+                            size: Sizes.size28,
+                          ),
+                          Gaps.h4,
+                          Text(
+                            '${script.heartCount}',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.8),
+                              fontSize: Sizes.size18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        ],
                       ),
                     ],
                   ),

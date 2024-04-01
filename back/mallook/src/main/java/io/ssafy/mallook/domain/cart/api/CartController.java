@@ -4,12 +4,12 @@ import io.ssafy.mallook.domain.cart.application.CartService;
 import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
-import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +20,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
-
 @RestController
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "장바구니", description = "장바구니 관련 API")
 public class CartController {
     private final CartService cartService;
+
     @Operation(summary = "장바구니 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "장바구니 조회 성공"),
@@ -36,17 +36,15 @@ public class CartController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<CartDetailRes>>> findProductsInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page=0) Pageable pageable,
-            @RequestParam(required = false) Long cursor
-        ){
-
-        var result = Objects.nonNull(cursor)? cartService.findProductsInCart(pageable, userSecurityDTO.getId(), cursor)
-                :cartService.findProductsInCartFirst(pageable, userSecurityDTO.getId());
+            @PageableDefault(size = 20, direction = Sort.Direction.DESC, page = 0) Pageable pageable
+    ) {
+        var result = cartService.findProductsInCart(pageable, userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
         );
     }
+
     @Operation(summary = "장바구니 추가",
             responses = {
                     @ApiResponse(responseCode = "200", description = "장바구니 추가 성공"),
@@ -55,13 +53,14 @@ public class CartController {
     @PostMapping
     public ResponseEntity<BaseResponse<String>> insertProductInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody CartInsertReq cartInsertReq){
+            @RequestBody CartInsertReq cartInsertReq) {
         cartService.insertProductInCart(userSecurityDTO.getId(), cartInsertReq);
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "장바구니 상품 추가 성공"
         );
     }
+
     @Operation(summary = "장바구니 내 상품 삭제",
             responses = {
                     @ApiResponse(responseCode = "200", description = "장바구니 내 상품 삭제 성공"),
@@ -70,7 +69,7 @@ public class CartController {
     @DeleteMapping
     public ResponseEntity<BaseResponse<String>> deleteProductInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody CartDeleteReq cartDeleteReq){
+            @RequestBody CartDeleteReq cartDeleteReq) {
         cartService.deleteProductInCart(userSecurityDTO.getId(), cartDeleteReq);
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,

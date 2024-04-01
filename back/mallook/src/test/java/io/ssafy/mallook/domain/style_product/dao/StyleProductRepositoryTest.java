@@ -2,7 +2,7 @@ package io.ssafy.mallook.domain.style_product.dao;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
@@ -63,7 +63,7 @@ class StyleProductRepositoryTest {
                 .build();
     }
 
-    private StyleProduct buildStyleProduct(Style style, Product product) {
+    private StyleProduct buildStyleProduct(Style style, String product) {
         return StyleProduct.builder()
                 .style(style)
                 .product(product)
@@ -100,8 +100,7 @@ class StyleProductRepositoryTest {
         for (int i = 0; i < 3; i++) {
             Product pd = buildProduct(shoppingMall);
             productRepository.save(pd);
-            var result = styleProductRepository.save(buildStyleProduct(style, pd));
-            System.out.println("#####################" + result.getId());
+            var result = styleProductRepository.save(buildStyleProduct(style, "66021cc8a57f1a18f0b8edd0"));
             deleteList.add(result.getId());
         }
         styleProductRepository.deleteMyStyleProduct(deleteList);

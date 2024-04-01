@@ -18,6 +18,10 @@ from selenium.webdriver.common.keys import Keys
 from multiprocessing import Pool
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from collections import Counter
+from pykospacing import Spacing
+from soynlp.word import WordExtractor
+from soynlp.tokenizer import LTokenizer
 
 # dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv()
@@ -25,7 +29,7 @@ password = os.getenv("MONGODB_PASSWORD")
 API_KEY = os.getenv("HIVER_API")
 
 client = MongoClient(f'mongodb+srv://root:{password}@cluster0.stojj99.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
-db = client.hiver
+db = client.products
 
 # Chrome 옵션 설정
 options = Options()
@@ -83,7 +87,7 @@ file_path = os.path.join(script_directory, "HiverCategory.pkl")
 
 with open(file_path, "rb") as f:
     category_numbers = pickle.load(f)
-
+print(category_numbers)
 # 상품 목록들(productId 기준)
 hiver_products = {}
 # 사이즈 이름들
@@ -97,6 +101,55 @@ keywords = {
     '캐주얼', '클래식', '모던', '빈티지', '보헤미안', '러스틱', '캠퍼스', '프레피', '글래머러스', '볼드', '캡슐', '레트로', '우먼리', '펑키', '에스닉', '민낯', '스트릿', '심플', '소피스티케이티드', '아방가르드', '메도우', '꽃무늬', '히피', '거리풍', '타이다이', '스포티', '모노크롬', '무드', '로맨틱', '우아함', '키치', '빈지', '마니시', '플라워', '스트릿웨어', '래디럴', '아방', '나이키', '좋즈', '이지부스트', '바팔로체크', '코튼', '러블리', '세련미', '쿨', '하이티크', '패션', '실버피', '퀸스', '스카프', '플레어', '포멀', '아디다스'
 }
 
+# 키워드 관련
+spacing = Spacing()     # PyKoSpacing 인스턴스 생성
+word_extractor = WordExtractor()    # WordExtractor 인스턴스 생성
+# 토크나이저 생성
+word_scores = word_extractor.word_scores()
+tokenizer = LTokenizer(scores=word_scores)        
+# 키워드 셋
+keyword_file = os.path.join("keyword", "keyword.txt")
+with open(keyword_file, 'r', encoding='utf-8') as file:
+    keyword_data = [line.strip() for line in file]
+# 불용어 셋
+stopword_file = os.path.join("keyword", "stopword.txt")
+with open(stopword_file, 'r', encoding='utf-8') as file:
+    stopword_data = [line.strip() for line in file]
+
+
+# 리뷰 키워드 불러오는 함수
+def review_preprocessing(corpus):
+    keywords = {}
+
+    # 전처리 및 토큰화
+    corpus = re.sub(r'[^가-힣]+', ' ', corpus)
+    corpus = spacing(corpus)
+    tokens = tokenizer.tokenize(corpus)
+
+    for token in tokens:
+        # 불용어 제거
+        if token in stopword_data:
+            continue
+        
+        for keyword in keyword_data:
+            # 키워드 셋에 있는 단어와 유사성 판별 (토큰 생성하는 데 개당 3초 내외로 걸림)
+            # if compare_word_meaning(morphs1, morphs2):
+
+            # 키워드 포함 여부 확인
+            if keyword in token:
+                keyword_count = keywords.setdefault(keyword, 0) + 1
+                keywords[keyword] = keyword_count
+                break
+    
+    # counter 객체 생성
+    counter = Counter(keywords)
+
+    # 빈도수가 높은 5개의 키워드 추출
+    keywords_top5 = [key for key, _ in counter.most_common(5)]
+
+    return list(keywords.keys()), keywords_top5
+
+
 # 상품 상세정보를 받아오는 함수
 def hiver_process(category_info):
     # 분류
@@ -104,13 +157,14 @@ def hiver_process(category_info):
     category_url = f'https://capi.hiver.co.kr/v1/web/categories/{category_number}/products'
     # 한 번호당 5000개까지 조회가능
     # for offset in range(0, 5001, 100):
+    #     limit = 100
+    #     # 0, 100, ~, 4999
+    #     if offset == 4900:
+    #         limit = 99
+    #     elif offset == 5000:
+    #         offset = 99
     for offset in range(0, 1, 100):
-        limit = 20
-        # 0, 100, ~, 4999
-        if offset == 5000:
-            offset = offset - 1
-        elif offset == 4900:
-            limit = 99
+        limit = 50
 
         # API 요청을 위한 헤더와 파라미터
         headers = {
@@ -143,7 +197,7 @@ def hiver_process(category_info):
             for product in category_data['data']:
                 # 해당 PRODUCT_id 값으로 문서 검색
                 query = {"product_id": product['id']}
-                existing_doc = db.hiver.find_one(query)
+                existing_doc = db.products.find_one(query)
 
                 # 값이 이미 있는 경우 넘어가기
                 if existing_doc:
@@ -179,6 +233,9 @@ def hiver_process(category_info):
                     }
 
                     print(f'[{product["id"]}]', '### 리뷰정보 조회 ###')
+
+                    # 리뷰 한줄
+                    oneline_reviews = ''
 
                     # 리뷰 요청
                     review_url = f'https://hiver-api.brandi.biz/v2/web/products/{product["id"]}/reviews'
@@ -249,6 +306,7 @@ def hiver_process(category_info):
                                 }
 
                                 reviews['reviews'].append(review)
+                                oneline_reviews += f"{photo_review['text']} "
                         # 데이터가 없는 경우 넘기기
                         else:
                             break
@@ -319,6 +377,7 @@ def hiver_process(category_info):
                                 }
 
                                 reviews['reviews'].append(review)
+                                oneline_reviews += f"{text_review['text']} "
                         # 데이터가 없는 경우 종료
                         else:
                             break
@@ -461,6 +520,11 @@ def hiver_process(category_info):
                                     sub_categories = '숏패딩/패딩조끼'
                                 else:
                                     sub_categories = '롱패딩'
+                            elif sub_categories == '코트(분류필요)':
+                                if '숏' in product_data['pageProps']['title']:
+                                    sub_categories = '숏코트'
+                                else:
+                                    sub_categories = '롱코트'
                             elif sub_categories == '재킷(분류필요)':
                                 if '무스탕' in product_data['pageProps']['title']:
                                     sub_categories = '무스탕'
@@ -519,6 +583,7 @@ def hiver_process(category_info):
                                     sub_categories = '기타'
                         elif main_categories == '신발':
                             if sub_categories == '운동화(분류필요)':
+                                sub_categories == '러닝화/워킹화'
                                 if '러닝' in product_data['pageProps']['title']:
                                     sub_categories = '러닝화/워킹화'
                                 elif '워킹' in product_data['pageProps']['title']:
@@ -720,48 +785,49 @@ def hiver_process(category_info):
                         'detail_images': image_urls,
                         'detail_html': image_code,
                         'reviews': reviews,
-                        'keywords': random.sample(keywords, numbers),
+                        # 'keywords': random.sample(keywords, numbers),
                     }
 
                     print('======================================================')
                     print(f'[{product["id"]}]', time.time() - start_time, '초 경과')
                     print('======================================================')
                     print()
+                    
+                    if oneline_reviews:
+                        keywords, keywords_top5 = review_preprocessing(oneline_reviews)
+                        hiver_products[product['id']]['keywords'] = keywords
+                        hiver_products[product['id']]['keywords_top5'] = keywords_top5            
 
-                    # print(hiver_products[product['id']]['detail_images'])
-
-                    # driver.quit()
-
-                    db.hiver.insert_one(hiver_products[product['id']])
+                    db.products.insert_one(hiver_products[product['id']])
 
         # data가 존재하지 않는 경우 넘기기
         else:
             return
 
 
-if __name__ == '__main__':
-    # 병렬 처리를 위한 프로세스 풀 생성
-    pool = Pool(processes=14)
+# if __name__ == '__main__':
+#     # 병렬 처리를 위한 프로세스 풀 생성
+#     pool = Pool(processes=14)
 
-    # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
-    category_info_list = []
-    for main_categories in category_numbers:
-        for sub_categories in category_numbers[main_categories]:
-            for category_number in category_numbers[main_categories][sub_categories]:
-                category_info_list.append((main_categories, sub_categories, category_number))
+#     # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
+#     category_info_list = []
+#     for main_categories in category_numbers:
+#         for sub_categories in category_numbers[main_categories]:
+#             for category_number in category_numbers[main_categories][sub_categories]:
+#                 category_info_list.append((main_categories, sub_categories, category_number))
 
-    # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
-    pool.map(hiver_process, category_info_list)
+#     # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
+#     pool.map(hiver_process, category_info_list)
 
-    # 웹드라이버 종료
-    driver.quit()
+#     # 웹드라이버 종료
+#     driver.quit()
 
-    # 프로세스 풀 종료
-    pool.close()
-    pool.join()
+#     # 프로세스 풀 종료
+#     pool.close()
+#     pool.join()
 
-    # # json 파일에 저장
-    # with open('hiver_details.json', 'w', encoding='utf-8') as f:
-    #     json.dump(hiver_products, f, ensure_ascii=False, indent=4)  
+#     # # json 파일에 저장
+#     # with open('hiver_details.json', 'w', encoding='utf-8') as f:
+#     #     json.dump(hiver_products, f, ensure_ascii=False, indent=4)  
 
-    print(hiver_products)
+#     print(hiver_products)

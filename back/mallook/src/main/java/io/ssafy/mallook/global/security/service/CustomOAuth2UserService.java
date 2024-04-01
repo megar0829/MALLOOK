@@ -136,6 +136,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .build();
         member.getRole().add(MemberRole.BASIC_USER); // 최초 권한 설정
         socialMember.setMember(member);
+        member.getSocialMembers().add(socialMember);
         return memberRepository.save(member);
     }
 

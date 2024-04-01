@@ -5,11 +5,10 @@ import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
-import io.ssafy.mallook.domain.product.dao.ProductRepository;
+import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
-import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
 import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.EntityManager;
@@ -19,17 +18,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.security.core.parameters.P;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -54,7 +48,7 @@ class CartRepositoryTest {
                 .member(member)
                 .totalPrice(10000L)
                 .totalCount(10L)
-                .totalFee(1000)
+                .totalFee(1000L)
                 .build();
     }
     private Product buildProduct(ShoppingMall shoppingMall){
@@ -70,10 +64,10 @@ class CartRepositoryTest {
                 .shopingmall(shoppingMall)
                 .build();
     }
-    private CartProduct buildCartProduct(Cart cart, Product product) {
+    private CartProduct buildCartProduct(Cart cart) {
         return CartProduct.builder()
                 .cart(cart)
-                .product(product)
+                .product("6604f5dd5fc901aa6386394d")
                 .productName("test")
                 .productCount(1)
                 .productPrice(1000)

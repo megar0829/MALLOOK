@@ -22,7 +22,7 @@ class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-    private String url = "/api/products";
+    private String url = "/api/products/mysql";
 
     @Test
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")

@@ -1,18 +1,18 @@
 package io.ssafy.mallook.domain.script.dto.request;
 
-import io.ssafy.mallook.domain.keyword.entity.Keyword;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;
-import jakarta.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
 import java.util.List;
 
 @Builder
+@Schema(description = "스크립트 생성시 요청 DTO")
 public record ScriptCreatDto(
         @NotEmpty
+        @Schema(description = "키워드 리스트")
         List<String> keywordsList) {
 
     public Script toEntity(Member member, String scriptContent) {
@@ -21,6 +21,7 @@ public record ScriptCreatDto(
                 .member(member)
                 .heartCount(0)
                 .totalLike(0)
+                .keywordList(keywordsList)
                 .build();
     }
 }

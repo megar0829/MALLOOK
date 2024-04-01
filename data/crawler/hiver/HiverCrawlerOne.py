@@ -17,6 +17,10 @@ from selenium.webdriver.common.keys import Keys
 from multiprocessing import Pool
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from collections import Counter
+from pykospacing import Spacing
+from soynlp.word import WordExtractor
+from soynlp.tokenizer import LTokenizer
 
 load_dotenv()
 password = os.getenv("MONGODB_PASSWORD")
@@ -88,6 +92,58 @@ size_names = {
     '사이즈', 'SIZE', 'size', 'Size', '사이즈1', 'size1', 'SIZE1', 'Size1', '사이즈 1', 'size 1', 'Size 1', 'SIZE 1', 
 }
 
+
+spacing = Spacing()     # PyKoSpacing 인스턴스 생성
+word_extractor = WordExtractor()    # WordExtractor 인스턴스 생성
+
+# 토크나이저 생성
+word_scores = word_extractor.word_scores()
+tokenizer = LTokenizer(scores=word_scores)        
+
+# 키워드 셋
+keyword_file = os.path.join("keyword", "keyword.txt")
+with open(keyword_file, 'r', encoding='utf-8') as file:
+    keyword_data = [line.strip() for line in file]
+
+# 불용어 셋
+stopword_file = os.path.join("keyword", "stopword.txt")
+with open(stopword_file, 'r', encoding='utf-8') as file:
+    stopword_data = [line.strip() for line in file]
+
+
+# 리뷰 키워드 불러오는 함수
+def review_preprocessing(corpus):
+    keywords = {}
+
+    # 전처리 및 토큰화
+    corpus = re.sub(r'[^가-힣]+', ' ', corpus)
+    corpus = spacing(corpus)
+    tokens = tokenizer.tokenize(corpus)
+
+    for token in tokens:
+        # 불용어 제거
+        if token in stopword_data:
+            continue
+        
+        for keyword in keyword_data:
+            # 키워드 셋에 있는 단어와 유사성 판별 (토큰 생성하는 데 개당 3초 내외로 걸림)
+            # if compare_word_meaning(morphs1, morphs2):
+
+            # 키워드 포함 여부 확인
+            if keyword in token:
+                keyword_count = keywords.setdefault(keyword, 0) + 1
+                keywords[keyword] = keyword_count
+                break
+    
+    # counter 객체 생성
+    counter = Counter(keywords)
+
+    # 빈도수가 높은 5개의 키워드 추출
+    keywords_top5 = [key for key, _ in counter.most_common(5)]
+
+    return list(keywords.keys()), keywords_top5
+
+
 # 상품 상세정보를 받아오는 함수
 def hiver_process(category_info):
     # 분류
@@ -124,7 +180,7 @@ def hiver_process(category_info):
 
     
     products = [
-        {'id': "144955445"},
+        {'id': "139064787"},
         # {'id': "128464334"},
         # {'id': "135292276"},
     ]
@@ -155,6 +211,8 @@ def hiver_process(category_info):
             'average_point': None,
             'reviews': [],
         }
+
+        oneline_reviews = ''
 
         print(f'[{product["id"]}]', '### 리뷰정보 조회 ###')
 
@@ -224,6 +282,7 @@ def hiver_process(category_info):
                     }
 
                     reviews['reviews'].append(review)
+                    oneline_reviews += f"{photo_review['text']} "
             # 데이터가 없는 경우 넘기기
             else:
                 break
@@ -291,6 +350,7 @@ def hiver_process(category_info):
                     }
 
                     reviews['reviews'].append(review)
+                    oneline_reviews += f"{text_review['text']} "
             # 데이터가 없는 경우 종료
             else:
                 break
@@ -683,6 +743,7 @@ def hiver_process(category_info):
         name = product_data['pageProps']['title']
         name = re.sub(r'\[.*?\]', '', name).lstrip()
 
+
         # 상품 정보 입력
         hiver_products[product['id']] = {
             'product_id': product['id'],
@@ -706,6 +767,16 @@ def hiver_process(category_info):
         print(f'[{product["id"]}]', time.time() - start_time, '초 경과')
         print('======================================================')
         print()
+
+        if oneline_reviews:
+            keywords, keywords_top5 = review_preprocessing(oneline_reviews)
+            hiver_products[product['id']]['keywords'] = keywords
+            hiver_products[product['id']]['keywords_top5'] = keywords_top5
+        
+        print(hiver_products[product['id']]['keywords'])
+        print(hiver_products[product['id']]['keywords_top5'])
+
+        print(hiver_products[product['id']])
 
 
 if __name__ == '__main__':

@@ -120,6 +120,7 @@ class MyProfileWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         RichText(
+                          maxLines: 2,
                           text: TextSpan(
                             children: [
                               TextSpan(

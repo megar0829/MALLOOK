@@ -1,44 +1,37 @@
+import re
+import os
 import requests
+import pymongo
+from dotenv import load_dotenv
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-import re
-import os
-from dotenv import load_dotenv
-import pymongo
 
 
 class TwentyNineScraper:
     def __init__(self):
         self.driver = None
         self.load_webdriver()
-        self.dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-        load_dotenv(self.dotenv_path)
+        load_dotenv()
         self.password = os.getenv("MONGODB_PASSWORD")
         self.connect_to_mongodb()
 
 
+    # 크롬 웹드라이버 초기화
     def load_webdriver(self):
-        # 크롬 웹드라이버 초기화
         chrome_options = Options()
         chrome_options.add_argument("--headless")
         self.driver = webdriver.Chrome(options=chrome_options)
 
 
+    # 웹드라이버 종료
     def close_webdriver(self):
-        # 웹드라이버 종료
         if self.driver:
             self.driver.quit()
 
 
-    def connect_to_mongodb(self):
-        self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
-                                          f"?retryWrites=true&w=majority&appName=Cluster")
-        self.db = self.client["products"]
-        self.collection = self.db["products"]
-
-
+    # 상품 전체 리스트
     def get_twentyninecm_products_list(self, categoryLargeCode, categoryMediumCode, categorySmallCode, mainCategory, subCategory):
         print(f"{subCategory}")
         url = 'https://search-api.29cm.co.kr/api/v4/products/category/'
@@ -57,9 +50,12 @@ class TwentyNineScraper:
         response = requests.get(url, params=params)
         try:
             response.raise_for_status()
-        except requests.exceptions.HTTPError as err:
-            print(f"HTTP Error: {err}")
-
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
+            return
+        
         results = response.json()
         params['count'] = results.get('data', {}).get('productsTotalCount', 0)
 
@@ -78,12 +74,12 @@ class TwentyNineScraper:
         for product in products[:1000]:
             itemNo = product.get('itemNo', None)
 
-            # 이미 저장된 상품 pass
-            if not self.check_if_product_in_mongodb(itemNo):
+            # 이미 저장된 상품인지 확인
+            if self.check_if_product_in_mongodb(itemNo):
                 continue
 
             reviewCount = product.get('reviewCount', None)
-            print(f"{subCategory}({itemNo}) 크롤링 중...")
+            print(f"{subCategory}({itemNo}) crawing...")
 
             # 상품 상세 정보 크롤링
             detail_info = self.crawling_twentyninecm_product_info(itemNo)
@@ -95,9 +91,9 @@ class TwentyNineScraper:
                 continue
 
             # categoryLargeCode가 272000000 이상이면 여성 상품
-            gender = '여성'
+            gender = 'female'
             if (categoryLargeCode // 1000000) >= 272:
-                gender = '남성'
+                gender = 'male'
 
             product_info = {
                 'product_id': itemNo,
@@ -107,8 +103,7 @@ class TwentyNineScraper:
                 'gender': gender,
                 'name': product.get('itemName', None),
                 'price': product.get('consumerPrice', None),
-                'brand_name_kr': product.get('frontBrandNameKor', None),
-                'brand_name_en': product.get('frontBrandNameEng', None),
+                'brand_name': product.get('frontBrandNameKor', None),
                 'image': f"https://img.29cm.co.kr/{product.get('imageUrl', None)}",
                 'url': f"https://product.29cm.co.kr/catalog/{itemNo}",
                 'color': detail_info['color'],
@@ -121,18 +116,26 @@ class TwentyNineScraper:
             self.save_to_mongodb(product_info)
 
 
+    # 상품 하나의 디테일 정보 크롤링
     def crawling_twentyninecm_product_info(self, itemNo):
         detail_info = {'color': [], 'size': [], 'detail_images': [], 'detail_html': ''}
         url = f'https://product.29cm.co.kr/catalog/{itemNo}'
 
-        # 상품이 존재하는지 확인 (존재하지 않는다면 404 발생)
         try:
             response = requests.get(url)
             response.raise_for_status()
-        except:
+        except requests.exceptions.HTTPError as http_err:
+            print(f'HTTP error occurred: {http_err}')
+        except Exception as err:
+            print(f'Other error occurred: {err}')
             return
 
-        self.driver.get(url)
+        self.driver.implicitly_wait(10)
+
+        try:
+            self.driver.get(url)
+        except:
+            return
 
         # color 및 size 옵션 입력 요소 찾기
         i = 0
@@ -157,19 +160,24 @@ class TwentyNineScraper:
                     option_name = option_mapping[option_name]
 
                 # 옵션 목록을 text로 변환한 후 저장
+                option_values = list(map(lambda x: x.text, li_elements[1:]))
                 if option_name in ('color', 'size'):
-                    option_values = list(map(lambda x: x.text, li_elements[1:]))
                     detail_info[option_name] = option_values
+
                 elif option_name == 'color:size':
-                    option_values = list(map(lambda x: x.text, li_elements[1:]))
                     color_set = set()
                     size_set = set()
+
                     for option_value in option_values:
                         color, size = option_value.split(':')
                         color_set.add(color)
                         size_set.add(size)
+                        
                     detail_info['color'] = list(color_set)
                     detail_info['size'] = list(size_set)
+
+                elif 'color' in option_name:
+                    detail_info['color'] = option_values
                 else:
                     pass
 
@@ -185,8 +193,7 @@ class TwentyNineScraper:
                 else:
                     # dropdown 닫음
                     option_element.click()
-
-            # 요소
+            # 요소가 더이상 없는 경우
             except:
                 break
 
@@ -220,6 +227,7 @@ class TwentyNineScraper:
         return detail_info
 
 
+    # 리뷰 목록
     def get_twentyninecm_reviews_list(self, itemNo, reviewCount):
         url = 'https://review-api.29cm.co.kr/api/v4/reviews/'
         params = {
@@ -265,18 +273,35 @@ class TwentyNineScraper:
                 # 색상과 사이즈 정보를 option 딕셔너리에 할당
                 product_option.append({'color': color, 'size': size})
 
+            user_size = {'height': None, 'weight': None }
+
+            for size in review.get('userSize', []):
+                if 'cm' in size:
+                    user_size['height'] = size
+                else:
+                    user_size['weight'] = size
+
             product_reviews['reviews'].append({
                 'contents': review.get('contents', None),
                 'created_at': review.get('insertTimestamp', None),
                 'images': images,
                 'point': review.get('point', None),
-                'productOption': product_option,
-                'userSize': review.get('userSize', None)
+                'product_option': product_option,
+                'userSize': user_size
             })
 
         return product_reviews
 
 
+    # MongoDB 연결
+    def connect_to_mongodb(self):
+        self.client = pymongo.MongoClient(f"mongodb+srv://root:{self.password}@cluster0.stojj99.mongodb.net/"
+                                          f"?retryWrites=true&w=majority&appName=Cluster")
+        self.db = self.client["products"]
+        self.collection = self.db["products"]
+
+
+    # MongoDB 데이터 저장
     def save_to_mongodb(self, product_info):
         try:
             self.collection.insert_one(product_info)
@@ -285,6 +310,7 @@ class TwentyNineScraper:
             print(f"MongoDB에 저장하는 중 오류가 발생했습니다: {e}")
 
 
+    # MongoDB에 이미 저장된 데이터인지 확인
     def check_if_product_in_mongodb(self, product_id):
         result = self.collection.find_one({'product_id': product_id})
         return result is not None

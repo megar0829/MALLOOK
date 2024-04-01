@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -28,31 +29,39 @@ class DioService {
         onRequest: (options, handler) async {
           final storageToken = await storage.read(key: "token");
           if (storageToken == null) {
+            log('storage token is null');
             throw Error();
           }
           final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
           if (token.accessToken == null) {
+            log('access token is null');
             options.headers["Authorization"] = "";
             return handler.next(options);
           }
 
           options.headers['Authorization'] = 'Bearer ${token.accessToken}';
+          print('Access Token: ${token.accessToken}');
           return handler.next(options);
         },
         onResponse: (response, handler) async {
           handler.next(response);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 401) {
+          log('error: ${error.response?.statusCode} ${error.message}');
+          log('error response: ${error.response?.data}');
+
+          if (error.response?.statusCode == 403) {
             _requestQueue.add(error.requestOptions);
 
             final storageToken = await storage.read(key: "token");
             if (storageToken == null) {
+              log('error situation: storage token is null');
               return;
             }
             final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
             // refresh token이 없으면 로그인 페이지로 이동
             if (token.refreshToken == null) {
+              log('eror situation: refresh token is null');
               moveToLoginScreen();
               return;
             }
@@ -63,10 +72,11 @@ class DioService {
               final response = await refreshDio.post(
                 "/api/auth/token/refresh",
                 data: jsonEncode(
-                    <String, String>{'refresh-token': token.refreshToken!}),
+                    <String, String>{'refreshToken': token.refreshToken!}),
               );
 
               if (response.statusCode == 200) {
+                log('token is updated');
                 final AuthTokenModel newAuthTokenModel =
                     AuthTokenModel.fromJson(response.data["result"]);
                 await storage.write(
@@ -77,9 +87,11 @@ class DioService {
                     newAuthTokenModel.accessToken!); // 저장된 요청 처리
                 return;
               } else {
+                storage.deleteAll();
                 moveToLoginScreen();
               }
             } catch (error) {
+              storage.deleteAll();
               moveToLoginScreen();
             }
           }
@@ -100,6 +112,67 @@ class DioService {
       } catch (e) {
         print("Failed to reprocess request: $e");
       }
+    }
+  }
+
+  Future<T> baseGet<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    T Function(Map<String, dynamic>)? fromJsonT,
+  }) async {
+    try {
+      final response =
+          await _authDio!.get(path, queryParameters: queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        int status = response.data['status'];
+        String message = response.data['message'];
+
+        T result;
+        if (fromJsonT != null) {
+          result = fromJsonT(response.data['result']);
+        } else {
+          result = response.data['result'];
+        }
+        return result;
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<T> basePost<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    dynamic postData,
+    T Function(Map<String, dynamic>)? fromJsonT,
+  }) async {
+    try {
+      final response = await _authDio!.post(
+        path,
+        data: postData,
+        queryParameters: queryParameters,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        int status = response.data['status'];
+        String message = response.data['message'];
+
+        T result;
+        if (fromJsonT != null) {
+          result = fromJsonT(response.data['result']);
+        } else {
+          result = response.data['result'];
+        }
+        return result;
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 }

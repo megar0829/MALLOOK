@@ -5,12 +5,23 @@ services:
     image: duckbill413/mallook-docker-api:latest
     ports:
       - "127.0.0.1:8080:8080"
+      - "8081:8081"
     environment:
       TZ: "Asia/Seoul"
     networks:
       - mallook_net
     volumes:
       - /home/ec2-user/logs:/logs
+
+  mallook-batch:
+    container_name: mallook-batch
+    image: duckbill413/mallook-docker-batch:latest
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - mallook_net
+    depends_on:
+      - springboot
 
   redis:
     image: redis:alpine
@@ -50,3 +61,4 @@ services:
 networks:
   mallook_net:
     driver: bridge
+

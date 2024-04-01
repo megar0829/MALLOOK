@@ -1,0 +1,6 @@
+FROM amazoncorretto:17
+WORKDIR /app
+ARG JAR_FILE=build/libs/*.jar
+COPY ${JAR_FILE} /app/mallook-api.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=batch", "-jar", "/app/mallook-api.jar"]
+

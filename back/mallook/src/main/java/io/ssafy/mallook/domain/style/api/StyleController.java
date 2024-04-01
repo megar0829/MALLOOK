@@ -5,11 +5,13 @@ import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
+import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -23,13 +25,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 
 
 @RestController
 @RequestMapping("/api/styles")
 @RequiredArgsConstructor
 @Log4j2
+@Tag(name = "스타일", description = "스타일 관련 API")
 public class StyleController {
 
     private final StyleService styleService;
@@ -53,15 +55,19 @@ public class StyleController {
                 result
         );
     }
-
+    @Operation(
+            summary = "월드컵 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "월드컵 리스트 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "월드컵 리스트 조회 실패")
+            }
+    )
     @GetMapping("/world-cup")
-    public ResponseEntity<BaseResponse<List<StyleRes>>> getWorldCupList(
-            @AuthenticationPrincipal UserSecurityDTO principal
+    public ResponseEntity<BaseResponse<List<StyledWorldCupDto>>> getWorldCupList(
     ) {
-        UUID id = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                styleService.getWorldCupList(id)
+                styleService.getWorldCupList()
         );
     }
 
