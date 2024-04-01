@@ -1,8 +1,10 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductPageRes;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.Reviews;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static java.util.Objects.isNull;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.newAggregation;
@@ -32,8 +35,8 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     private final String COLLECTION_NAME = "hiver";
 
     @Override
-    public Slice<ProductsListDto> getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
-        Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
+    public ProductsPageRes getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
+        Query query = new Query().addCriteria(Criteria.where("id").lte(cursor))
                 .with(pageable);
 
         if (!isNull(mainCategory)) {
@@ -46,10 +49,13 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         List<ProductsListDto> productsList = mongoTemplate.find(query, Products.class)
                 .stream()
                 .map(ProductsListDto::toDto)
-                .toList();
-
-        boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
-        return new SliceImpl<>(productsList, pageable, hasNext);
+                .collect(Collectors.toList());
+        boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber()) * pageable.getPageSize());
+        System.out.println(hasNext);
+        System.out.println(pageable.getPageSize()+","+ pageable.getPageNumber());
+        var nextCursor = hasNext? productsList.getLast().id():null;
+        productsList.removeLast();
+        return new ProductsPageRes(productsList, nextCursor);
     }
 
     @Override
@@ -65,7 +71,6 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .toList();
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
-
         return new SliceImpl<>(productsList, pageable, hasNext);
     }
 

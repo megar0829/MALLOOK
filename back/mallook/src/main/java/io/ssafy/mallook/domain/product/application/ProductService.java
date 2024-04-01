@@ -18,7 +18,7 @@ public interface ProductService {
 
     Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
+    ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 
     ProductsDetailDto getMongoProductsDetail(String id);
 

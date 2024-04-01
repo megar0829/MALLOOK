@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
+    public ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
         return productsCustomRepository.getProductsListByCategory(cursor, pageable, mainCategory, subCategory);
     }
 

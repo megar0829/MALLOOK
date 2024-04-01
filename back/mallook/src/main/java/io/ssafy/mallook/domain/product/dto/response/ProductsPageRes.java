@@ -11,7 +11,7 @@ import java.util.List;
 public record ProductsPageRes(
 
         @Schema(description = "상품 리스트")
-        List<Products> content,
+        List<ProductsListDto> content,
 
         @Schema(description = "다음 커서")
         String nextCursor

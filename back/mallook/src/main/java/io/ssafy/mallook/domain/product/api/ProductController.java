@@ -49,8 +49,8 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "상품 리스트 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductsList(
-            @PageableDefault(size = 20,
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getProductsList(
+            @PageableDefault(size = 21,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
