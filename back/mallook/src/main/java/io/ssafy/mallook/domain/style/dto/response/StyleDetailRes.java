@@ -12,6 +12,5 @@ public record StyleDetailRes(
         Long heartCount,
         @Schema(description = "스타일에 포함된 상품 리스트")
         List<StyleProductRes> styleProductResList
-
 ) {
 }

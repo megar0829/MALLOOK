@@ -1,9 +1,9 @@
 package io.ssafy.mallook.global.security.dto;
 
 
-import io.ssafy.mallook.global.security.validator.Token;
+import jakarta.validation.constraints.NotBlank;
 
 public record AuthTokenReq(
-        @Token String refreshToken
+        @NotBlank String refreshToken
 ) {
 }

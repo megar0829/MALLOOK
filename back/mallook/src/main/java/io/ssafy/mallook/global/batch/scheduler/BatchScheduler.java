@@ -1,4 +1,4 @@
-package io.ssafy.mallook.global.batch;
+package io.ssafy.mallook.global.batch.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -13,6 +13,7 @@ import org.springframework.batch.core.repository.JobExecutionAlreadyRunningExcep
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 @Log4j2
 @RequiredArgsConstructor
 @Component
+@Profile("batch")
 public class BatchScheduler {
 
     @Value("${server.role}")
@@ -32,10 +34,6 @@ public class BatchScheduler {
     @Scheduled(cron = "0 0 0 * * 1")
     @SchedulerLock(name = "couponSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runJob() {
-        if (!"batch".equals(serverRole)) {
-            return; // 서버 역할이 batch가 아니면 작업을 실행하지 않음
-        }
-
         String time = LocalDateTime.now().toString();
 
         try {
@@ -52,10 +50,6 @@ public class BatchScheduler {
     @Scheduled(cron = "0 0/30 * * * *") // 매 30분마다 실행
     @SchedulerLock(name = "heartSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runSecondJob() {
-        if (!"batch".equals(serverRole)) {
-            return; // 서버 역할이 batch가 아니면 작업을 실행하지 않음
-        }
-
         String time = LocalDateTime.now().toString();
 
         try {

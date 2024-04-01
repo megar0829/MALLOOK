@@ -56,7 +56,7 @@ public class AuthController {
     @Operation(summary = "액세스 토큰 재발급 요청하기", description = "액세스 토큰 없거나 만료됐으면 재발급 요청하기")
     @PostMapping("/token/refresh")
     public ResponseEntity<BaseResponse<TokenDto>> rotateJwtTokensRequest(
-            @Valid @NotNull @RequestBody AuthTokenReq authTokenReq) throws RefreshTokenException {
+            @Valid @RequestBody AuthTokenReq authTokenReq) throws RefreshTokenException {
         TokenDto tokenDto = jwtService.rotateJwtTokens(authTokenReq.refreshToken());
 
         return BaseResponse.success(

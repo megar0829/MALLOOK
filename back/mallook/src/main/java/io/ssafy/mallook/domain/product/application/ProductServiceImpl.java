@@ -20,8 +20,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 import java.util.Objects;
 
 @Service
@@ -41,13 +39,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(String name, String cursor) {
-        return productsCustomRepository.findByProductName(name, cursor);
+    public Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable) {
+        return productsCustomRepository.findByProductName(name, cursor, pageable);
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor) {
-        return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor);
+    public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
+        return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor, pageable);
     }
 
     @Override

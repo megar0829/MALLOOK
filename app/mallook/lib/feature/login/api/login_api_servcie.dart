@@ -54,7 +54,9 @@ class LoginApiService {
         throw Error();
       }
 
-      return AuthTokenModel.fromJson(result);
+      var token = AuthTokenModel.fromJson(result);
+      await storage.write(key: 'token', value: jsonEncode(token.toJson()));
+      return token;
     }
 
     throw Error();

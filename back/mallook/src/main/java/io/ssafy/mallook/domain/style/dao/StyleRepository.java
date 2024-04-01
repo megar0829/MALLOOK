@@ -19,7 +19,7 @@ public interface StyleRepository extends JpaRepository<Style, Long> {
     @Query("SELECT s FROM Style s ORDER BY s.totalLike DESC limit 50")
     List<Style> findTop50StylesOrderByTotalLikeDesc();
 
-    Slice<StyleRes> findStylesByIdLessThan(Pageable pageable, Long cursor);
+    Slice<Style> findStylesByIdLessThan(Pageable pageable, Long cursor);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query(value = """

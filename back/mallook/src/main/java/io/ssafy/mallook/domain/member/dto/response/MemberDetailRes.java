@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.member.dto.response;
 
 
+import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.entity.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
@@ -23,6 +24,8 @@ public record MemberDetailRes(
         String grade,
         @Schema(description = "경험치 범위")
         List<Integer> expRange,
+        @Schema(description = "포인트")
+        Level level,
         @Schema(description = "포인트")
         Long point,
         @Schema(description = "경험치")

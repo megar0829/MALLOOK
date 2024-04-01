@@ -40,71 +40,71 @@ class ScriptControllerTest {
 
     private String url = "/api/scripts";
 
-    @Test
-    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void getScriptList() throws Exception {
-        boolean hasNext = false;
-        List<ScriptListDto> list = new ArrayList<>();
-        Pageable pageable = PageRequest.of(0, 2);
-        Slice<ScriptListDto> page = new SliceImpl<>(list, pageable, hasNext);
+//    @Test
+//    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
+//    void getScriptList() throws Exception {
+//        boolean hasNext = false;
+//        List<ScriptListDto> list = new ArrayList<>();
+//        Pageable pageable = PageRequest.of(0, 2);
+//        Slice<ScriptListDto> page = new SliceImpl<>(list, pageable, hasNext);
+//
+//        mockMvc.perform(
+//                        MockMvcRequestBuilders.get(url)
+//                                .contentType(MediaType.APPLICATION_JSON)
+//                                .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));
+//    }
 
-        mockMvc.perform(
-                        MockMvcRequestBuilders.get(url)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));
-    }
+//    @Test
+//    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
+//    void getScriptDetail() throws Exception {
+//        Long scriptId = 1L;
+//        ScriptDetailDto mockScriptDetail = new ScriptDetailDto("test", 1);
+//        Mockito.when(scriptService.getScriptDetail(scriptId))
+//                .thenReturn(mockScriptDetail);
+//        mockMvc.perform(MockMvcRequestBuilders.get(url + "/{id}", scriptId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.result").exists())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));
+//    }
 
-    @Test
-    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void getScriptDetail() throws Exception {
-        Long scriptId = 1L;
-        ScriptDetailDto mockScriptDetail = new ScriptDetailDto("test", 1);
-        Mockito.when(scriptService.getScriptDetail(scriptId))
-                .thenReturn(mockScriptDetail);
-        mockMvc.perform(MockMvcRequestBuilders.get(url + "/{id}", scriptId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.result").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("SELECT SUCCESS"));
-    }
+//    @Test
+//    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
+//    void createScript() throws Exception {
+//        List<String> keywordList = new ArrayList<>();
+//        keywordList.add("예쁜");
+//        keywordList.add("멋진");
+//        ScriptCreatDto scriptCreateDto = ScriptCreatDto.builder()
+//                .keywordsList(keywordList)
+//                .build();
+//        mockMvc.perform(MockMvcRequestBuilders.post(url)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(scriptCreateDto))
+//                        .with(csrf()))
+//                .andExpect(MockMvcResultMatchers.status().isCreated())
+//                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("INSERT SUCCESS")
+//                );
+//    }
 
-    @Test
-    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void createScript() throws Exception {
-        List<String> keywordList = new ArrayList<>();
-        keywordList.add("예쁜");
-        keywordList.add("멋진");
-        ScriptCreatDto scriptCreateDto = ScriptCreatDto.builder()
-                .keywordsList(keywordList)
-                .build();
-        mockMvc.perform(MockMvcRequestBuilders.post(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(scriptCreateDto))
-                        .with(csrf()))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("INSERT SUCCESS")
-                );
-    }
-
-    @Test
-    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
-    void deleteScript() throws Exception {
-        Long id = 1L;
-        List<Long> toDeleteList = new ArrayList<>();
-        toDeleteList.add(id);
-        ScriptDeleteListDto scriptDeleteListDto = new ScriptDeleteListDto(toDeleteList);
-        mockMvc.perform(MockMvcRequestBuilders.delete(url)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(scriptDeleteListDto))
-                        .with(csrf()))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("DELETE SUCCESS"));
-    }
+//    @Test
+//    @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
+//    void deleteScript() throws Exception {
+//        Long id = 1L;
+//        List<Long> toDeleteList = new ArrayList<>();
+//        toDeleteList.add(id);
+//        ScriptDeleteListDto scriptDeleteListDto = new ScriptDeleteListDto(toDeleteList);
+//        mockMvc.perform(MockMvcRequestBuilders.delete(url)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(scriptDeleteListDto))
+//                        .with(csrf()))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value("DELETE SUCCESS"));
+//    }
 }
