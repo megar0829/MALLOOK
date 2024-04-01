@@ -27,5 +27,5 @@ public class StyleProduct extends BaseEntity {
 
     @NotNull
     @Column(name = "product_id")
-    String product;
+    String products;
 }
