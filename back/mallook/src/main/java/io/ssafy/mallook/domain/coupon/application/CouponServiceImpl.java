@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -45,6 +46,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
+    @Transactional
     public void saveNewCoupon() {
         // 이벤트 쿠폰 디비에 저장
         Coupon coupon = Coupon.builder()
@@ -59,7 +61,12 @@ public class CouponServiceImpl implements CouponService {
     }
 
     public Integer availableCoupons(String key) {
-        return (int) redissonClient.getBucket(key).get();
+        var stock = redissonClient.getBucket(key).get();
+        if (Objects.isNull(stock)) {
+            return 0;
+        }
+        return (int)stock;
+
     }
 
     public void setCouponStock(String key, Integer quantity) {

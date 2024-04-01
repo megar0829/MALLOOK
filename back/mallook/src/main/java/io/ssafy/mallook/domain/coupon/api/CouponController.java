@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.coupon.api;
 
 import io.ssafy.mallook.domain.coupon.application.CouponService;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponDeleteReq;
+import io.ssafy.mallook.domain.coupon.dto.request.CouponReq;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
@@ -55,7 +56,7 @@ public class CouponController {
         );
     }
 
-    @Scheduled(cron = "0 0 0 * * 1")    //todo: 수정 - 선착순 쿠폰 발급
+//    @Scheduled(cron = "0 0/5 * * * *")    //todo: 수정 - 선착순 쿠폰 발급
     public void saveCoupon() {
         couponService.saveNewCoupon();
     }
@@ -68,8 +69,8 @@ public class CouponController {
     @PostMapping("/event")
     public ResponseEntity<BaseResponse<String>> getEventCoupon(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @NotNull @RequestBody Long couponId) {
-        couponService.decreaseCoupon(couponId, userSecurityDTO.getId());
+            @Valid @NotNull @RequestBody CouponReq couponReq) {
+        couponService.decreaseCoupon(couponReq.couponId(), userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "쿠폰 등록 완료"

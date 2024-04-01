@@ -35,7 +35,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     @Override
     public ProductsPageRes getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
-        Query query = new Query().addCriteria(Criteria.where("id").lte(cursor))
+        Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
                 .with(pageable);
 
         if (!isNull(mainCategory)) {
@@ -49,10 +49,9 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .stream()
                 .map(ProductsListDto::toDto)
                 .collect(Collectors.toList());
-        boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber()) * pageable.getPageSize());
+        boolean hasNext = mongoTemplate.count(query, Products.class) >= pageable.getPageSize();
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
         productsList.remove(productsList.size() - 1);
-
         return ProductsPageRes.builder()
                 .content(productsList)
                 .nextCursor(nextCursor)
