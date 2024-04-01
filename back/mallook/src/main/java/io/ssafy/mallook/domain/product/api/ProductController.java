@@ -49,14 +49,14 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<BaseResponse<ProductsPageRes>> getProductsList(
             @PageableDefault(size = 20,
-                    sort = "id",
+                    sort = "_id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
         cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1, Sort.by(Sort.Direction.DESC, "_id"));
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
