@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.coupon.application;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
+import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
@@ -72,13 +73,14 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     @Transactional
-    public void decreaseCoupon(String key, UUID memberId) {
+    public void decreaseCoupon(Long couponId, UUID memberId) {
         // 같은 쿠폰이 재고보다 많이 발급되지 않도록
-        // 한 사람 당 한번만 등록 가능 -> hash 사용
+        // 한 사람 당 한번만 등록 가능
         boolean usingLock;
         Long waitTime = 1L;
         Long leaseTime = 3L;
-        final RLock lock = redissonClient.getLock(key);
+        String keyName = "couponKey" + couponId.toString();
+        final RLock lock = redissonClient.getLock(keyName);
         final String thread = Thread.currentThread().getName();
         try {
             // trylock을 기준으로 구독 시작
@@ -91,26 +93,26 @@ public class CouponServiceImpl implements CouponService {
                 return;
             }
             // 재고 소진이라면 return
-            final int currentStock = availableCoupons(key);
+            final int currentStock = availableCoupons(keyName);
             if (currentStock > outOfStock) {
                 log.info("{} - 쿠폰 모두 소진 (수량 : {}개)", thread, currentStock);
                 return;
             }
-            log.info("쿠폰 발급 중 : {} - 현재 잔여 쿠폰 {} (수량 : {}개)", thread, key, currentStock);
-            setCouponStock(key, currentStock - 1);
+            log.info("쿠폰 발급 중 : {} - 현재 잔여 쿠폰 {} (수량 : {}개)", thread, keyName, currentStock);
+            setCouponStock(keyName, currentStock - 1);
             memberCouponRepository.save(MemberCoupon.builder()
-                    .coupon(Coupon.builder().id(Long.parseLong(key)).build())
+                    .coupon(Coupon.builder().id(couponId).build())
                     .member(Member.builder().id(memberId).build())
                     .build());
             redissonClient.getSet(PURCHASED_COUPON_SET_KEY).add(memberId.toString());
         } catch (InterruptedException e) {
+            // thread가 인터럽트 된 경우
             Thread.currentThread().interrupt();
         } finally {
+            // 락 해제
             if (lock.isLocked()) {
                 lock.unlock();
             }
         }
-
     }
-
 }

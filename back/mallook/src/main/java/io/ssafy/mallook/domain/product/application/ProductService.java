@@ -1,9 +1,7 @@
 package io.ssafy.mallook.domain.product.application;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -16,17 +14,17 @@ import org.springframework.data.domain.Slice;
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 
-    Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable);
+    ProductsPageRes getProductDetail(String name, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
+    ProductsPageRes getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
+    ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 
     ProductsDetailDto getMongoProductsDetail(String id);
 
-    Page<ReviewObject> getReviewList(String productsId, Pageable pageable);
+    ReviewPageRes getReviewList(String productsId, Pageable pageable);
 
-    Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable);
+    ProductPageRes getProductsWithManyReviews(Pageable pageable);
 
     Long getLastProductId();
 

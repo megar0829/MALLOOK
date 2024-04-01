@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.coupon.api;
 
 import io.ssafy.mallook.domain.coupon.application.CouponService;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponDeleteReq;
+import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
 import io.ssafy.mallook.global.common.BaseResponse;
@@ -25,6 +26,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/coupons")
@@ -43,7 +45,7 @@ public class CouponController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<CouponRes>>> findMyCouponList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
+            @PageableDefault(size = 21, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         var result = Objects.nonNull(cursor) ? couponService.findMyCouponList(pageable, userSecurityDTO.getId(), cursor)
                 : couponService.findMyCouponListFirst(pageable, userSecurityDTO.getId());
@@ -57,6 +59,23 @@ public class CouponController {
     public void saveCoupon() {
         couponService.saveNewCoupon();
     }
+
+    @Operation(summary = "선착순 쿠폰 등록",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "선착순 쿠폰 등록 성공"),
+                    @ApiResponse(responseCode = "404", description = "선착순 쿠폰 등록 실패")
+            })
+    @PostMapping("/event")
+    public ResponseEntity<BaseResponse<String>> getEventCoupon(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @Valid @NotNull @RequestBody Long couponId) {
+        couponService.decreaseCoupon(couponId, userSecurityDTO.getId());
+        return BaseResponse.success(
+                SuccessCode.INSERT_SUCCESS,
+                "쿠폰 등록 완료"
+        );
+    }
+
 
     @Operation(summary = "내 쿠폰 등록",
             responses = {

@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.cart.application.CartService;
 import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
+import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.ssafy.mallook.global.security.user.UserSecurityDTO;
@@ -34,7 +35,7 @@ public class CartController {
                     @ApiResponse(responseCode = "404", description = "장바구니 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<Slice<CartDetailRes>>> findProductsInCart(
+    public ResponseEntity<BaseResponse<CartPageRes>> findProductsInCart(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @PageableDefault(size = 20, direction = Sort.Direction.DESC, page = 0) Pageable pageable
     ) {

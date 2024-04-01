@@ -4,6 +4,7 @@ import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
+import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
@@ -31,8 +32,10 @@ public class CartServiceImpl implements CartService {
     private final ProductsRepository productsRepository;
 
     @Override
-    public Slice<CartDetailRes> findProductsInCart(Pageable pageable, UUID memberId) {
-        return cartRepository.findProductsInCart(pageable, memberId);
+    public CartPageRes findProductsInCart(Pageable pageable, UUID memberId) {
+        var result = cartRepository.findProductsInCart(pageable, memberId);
+        return new CartPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
+
     }
 
     @Override

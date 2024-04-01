@@ -8,7 +8,7 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -70,14 +70,14 @@ public class ScriptServiceImpl implements ScriptService {
                 .build();
         String cursor = mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable)
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable).content()
                 .stream()
                 .map(ScriptProductDto::toScriptProductDto)
                 .collect(toList());
     }
 
     @Override
-    public Slice<ProductsListDto> getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable) {
+    public ProductsPageRes getRecommendProductDetail(Long scriptId, String cursor, Pageable pageable) {
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
         List<String> scriptKeyword = proxyScript.getKeywordList();
         ProductHotKeywordDto productHotKeywordDto = ProductHotKeywordDto.builder()
