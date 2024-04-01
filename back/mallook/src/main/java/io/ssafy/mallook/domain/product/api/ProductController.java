@@ -89,7 +89,7 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
-            @RequestParam(required = false) ProductHotKeywordDto hotKeywordDto) {
+            @RequestParam(required = false) ProductHotKeywordDto hotKeywordDto,
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable
@@ -121,14 +121,16 @@ public class ProductController {
         );
     }
 
+
+
+
     @Operation(summary = "상품 상세 정보 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 상세 정보 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "상품 상세 정보 조회 실패")
             })
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(
-            @PathVariable("id") String id) {
+    public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(@PathVariable("id") String id) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsDetail(id)
