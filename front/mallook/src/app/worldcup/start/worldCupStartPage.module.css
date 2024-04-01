@@ -1,0 +1,27 @@
+.container {
+    width: 90dvw;
+    height: calc(90dvh - 85px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.leftDiv {
+    width: 43dvw;
+    height: 80dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+}
+.box {
+    width: 15dvw;
+    height: 10dvh;
+    border: 2px solid gray;
+    border-radius: 0.75rem;
+}
+
+
+.rightDiv {
+    width: 43dvw;
+    height: 80dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+}

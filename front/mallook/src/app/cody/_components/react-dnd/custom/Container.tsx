@@ -48,6 +48,7 @@ export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {
 					y: number
 				}
 				console.log(item)
+				console.log(delta);
 				let left = Math.round(item.left + delta.x)
 				let top = Math.round(item.top + delta.y)
 				if (snapToGrid) {

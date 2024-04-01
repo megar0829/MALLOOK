@@ -16,11 +16,9 @@ export default function CodyCreatePage() {
 
   return (
     <div className={styles.codyCreate__background}>
-      {/*<DndProvider backend={HTML5Backend}>*/}
-      {/*  <Dnd />*/}
-      {/*  /!*<ReactDnd products={products} />*!/*/}
-      {/*</DndProvider>*/}
-      {/*<TestDrag />*/}
+      <DndProvider backend={HTML5Backend}>
+        <Dnd />
+      </DndProvider>
     </div>
   );
 }
