@@ -88,7 +88,7 @@ public class StyleServiceImpl implements StyleService {
         var style = styleRepository.findById(id)
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         List<StyleProductRes> productList = style.getStyleProductList().stream()
-                .map(ele -> productsRepository.findById(ele.getProduct())
+                .map(ele -> productsRepository.findById(ele.getProducts())
                         .map(product -> new StyleProductRes(
                                 product.getName(),
                                 product.getPrice(),
@@ -107,20 +107,21 @@ public class StyleServiceImpl implements StyleService {
 
     @Override
     @Transactional
-    public void saveStyle(UUID memberId, StyleInsertReq styleInsertRes) {
+    public void saveStyle(UUID memberId, StyleInsertReq styleInsertReq) {
         Member proxyMember = memberRepository.getReferenceById(memberId);
         Style style = Style.builder()
-                .name(styleInsertRes.name())
+                .name(styleInsertReq.name())
                 .heartCount(0L)
                 .totalLike(0)
                 .member(proxyMember)
+                .imgUrl(styleInsertReq.imageUrl())
                 .build();
         var st = styleRepository.save(style);
-        styleInsertRes.productIdList().forEach(ele ->
+        styleInsertReq.productIdList().forEach(ele ->
                 styleProductRepository.save(
                         StyleProduct.builder()
                                 .style(st)
-                                .product(ele)
+                                .products(ele)
                                 .build()));
     }
 
@@ -138,13 +139,13 @@ public class StyleServiceImpl implements StyleService {
                 .memberNickname(style.getMember().getNickname())
                 .urlList(style.getStyleProductList()
                         .stream()
-                        .map(ele -> productsRepository.findById(ele.getProduct())
+                        .map(ele -> productsRepository.findById(ele.getProducts())
                                 .map(Products::getImage)
                                 .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT)))
                         .collect(toList()))
                 .keywordList(style.getStyleProductList()
                         .stream()
-                        .flatMap(ele -> productsRepository.findById(ele.getProduct())
+                        .flatMap(ele -> productsRepository.findById(ele.getProducts())
                                 .map(product -> product.getKeywords().stream())
                                 .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT)))
                         .collect(toCollection(LinkedHashSet::new))
@@ -159,7 +160,7 @@ public class StyleServiceImpl implements StyleService {
 
         for (StyleProduct styleProduct : style.getStyleProductList()) {
             // StyleProduct의 product 필드로 MongoDB에서 Products 객체를 조회
-            productsRepository.findById(styleProduct.getProduct()).ifPresent(products -> {
+            productsRepository.findById(styleProduct.getProducts()).ifPresent(products -> {
                 // 조회된 Products 객체를 ProductsListDto로 변환하여 목록에 추가
                 productsListDtoList.add(ProductsListDto.toDto(products));
             });

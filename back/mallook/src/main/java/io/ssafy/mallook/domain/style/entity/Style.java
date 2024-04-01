@@ -45,6 +45,8 @@ public class Style extends BaseEntity {
     @Column(name = "total_like")
     private Integer totalLike;
 
+    private String imgUrl;
+
     @OneToMany(mappedBy = "style", cascade = CascadeType.ALL)
     @Builder.Default
     private List<StyleProduct> styleProductList = new ArrayList<>();

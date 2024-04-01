@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductPageRes;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;

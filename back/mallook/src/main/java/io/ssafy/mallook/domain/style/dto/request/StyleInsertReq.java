@@ -13,6 +13,7 @@ public record StyleInsertReq(
         String name,
         @Schema(description = "상품 id 리스트")
         @NotEmpty(message = "상품 id리스트는 공백일 수 없습니다.")
-        List<String> productIdList
+        List<String> productIdList,
+        String imageUrl
 ) {
 }
