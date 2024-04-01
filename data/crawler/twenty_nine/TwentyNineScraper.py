@@ -7,6 +7,11 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
+from collections import Counter
+from pykospacing import Spacing
+from soynlp.word import WordExtractor
+from soynlp.tokenizer import LTokenizer
+from konlpy.tag import Kkma
 
 
 class TwentyNineScraper:
@@ -16,6 +21,23 @@ class TwentyNineScraper:
         load_dotenv()
         self.password = os.getenv("MONGODB_PASSWORD")
         self.connect_to_mongodb()
+
+        self.spacing = Spacing()     # PyKoSpacing 인스턴스 생성
+        word_extractor = WordExtractor()    # WordExtractor 인스턴스 생성
+        
+        # 토크나이저 생성
+        word_scores = word_extractor.word_scores()
+        self.tokenizer = LTokenizer(scores=word_scores)        
+        
+        # 키워드 셋
+        keyword_file = os.path.join("keyword", "keyword.txt")
+        with open(keyword_file, 'r', encoding='utf-8') as file:
+            self.keyword_data = [line.strip() for line in file]
+
+        # 불용어 셋
+        stopword_file = os.path.join("keyword", "stopword.txt")
+        with open(stopword_file, 'r', encoding='utf-8') as file:
+            self.stopword_data = [line.strip() for line in file]
 
 
     # 크롬 웹드라이버 초기화
@@ -71,7 +93,7 @@ class TwentyNineScraper:
         # 상품 리스트
         products = results.get('data', {}).get('products', [])
 
-        for product in products[:1000]:
+        for product in products[:50]:
             itemNo = product.get('itemNo', None)
 
             # 이미 저장된 상품인지 확인
@@ -84,7 +106,7 @@ class TwentyNineScraper:
             # 상품 상세 정보 크롤링
             detail_info = self.crawling_twentyninecm_product_info(itemNo)
             # 5000개 이상의 리뷰를 한 번에 가져올 시 500 에러 발생하기 때문에 5000개 이하로 가져옴
-            product_reviews = self.get_twentyninecm_reviews_list(itemNo, reviewCount)
+            product_reviews, review_string = self.get_twentyninecm_reviews_list(itemNo, reviewCount)
 
             # 상품 정보가 없는 경우
             if not detail_info:
@@ -110,8 +132,13 @@ class TwentyNineScraper:
                 'size': detail_info['size'],
                 'detail_images': detail_info['detail_images'],
                 'detail_html': detail_info['detail_html'],
-                'reviews': product_reviews
+                'reviews': product_reviews,
             }
+            
+            if review_string:
+                keywords, keywords_top5 = self.review_preprocessing(review_string)
+                product_info['keywords'] = keywords
+                product_info['keywords_top5'] = keywords_top5
 
             self.save_to_mongodb(product_info)
 
@@ -244,7 +271,7 @@ class TwentyNineScraper:
                 'count': 0,
                 'average_point': 0,
                 'reviews': []
-            }
+            }, ''
         
         results = response.json()
         reviews = results.get('data', {})
@@ -254,6 +281,8 @@ class TwentyNineScraper:
             'average_point': reviews.get('averagePoint', 0),
             'reviews': []
         }
+
+        review_string = ''
 
         for review in reviews.get('results', []):
             # 리뷰 이미지 url 리스트
@@ -287,10 +316,44 @@ class TwentyNineScraper:
                 'images': images,
                 'point': review.get('point', None),
                 'product_option': product_option,
-                'userSize': user_size
+                'user_size': user_size
             })
 
-        return product_reviews
+            review_string += f" {review.get('contents', None)}"
+
+        return product_reviews, review_string
+
+
+    def review_preprocessing(self, corpus):
+        keywords = {}
+
+        # 전처리 및 토큰화
+        corpus = re.sub(r'[^가-힣]+', ' ', corpus)
+        corpus = self.spacing(corpus)
+        tokens = self.tokenizer.tokenize(corpus)
+
+        for token in tokens:
+            # 불용어 제거
+            if token in self.stopword_data:
+                continue
+            
+            for keyword in self.keyword_data:
+                # 키워드 셋에 있는 단어와 유사성 판별 (토큰 생성하는 데 개당 3초 내외로 걸림)
+                # if compare_word_meaning(morphs1, morphs2):
+
+                # 키워드 포함 여부 확인
+                if keyword in token:
+                    keyword_count = keywords.setdefault(keyword, 0) + 1
+                    keywords[keyword] = keyword_count
+                    break
+        
+        # counter 객체 생성
+        counter = Counter(keywords)
+
+        # 빈도수가 높은 5개의 키워드 추출
+        keywords_top5 = [key for key, _ in counter.most_common(5)]
+
+        return list(keywords.keys()), keywords_top5
 
 
     # MongoDB 연결
