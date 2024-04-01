@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/search/models/popular_keyword.dart';
 
 class HotKeywordGridWidget extends StatelessWidget {
-  final List<String> hotKeywords;
+  final List<PopularKeyword> hotKeywords;
   final Function addKeyword;
 
   const HotKeywordGridWidget({
@@ -23,7 +24,7 @@ class HotKeywordGridWidget extends StatelessWidget {
       ),
       itemCount: hotKeywords.length,
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => addKeyword(hotKeywords[index]),
+        onTap: () => addKeyword(hotKeywords[index].name),
         child: Row(
           children: [
             Flexible(
@@ -67,9 +68,9 @@ class HotKeywordGridWidget extends StatelessWidget {
             //     fontWeight: FontWeight.bold,
             //   ),
             // ),
-            Gaps.h12,
+            // Gaps.h12,
             Text(
-              hotKeywords[index],
+              hotKeywords[index].name ?? "",
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,
