@@ -1,7 +1,7 @@
 import styles from "./mainCody.module.css";
 import Image from "next/image";
 
-import {CodyData} from "@/constants";
+import {CodyData} from "@/types";
 import Link from "next/link";
 
 export default function MainCody(props: { cody: CodyData, codyId: number } ) {
