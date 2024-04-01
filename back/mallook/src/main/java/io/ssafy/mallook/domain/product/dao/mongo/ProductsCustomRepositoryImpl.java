@@ -51,13 +51,17 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .collect(Collectors.toList());
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber()) * pageable.getPageSize());
-        var nextCursor = hasNext? productsList.get(productsList.size()-1).id():null;
-        productsList.remove(productsList.size()-1);
-        return new ProductsPageRes(productsList, nextCursor);
+        var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
+        productsList.remove(productsList.size() - 1);
+
+        return ProductsPageRes.builder()
+                .content(productsList)
+                .nextCursor(nextCursor)
+                .build();
     }
 
     @Override
-    public Slice<ProductsListDto> findByProductName(String name, String cursor, Pageable pageable) {
+    public ProductsPageRes findByProductName(String name, String cursor, Pageable pageable) {
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
         if (!isNull(cursor) && !cursor.isEmpty()) {
@@ -69,11 +73,16 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .toList();
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
-        return new SliceImpl<>(productsList, pageable, hasNext);
+        var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
+        productsList.remove(productsList.size() - 1);
+        return ProductsPageRes.builder()
+                .content(productsList)
+                .nextCursor(nextCursor)
+                .build();
     }
 
     @Override
-    public Slice<ProductsListDto> findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
+    public ProductsPageRes findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
         List<String> keywords = hotKeywordDto.hotKeywordList();
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
 
@@ -86,8 +95,13 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .toList();
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
+        var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
+        productsList.remove(productsList.size() - 1);
 
-        return new SliceImpl<>(productsList, pageable, hasNext);
+        return ProductsPageRes.builder()
+                .content(productsList)
+                .nextCursor(nextCursor)
+                .build();
     }
 
     @Override
@@ -121,7 +135,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     @Override
     public Page<ProductsListDto> getProductsWithManyReviews(int page, int size) {
-        page = page > 9 ? 9 : Math.max(page, 0) ;
+        page = page > 9 ? 9 : Math.max(page, 0);
         Long maxProducts = 100L;
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "reviews.count"));
         Query query = new Query().with(pageable);

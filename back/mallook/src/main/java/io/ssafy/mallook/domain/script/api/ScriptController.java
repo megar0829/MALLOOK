@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.api;
 import com.theokanning.openai.service.OpenAiService;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -117,7 +118,7 @@ public class ScriptController {
             }
     )
     @GetMapping("/{scriptId}/product-detail")
-    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getScriptDetailRecommend(
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getScriptDetailRecommend(
             @PathVariable Long scriptId,
             @RequestParam(required = false) String cursor,
             @PageableDefault(size = 12,

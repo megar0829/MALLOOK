@@ -14,9 +14,9 @@ import org.springframework.data.domain.Slice;
 public interface ProductService {
     Slice<ProductListDto> getProductList(Long cursor, Pageable pageable, MainCategory mainCategory, SubCategory subCategory);
 
-    Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable);
+    ProductsPageRes getProductDetail(String name, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
+    ProductsPageRes getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
 
     ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 

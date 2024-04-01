@@ -14,9 +14,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductsCustomRepository {
 
-    Slice<ProductsListDto> findByProductName(String name, String cursor, Pageable pageable);
+    ProductsPageRes findByProductName(String name, String cursor, Pageable pageable);
 
-    Slice<ProductsListDto> findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
+    ProductsPageRes findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable);
 
     ProductsPageRes getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory);
 

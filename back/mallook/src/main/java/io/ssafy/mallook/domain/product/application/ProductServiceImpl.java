@@ -39,12 +39,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable) {
+    public ProductsPageRes getProductDetail(String name, String cursor, Pageable pageable) {
         return productsCustomRepository.findByProductName(name, cursor, pageable);
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
+    public ProductsPageRes getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
         return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor, pageable);
     }
 
