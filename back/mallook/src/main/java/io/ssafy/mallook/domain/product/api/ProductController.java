@@ -58,10 +58,9 @@ public class ProductController {
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
-        ObjectId cursorObjectId = new ObjectId(cursor);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
+                productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
         );
     }
     @Operation(
