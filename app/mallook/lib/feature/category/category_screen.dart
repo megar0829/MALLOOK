@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/category/api/category_api_service.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
 import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_cursor_response.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 Map<String, List<String>> categorys = {
-  "베스트": ["전체"],
   "상의": ["전체", "긴팔", "반팔", "민소매", "후드티", "맨투맨", "니트/스웨터", "셔츠/블라우스", "기타"],
   "하의": ["전체", "데님", "면", "슬랙스", "트레이닝/조커팬츠", "스커트", "레깅스", "숏팬츠", "와이드", "기타"],
   "아우터": [
@@ -57,16 +58,15 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Product> _products = [];
-  int _productPage = 0;
-  int _totalPage = 0;
   bool _isProductLoading = false;
-  String primary = categorys.keys.first;
-  late String secondary = "";
+  String _primary = categorys.keys.first;
+  late String _secondary = "";
+  String? _cursor = "";
 
   @override
   void initState() {
     super.initState();
-    secondary = categorys[primary]!.first;
+    _secondary = categorys[_primary]!.first;
 
     _loadMoreProducts();
     _scrollController.addListener(() {
@@ -85,7 +85,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _loadMoreProducts() async {
-    if (_productPage > _totalPage) return;
+    if (_cursor == null) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
@@ -93,30 +93,47 @@ class _CategoryScreenState extends State<CategoryScreen> {
         });
       }
 
-      var loadedProducts =
-          await HomeApiService.getPopularProducts(_productPage);
+      print("================cursor================");
+      print(_cursor ?? "XXXX");
+
+      ProductCursorResponse loadedProducts;
+      try {
+        loadedProducts = await CartApiService.getCategoryProducts(
+          cursor: _cursor ?? '',
+          primary: _primary,
+          secondary: _secondary,
+        );
+      } finally {
+        _isProductLoading = false;
+      }
+
       if (mounted) {
         setState(() {
-          _productPage = loadedProducts.currentPage! + 1;
-          _totalPage = loadedProducts.totalPage!;
-          _products.addAll(loadedProducts.content!);
-          _productPage++;
-          _isProductLoading = false;
+          if (loadedProducts.content != null) {
+            _products.addAll(loadedProducts.content!);
+          }
+          _cursor = loadedProducts.nextCursor;
+          print("================next cursor================");
+          print(_cursor ?? "XXXX");
         });
       }
     }
   }
 
-  void _onTapPrimaryCategory(int primaryIdx) {
-    primary = categorys.keys.toList()[primaryIdx];
-    secondary = categorys[primary]!.first;
+  void _onTapPrimaryCategory(int primaryIdx) async {
+    _isProductLoading = false;
+    _cursor = "";
+    _primary = categorys.keys.toList()[primaryIdx];
+    _secondary = categorys[_primary]!.first;
     _products.clear();
     _loadMoreProducts();
     setState(() {});
   }
 
-  void _onTapSecondaryCategory(int secondaryIdx) {
-    secondary = categorys[primary]![secondaryIdx];
+  void _onTapSecondaryCategory(int secondaryIdx) async {
+    _isProductLoading = false;
+    _cursor = "";
+    _secondary = categorys[_primary]![secondaryIdx];
     _products.clear();
     _loadMoreProducts();
     setState(() {});
@@ -135,7 +152,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           shadowColor: Colors.grey.shade400,
           centerTitle: true,
           title: Text(
-            secondary.isNotEmpty ? '$primary · $secondary' : primary,
+            _secondary.isNotEmpty ? '$_primary · $_secondary' : _primary,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -206,12 +223,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               horizontal: Sizes.size8,
                             ),
                             decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size16,
-                                )),
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(
+                                Sizes.size16,
+                              ),
+                            ),
                             child: Text(
-                              categorys[primary]!.toList()[index],
+                              categorys[_primary]!.toList()[index],
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size14,
@@ -221,7 +239,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         ),
                         separatorBuilder: (context, index) => Gaps.h8,
-                        itemCount: categorys[primary]!.length,
+                        itemCount: categorys[_primary]!.length,
                       ),
                     )
                   ],
