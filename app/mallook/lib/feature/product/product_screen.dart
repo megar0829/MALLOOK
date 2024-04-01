@@ -151,73 +151,112 @@ class _ProductScreenState extends State<ProductScreen>
                       separatorBuilder: (context, index) => Gaps.v8,
                       itemCount: (product.detailImages ?? []).length,
                     ),
-                    ListView.separated(
-                      itemBuilder: (context, index) => Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Sizes.size10,
-                          horizontal: Sizes.size14,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey.shade300,
-                            width: Sizes.size1,
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.size32,
                           ),
-                          borderRadius: BorderRadius.circular(
-                            Sizes.size14,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (product.review!.count != null)
+                                Text(
+                                  '리뷰 ${product.review!.count!}개',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                              if (product.review!.averagePoint != null)
+                                Text(
+                                  '평점 ${product.review!.averagePoint!}점',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                )
+                            ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              product.review!.reviewList![index].createdAt!,
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                                fontSize: Sizes.size12,
+                        Gaps.v12,
+                        Expanded(
+                          child: ListView.separated(
+                            itemBuilder: (context, index) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size10,
+                                horizontal: Sizes.size14,
                               ),
-                            ),
-                            const Divider(),
-                            Text(
-                              product.review!.reviewList![index].contents!,
-                              maxLines: 5,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: Sizes.size14,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: Sizes.size1,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size14,
+                                ),
                               ),
-                            ),
-                            const Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                if (product.review!.reviewList![index].userSize!
-                                        .height !=
-                                    null)
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Text(
-                                    "신장 ${product.review!.reviewList![index].userSize!.height}",
-                                    style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
+                                    product
+                                        .review!.reviewList![index].createdAt!,
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
                                       fontSize: Sizes.size12,
                                     ),
                                   ),
-                                if (product.review!.reviewList![index].userSize!
-                                        .weight !=
-                                    null)
+                                  const Divider(),
                                   Text(
-                                    "체중 ${product.review!.reviewList![index].userSize!.weight}",
+                                    product
+                                        .review!.reviewList![index].contents!,
+                                    maxLines: 5,
                                     style: const TextStyle(
-                                      color: Colors.black87,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: Sizes.size12,
+                                      color: Colors.black,
+                                      fontSize: Sizes.size14,
                                     ),
                                   ),
-                              ],
-                            )
-                          ],
+                                  const Divider(),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (product.review!.reviewList![index]
+                                              .userSize!.height !=
+                                          null)
+                                        Text(
+                                          "신장 ${product.review!.reviewList![index].userSize!.height}",
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Sizes.size12,
+                                          ),
+                                        ),
+                                      if (product.review!.reviewList![index]
+                                              .userSize!.weight !=
+                                          null)
+                                        Text(
+                                          "체중 ${product.review!.reviewList![index].userSize!.weight}",
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Sizes.size12,
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            separatorBuilder: (context, index) => Gaps.v8,
+                            itemCount:
+                                (product.review?.reviewList ?? []).length,
+                          ),
                         ),
-                      ),
-                      separatorBuilder: (context, index) => Gaps.v8,
-                      itemCount: (product.review?.reviewList ?? []).length,
+                      ],
                     ),
                   ],
                 ),

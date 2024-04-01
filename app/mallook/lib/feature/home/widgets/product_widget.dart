@@ -47,6 +47,7 @@ class ProductWidget extends StatelessWidget {
                 image: _product.image!,
                 fit: BoxFit.fill,
                 filterQuality: FilterQuality.low,
+                fadeInDuration: const Duration(milliseconds: 100),
               ),
             ),
           ),
