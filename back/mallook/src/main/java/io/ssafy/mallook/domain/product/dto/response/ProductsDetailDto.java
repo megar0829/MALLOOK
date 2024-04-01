@@ -45,7 +45,7 @@ public record ProductsDetailDto(
         @Schema(description = "키워드 리스트")
         List<String> keywords,
         @Schema(description = "리뷰 리스트 중 처음 5개")
-        Reviews reviews
+        Reviews review
 ) {
     public static ProductsDetailDto toDto(Products products) {
         return ProductsDetailDto.builder()
@@ -66,7 +66,7 @@ public record ProductsDetailDto(
                 .detailImages(products.getDetailImages())
                 .detailHtml(products.getDetailHtml())
                 .keywords(products.getKeywords())
-                .reviews(products.getReviews())
+                .review(products.getReview())
                 .build();
     }
 }

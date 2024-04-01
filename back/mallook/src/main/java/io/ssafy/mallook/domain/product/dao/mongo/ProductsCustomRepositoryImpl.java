@@ -125,11 +125,12 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         AggregationOperation sliceOperation = Aggregation.project()
                 .and("reviews.count").as("reviews.count")
                 .and("reviews.average_point").as("reviews.average_point")
-                .and("reviews.reviews").slice(pageable.getPageSize(), (int) (pageable.getOffset())).as("reviews.reviews");
+                .and("reviews.reviews").slice(pageable.getPageSize(), (int) (pageable.getOffset()))
+                .as("reviews.reviews");
         TypedAggregation<Products> aggregation = newAggregation(Products.class, matchOperation, sliceOperation);
         AggregationResults<Products> result = mongoTemplate.aggregate(aggregation, COLLECTION_NAME, Products.class);
-        Reviews reviews = Objects.requireNonNull(result.getUniqueMappedResult()).getReviews();
-        return new PageImpl<>(reviews.getReviews(), pageable, reviews.getCount());
+        Reviews reviews = Objects.requireNonNull(result.getUniqueMappedResult()).getReview();
+        return new PageImpl<>(reviews.getReviewList(), pageable, reviews.getCount());
     }
 
     @Override
