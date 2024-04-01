@@ -11,14 +11,26 @@ public record OrderListDto(
         Long id,
         @Schema(description = "구매액")
         Long price,
+        @Schema(description = "배송비")
+        Long fee,
         @Schema(description = "구매량")
-        Long quantity) {
+        Long quantity,
+        @Schema(description = "대표 상품 이미지")
+        String image,
+        @Schema(description = "대표 상품 명")
+        String productName,
+        @Schema(description = "주문일")
+        String createdAt) {
 
     public static OrderListDto toDto(Orders order) {
         return OrderListDto.builder()
                 .id(order.getId())
-                .price(order.getTotalPrice() / order.getTotalCount())
+                .price(order.getTotalPrice())
+                .fee(order.getTotalFee())
                 .quantity(order.getTotalCount())
+                .productName(order.getProductHistoryList().get(0).getProductName())
+                .image(order.getProductHistoryList().get(0).getProductImage())
+                .createdAt(order.getCreatedAt().toString())
                 .build();
     }
 }
