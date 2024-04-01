@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/profile/model/member_detail.dart';
@@ -13,6 +15,12 @@ class ProfileScreen extends StatelessWidget {
   final Future<MemberDetail> member;
 
   const ProfileScreen({super.key, required this.member});
+
+  void _onLogoutBtnPressed(BuildContext context) async {
+    const storage = FlutterSecureStorage();
+    await storage.deleteAll();
+    moveToLoginScreen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +109,17 @@ class ProfileScreen extends StatelessWidget {
                 const Divider(),
                 const MyScriptTileWidget(),
                 const Divider(),
+                TextButton(
+                  onPressed: () => _onLogoutBtnPressed(context),
+                  child: Text(
+                    '로그아웃',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size14,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                )
               ],
             ),
           ),

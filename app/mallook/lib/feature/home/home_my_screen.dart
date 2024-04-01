@@ -97,8 +97,9 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                   mainAxisSpacing: Sizes.size10,
                   childAspectRatio: 0.73,
                 ),
-                itemBuilder: (context, index) =>
-                    ProductWidget(product: _products[index]),
+                itemBuilder: (context, index) => ProductWidget(
+                  product: _products[index],
+                ),
                 itemCount: _products.length, // itemCount 수정
               ),
               if (_isProductLoading) CustomCircularWaitWidget(),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/product/api/product_api_service.dart';
 import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_detail.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
 import 'package:mallook/feature/product/widget/product_img_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -20,22 +22,15 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
+  late Future<ProductDetail> _productDetail;
   final ScrollController _storeController = ScrollController();
-  final List<String> sizes = [
-    'XS',
-    'S',
-    'M',
-    'L',
-    'XL',
-  ];
 
-  final List<String> colors = [
-    'red',
-    'yellow',
-    'blue',
-    'green',
-    'orange',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _productDetail = ProductApiService.getProductDetail(widget.product.id!);
+    print('hihih   $_productDetail');
+  }
 
   @override
   void dispose() {
@@ -49,7 +44,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _clickHeartIcon() {}
 
-  void _showOrderBottomSheet() async {
+  void _showOrderBottomSheet(List<String> sizes, List<String> colors) async {
     await showModalBottomSheet(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -80,34 +75,53 @@ class _ProductScreenState extends State<ProductScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ProductImgWidget(
-              product: widget.product,
-            ),
-            Gaps.v10,
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size8,
-                horizontal: Sizes.size32,
-              ),
-              child: Column(
+        child: FutureBuilder<ProductDetail>(
+          future: _productDetail,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              var product = snapshot.data!;
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    widget.product.name!,
-                    maxLines: 5,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size18,
+                  ProductImgWidget(
+                    images: [
+                      product.image ??
+                          "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                    ],
+                  ),
+                  Gaps.v10,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size8,
+                      horizontal: Sizes.size32,
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          product.name!,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size18,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  Gaps.v10,
+                  Expanded(
+                    child: ListView.separated(
+                        itemBuilder: (context, index) => Container(),
+                        separatorBuilder: (context, index) => Gaps.v8,
+                        itemCount: (product.detailImages ?? []).length),
+                  ),
                 ],
-              ),
-            ),
-          ],
+              );
+            }
+            return const CircularProgressIndicator();
+          },
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -116,17 +130,21 @@ class _ProductScreenState extends State<ProductScreen> {
         color: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 1,
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
+        child: FutureBuilder<ProductDetail>(
+          future: _productDetail,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColorDark,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size12,
                   ),
                 ),
-                onPressed: _showOrderBottomSheet,
+                onPressed: () => _showOrderBottomSheet(
+                  snapshot.data!.size ?? [],
+                  snapshot.data!.color ?? [],
+                ),
                 child: const Text(
                   '구매하기',
                   style: TextStyle(
@@ -135,9 +153,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     color: Colors.white,
                   ),
                 ),
-              ),
-            ),
-          ],
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

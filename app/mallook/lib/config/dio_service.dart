@@ -123,9 +123,9 @@ class DioService {
     try {
       final response =
           await _authDio!.get(path, queryParameters: queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if ((response.statusCode == 200 || response.statusCode == 201) &&
+          response.data['status'] == 200) {
         print(response.data);
-        int status = response.data['status'];
         String message = response.data['message'];
 
         T result;
