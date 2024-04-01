@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.api;
 
 import com.amazonaws.util.CollectionUtils;
+import com.amazonaws.util.StringUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.*;
@@ -54,7 +55,7 @@ public class ProductController {
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
-        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
