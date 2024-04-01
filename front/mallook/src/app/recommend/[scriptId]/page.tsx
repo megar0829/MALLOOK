@@ -20,7 +20,7 @@ export default async function RecommendDetailPage({params: {scriptId}} : IParams
       <div className={styles.container}>
         <DetailCody codyId={scriptId} />
 
-        <ProductListComponent />
+        <ProductListComponent productList={[]} />
       </div>
     </div>
   );

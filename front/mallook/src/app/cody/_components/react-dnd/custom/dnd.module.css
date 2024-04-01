@@ -11,11 +11,12 @@
     height: 80dvh;
     border: 1px solid black;
     padding: 20px;
+
 }
 
 .drag__container {
-    width: 40dvw;
-    height: 80dvh;
+    width: calc(40dvw - 40px);
+    height: calc(80dvh - 40px);
     position: relative;
 }
 

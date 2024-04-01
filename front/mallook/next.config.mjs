@@ -8,6 +8,12 @@ const nextConfig = {
                 port: '',
                 pathname: '/egjs-infinitegrid/assets/image/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'image.brandi.me',
+                port: '',
+                pathname: '/common/**',
+            },
         ],
     },
 };

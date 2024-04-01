@@ -1,12 +1,13 @@
 .container {
-  width: 100dvw;
+  width: 120dvw;
   height: 100dvh;
   display: flex;
   background-color: black;
+  justify-content: space-between;
 }
 
 .leftDiv {
-  width: 40dvw;
+  width: 38dvw;
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -61,12 +62,14 @@
 }
 
 .rightDiv {
-  width: 60dvw;
+  width: 78dvw;
   height: 100dvh;
   padding-top: 20dvh;
+  display: flex;
+  justify-content: center;
 }
 .phoneDiv {
-  width: 60dvw;
+  width: 58dvw;
   height: 700px;
 }
 .phoneDiv img {

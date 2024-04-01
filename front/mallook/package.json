@@ -28,7 +28,8 @@
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18",
     "react-query": "^3.39.3",
-    "sass": "^1.71.1"
+    "sass": "^1.71.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -37,6 +38,7 @@
     "autoprefixer": "^10.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
+    "postcss": "^8",
     "typescript": "^5"
   }
 }
