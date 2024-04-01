@@ -56,7 +56,7 @@ public class CouponController {
         );
     }
 
-    @Scheduled(cron = "0 0/5 * * * *")    //todo: 수정 - 선착순 쿠폰 발급
+//    @Scheduled(cron = "0 0/5 * * * *")    //todo: 수정 - 선착순 쿠폰 발급
     public void saveCoupon() {
         couponService.saveNewCoupon();
     }
