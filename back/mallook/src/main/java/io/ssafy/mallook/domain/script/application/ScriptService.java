@@ -26,6 +26,10 @@ public interface ScriptService {
 
     ScriptDetailDto getScriptDetail(Long scriptId);
 
+    ScriptListDto getLatestScript(UUID id);
+
+    ScriptDetailDto getScriptDetail(UUID memberId,Long scriptId);
+
     void createScript(ScriptCreatDto scriptCreateDto, UUID id);
 
     void deleteScript(ScriptDeleteListDto scriptDeleteListDto);

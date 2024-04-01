@@ -12,13 +12,26 @@ public record ScriptDetailDto(
         @Schema(description = "좋아요 수")
         Integer heartCount,
         @Schema(description = "작성자 닉네임")
-        String nickname)
+        String nickname,
+        @Schema(description = "내가 좋아요 했는지 여부")
+        boolean hasLiked
+        )
 {
-    public static ScriptDetailDto toDto(Script script) {
+    public static ScriptDetailDto toDtoNotLogin(Script script) {
         return ScriptDetailDto.builder()
                 .name(script.getName())
                 .heartCount(script.getHeartCount())
                 .nickname(script.getMember().getNickname())
+                .hasLiked(false)
+                .build();
+    }
+
+    public static ScriptDetailDto toDto(Script script, boolean hasLiked) {
+        return ScriptDetailDto.builder()
+                .name(script.getName())
+                .heartCount(script.getHeartCount())
+                .nickname(script.getMember().getNickname())
+                .hasLiked(hasLiked)
                 .build();
     }
 }
