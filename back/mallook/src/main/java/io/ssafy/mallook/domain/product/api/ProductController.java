@@ -3,9 +3,7 @@ package io.ssafy.mallook.domain.product.api;
 import com.amazonaws.util.CollectionUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -41,7 +39,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
-@Tag(name = "주문", description = "주문 관련 API")
+@Tag(name = "상품", description = "상품 관련 API")
 public class ProductController {
 
     private final ProductService productService;
@@ -73,7 +71,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "리뷰순 top100 상품 조회 실패")
             })
     @GetMapping("/popular")
-    public ResponseEntity<BaseResponse<Page<ProductsListDto>>> getProductsListWithManyReviews(
+    public ResponseEntity<BaseResponse<ProductPageRes>> getProductsListWithManyReviews(
             @PageableDefault(size = 10) Pageable pageable
     ) {
         return BaseResponse.success(
@@ -90,7 +88,7 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
-            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto) {
+            @RequestParam(required = false) ProductHotKeywordDto hotKeywordDto) {
         if (isNull(name) && isNull(hotKeywordDto)) {
             List<FieldError> errors = new ArrayList<>();
             FieldError fieldError = new FieldError("검색어", "name", "FAIL");
@@ -136,7 +134,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "리뷰 다음 페이지 조회 실패")
             })
     @GetMapping("/reviews")
-    public ResponseEntity<BaseResponse<Page<ReviewObject>>> getReviewList(
+    public ResponseEntity<BaseResponse<ReviewPageRes>> getReviewList(
             @RequestParam(name = "id") String id,
             @PageableDefault(size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
         return BaseResponse.success(

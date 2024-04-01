@@ -1,9 +1,7 @@
 package io.ssafy.mallook.domain.product.application;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -26,9 +24,9 @@ public interface ProductService {
 
     ProductsDetailDto getMongoProductsDetail(String id);
 
-    Page<ReviewObject> getReviewList(String productsId, Pageable pageable);
+    ReviewPageRes getReviewList(String productsId, Pageable pageable);
 
-    Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable);
+    ProductPageRes getProductsWithManyReviews(Pageable pageable);
 
     Long getLastProductId();
 

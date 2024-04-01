@@ -5,9 +5,7 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -83,12 +81,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ReviewObject> getReviewList(String productsId, Pageable pageable) {
-        return productsCustomRepository.getReviews(productsId, pageable);
+    public ReviewPageRes getReviewList(String productsId, Pageable pageable) {
+        var result = productsCustomRepository.getReviews(productsId, pageable);
+        return new ReviewPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
     }
 
     @Override
-    public Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable) {
-        return productsCustomRepository.getProductsWithManyReviews(pageable.getPageNumber(), pageable.getPageSize());
+    public ProductPageRes getProductsWithManyReviews(Pageable pageable) {
+        var result = productsCustomRepository.getProductsWithManyReviews(pageable.getPageNumber(), pageable.getPageSize());
+        return new ProductPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
     }
 }

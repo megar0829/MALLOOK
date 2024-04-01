@@ -8,10 +8,10 @@ import java.util.List;
 public record CartPageRes(
         @Schema(description = "장바구니 내 상품 정보 리스트")
         List<CartDetailRes> content,
-        @Schema(description = "전체 페이지")
-        int totalPage,
         @Schema(description = "현재 페이지")
-        int currentPage
+        int currentPage,
+        @Schema(description = "전체 페이지")
+        int totalPage
 ) {
 
 }

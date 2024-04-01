@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.coupon.application;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
+import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
