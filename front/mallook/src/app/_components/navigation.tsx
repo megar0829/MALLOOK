@@ -6,10 +6,11 @@ import {useEffect, useState} from "react";
 import Image from "next/image";
 import styles from "./navigation.module.css";
 
-import imgLogo from "@/assets/img/icons/logo.png";
+import imgLogo from "@/assets/img/icons/logo_lg.png";
 import iconSearch from "@/assets/img/icons/search.png";
 import iconCart from "@/assets/img/icons/cart.png";
 import iconProfile from "@/assets/img/icons/profile.png";
+
 
 import LoginState, {Token} from "@/states/login";
 
@@ -28,8 +29,8 @@ export default function Navigation() {
                 src={imgLogo} 
                 alt="Logo Image" 
                 style={{
-                  width: "130px",
-                  height:"70px"
+                  height:"50px",
+                  width:"auto"
                 }} 
                 />  
             </Link>

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@egjs/react-infinitegrid": "^4.11.1",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@nextui-org/react": "^2.2.10",
     "@types/file-saver": "^2.0.7",
     "axios": "^1.6.8",
