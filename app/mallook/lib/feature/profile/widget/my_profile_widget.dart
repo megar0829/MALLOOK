@@ -105,20 +105,20 @@ class MyProfileWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: Sizes.size64,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
-                ),
-                child: FadeInImage.assetNetwork(
-                  placeholder: "assets/images/ssafy_logo.png",
-                  image: "https://avatars.githubusercontent.com/u/86183856?v=4",
-                  fit: BoxFit.fill,
-                  filterQuality: FilterQuality.low,
-                ),
-              ),
+              // Container(
+              //   width: Sizes.size64,
+              //   clipBehavior: Clip.hardEdge,
+              //   decoration: BoxDecoration(
+              //     color: Theme.of(context).primaryColor,
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: FadeInImage.assetNetwork(
+              //     placeholder: "assets/images/ssafy_logo.png",
+              //     image: "https://avatars.githubusercontent.com/u/86183856?v=4",
+              //     fit: BoxFit.fill,
+              //     filterQuality: FilterQuality.low,
+              //   ),
+              // ),
               Gaps.h12,
               Expanded(
                 child: Column(

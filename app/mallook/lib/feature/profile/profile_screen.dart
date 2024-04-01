@@ -38,11 +38,22 @@ class ProfileScreen extends StatelessWidget {
               fontSize: Sizes.size20,
             ),
           ),
-          actions: const [
+          actions: [
             // 쿠폰 버튼
-            CouponIconButton(),
+            FutureBuilder(
+              future: member,
+              builder:
+                  (BuildContext context, AsyncSnapshot<MemberDetail> snapshot) {
+                if (snapshot.hasData) {
+                  return CouponIconButton(
+                    couponCnt: snapshot.data!.coupon!,
+                  );
+                }
+                return const CouponIconButton(couponCnt: 0);
+              },
+            ),
             Gaps.h8,
-            CartIconButton(),
+            const CartIconButton(),
             Gaps.h24,
           ],
         ),

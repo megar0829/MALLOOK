@@ -5,8 +5,10 @@ import 'package:mallook/feature/coupon/my_coupon_screen.dart';
 
 class CouponIconButton extends StatelessWidget {
   const CouponIconButton({
-    super.key,
+    super.key, required this.couponCnt,
   });
+
+  final int couponCnt;
 
   void _moveToMyCouponScreen(BuildContext context) {
     Navigator.of(context).push(
@@ -37,17 +39,21 @@ class CouponIconButton extends StatelessWidget {
             width: Sizes.size20,
             height: Sizes.size20,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
+              color: Theme
+                  .of(context)
+                  .primaryColorDark,
               shape: BoxShape.circle,
               border: Border.all(
-                color: Theme.of(context).primaryColor,
+                color: Theme
+                    .of(context)
+                    .primaryColor,
                 width: 0.5,
               ),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                '2',
-                style: TextStyle(
+                '$couponCnt',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: Sizes.size12,
                   fontWeight: FontWeight.w800,
