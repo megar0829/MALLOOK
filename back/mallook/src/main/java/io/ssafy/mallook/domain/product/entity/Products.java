@@ -39,5 +39,5 @@ public class Products {
     @Field(name = "keywords")
     private List<String> keywords;
     @Field(name = "reviews")
-    private Reviews reviews;
+    private Reviews review;
 }

@@ -14,6 +14,6 @@ public class Reviews {
     @Field(name = "average_point")
     private Double averagePoint;
     @Field(name = "reviews")
-    private List<ReviewObject> reviews;
+    private List<ReviewObject> reviewList;
 
 }
