@@ -15,16 +15,22 @@
   align-items: center;
   justify-content: space-between;
   height: inherit;
-  width: 500px; 
+  width: 50dvw;
 }
-
+.leftContainerLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: inherit;
+  width: 15dvw;
+}
 .leftContainerUl {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   height: inherit;
-  padding-left: 0px;
-  width: 300px; 
+  margin-left: 5dvw;
+  width: 30dvw;
 }
 
 .leftContainerUl a {
@@ -33,10 +39,16 @@
 }
 
 .rightContainer {
+  width: 50dvw;
+  height: inherit;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.rightContainerUl {
   display: flex;
   align-items: center;
   justify-content: space-around;
   height: inherit;
-  padding-left: 0px;
-  width: 150px; 
+  width: 15dvw;
 }

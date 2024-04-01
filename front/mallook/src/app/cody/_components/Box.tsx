@@ -1,5 +1,6 @@
 import React from 'react';
-import styles from "./testDrag.module.css"
+import styles from "./drag.module.css";
+
 export default React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(function Box(
 	props,
 	ref,
@@ -8,7 +9,7 @@ export default React.forwardRef<HTMLDivElement, React.ComponentProps<'div'>>(fun
 		<div
 			{...props}
 			ref={ref}
-			className="h-full w-full cursor-move rounded-xl bg-white shadow-xl ring-1 ring-gray-100 transition-[shadow,transform] active:scale-95 active:shadow-lg"
+			className={styles.box}
 		/>
 	);
 });

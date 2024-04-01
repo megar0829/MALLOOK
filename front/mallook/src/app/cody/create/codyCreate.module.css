@@ -1,8 +1,8 @@
 .codyCreate__background {
     width: 100dvw;
-    height: 100dvh;
+    height: calc(100dvh - 85px);
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
 }
 
