@@ -1,9 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/profile/api/profile_api_service.dart';
+import 'package:mallook/feature/profile/model/member_detail.dart';
 import 'package:mallook/feature/profile/widget/coupon_icon_button.dart';
 import 'package:mallook/feature/profile/widget/fashion_tile_widget.dart';
 import 'package:mallook/feature/profile/widget/my_profile_controller_widget.dart';
@@ -12,15 +10,9 @@ import 'package:mallook/feature/profile/widget/my_script_tile_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 
 class ProfileScreen extends StatelessWidget {
-  ProfileScreen({super.key});
+  final Future<MemberDetail> member;
 
-  final String username = '정우현';
-
-  final String hashcode = "O12AB2";
-
-  final String level = '3';
-
-  final percentage = 82.3;
+  const ProfileScreen({super.key, required this.member});
 
   @override
   Widget build(BuildContext context) {
@@ -63,18 +55,35 @@ class ProfileScreen extends StatelessWidget {
             child: Column(
               children: [
                 Gaps.v20,
-                MyProfileWidget(
-                  username: username,
-                  hashcode: hashcode,
-                  level: level,
-                  percentage: percentage,
+                FutureBuilder(
+                  future: member,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return MyProfileWidget(
+                        nickname: snapshot.data!.nickname!,
+                        nicknameTag: snapshot.data!.nicknameTag!,
+                        level: 1,
+                        exp: snapshot.data!.exp!,
+                        expRange: snapshot.data!.expRange!,
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
                 Gaps.v12,
-                MyProfileControllerWidget(
-                  order: Random().nextInt(10),
-                  deliver: Random().nextInt(10),
-                  coupon: Random().nextInt(100),
-                  point: Random().nextInt(30000),
+                FutureBuilder(
+                  future: member,
+                  builder: (BuildContext context,
+                      AsyncSnapshot<MemberDetail> snapshot) {
+                    if (snapshot.hasData) {
+                      return MyProfileControllerWidget(
+                        orders: snapshot.data!.orders!,
+                        coupon: snapshot.data!.orders!,
+                        point: snapshot.data!.point!,
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
                 Gaps.v20,
                 const FashionTileWidget(),

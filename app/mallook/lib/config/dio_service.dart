@@ -134,6 +134,7 @@ class DioService {
         } else {
           result = response.data['result'];
         }
+        print(result);
         return result;
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');
@@ -167,6 +168,7 @@ class DioService {
         } else {
           result = response.data['result'];
         }
+        print(result);
         return result;
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');

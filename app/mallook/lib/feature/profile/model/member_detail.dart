@@ -1,49 +1,74 @@
 import 'package:mallook/feature/profile/model/address.dart';
 
 class MemberDetail {
-  String? nickname;
-  String? birth;
-  String? gender;
-  String? phone;
-  int? point;
-  int? exp;
-  List<int>? expRange;
-  Address? address;
-
-  MemberDetail(
-      {this.nickname,
-      this.birth,
-      this.gender,
-      this.phone,
-      this.point,
-      this.exp,
-      this.expRange,
-      this.address});
+  MemberDetail({
+    this.nickname,
+    this.nicknameTag,
+    this.birth,
+    this.gender,
+    this.phone,
+    this.grade,
+    this.expRange,
+    this.point,
+    this.exp,
+    this.address,
+    this.memberCoupon,
+    this.coupon,
+    this.cartProduct,
+    this.orders,
+  });
 
   MemberDetail.fromJson(dynamic json) {
     nickname = json['nickname'];
+    nicknameTag = json['nicknameTag'];
     birth = json['birth'];
     gender = json['gender'];
     phone = json['phone'];
+    grade = json['grade'];
+    expRange = json['expRange'] != null ? json['expRange'].cast<int>() : [];
     point = json['point'];
     exp = json['exp'];
-    expRange = json['expRange']?.cast<int>();
     address =
         json['address'] != null ? Address.fromJson(json['address']) : null;
+    memberCoupon = json['memberCoupon'];
+    coupon = json['coupon'];
+    cartProduct = json['cartProduct'];
+    orders = json['orders'];
   }
 
+  String? nickname;
+  String? nicknameTag;
+  String? birth;
+  String? gender;
+  String? phone;
+  String? grade;
+  List<int>? expRange;
+  int? point;
+  int? exp;
+  Address? address;
+  int? memberCoupon;
+  int? coupon;
+  int? cartProduct;
+  int? orders;
+
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['nickname'] = nickname;
-    data['birth'] = birth;
-    data['gender'] = gender;
-    data['phone'] = phone;
-    data['point'] = point;
-    data['exp'] = exp;
-    data['expRange'] = expRange;
+    final map = <String, dynamic>{};
+    map['nickname'] = nickname;
+    map['nicknameTag'] = nicknameTag;
+    map['birth'] = birth;
+    map['gender'] = gender;
+    map['phone'] = phone;
+    map['grade'] = grade;
+    map['expRange'] = expRange;
+    map['point'] = point;
+    map['exp'] = exp;
     if (address != null) {
-      data['address'] = address!.toJson();
+      map['address'] = address?.toJson();
     }
-    return data;
+    map['memberCoupon'] = memberCoupon;
+    map['coupon'] = coupon;
+    map['cartProduct'] = cartProduct;
+    map['orders'] = orders;
+    return map;
   }
 }

@@ -46,7 +46,7 @@ class MainNavigationScreen extends StatefulWidget {
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   DateTime? _currentBackPressTime;
   int _selectedIndex = 0;
-  Future<MemberDetail> m = ProfileApiService.getMemberDetail();
+  Future<MemberDetail> memberDetail = ProfileApiService.getMemberDetail();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -94,7 +94,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
             Offstage(
               offstage: _selectedIndex != 4,
-              child: ProfileScreen(),
+              child: ProfileScreen(
+                member: memberDetail,
+              ),
             ),
           ],
         ),

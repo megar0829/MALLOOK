@@ -6,15 +6,13 @@ import 'package:mallook/feature/order/ordered_list_screen.dart';
 import 'package:mallook/feature/profile/widget/profile_selector_widget.dart';
 
 class MyProfileControllerWidget extends StatelessWidget {
-  final int order;
-  final int deliver;
+  final int orders;
   final int coupon;
   final int point;
 
   const MyProfileControllerWidget({
     super.key,
-    required this.order,
-    required this.deliver,
+    required this.orders,
     required this.coupon,
     required this.point,
   });
@@ -38,10 +36,10 @@ class MyProfileControllerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
+      height: 140,
       clipBehavior: Clip.hardEdge,
       padding: const EdgeInsets.symmetric(
-        vertical: Sizes.size16,
+        vertical: Sizes.size12,
         horizontal: Sizes.size12,
       ),
       decoration: BoxDecoration(
@@ -56,20 +54,14 @@ class MyProfileControllerWidget extends StatelessWidget {
       child: GridView(
         physics: const NeverScrollableScrollPhysics(), // 스크롤 금지
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
+          crossAxisCount: 3,
         ),
         children: [
           ProfileSelectorWidget(
             icon: FontAwesomeIcons.boxArchive,
             title: "주문",
-            count: order,
+            count: orders,
             onTap: () => _moveToOrderedListScreen(context),
-          ),
-          ProfileSelectorWidget(
-            icon: FontAwesomeIcons.truckFast,
-            title: "배송",
-            count: deliver,
-            onTap: () {},
           ),
           ProfileSelectorWidget(
             icon: FontAwesomeIcons.ticket,
