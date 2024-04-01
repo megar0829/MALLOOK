@@ -23,7 +23,6 @@ from pykospacing import Spacing
 from soynlp.word import WordExtractor
 from soynlp.tokenizer import LTokenizer
 
-# dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
 load_dotenv()
 password = os.getenv("MONGODB_PASSWORD")
 API_KEY = os.getenv("HIVER_API")
@@ -41,7 +40,6 @@ options.add_argument("disable-gpu")
 options.add_argument("disable-infobars")
 options.add_argument("--disable-extensions")
 options.add_argument('--disable-images')
-# options.add_argument('--headless')
 
 # 속도 향상을 위한 옵션 해제
 prefs = {'profile.default_content_setting_values': {
@@ -132,8 +130,6 @@ def review_preprocessing(corpus):
             continue
         
         for keyword in keyword_data:
-            # 키워드 셋에 있는 단어와 유사성 판별 (토큰 생성하는 데 개당 3초 내외로 걸림)
-            # if compare_word_meaning(morphs1, morphs2):
 
             # 키워드 포함 여부 확인
             if keyword in token:
@@ -579,6 +575,8 @@ def hiver_process(category_info):
                             if sub_categories == '기타(분류필요)':
                                 if '웨이스트' in product_data['pageProps']['title']:
                                     sub_categories = '웨이스트백'
+                                elif '힙쌕' in product_data['pageProps']['title']:
+                                    sub_categories = '웨이스트백'
                                 else:
                                     sub_categories = '기타'
                         elif main_categories == '신발':
@@ -677,7 +675,7 @@ def hiver_process(category_info):
                                 elif '롱코트' in product_data['pageProps']['title']:
                                     sub_categories = '롱코트'
                                 elif '라이더' in product_data['pageProps']['title']:
-                                    sub_categories = '라이더 재킷'
+                                    sub_categories = '라이더재킷'
                                 elif '무스탕' in product_data['pageProps']['title']:
                                     sub_categories = '무스탕'
                                 elif '플리스' in product_data['pageProps']['title']:
@@ -784,8 +782,6 @@ def hiver_process(category_info):
                         'size': sizes,
                         'detail_images': image_urls,
                         'detail_html': image_code,
-                        'reviews': reviews,
-                        # 'keywords': random.sample(keywords, numbers),
                     }
 
                     print('======================================================')
@@ -805,29 +801,23 @@ def hiver_process(category_info):
             return
 
 
-# if __name__ == '__main__':
-#     # 병렬 처리를 위한 프로세스 풀 생성
-#     pool = Pool(processes=14)
+if __name__ == '__main__':
+    # 병렬 처리를 위한 프로세스 풀 생성
+    pool = Pool(processes=14)
 
-#     # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
-#     category_info_list = []
-#     for main_categories in category_numbers:
-#         for sub_categories in category_numbers[main_categories]:
-#             for category_number in category_numbers[main_categories][sub_categories]:
-#                 category_info_list.append((main_categories, sub_categories, category_number))
+    # 대분류, 소분류, 카테고리 번호 정보를 리스트로 묶음
+    category_info_list = []
+    for main_categories in category_numbers:
+        for sub_categories in category_numbers[main_categories]:
+            for category_number in category_numbers[main_categories][sub_categories]:
+                category_info_list.append((main_categories, sub_categories, category_number))
 
-#     # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
-#     pool.map(hiver_process, category_info_list)
+    # 병렬 처리를 통해 각 카테고리 정보에 대해 process_category 함수를 실행
+    pool.map(hiver_process, category_info_list)
 
-#     # 웹드라이버 종료
-#     driver.quit()
+    # 웹드라이버 종료
+    driver.quit()
 
-#     # 프로세스 풀 종료
-#     pool.close()
-#     pool.join()
-
-#     # # json 파일에 저장
-#     # with open('hiver_details.json', 'w', encoding='utf-8') as f:
-#     #     json.dump(hiver_products, f, ensure_ascii=False, indent=4)  
-
-#     print(hiver_products)
+    # 프로세스 풀 종료
+    pool.close()
+    pool.join()

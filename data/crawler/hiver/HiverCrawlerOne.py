@@ -31,7 +31,6 @@ db = client.hiver
 
 # Chrome 옵션 설정
 options = Options()
-# options.add_experimental_option("detach", True)
 
 user_agent = UserAgent().random
 options.add_argument(f'user-agent={user_agent}')
@@ -126,8 +125,6 @@ def review_preprocessing(corpus):
             continue
         
         for keyword in keyword_data:
-            # 키워드 셋에 있는 단어와 유사성 판별 (토큰 생성하는 데 개당 3초 내외로 걸림)
-            # if compare_word_meaning(morphs1, morphs2):
 
             # 키워드 포함 여부 확인
             if keyword in token:
