@@ -13,7 +13,7 @@ export default function ProductComponent(props: { productData: Product, id: numb
 					className={styles.product__image}
 					width={200}
 					height={250}
-					src={props.productData.image}
+					src={props.productData.image }
 					alt="상품 이미지"
 					unoptimized={true}
 				/>

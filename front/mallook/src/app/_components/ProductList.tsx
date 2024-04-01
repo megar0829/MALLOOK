@@ -17,14 +17,14 @@ export default function ProductListComponent(props: {productList: Product[]}) {
 					);
 				})
 			)
-		} else {
-			return (
-				ProductList.map((product, index) => {
-					return (
-						<ProductComponent productData={product} key={index} id={index} />
-					);
-				})
-			);
+		// } else {
+		// 	return (
+		// 		ProductList.map((product, index) => {
+		// 			return (
+		// 				<ProductComponent productData={product} key={index} id={index} />
+		// 			);
+		// 		})
+		// 	);
 		}
 	}
 
