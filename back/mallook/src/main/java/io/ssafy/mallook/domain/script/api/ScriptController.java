@@ -91,6 +91,24 @@ public class ScriptController {
     }
 
     @Operation(
+            summary = "자신이 작성한 스크립트 페이지에서 가장 최신에 작성한 스크립트",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 가져오기 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 가져오기 실패")
+            }
+    )
+    @GetMapping("/my-latest")
+    public ResponseEntity<BaseResponse<ScriptListDto>> getLatestScript(
+            @AuthenticationPrincipal UserSecurityDTO principal) {
+        UUID id = principal.getId();
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getLatestScript(id)
+        );
+    }
+
+
+    @Operation(
             summary = "스크립트 리스트 시 상품 추천(6개)",
             responses = {
                     @ApiResponse(responseCode = "200", description = "스크립트 상품 추천 성공"),

@@ -98,6 +98,14 @@ public class ScriptServiceImpl implements ScriptService {
     }
 
     @Override
+    public ScriptListDto getLatestScript(UUID id) {
+        Member proxyMember = memberRepository.getReferenceById(id);
+        return scriptRepository.findTopByMemberOrderByIdDesc(proxyMember)
+                .map(ScriptListDto::toDto)
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
+    }
+
+    @Override
     public ScriptDetailDto getScriptDetail(UUID memberId, Long scriptId) {
         Member proxyMember = memberRepository.getReferenceById(memberId);
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
