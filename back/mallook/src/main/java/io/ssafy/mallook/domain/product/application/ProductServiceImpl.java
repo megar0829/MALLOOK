@@ -59,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String getLastMongoProductsId() {
-        return mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
+        return mongoProductsRepository.findFirstByOrderById().getId().toString();
     }
 
     @Override

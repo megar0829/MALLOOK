@@ -52,10 +52,12 @@ public class ProductController {
                     sort = "_id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
-            @RequestParam(name = "primary", required = false) String mainCategory,
+            @RequestParam(name = "primary", required = false, defaultValue = "상의") String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
+//        cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
         cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
+
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1, Sort.by(Sort.Direction.DESC, "reviews.count"));
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
