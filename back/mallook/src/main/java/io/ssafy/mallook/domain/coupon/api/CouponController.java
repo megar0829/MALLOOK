@@ -3,8 +3,8 @@ package io.ssafy.mallook.domain.coupon.api;
 import io.ssafy.mallook.domain.coupon.application.CouponService;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponDeleteReq;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponReq;
-import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
+import io.ssafy.mallook.domain.coupon.dto.response.MemberCouponRes;
 import io.ssafy.mallook.domain.member_coupon.application.MemberCouponService;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
@@ -21,13 +21,11 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/coupons")
@@ -38,15 +36,32 @@ public class CouponController {
     private final CouponService couponService;
     private final MemberCouponService memberCouponService;
 
+    @Operation(summary = "전체 쿠폰 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "쿠폰 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "쿠폰 조회 실패")
+            })
+    @GetMapping("/all")
+    public ResponseEntity<BaseResponse<Slice<CouponRes>>> findCouponList(
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
+            @RequestParam(required = false) Long cursor) {
+        var result = Objects.nonNull(cursor) ? couponService.findCouponList(pageable, cursor)
+                : couponService.findCouponListFirst(pageable);
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                result
+        );
+    }
     @Operation(summary = "내 쿠폰 리스트 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "쿠폰 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "쿠폰 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<Slice<CouponRes>>> findMyCouponList(
+    public ResponseEntity<BaseResponse<Slice<MemberCouponRes>>> findMyCouponList(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @PageableDefault(size = 21, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
         var result = Objects.nonNull(cursor) ? couponService.findMyCouponList(pageable, userSecurityDTO.getId(), cursor)
                 : couponService.findMyCouponListFirst(pageable, userSecurityDTO.getId());

@@ -1,8 +1,8 @@
 package io.ssafy.mallook.domain.coupon.application;
 
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
-import io.ssafy.mallook.domain.coupon.dto.response.CouponPageRes;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
+import io.ssafy.mallook.domain.coupon.dto.response.MemberCouponRes;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.ssafy.mallook.domain.member.entity.Member;
@@ -37,7 +37,21 @@ public class CouponServiceImpl implements CouponService {
     public static final String PURCHASED_COUPON_SET_KEY = "PURCHASED_COUPON_SET_KEY";
 
     @Override
-    public Slice<CouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId) {
+    public Slice<CouponRes> findCouponListFirst(Pageable pageable) {
+        Long maxId = couponRepository.getMaxId();
+        if (Objects.isNull(maxId)) {
+            return new SliceImpl<>(List.of(), pageable, false);
+        }
+        return couponRepository.findCouponBy(pageable, maxId);
+    }
+
+    @Override
+    public Slice<CouponRes> findCouponList(Pageable pageable, Long cursor) {
+        return couponRepository.findCouponBy(pageable, cursor);
+    }
+
+    @Override
+    public Slice<MemberCouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId) {
         Long maxId = memberCouponRepository.getMaxId(memberId);
         if (Objects.isNull(maxId)) {
             return new SliceImpl<>(List.of(), pageable, false);
@@ -46,7 +60,7 @@ public class CouponServiceImpl implements CouponService {
     }
 
     @Override
-    public Slice<CouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor) {
+    public Slice<MemberCouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor) {
         return couponRepository.findAllByMemberId(pageable, memberId, cursor + 1);
     }
 
