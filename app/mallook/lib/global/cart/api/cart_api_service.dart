@@ -4,11 +4,24 @@ import 'package:mallook/global/cart/model/page_cart_item.dart';
 class CartApiService {
   static final _dio = DioService();
 
-  static Future<PageCartItem> getCartItems(int page) async {
+  static Future<PageCartItem> getCartItems() async {
     return await _dio.baseGet(
       path: "/api/carts",
-      queryParameters: <String, num>{"page": page},
       fromJsonT: (json) => PageCartItem.fromJson(json),
+    );
+  }
+
+  static Future<String> removeCartItem({required dynamic data}) async {
+    return await _dio.baseDelete(
+      path: "/api/carts",
+      deleteData: data,
+    );
+  }
+
+  static Future<String> addCartItem({required dynamic data}) async {
+    return await _dio.basePost(
+      path: "/api/carts",
+      postData: data,
     );
   }
 }

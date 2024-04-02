@@ -47,9 +47,14 @@ class _OrderSheetState extends State<OrderSheet> {
       if (_selectedSize == null || _selectedColor == null) return;
       CartItem cartItem = CartItem(
         product: widget.product,
+        productId: widget.product.id,
+        price: widget.product.price,
         count: 1,
+        name: widget.product.name,
+        image: widget.product.image,
         size: _selectedSize!,
-        color: _selectedColor!,
+        color: _selectedColor,
+        fee: widget.product.fee,
       );
       _cartItems.add(cartItem);
       _selectedSize = null;
@@ -88,7 +93,6 @@ class _OrderSheetState extends State<OrderSheet> {
     }
     for (var cartItem in _cartItems) {
       cartController.addItem(
-        productId: cartItem.name!,
         cartItem: cartItem,
       );
     }

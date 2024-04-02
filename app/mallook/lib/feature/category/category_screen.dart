@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/api/category_api_service.dart';
-import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/model/product_cursor_response.dart';
@@ -98,7 +97,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
       try {
         ProductCursorResponse loadedProducts =
-            await CartApiService.getCategoryProducts(
+            await CategoryApiService.getCategoryProducts(
           cursor: _cursor ?? '',
           primary: _primary,
           secondary: _secondary,

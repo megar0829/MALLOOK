@@ -1,7 +1,7 @@
 import 'package:mallook/config/dio_service.dart';
 import 'package:mallook/feature/product/model/product_cursor_response.dart';
 
-class CartApiService {
+class CategoryApiService {
   static final _dio = DioService();
 
   static Future<ProductCursorResponse> getCategoryProducts(
