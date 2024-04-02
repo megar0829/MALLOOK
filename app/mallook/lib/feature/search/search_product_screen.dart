@@ -13,7 +13,7 @@ import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class SearchProductScreen extends StatefulWidget {
   final String searchWord;
-  final Set<String> searchKeywords;
+  final Set<Keyword> searchKeywords;
 
   const SearchProductScreen({
     super.key,
@@ -42,10 +42,9 @@ class _SearchProductScreenState extends State<SearchProductScreen>
   final ScrollController _scrollController = ScrollController();
   final Future<List<Keyword>> _hotKeywords = SearchApiService.getHotKeywords();
   final List<Product> _products = [];
-  int _productPage = 0;
-  int _totalPage = 0;
+  late Set<Keyword> _searchKeywords;
+  String? _productCursor = "";
   bool _isProductLoading = false;
-  late Set<String> _searchKeywords;
   late String _searchWord;
   bool _isHotKeywordVisible = false;
 
@@ -53,7 +52,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
   void initState() {
     setState(() {
       _textEditingController.text = _searchWord = widget.searchWord;
-      _searchKeywords = widget.searchKeywords.toSet();
+      _searchKeywords = Set.from(widget.searchKeywords);
     });
     super.initState();
     _textEditingController.addListener(
@@ -76,7 +75,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
   }
 
   void _loadMoreProducts() async {
-    if (_productPage > _totalPage) return;
+    if (_productCursor == null) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
@@ -85,14 +84,15 @@ class _SearchProductScreenState extends State<SearchProductScreen>
       }
 
       try {
-        var loadedProducts =
-            await HomeApiService.getPopularProducts(_productPage);
+        var loadedProducts = await SearchApiService.getSearchedProducts(
+          name: _searchWord,
+          cursor: _productCursor,
+          keywords: _searchKeywords.toList(),
+        );
         if (mounted) {
           setState(() {
-            _productPage = loadedProducts.currentPage! + 1;
-            _totalPage = loadedProducts.totalPage!;
-            _products.addAll(
-                loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
+            _products.addAll(loadedProducts.content ?? []);
+            _productCursor = loadedProducts.nextCursor;
           });
         }
       } finally {
@@ -122,7 +122,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
     FocusScope.of(context).unfocus();
   }
 
-  void addSearchKeyword(String keyword) {
+  void addSearchKeyword(Keyword keyword) {
     setState(() {
       _appBarScrollController.animateTo(
         _appBarScrollController.position.maxScrollExtent,
@@ -134,7 +134,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
     });
   }
 
-  void _removeSearchKeyword(String keyword) {
+  void _removeSearchKeyword(Keyword keyword) {
     setState(() {
       _searchKeywords.remove(keyword);
     });
@@ -272,38 +272,17 @@ class _SearchProductScreenState extends State<SearchProductScreen>
                         Sizes.size20,
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          '# ${_searchKeywords.elementAt(index)}',
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size14,
-                          ),
+                    child: InkWell(
+                      onTap: () => _removeSearchKeyword(
+                          _searchKeywords.elementAt(index)),
+                      child: Text(
+                        '# ${_searchKeywords.elementAt(index).name ?? ""}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Sizes.size14,
                         ),
-                        Gaps.h4,
-                        GestureDetector(
-                          onTap: () => _removeSearchKeyword(
-                              _searchKeywords.elementAt(index)),
-                          child: Container(
-                            padding: const EdgeInsets.all(
-                              Sizes.size2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColorLight,
-                              borderRadius: BorderRadius.circular(
-                                Sizes.size10,
-                              ),
-                            ),
-                            child: FaIcon(
-                              FontAwesomeIcons.xmark,
-                              color: Colors.grey.shade700,
-                              size: Sizes.size14,
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
                   ),
                   separatorBuilder: (context, index) => Gaps.h10,

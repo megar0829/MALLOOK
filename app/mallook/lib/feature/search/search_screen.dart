@@ -19,7 +19,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _appBarScrollController = ScrollController();
   final Future<List<Keyword>> _hotKeywords = SearchApiService.getHotKeywords();
-  final Set<String> _searchKeywords = {};
+  final Set<Keyword> _searchKeywords = {};
 
   String _searchWord = "";
 
@@ -54,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void addSearchKeyword(String keyword) {
+  void addSearchKeyword(Keyword keyword) {
     setState(() {
       _appBarScrollController.animateTo(
         _appBarScrollController.position.maxScrollExtent,
@@ -66,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  void _removeSearchKeyword(String keyword) {
+  void _removeSearchKeyword(Keyword keyword) {
     setState(() {
       _searchKeywords.remove(keyword);
     });
@@ -189,7 +189,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     child: Text(
-                      '# ${_searchKeywords.elementAt(index)}',
+                      '# ${_searchKeywords.elementAt(index).name ?? ""}',
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

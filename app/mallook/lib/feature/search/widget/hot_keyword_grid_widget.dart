@@ -24,7 +24,7 @@ class HotKeywordGridWidget extends StatelessWidget {
       ),
       itemCount: hotKeywords.length,
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => addKeyword(hotKeywords[index].name),
+        onTap: () => addKeyword(hotKeywords[index]),
         child: Row(
           children: [
             Flexible(
