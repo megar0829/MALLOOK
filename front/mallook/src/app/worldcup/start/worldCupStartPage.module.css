@@ -1,0 +1,149 @@
+.container {
+    width: 100dvw;
+    height: calc(100dvh - 85px);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-top: 20px;
+}
+
+.modal__background {
+    z-index: 10;
+    top: 0;
+    position: absolute;
+    width: 100dvw;
+    height: calc(100dvh - 85px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.modal__container {
+    width: 40dvw;
+    height: 65dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    background-color: white;
+}
+.modal__image {
+
+}
+.modal__span {
+    font-size: 30px;
+    font-weight: 700;
+}
+.modal__button {
+    width: 200px;
+    height: 80px;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    background-color: #5284fc;
+    color: white;
+    margin-bottom: 20px;
+}
+
+.div1 {
+    width: 100dvw;
+    height: 20dvh;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+}
+
+
+.div2 {
+    width: 100dvw;
+    height: 20dvh;
+    display: flex;
+}
+.div2__1 {
+    width: 50dvw;
+    height: 20dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.div2__2 {
+    width: 50dvw;
+    height: 20dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.div3 {
+    width: 100dvw;
+    height: 20dvh;
+    display: flex;
+
+}
+.div3__inner {
+    width: 100dvw;
+    height: 20dvh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.div4 {
+    width: 100dvw;
+    height: 26dvh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.box {
+    width: 155px;
+    height: 155px;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.top__box {
+    width: 270px;
+    height: 270px;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.top__box__crown {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 0;
+    right: 0;
+    transform: rotate(30deg);
+
+}
+.codyImg {
+    width: 150px;
+    height: 150px;
+    border-radius: 0.75rem;
+    z-index: 2;
+}
+.blockDiv {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    top: 0;
+    left: 0;
+    border-radius: 0.75rem;
+    z-index: 3;
+}
+.codyImg__result {
+    width: 265px;
+    height: 265px;
+    border-radius: 0.75rem;
+    z-index: 2;
+}
