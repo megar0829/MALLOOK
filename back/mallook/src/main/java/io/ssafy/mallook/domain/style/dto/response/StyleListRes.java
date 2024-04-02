@@ -10,13 +10,16 @@ public record StyleListRes(
         @Schema(description = "스타일 id")
         Long id,
         @Schema(description="스타일 제목")
-        String name
+        String name,
+        @Schema(description = "스타일 이미지")
+        String imgUrl
 
 ) {
     public static StyleListRes toDto(Style style) {
         return StyleListRes.builder()
                 .id(style.getId())
                 .name(style.getName())
+                .imgUrl(style.getImgUrl())
                 .build();
     }
 }

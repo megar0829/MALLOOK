@@ -40,4 +40,5 @@ public class Products {
     private List<String> keywords;
     @Field(name = "reviews")
     private Reviews review;
+    private String crop;
 }

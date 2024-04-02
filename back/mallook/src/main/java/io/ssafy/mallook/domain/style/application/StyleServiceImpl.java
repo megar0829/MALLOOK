@@ -2,9 +2,10 @@ package io.ssafy.mallook.domain.style.application;
 
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
+import io.ssafy.mallook.domain.product.dto.response.ProductImgRes;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
-import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.style.dao.StyleRepository;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
@@ -18,6 +19,7 @@ import io.ssafy.mallook.global.batch.dao.Top50RedisDao;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -25,10 +27,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static io.ssafy.mallook.global.common.code.ErrorCode.NOT_FOUND_PRODUCT;
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -41,6 +42,7 @@ public class StyleServiceImpl implements StyleService {
     private final StyleProductRepository styleProductRepository;
     private final ProductsRepository productsRepository;
     private final Top50RedisDao top50RedisDao;
+    private final ProductsCustomRepository productsCustomRepository;
 
     @Override
     public Slice<StyleRes> findStyleListFirst(Pageable pageable) {
@@ -129,6 +131,11 @@ public class StyleServiceImpl implements StyleService {
     @Transactional
     public void DeleteStyle(UUID memberId, List<Long> styleIdList) {
         styleRepository.deleteMyStyle(memberId, styleIdList);
+    }
+
+    @Override
+    public Page<ProductImgRes> getMallookBookImages(Pageable pageable, String mainCategory, String subCategory) {
+        return productsCustomRepository.getProductImg(pageable, mainCategory, subCategory);
     }
 
     public StyledWorldCupDto toDto(Style style) {
