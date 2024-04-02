@@ -126,6 +126,7 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                   FaIcon(
                     FontAwesomeIcons.bullhorn,
                     color: Theme.of(context).primaryColorDark,
+                    size: Sizes.size18,
                   ),
                   Gaps.h10,
                   Text(
@@ -133,113 +134,118 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size24,
+                      fontSize: Sizes.size20,
                     ),
                   ),
                 ],
               ),
-              Gaps.v36,
+              Gaps.v20,
               if (_itemCount >= 2)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                Column(
                   children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        const Text(
-                          'A',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size20,
-                          ),
-                        ),
-                        Gaps.v5,
-                        GestureDetector(
-                          onTap: _selectLeft,
-                          child: Container(
-                            width: 160,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: Sizes.size1,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                Sizes.size16,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${_codies[_index]}',
-                                style: const TextStyle(
-                                  color: Colors.red,
-                                  fontSize: Sizes.size20,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: _selectLeft,
+                              child: Container(
+                                width: 220,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                    width: Sizes.size1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    Sizes.size16,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${_codies[_index]}',
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: Sizes.size20,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            Gaps.v10,
+                            const Text(
+                              '월드컵 멘트',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Sizes.size16,
+                              ),
+                            )
+                          ],
                         ),
-                        Gaps.v10,
-                        const Text(
-                          '월드컵 멘트',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size16,
-                          ),
-                        )
                       ],
                     ),
-                    Gaps.h16,
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text(
-                          'B',
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: Sizes.size12,
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Vs',
                           style: TextStyle(
-                            color: Colors.blue,
+                            color: Colors.black,
                             fontWeight: FontWeight.bold,
                             fontSize: Sizes.size20,
                           ),
                         ),
-                        Gaps.v5,
-                        GestureDetector(
-                          onTap: _selectRight,
-                          child: Container(
-                            width: 160,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey.shade300,
-                                width: Sizes.size1,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                Sizes.size16,
-                              ),
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${_codies[_index + 1]}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  fontSize: Sizes.size20,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: _selectLeft,
+                              child: Container(
+                                width: 220,
+                                height: 250,
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey.shade300,
+                                    width: Sizes.size1,
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                    Sizes.size16,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${_codies[_index + 1]}',
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                      fontSize: Sizes.size20,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                            Gaps.v10,
+                            const Text(
+                              '월드컵 멘트',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: Sizes.size16,
+                              ),
+                            )
+                          ],
                         ),
-                        Gaps.v10,
-                        const Text(
-                          '월드컵 멘트',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size16,
-                          ),
-                        )
                       ],
-                    )
+                    ),
                   ],
                 ),
               if (_itemCount == 1)
