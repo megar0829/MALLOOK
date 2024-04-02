@@ -106,7 +106,7 @@ class Review {
   }
 
   int? count;
-  int? averagePoint;
+  num? averagePoint;
   List<ReviewList>? reviewList;
 
   Map<String, dynamic> toJson() {

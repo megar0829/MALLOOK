@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/product/api/product_api_service.dart';
@@ -33,7 +31,6 @@ class _ProductScreenState extends State<ProductScreen>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     _productDetail = ProductApiService.getProductDetail(widget.product.id!);
-    print('hihih   $_productDetail');
   }
 
   @override
@@ -101,7 +98,7 @@ class _ProductScreenState extends State<ProductScreen>
                           horizontal: Sizes.size24,
                         ),
                         child: Text(
-                          product.name!,
+                          product.name ?? "",
                           maxLines: 5,
                           style: const TextStyle(
                             color: Colors.black,
@@ -160,7 +157,8 @@ class _ProductScreenState extends State<ProductScreen>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              if (product.review!.count != null)
+                              if (product.review != null &&
+                                  product.review!.count != null)
                                 Text(
                                   '리뷰 ${product.review!.count!}개',
                                   style: TextStyle(
@@ -169,7 +167,8 @@ class _ProductScreenState extends State<ProductScreen>
                                     fontSize: Sizes.size18,
                                   ),
                                 ),
-                              if (product.review!.averagePoint != null)
+                              if (product.review != null &&
+                                  product.review!.averagePoint != null)
                                 Text(
                                   '평점 ${product.review!.averagePoint!}점',
                                   style: TextStyle(

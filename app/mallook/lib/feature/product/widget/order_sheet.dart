@@ -188,7 +188,7 @@ class _OrderSheetState extends State<OrderSheet> {
                     ),
                     Gaps.v6,
                     OptionSelector(
-                      items: widget.sizes,
+                      items: widget.sizes.isNotEmpty ? widget.sizes : ['FREE'],
                       hintText: "사이즈 선택!",
                       onChanged: _updateSize,
                       selectedItem: _selectedSize,
@@ -215,7 +215,8 @@ class _OrderSheetState extends State<OrderSheet> {
                     ),
                     Gaps.v6,
                     OptionSelector(
-                      items: widget.colors,
+                      items:
+                          widget.colors.isNotEmpty ? widget.colors : ['FREE'],
                       hintText: "컬러 선택!",
                       onChanged: _updateColor,
                       selectedItem: _selectedColor,
