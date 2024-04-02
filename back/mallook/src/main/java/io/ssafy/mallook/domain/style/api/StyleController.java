@@ -136,7 +136,7 @@ public class StyleController {
     @GetMapping("/mallook-books")
     public ResponseEntity<BaseResponse<Page<ProductImgRes>>> getMallookBookImages(
             @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
-            @RequestParam(name = "primary", required = false, defaultValue = "상의") String mainCategory,
+            @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
         return BaseResponse.success(

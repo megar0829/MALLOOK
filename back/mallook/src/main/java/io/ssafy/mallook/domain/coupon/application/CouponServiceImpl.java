@@ -37,17 +37,19 @@ public class CouponServiceImpl implements CouponService {
     public static final String PURCHASED_COUPON_SET_KEY = "PURCHASED_COUPON_SET_KEY";
 
     @Override
-    public Slice<CouponRes> findCouponListFirst(Pageable pageable) {
+    public Slice<CouponRes> findCouponListFirst(Pageable pageable, UUID memberId) {
         Long maxId = couponRepository.getMaxId();
         if (Objects.isNull(maxId)) {
             return new SliceImpl<>(List.of(), pageable, false);
         }
-        return couponRepository.findCouponBy(pageable, maxId);
+//        return couponRepository.findCouponBy(pageable, maxId);
+        return null;
     }
 
     @Override
-    public Slice<CouponRes> findCouponList(Pageable pageable, Long cursor) {
-        return couponRepository.findCouponBy(pageable, cursor);
+    public Slice<CouponRes> findCouponList(Pageable pageable, Long cursor, UUID memberId) {
+//        return couponRepository.findCouponBy(pageable, cursor);
+        return null;
     }
 
     @Override

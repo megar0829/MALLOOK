@@ -6,7 +6,7 @@ import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
-import io.ssafy.mallook.global.batch.MemberExpDto;
+import io.ssafy.mallook.global.batch.dto.MemberExpDto;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +47,6 @@ public class GradeBatchConfig {
         return new JobBuilder("gradeJob", jobRepository)
                 .start(this.updateExpStep(jobRepository, transactionManager))
                 .next(this.updateGradeStep(jobRepository, transactionManager))
-                // todo: 등급별 쿠폰 등록 및 회원별 쿠폰 등록
                 .build();
     }
 
@@ -72,14 +71,7 @@ public class GradeBatchConfig {
                 .build();
     }
 
-    //    @Bean(JOB_NAME + "_updateGradeCouponStep")
-//    public Step updateGradeCouponStep(JobRepository jobRepository, PlatformTransactionManager transactionManager) throws Exception {
-//        return new StepBuilder("updateGradeCouponStep", jobRepository)
-//                .<Member, Member>chunk(CHUNK_SIZE, transactionManager)
-//                .reader(loadMemberData())
-//                .writer(changeMemberGradeData())
-//                .build();
-//    }
+
     private ItemReader<? extends Member> loadMemberData() throws Exception {
         JpaPagingItemReader<Member> jpaPagingItemReader = new JpaPagingItemReaderBuilder<Member>()
                 .name(JOB_NAME + "_loadMemberData")
@@ -97,7 +89,7 @@ public class GradeBatchConfig {
                 .entityManagerFactory(entityManagerFactory)
                 .pageSize(CHUNK_SIZE)
                 .queryString("""
-                        select new io.ssafy.mallook.global.batch.MemberExpDto(m, sum(o.totalPrice))
+                        select new io.ssafy.mallook.global.batch.dto.MemberExpDto(m, sum(o.totalPrice))
                         from Member m
                         join Orders o on m.id = o.member.id
                         where o.createdAt > :createdAt
@@ -135,26 +127,5 @@ public class GradeBatchConfig {
             gradeRepository.save(grade);
         });
     }
-//    private ItemWriter<? super Member> createCouponAndMemberCoupon() {
-//        // 등급별 쿠폰 등록\
-//        Arrays.stream(Level.values()).forEach(level -> {
-//            // level 별 쿠폰 발급
-//            couponRepository.save(Coupon.builder()
-//                        .name("회원 등급별 정기 쿠폰")
-//                        .type(CouponType.RATIO)
-//                        .amount(level.discountRate.toString())
-//                        .expiredTime(LocalDateTime.now().plusDays(5))
-//                        .build());
-//        });
-//        // 회원별 쿠폰 등록
-//        return members -> members.forEach( member -> {
-//            couponRepository.;
-//            memberCouponRepository.save(
-//                    MemberCoupon.builder()
-//                            .coupon()
-//                            .build()
-//            );
-//
-//        });
-//    }
+
 }

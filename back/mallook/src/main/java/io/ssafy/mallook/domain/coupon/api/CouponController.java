@@ -46,8 +46,8 @@ public class CouponController {
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
             @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC, page = 0) Pageable pageable,
             @RequestParam(required = false) Long cursor) {
-        var result = Objects.nonNull(cursor) ? couponService.findCouponList(pageable, cursor)
-                : couponService.findCouponListFirst(pageable);
+        var result = Objects.nonNull(cursor) ? couponService.findCouponList(pageable, cursor, userSecurityDTO.getId())
+                : couponService.findCouponListFirst(pageable, userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
