@@ -29,4 +29,5 @@ public interface ProductsCustomRepository {
 
     Page<ProductImgRes> getProductImg(Pageable pageable, String mainCategory, String subCategory);
 
+    List<Products> findByKeywordsWithLimit(List<String> keywords);
 }
