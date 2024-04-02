@@ -7,8 +7,8 @@ import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 import iconDefault from "@/assets/img/icons/defaultUser.png";
 import iconHeart from "@/assets/img/icons/heart.png";
 import iconHeartFilled from "@/assets/img/icons/heart_filled.png";
-
-import {CodyBookList, CodyBookData} from "@/constants";
+import {CodyBookData} from "@/types";
+import {CodyBookList} from "@/constants";
 import Image, {StaticImageData} from "next/image";
 import {useState} from "react";
 import iconDefaultProfile from "@/assets/img/icons/defaultUser.png";

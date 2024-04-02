@@ -19,6 +19,6 @@ public interface StyleHeartRepository extends JpaRepository<StyleHeart, Long> {
 
     Optional<StyleHeart> findByMemberAndStyle(Member member, Style style);
 
-    @Query("SELECT max (h.id) from ScriptHeart h")
+    @Query("SELECT max (h.id) from StyleHeart h")
     Long findMaxHeartId();
 }

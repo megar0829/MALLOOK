@@ -4,25 +4,21 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductCustomRepository;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
-import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
-import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +37,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(String name, String cursor, Pageable pageable) {
+    public ProductsPageRes getProductDetail(String name, String cursor, Pageable pageable) {
         return productsCustomRepository.findByProductName(name, cursor, pageable);
     }
 
     @Override
-    public Slice<ProductsListDto> getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
-        return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor, pageable);
+    public ProductsPageRes getProductDetail(List<String> keywords, String cursor, Pageable pageable) {
+        return productsCustomRepository.findByKeywordList(keywords, cursor, pageable);
     }
 
     @Override
@@ -67,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Slice<ProductsListDto> getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
+    public ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
         return productsCustomRepository.getProductsListByCategory(cursor, pageable, mainCategory, subCategory);
     }
 
@@ -81,12 +77,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<ReviewObject> getReviewList(String productsId, Pageable pageable) {
-        return productsCustomRepository.getReviews(productsId, pageable);
+    public ReviewPageRes getReviewList(String productsId, Pageable pageable) {
+        var result = productsCustomRepository.getReviews(productsId, pageable);
+        return new ReviewPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
     }
 
     @Override
-    public Page<ProductsListDto> getProductsWithManyReviews(Pageable pageable) {
-        return productsCustomRepository.getProductsWithManyReviews(pageable.getPageNumber(), pageable.getPageSize());
+    public ProductPageRes getProductsWithManyReviews(Pageable pageable) {
+        var result = productsCustomRepository.getProductsWithManyReviews(pageable.getPageNumber(), pageable.getPageSize());
+        return new ProductPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
     }
 }

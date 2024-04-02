@@ -1,0 +1,51 @@
+.container {
+    width: 90dvw;
+    height: 90dvh;
+    border: 2px solid lightgray;
+    border-radius: 0.75rem;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dragContainer {
+    width: 35dvw;
+    height: 75dvh;
+    border: 1px solid gray;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    position: relative;
+}
+.drag__imageDiv {
+
+}
+.drag__image {
+
+}
+
+.image {
+    width: 10dvw;
+    height: 22dvh;
+    cursor: move;
+    float: left;
+}
+.imageDiv {
+    width: 11dvw;
+    height: 23dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid lightgray;
+}
+.imageContainer {
+    width: 35dvw;
+    height: 75dvh;
+    border: 1px solid gray;
+    border-radius: 0.75rem;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(auto-fill, 25dvh);
+    gap: 1px 5px;
+}

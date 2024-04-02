@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ScriptRepository extends JpaRepository<Script, Long> {
@@ -21,6 +22,8 @@ public interface ScriptRepository extends JpaRepository<Script, Long> {
     Slice<Script> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     Slice<Script> findByIdLessThanOrderByIdDesc(Long id, Pageable pageable);
+
+    Optional<Script> findTopByMemberOrderByIdDesc(Member member);
 
     @Query("SELECT s FROM Script s ORDER BY s.totalLike DESC limit 50")
     List<Script> findTop50ScriptsOrderByTotalLikeDesc();

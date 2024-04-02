@@ -1,11 +1,10 @@
 package io.ssafy.mallook.domain.product.api;
 
 import com.amazonaws.util.CollectionUtils;
+import com.amazonaws.util.StringUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductListDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
@@ -20,10 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -41,7 +37,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
-@Tag(name = "주문", description = "주문 관련 API")
+@Tag(name = "상품", description = "상품 관련 API")
 public class ProductController {
 
     private final ProductService productService;
@@ -51,19 +47,19 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "상품 리스트 조회 실패")
             })
     @GetMapping
-    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getProductsList(
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getProductsList(
             @PageableDefault(size = 20,
-                    sort = "id",
+                    sort = "_id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
-        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
-        ObjectId cursorObjectId = new ObjectId(cursor);
+        cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1, Sort.by(Sort.Direction.DESC, "reviews.count"));
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                productService.getMongoProductsList(cursorObjectId, pageable, mainCategory, subCategory)
+                productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
         );
     }
     @Operation(
@@ -73,7 +69,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "리뷰순 top100 상품 조회 실패")
             })
     @GetMapping("/popular")
-    public ResponseEntity<BaseResponse<Page<ProductsListDto>>> getProductsListWithManyReviews(
+    public ResponseEntity<BaseResponse<ProductPageRes>> getProductsListWithManyReviews(
             @PageableDefault(size = 10) Pageable pageable
     ) {
         return BaseResponse.success(
@@ -91,31 +87,21 @@ public class ProductController {
     public ResponseEntity<?> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
-            @RequestBody(required = false) ProductHotKeywordDto hotKeywordDto,
+            @RequestParam(required = false) List<String> keywords,
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        if (isNull(name) && isNull(hotKeywordDto)) {
-            List<FieldError> errors = new ArrayList<>();
-            FieldError fieldError = new FieldError("검색어", "name", "FAIL");
-            errors.add(fieldError);
-            ErrorResponse errorResponse = ErrorResponse.of()
-                    .code(BAD_REQUEST_ERROR)
-                    .message("검색어를 입력해야 합니다.")
-                    .errors(errors)
-                    .build();
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(errorResponse);
+        if (isNull(name) && isNullOrEmpty(keywords)) {
+            throw new NullPointerException("Both name and keywords are null or empty");
         }
 
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
+        final Pageable page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         String finalCursor = cursor;
-        Supplier<Slice<ProductsListDto>> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
-                ? () -> productService.getProductDetail(name, finalCursor, pageable)
-                : () -> productService.getProductDetail(hotKeywordDto, finalCursor, pageable);
+        Supplier<ProductsPageRes> methodToCall = isNullOrEmpty(keywords)
+                ? () -> productService.getProductDetail(name, finalCursor, page)
+                : () -> productService.getProductDetail(keywords, finalCursor, page);
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
@@ -123,14 +109,16 @@ public class ProductController {
         );
     }
 
+
+
+
     @Operation(summary = "상품 상세 정보 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 상세 정보 조회 성공"),
                     @ApiResponse(responseCode = "404", description = "상품 상세 정보 조회 실패")
             })
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(
-            @PathVariable("id") String id) {
+    public ResponseEntity<BaseResponse<ProductsDetailDto>> getProductsDetail(@PathVariable("id") String id) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsDetail(id)
@@ -143,7 +131,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "리뷰 다음 페이지 조회 실패")
             })
     @GetMapping("/reviews")
-    public ResponseEntity<BaseResponse<Page<ReviewObject>>> getReviewList(
+    public ResponseEntity<BaseResponse<ReviewPageRes>> getReviewList(
             @RequestParam(name = "id") String id,
             @PageableDefault(size = 20, direction = Sort.Direction.DESC) Pageable pageable) {
         return BaseResponse.success(

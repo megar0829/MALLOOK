@@ -1,11 +1,18 @@
 import styles from "./mainProductList.module.css";
 import {object} from "prop-types";
-import Image from "next/image";
+import Image, {StaticImageData} from "next/image";
 
-import {ProductListProps, Product} from "@/constants";
+import {ProductListProps, Product} from "@/types";
 import Link from "next/link";
 
-export default function MainProductList(props:{ productLeft: Product[], productRight: Product[], codyId: number } ) {
+interface SampleProduct {
+  productImg: string | StaticImageData;
+  name: string;
+  brand: string;
+  price: number;
+}
+
+export default function MainProductList(props:{ productLeft: SampleProduct[], productRight: SampleProduct[], codyId: number } ) {
 
   const productListLeft = () => {
     return (

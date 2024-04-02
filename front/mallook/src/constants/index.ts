@@ -63,75 +63,11 @@ import iconOnepiece from "@/assets/img/category/onepiece.jpg";
 import iconBag from "@/assets/img/category/bag.jpg";
 import iconShoe from "@/assets/img/category/shoe.jpg";
 import iconHat from "@/assets/img/category/hat.jpg";
+import {CodyBookData, CodyData, MainCategoryData, Product, ProfileSampleData, ReviewData, SampleProduct} from "@/types";
 
-export interface Product {
-    productImg: string | StaticImageData;
-    name: string;
-    brand: string;
-    price: number;
-}
 
-export interface CodyData {
-    codyImg: string | StaticImageData;
-    codyName: string;
-    profileImg: string | StaticImageData;
-    username: string;
-    productLeft: Product[];
-    productRight: Product[];
-}
 
-export interface ProductListProps {
-    productLeft: Product[];
-    productRight: Product[];
-}
-
-export interface CodyBookData {
-    profileImg: string | StaticImageData;
-    username: string;
-    content: string;
-    likeCnt: number;
-    codyImg: string | StaticImageData;
-}
-
-export interface DetailCategoryData {
-    categoryName: string,
-    categoryUrl: string | StaticImageData
-}
-
-export interface MainCategoryData {
-    name: string,
-    url: string | StaticImageData ,
-    detailCategory: DetailCategoryData[]
-}
-
-export interface ProfileData {
-    nickname: string;
-    birth: string;
-    gender: string;
-    phone: string;
-    point: number;
-    exp: number;
-    city: string;
-    district: string;
-    address: string;
-    zipcode: string;
-}
-
-export interface ProfileSampleData {
-    nickname: string;
-    point: number;
-    exp: number;
-    profileImg: string | StaticImageData;
-}
-
-export interface ReviewData {
-    content: string;
-    created_at: string | Date;
-    images: string | StaticImageData;
-    point: string | null;
-    product_option: any [];
-    user_size: number [];
-}
+export const API_URL = "https://j10a606.p.ssafy.io";
 
 export const ReviewList: ReviewData[] = [
     {
@@ -204,7 +140,7 @@ export const ReviewList: ReviewData[] = [
     }
 ]
 
-export const ProductList: Product[] = [
+export const ProductList: SampleProduct[] = [
     {
         productImg: imgCody10_1,
         name: "빅 트위치 로고 티셔츠 화이트",

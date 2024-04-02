@@ -50,7 +50,7 @@ class MemberCouponRepositoryTest {
         return Coupon.builder()
                 .name("test 쿠폰")
                 .type(CouponType.MONEY)
-                .amount("2.1%")
+                .amount(2L)
                 .expiredTime(LocalDateTime.now())
                 .build();
     }

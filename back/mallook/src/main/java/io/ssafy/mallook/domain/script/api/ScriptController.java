@@ -3,6 +3,7 @@ package io.ssafy.mallook.domain.script.api;
 import com.theokanning.openai.service.OpenAiService;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -90,6 +91,24 @@ public class ScriptController {
     }
 
     @Operation(
+            summary = "자신이 작성한 스크립트 페이지에서 가장 최신에 작성한 스크립트",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스크립트 가져오기 성공"),
+                    @ApiResponse(responseCode = "404", description = "스크립트 가져오기 실패")
+            }
+    )
+    @GetMapping("/my-latest")
+    public ResponseEntity<BaseResponse<ScriptListDto>> getLatestScript(
+            @AuthenticationPrincipal UserSecurityDTO principal) {
+        UUID id = principal.getId();
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                scriptService.getLatestScript(id)
+        );
+    }
+
+
+    @Operation(
             summary = "스크립트 리스트 시 상품 추천(6개)",
             responses = {
                     @ApiResponse(responseCode = "200", description = "스크립트 상품 추천 성공"),
@@ -117,7 +136,7 @@ public class ScriptController {
             }
     )
     @GetMapping("/{scriptId}/product-detail")
-    public ResponseEntity<BaseResponse<Slice<ProductsListDto>>> getScriptDetailRecommend(
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getScriptDetailRecommend(
             @PathVariable Long scriptId,
             @RequestParam(required = false) String cursor,
             @PageableDefault(size = 12,
@@ -141,10 +160,19 @@ public class ScriptController {
             }
     )
     @GetMapping("/{id}")
-    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(@PathVariable Long id) {
+    public ResponseEntity<BaseResponse<ScriptDetailDto>> getScriptDetail(
+            @AuthenticationPrincipal UserSecurityDTO principal,
+            @PathVariable Long id) {
+        if (Objects.isNull(principal)) {
+            return BaseResponse.success(
+                    SuccessCode.SELECT_SUCCESS,
+                    scriptService.getScriptDetail(id)
+            );
+        }
+        UUID memberId = principal.getId();
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
-                scriptService.getScriptDetail(id)
+                scriptService.getScriptDetail(memberId, id)
         );
     }
 

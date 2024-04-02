@@ -11,15 +11,9 @@ import iconSearch from "@/assets/img/icons/search.png";
 import iconCart from "@/assets/img/icons/cart.png";
 import iconProfile from "@/assets/img/icons/profile.png";
 
+import LoginState, {Token} from "@/states/login";
+
 export default function Navigation() {
-  // const params = useSearchParams();
-
-  // useEffect(() => {
-  //   console.log(params);
-  // }, [params]);
-  //
-  // console.log(params.get("access-token"));
-
   const path = usePathname();
   const [count, setCount] = useState(0);
 
@@ -28,7 +22,7 @@ export default function Navigation() {
     <nav>
       <div className={styles.container}>
         <div className={styles.leftContainer}>
-          <div>
+          <div className={styles.leftContainerLogo}>
             <Link href="/">
               <Image 
                 src={imgLogo} 
@@ -53,54 +47,56 @@ export default function Navigation() {
           </ul>
         </div>
 
-        <ul className={styles.rightContainer}>
-          <li>
-            <Link href="https://j10a606.p.ssafy.io/oauth2/authorization/kakao">
-              <Image
-                src={iconSearch}
-                alt="search Image"
-                style={{
-                  width: "30px",
-                  height:"30px"
-                }}
-              />
-            </Link>
-            {/*<Link href="/login">*/}
-            {/*  <Image*/}
-            {/*    src={iconSearch}*/}
-            {/*    alt="search Image"*/}
-            {/*    style={{*/}
-            {/*      width: "30px",*/}
-            {/*      height:"30px"*/}
-            {/*    }}*/}
-            {/*  />*/}
-            {/*</Link>*/}
-          </li>
-          <li>
-            <Link href="/cart">
-              <Image 
-                src={iconCart} 
-                alt="cart Image"
-                style={{
-                  width: "30px",
-                  height:"30px"
-                }} 
-              />  
-            </Link>
-          </li>
-          <li>
-            <Link href="/my-page">
-              <Image 
-                src={iconProfile} 
-                alt="profile Image"
-                style={{
-                  width: "40px",
-                  height:"40px"
-                }} 
-              />  
-            </Link>
-          </li>
-        </ul>
+        <div className={styles.rightContainer}>
+          <ul className={styles.rightContainerUl}>
+            <li>
+              <Link href="https://j10a606.p.ssafy.io/oauth2/authorization/kakao">
+                <Image
+                  src={iconSearch}
+                  alt="search Image"
+                  style={{
+                    width: "30px",
+                    height:"30px"
+                  }}
+                />
+              </Link>
+              {/*<Link href="/login">*/}
+              {/*  <Image*/}
+              {/*    src={iconSearch}*/}
+              {/*    alt="search Image"*/}
+              {/*    style={{*/}
+              {/*      width: "30px",*/}
+              {/*      height:"30px"*/}
+              {/*    }}*/}
+              {/*  />*/}
+              {/*</Link>*/}
+            </li>
+            <li>
+              <Link href="/cart">
+                <Image
+                  src={iconCart}
+                  alt="cart Image"
+                  style={{
+                    width: "30px",
+                    height:"30px"
+                  }}
+                />
+              </Link>
+            </li>
+            <li>
+              <Link href="/my-page">
+                <Image
+                  src={iconProfile}
+                  alt="profile Image"
+                  style={{
+                    width: "40px",
+                    height:"40px"
+                  }}
+                />
+              </Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
