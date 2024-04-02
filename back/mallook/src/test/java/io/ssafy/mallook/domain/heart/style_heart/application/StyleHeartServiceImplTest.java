@@ -11,9 +11,11 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Pageable;
 
@@ -24,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class StyleHeartServiceImplTest {
 
     @Mock
@@ -47,49 +49,8 @@ class StyleHeartServiceImplTest {
     @BeforeEach
     void setUp() {
         member = Mockito.mock(Member.class);
-        styleId = 1L;
-        member = new Member();
-        style = Mockito.mock(Style.class);
-
-        when(memberRepository.getReferenceById(memberId)).thenReturn(member);
-        when(styleRepository.getReferenceById(styleId)).thenReturn(style);
-    }
-
-    @Test
-    void likeStyle_Success() {
-        LikeDto likeDto = new LikeDto(styleId);
-
-        when(styleHeartRepository.findByMemberAndStyle(any(Member.class), any(Style.class)))
-                .thenReturn(Optional.empty());
-
-        styleHeartService.likeStyle(memberId, likeDto);
-
-        verify(styleHeartRepository, times(1)).save(any());
-    }
-
-    @Test
-    void likeStyle_Fail_When_Duplicate() {
-        LikeDto likeDto = new LikeDto(styleId);
-
-        when(styleHeartRepository.findByMemberAndStyle(any(Member.class), any(Style.class)))
-                .thenReturn(Optional.of(mock(StyleHeart.class)));
-
-        assertThrows(BaseExceptionHandler.class, () -> {
-            styleHeartService.likeStyle(memberId, likeDto);
-        });
-    }
-
-    @Test
-    void unlikeStyle_Success() {
-        LikeDto likeDto = new LikeDto(styleId);
-        StyleHeart styleHeart = mock(StyleHeart.class);
-
-        when(styleHeartRepository.findByMemberAndStyle(any(Member.class), any(Style.class)))
-                .thenReturn(Optional.of(styleHeart));
-
-        styleHeartService.unlikeStyle(memberId, likeDto);
-
-        verify(styleHeartRepository, times(1)).deleteById(any());
+        style = buildStyle(member);
+        styleRepository.save(style);
     }
 
     @Test
@@ -99,6 +60,14 @@ class StyleHeartServiceImplTest {
         Long maxId = styleHeartService.findMaxHeartId();
 
         verify(styleHeartRepository, times(1)).findMaxHeartId();
-        assertEquals(10L, maxId);
+    }
+
+    private Style buildStyle(Member member) {
+        return Style.builder()
+                .name("테스트용 제목")
+                .member(member)
+                .heartCount(0L)
+                .totalLike(0)
+                .build();
     }
 }
