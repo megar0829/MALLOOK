@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/script/model/script.dart';
 
 class ScriptImgWidget extends StatelessWidget {
   final Script script;

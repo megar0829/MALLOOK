@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/script/model/script.dart';
 
 class MyScriptApiService {
   static const String baseUrl = "";

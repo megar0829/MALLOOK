@@ -1,9 +1,9 @@
 import 'dart:math';
 
 import 'package:mallook/config/dio_service.dart';
-import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/model/product_page_response.dart';
+import 'package:mallook/feature/script/model/script.dart';
 
 class HomeApiService {
   static final _dio = DioService();
