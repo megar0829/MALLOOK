@@ -47,6 +47,16 @@ Map<String, List<String>> categorys = {
   "모자": ["전체", "볼캡/야구모자", "스냅백", "비니", "버킷햇", "베레모", "페도라", "기타"]
 };
 
+Map<String, String> titleImage = {
+  "상의": "assets/images/tops_shirt.jpg",
+  "하의": "assets/images/bottoms_slacks.jpg",
+  "아우터": "assets/images/outer_short-padding.jpg",
+  "원피스": "assets/images/dresses_mini.jpg",
+  "가방": "assets/images/bags_tote.jpg",
+  "신발": "assets/images/shoes_running.jpg",
+  "모자": "assets/images/hats_bucket-hat.jpg",
+};
+
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
@@ -190,8 +200,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   ),
                                   shape: BoxShape.circle,
                                 ),
-                                child:
-                                    Image.asset("assets/images/ssafy_logo.png"),
+                                child: Image.asset(titleImage[
+                                    categorys.keys.toList()[index]]!),
                               ),
                               Text(
                                 categorys.keys.toList()[index],
