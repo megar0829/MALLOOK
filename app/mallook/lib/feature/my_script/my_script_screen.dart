@@ -17,7 +17,7 @@ class MyScriptScreen extends StatefulWidget {
 class _MyScriptScreenState extends State<MyScriptScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Script> _scripts = [];
-  int _scriptPage = 0;
+  int _scriptCursor = 9999999999999999;
   bool _isScriptLoading = false;
 
   @override
@@ -41,6 +41,7 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
   }
 
   void _loadMoreScripts() async {
+    if (_scriptCursor == 0) return;
     if (!_isScriptLoading) {
       if (mounted) {
         setState(() {
@@ -48,12 +49,14 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
         });
       }
       try {
-        var loadedScripts = await MyScriptApiService.getMyScripts(_scriptPage);
+        var data = await MyScriptApiService.getMyScripts(_scriptCursor);
 
         if (mounted) {
           setState(() {
-            _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-            _scriptPage++;
+            _scripts.addAll(data.content ?? []);
+            if ((data.content ?? []).isNotEmpty) {
+              _scriptCursor = data.content!.last.id! - 1;
+            }
           });
         }
       } finally {

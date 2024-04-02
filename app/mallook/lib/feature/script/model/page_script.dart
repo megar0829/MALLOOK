@@ -1,7 +1,7 @@
 import 'package:mallook/feature/script/model/script.dart';
 
-class CursorScript {
-  CursorScript({
+class PageScript {
+  PageScript({
     this.content,
     this.pageable,
     this.size,
@@ -13,7 +13,7 @@ class CursorScript {
     this.empty,
   });
 
-  CursorScript.fromJson(dynamic json) {
+  PageScript.fromJson(dynamic json) {
     if (json['content'] != null) {
       content = [];
       json['content'].forEach((v) {

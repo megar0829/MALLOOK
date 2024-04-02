@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:mallook/config/dio_service.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/model/product_page_response.dart';
-import 'package:mallook/feature/script/model/cursor_script.dart';
+import 'package:mallook/feature/script/model/page_script.dart';
 import 'package:mallook/feature/script/model/script.dart';
 
 class HomeApiService {
@@ -27,13 +27,13 @@ class HomeApiService {
 
   /// 랭킹에 따른 스크립트
   /// TODO: 스크립트 작성자 정보 추가 필요
-  static Future<CursorScript> getRankingScripts(int cursor) async {
-    return await _dio.baseGet<CursorScript>(
+  static Future<PageScript> getRankingScripts(int cursor) async {
+    return await _dio.baseGet<PageScript>(
       path: "/api/scripts/all",
       queryParameters: <String, num>{
         "cursor": cursor,
       },
-      fromJsonT: (json) => CursorScript.fromJson(json),
+      fromJsonT: (json) => PageScript.fromJson(json),
     );
   }
 }
