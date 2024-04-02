@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mallook/global/cart/model/cart_item.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 
 class CartController extends GetxController {
   final _items = <CartItem>[].obs;

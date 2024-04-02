@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
-import 'package:mallook/global/cart/model/cart_item.dart';
-
-import '../../../constants/sizes.dart';
+import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 
 class OrderProductWidget extends StatelessWidget {
   final CartItem cartItem;

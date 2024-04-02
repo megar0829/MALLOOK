@@ -54,16 +54,20 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
           _isProductLoading = true;
         });
       }
-      var loadedProducts =
-          await HomeApiService.getPopularProducts(_productPage);
-      if (mounted) {
-        setState(() {
-          _productPage = loadedProducts.currentPage! + 1;
-          _totalPage = loadedProducts.totalPage!;
-          _products
-              .addAll(loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
-          _isProductLoading = false;
-        });
+
+      try {
+        var loadedProducts =
+            await HomeApiService.getPopularProducts(_productPage);
+        if (mounted) {
+          setState(() {
+            _productPage = loadedProducts.currentPage! + 1;
+            _totalPage = loadedProducts.totalPage!;
+            _products.addAll(
+                loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
+          });
+        }
+      } finally {
+        _isProductLoading = false;
       }
     }
   }

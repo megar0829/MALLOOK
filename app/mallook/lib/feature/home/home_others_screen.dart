@@ -46,13 +46,18 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
           _isScriptLoading = true;
         });
       }
-      var loadedScripts = await HomeApiService.getRankingScripts(_scriptPage);
-      if (mounted) {
-        setState(() {
-          _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-          _scriptPage++;
-          _isScriptLoading = false;
-        });
+
+      try {
+        List<Script> loadedScripts =
+            await HomeApiService.getRankingScripts(_scriptPage);
+        if (mounted) {
+          setState(() {
+            _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
+            _scriptPage++;
+          });
+        }
+      } finally {
+        _isScriptLoading = false;
       }
     }
   }

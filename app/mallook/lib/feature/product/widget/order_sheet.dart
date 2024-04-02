@@ -7,7 +7,7 @@ import 'package:mallook/feature/order/cart_screen.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
-import 'package:mallook/global/cart/model/cart_item.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 class OrderSheet extends StatefulWidget {

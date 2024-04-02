@@ -1,5 +1,38 @@
 import 'package:mallook/feature/product/model/product.dart';
 
+class PageCartItem {
+  PageCartItem({
+    this.content,
+    this.currentPage,
+    this.totalPage,
+  });
+
+  PageCartItem.fromJson(dynamic json) {
+    if (json['content'] != null) {
+      content = [];
+      json['content'].forEach((v) {
+        content?.add(CartItem.fromJson(v));
+      });
+    }
+    currentPage = json['currentPage'];
+    totalPage = json['totalPage'];
+  }
+
+  List<CartItem>? content;
+  int? currentPage;
+  int? totalPage;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (content != null) {
+      map['content'] = content?.map((v) => v.toJson()).toList();
+    }
+    map['currentPage'] = currentPage;
+    map['totalPage'] = totalPage;
+    return map;
+  }
+}
+
 class CartItem {
   CartItem({
     this.cartId,
@@ -29,8 +62,8 @@ class CartItem {
   }
 
   int? cartId;
-  int? cartProductId; // 장바구니 내 상품 id
-  String? productId; // 상품 id
+  int? cartProductId;
+  String? productId;
   int? price;
   int? count;
   String? name;
@@ -39,7 +72,7 @@ class CartItem {
   String? color;
   int? fee;
   Product? product;
-  bool selected = true;
+  bool isSelected = true;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

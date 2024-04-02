@@ -40,14 +40,17 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
           _isCouponLoading = true;
         });
       }
-      var loadedCoupons = await CouponApiService.getCoupons(_couponPage);
+      try {
+        var loadedCoupons = await CouponApiService.getCoupons(_couponPage);
 
-      if (mounted) {
-        setState(() {
-          coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
-          _couponPage++;
-          _isCouponLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
+            _couponPage++;
+          });
+        }
+      } finally {
+        _isCouponLoading = false;
       }
     }
   }

@@ -1,4 +1,4 @@
-import 'package:mallook/global/cart/model/cart_item.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 
 class OrderDetail {
   final num id;

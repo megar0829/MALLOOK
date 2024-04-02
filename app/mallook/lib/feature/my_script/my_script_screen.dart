@@ -47,14 +47,17 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
           _isScriptLoading = true;
         });
       }
-      var loadedScripts = await MyScriptApiService.getMyScripts(_scriptPage);
+      try {
+        var loadedScripts = await MyScriptApiService.getMyScripts(_scriptPage);
 
-      if (mounted) {
-        setState(() {
-          _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-          _scriptPage++;
-          _isScriptLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
+            _scriptPage++;
+          });
+        }
+      } finally {
+        _isScriptLoading = false;
       }
     }
   }

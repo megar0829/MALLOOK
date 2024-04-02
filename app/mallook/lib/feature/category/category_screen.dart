@@ -96,26 +96,26 @@ class _CategoryScreenState extends State<CategoryScreen> {
       print("================cursor================");
       print(_cursor ?? "XXXX");
 
-      ProductCursorResponse loadedProducts;
       try {
-        loadedProducts = await CartApiService.getCategoryProducts(
+        ProductCursorResponse loadedProducts =
+            await CartApiService.getCategoryProducts(
           cursor: _cursor ?? '',
           primary: _primary,
           secondary: _secondary,
         );
+
+        if (mounted) {
+          setState(() {
+            if (loadedProducts.content != null) {
+              _products.addAll(loadedProducts.content!);
+            }
+            _cursor = loadedProducts.nextCursor;
+            print("================next cursor================");
+            print(_cursor ?? "XXXX");
+          });
+        }
       } finally {
         _isProductLoading = false;
-      }
-
-      if (mounted) {
-        setState(() {
-          if (loadedProducts.content != null) {
-            _products.addAll(loadedProducts.content!);
-          }
-          _cursor = loadedProducts.nextCursor;
-          print("================next cursor================");
-          print(_cursor ?? "XXXX");
-        });
       }
     }
   }

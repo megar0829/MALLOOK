@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:mallook/feature/order/model/order_detail_model.dart';
 import 'package:mallook/feature/product/model/product.dart';
-import 'package:mallook/global/cart/model/cart_item.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 
 class OrderApiService {
   static Future<OrderDetail> getOrderDetail(num orderId) async {

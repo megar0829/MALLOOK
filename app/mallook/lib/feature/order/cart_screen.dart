@@ -7,7 +7,7 @@ import 'package:mallook/feature/order/order_screen.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/product_screen.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
-import 'package:mallook/global/cart/model/cart_item.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -34,7 +34,7 @@ class _CartScreenState extends State<CartScreen> {
     super.initState();
     _cartItems = widget.cartItems ?? cartController.items;
     for (var item in _cartItems) {
-      item.selected = true;
+      item.isSelected = true;
     }
   }
 
@@ -45,7 +45,7 @@ class _CartScreenState extends State<CartScreen> {
   void _toggleAllItem(bool? value) {
     _isAllItemSelected = value!;
     for (var item in _cartItems) {
-      item.selected = _isAllItemSelected;
+      item.isSelected = _isAllItemSelected;
     }
     setState(() {});
   }
@@ -53,7 +53,7 @@ class _CartScreenState extends State<CartScreen> {
   void _updateIsAllItemSelected() {
     _isAllItemSelected = true;
     for (var item in _cartItems) {
-      if (!item.selected) {
+      if (!item.isSelected) {
         _isAllItemSelected = false;
         break;
       }
@@ -63,7 +63,7 @@ class _CartScreenState extends State<CartScreen> {
 
   bool _isOrderAble() {
     for (var item in _cartItems) {
-      if (item.selected) {
+      if (item.isSelected) {
         return true;
       }
     }
@@ -75,7 +75,7 @@ class _CartScreenState extends State<CartScreen> {
     List<CartItem> removeItems = [];
 
     for (var item in _cartItems) {
-      if (item.selected) {
+      if (item.isSelected) {
         removeItems.add(item);
       }
     }
@@ -89,7 +89,7 @@ class _CartScreenState extends State<CartScreen> {
   int _getTotalPrice() {
     int totalPrice = 0;
     for (var item in _cartItems) {
-      if (item.selected) {
+      if (item.isSelected) {
         totalPrice += item.price! * item.count!;
       }
     }
@@ -99,7 +99,7 @@ class _CartScreenState extends State<CartScreen> {
   int _getTotalQuantity() {
     int totalQuantity = 0;
     for (var item in _cartItems) {
-      if (item.selected) {
+      if (item.isSelected) {
         totalQuantity += item.count!;
       }
     }
@@ -117,7 +117,7 @@ class _CartScreenState extends State<CartScreen> {
   void _moveToOrderScreen() {
     List<CartItem> orderItem = [];
     for (var item in _cartItems) {
-      if (!item.selected) continue;
+      if (!item.isSelected) continue;
       orderItem.add(item);
     }
     if (orderItem.isEmpty) {
@@ -272,9 +272,9 @@ class _CartScreenState extends State<CartScreen> {
                                       horizontal: VisualDensity.minimumDensity,
                                       vertical: VisualDensity.minimumDensity,
                                     ),
-                                    value: _cartItems[index].selected,
+                                    value: _cartItems[index].isSelected,
                                     onChanged: (value) => setState(() {
-                                      _cartItems[index].selected = value!;
+                                      _cartItems[index].isSelected = value!;
                                       _updateIsAllItemSelected();
                                     }),
                                   ),
