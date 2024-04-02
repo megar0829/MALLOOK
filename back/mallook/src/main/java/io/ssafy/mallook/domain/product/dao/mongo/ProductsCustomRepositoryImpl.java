@@ -31,7 +31,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     private final MongoTemplate mongoTemplate;
-    private final String COLLECTION_NAME = "hiver";
+    private final String COLLECTION_NAME = "products";
 
     @Override
     public ProductsPageRes getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {

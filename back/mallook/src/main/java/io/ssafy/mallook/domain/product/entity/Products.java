@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.MongoId;
 import java.util.List;
 
 @Getter
-@Document(collection = "hiver")
+@Document(collection = "products")
 public class Products {
     @MongoId
     @Id
