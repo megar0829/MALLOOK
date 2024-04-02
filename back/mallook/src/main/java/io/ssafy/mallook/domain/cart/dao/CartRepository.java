@@ -6,8 +6,10 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -29,6 +31,15 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     Page<CartDetailRes> findProductsInCart(Pageable pageable, @Param("memberId") UUID memberId);
 
     Optional<Cart> findMyCartByMember(Member member);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query(
+            """
+            update Cart c
+            set c.status = false
+            where c.member.id = :memberId and c.id = :cartId
+            """)
+    void deleteMyCart(@Param("memberId") UUID memberId, @Param("cartId") Long cartId);
 
 
 }

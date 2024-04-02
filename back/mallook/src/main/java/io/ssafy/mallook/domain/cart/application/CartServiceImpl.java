@@ -1,9 +1,8 @@
 package io.ssafy.mallook.domain.cart.application;
 
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
-import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
+import io.ssafy.mallook.domain.cart.dto.request.CartProductDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
-import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
@@ -16,7 +15,6 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -75,7 +73,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq) {
+    public void deleteProductInCart(UUID memberId, CartProductDeleteReq cartDeleteReq) {
         Cart cart = cartRepository.findMyCartByMember(new Member(memberId))
                 .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         CartProduct cartProduct = cartProductRepository.findById(cartDeleteReq.cartProductId())
@@ -89,7 +87,9 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCart(UUID memberId) {
-//        Cart cart = cartRepository.findMyCartByMember(Member.builder().build())
+    @Transactional
+    public void deleteCart(UUID memberId, Long cartId) {
+        cartRepository.deleteMyCart(memberId, cartId);
+        cartProductRepository.deleteByCart(cartId);
     }
 }
