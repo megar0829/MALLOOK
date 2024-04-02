@@ -14,24 +14,28 @@ public record ScriptDetailDto(
         @Schema(description = "작성자 닉네임")
         String nickname,
         @Schema(description = "내가 좋아요 했는지 여부")
-        boolean hasLiked
+        boolean hasLiked,
+        @Schema(description = "스크립트 대표 이미지")
+        String imageUrl
         )
 {
-    public static ScriptDetailDto toDtoNotLogin(Script script) {
+    public static ScriptDetailDto toDtoNotLogin(Script script, String imageUrl) {
         return ScriptDetailDto.builder()
                 .name(script.getName())
                 .heartCount(script.getHeartCount())
                 .nickname(script.getMember().getNickname())
                 .hasLiked(false)
+                .imageUrl(imageUrl)
                 .build();
     }
 
-    public static ScriptDetailDto toDto(Script script, boolean hasLiked) {
+    public static ScriptDetailDto toDto(Script script, boolean hasLiked, String imageUrl) {
         return ScriptDetailDto.builder()
                 .name(script.getName())
                 .heartCount(script.getHeartCount())
                 .nickname(script.getMember().getNickname())
                 .hasLiked(hasLiked)
+                .imageUrl(imageUrl)
                 .build();
     }
 }
