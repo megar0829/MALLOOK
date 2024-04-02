@@ -30,4 +30,9 @@ class Script {
     map['imageUrl'] = imageUrl;
     return map;
   }
+
+  @override
+  String toString() {
+    return 'Script{id: $id, name: $name, heartCount: $heartCount, nickname: $nickname, imageUrl: $imageUrl}';
+  }
 }
