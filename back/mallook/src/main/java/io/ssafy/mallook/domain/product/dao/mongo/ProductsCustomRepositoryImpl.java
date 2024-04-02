@@ -174,7 +174,12 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductImgRes::toDto)
                 .toList();
 
-
         return new PageImpl<>(productsList, pageable, result.size());
+    }
+
+    @Override
+    public List<Products> findByKeywordsWithLimit(List<String> keywords) {
+        Query query = new Query(Criteria.where("keywords").in(keywords)).limit(5);
+        return mongoTemplate.find(query, Products.class);
     }
 }
