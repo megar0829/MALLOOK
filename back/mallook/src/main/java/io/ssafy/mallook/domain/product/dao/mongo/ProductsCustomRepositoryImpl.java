@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
+import io.ssafy.mallook.domain.product.dto.response.ProductImgRes;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
@@ -8,6 +9,7 @@ import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.Reviews;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,6 +30,7 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.newA
 
 @Repository
 @RequiredArgsConstructor
+@Log4j2
 public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     private final MongoTemplate mongoTemplate;
@@ -50,7 +53,6 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .collect(Collectors.toList());
         boolean hasNext = mongoTemplate.count(query, Products.class) >= pageable.getPageSize();
-        System.out.println(productsList.size());
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
         productsList.remove(productsList.size() - 1);
         return ProductsPageRes.builder()
@@ -150,5 +152,26 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto).toList();
 
         return new PageImpl<>(productsList, pageable, maxProducts);
+    }
+
+    @Override
+    public Page<ProductImgRes> getProductImg(Pageable pageable, String mainCategory, String subCategory) {
+        Query query = new Query().addCriteria(Criteria.where("crop").exists(true))
+                .with(pageable);
+        log.info(query);
+        if (!isNull(mainCategory)) {
+            query.addCriteria(Criteria.where("mainCategory").is(mainCategory));
+        }
+        if (!isNull(subCategory)) {
+            query.addCriteria(Criteria.where("subCategory").is(subCategory));
+        }
+        var result = mongoTemplate.find(query, Products.class);
+        List<ProductImgRes> productsList = result
+                .stream()
+                .map(ProductImgRes::toDto)
+                .toList();
+
+
+        return new PageImpl<>(productsList, pageable, result.size());
     }
 }

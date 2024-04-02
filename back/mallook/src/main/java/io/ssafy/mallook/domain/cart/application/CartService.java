@@ -15,4 +15,6 @@ public interface CartService {
     void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq);
 
     void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq);
+
+    void deleteCart(UUID memberId);
 }

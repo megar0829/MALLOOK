@@ -1,5 +1,6 @@
 package io.ssafy.mallook.domain.style.api;
 
+import io.ssafy.mallook.domain.product.dto.response.ProductImgRes;
 import io.ssafy.mallook.domain.style.application.StyleService;
 import io.ssafy.mallook.domain.style.dto.request.StyleDeleteReq;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
@@ -15,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -124,4 +126,23 @@ public class StyleController {
                 "스타일 삭제 성공"
         );
     }
+    @Operation(
+            summary = "몰룩북 누끼 이미지 리스트 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "몰룩북 누끼 이미지 리스트 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "몰룩북 누끼 이미지 리스트 조회 실패")
+            }
+    )
+    @GetMapping("/mallook-books")
+    public ResponseEntity<BaseResponse<Page<ProductImgRes>>> getMallookBookImages(
+            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
+            @RequestParam(name = "primary", required = false, defaultValue = "상의") String mainCategory,
+            @RequestParam(name = "secondary", required = false) String subCategory
+    ) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                styleService.getMallookBookImages(pageable, mainCategory, subCategory)
+        );
+    }
+
 }

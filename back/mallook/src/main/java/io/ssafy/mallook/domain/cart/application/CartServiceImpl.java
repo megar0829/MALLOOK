@@ -87,4 +87,9 @@ public class CartServiceImpl implements CartService {
         cartRepository.save(cart);
         cartProductRepository.deleteCartProduct(cartDeleteReq.cartProductId());
     }
+
+    @Override
+    public void deleteCart(UUID memberId) {
+//        Cart cart = cartRepository.findMyCartByMember(Member.builder().build())
+    }
 }
