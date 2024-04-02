@@ -4,7 +4,6 @@ import { useCallback, useState } from 'react'
 import { useDrop } from 'react-dnd'
 
 import { DraggableBox } from './DraggableBox'
-import type { DragItem } from './interface'
 import { ItemTypes } from './ItemTypes'
 import { snapToGrid as doSnapToGrid } from './snapToGrid'
 
@@ -15,6 +14,13 @@ import {ItemData} from "@/app/cody/_components/react-dnd/custom/Dnd";
 export interface ContainerProps {
 	snapToGrid: boolean;
 	dragItems: ItemData[];
+}
+
+export interface DragItem {
+	id: number
+	type: string
+	left: number
+	top: number
 }
 
 export const Container: FC<ContainerProps> = ({ snapToGrid, dragItems }) => {

@@ -1,221 +1,334 @@
 "use client";
 
-import { inrange } from '@/utils';
-import registDragEvent from '@/utils/registDragEvent';
-import { useEffect, useRef, useState } from 'react';
-import Boundary from "../_components/Boundary";
-import styles from "./worldCupStartPage.module.css";
+import {useEffect, useState} from "react";
+import styles from './worldCupStartPage.module.css';
+import Image, {StaticImageData} from "next/image";
+import iconCrown from "@/assets/img/icons/crown.png";
+import StartModal from "@/app/worldcup/_components/StartModal";
+import {ProductList} from "@/constants";
+import NextModal from "@/app/worldcup/_components/NextModal";
+import {useSleep} from "@/utils";
+import {rgba} from "color2k";
+import {useRouter} from "next/navigation";
 
-const BOUNDARY_MARGIN = 12;
-const MIN_W = 80;
-const MIN_H = 80;
-const viewportWidth = window.innerWidth;
-const viewportHeight = window.innerHeight;
-
-const pixelsFor10dvw = viewportWidth * 0.1;
-const pixelsFor10dvh = viewportHeight * 0.1;
+interface WorldCupProps {
+  url: string | StaticImageData;
+  index: number | null;
+}
 
 export default function WorldCupStartPage() {
-  const boundaryRef = useRef<HTMLDivElement>(null);
-  const boxRef = useRef<HTMLDivElement>(null);
-
-  const [{ x, y, w, h }, setConfig] = useState({
-    x: 0,
-    y: 0,
-    w: pixelsFor10dvw,
-    h: pixelsFor10dvh
+  const codyData = ProductList.slice(0, 8).map((item, index) => {
+    return {url: item.productImg, index: index}
   });
-  const [show, setShow] = useState(true);
 
-  useEffect(() => {
-    const boundary = boundaryRef.current?.getBoundingClientRect();
-    const box = boxRef.current?.getBoundingClientRect();
+  const router = useRouter();
 
-    if (boundary && box) {
-      setConfig({
-        x: Math.floor(boundary.width / 2 - box.width / 2),
-        y: Math.floor(boundary.height / 2 - box.height / 2),
-        w,
-        h,
-      });
+  const [isWorldCup8, setIsWorldCup8] = useState(false);
+
+  const [isWorldCup4, setIsWorldCup4] = useState(false);
+
+  const [isNext1, setIsNext1] = useState(false);
+  const [isNext2, setIsNext2] = useState(false);
+  const [isNext3, setIsNext3] = useState(false);
+  const [isNext4, setIsNext4] = useState(false);
+  const [isNext5, setIsNext5] = useState(false);
+  const [isNext6, setIsNext6] = useState(false);
+  const [isNext7, setIsNext7] = useState(false);
+
+  const [url1, setUrl1] = useState<WorldCupProps>({url: "", index: null});
+
+  const [url21, setUrl21] = useState<WorldCupProps>({url: "", index: null});
+  const [url22, setUrl22] = useState<WorldCupProps>({url: "", index: null});
+
+  const [worldCup8List, setWorldCup8List] = useState<WorldCupProps[]>(codyData);
+
+  const [isDone81, setIsDone81] = useState(false);
+  const [isDone82, setIsDone82] = useState(false);
+  const [isDone83, setIsDone83] = useState(false);
+  const [isDone84, setIsDone84] = useState(false);
+  const [isDone85, setIsDone85] = useState(false);
+  const [isDone86, setIsDone86] = useState(false);
+  const [isDone87, setIsDone87] = useState(false);
+  const [isDone88, setIsDone88] = useState(false);
+
+
+  const [worldCup4List, setWorldCup4List] = useState<WorldCupProps[]>([]);
+
+  const [worldCup2List, setWorldCup2List] = useState<WorldCupProps[]>([]);
+
+  const [worldCupResult, setWorldCupResult] = useState<WorldCupProps>({url: "", index: null});
+
+  const worldCup8 = () => {
+    if (worldCup8List) {
+      return (
+        <div className={styles.div4}>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[0].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[1].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[2].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[3].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[4].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[5].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[6].url}
+              alt="코디 이미지"
+            />
+          </div>
+          <div className={styles.box}>
+            <Image
+              className={styles.codyImg}
+              src={worldCup8List[7].url}
+              alt="코디 이미지"
+            />
+          </div>
+        </div>
+      );
     }
-  }, []);
+  }
+
+  const worldCup4 = () => {
+    return (
+      <div className={styles.div3}>
+        <div className={styles.div3__inner}>
+          <div className={styles.box}>
+            {worldCup4List.length >= 1 &&
+              <Image className={styles.codyImg} src={worldCup4List[0].url} alt="4강 1"/>
+            }
+          </div>
+          <div className={styles.box}>
+            {worldCup4List.length >= 2 &&
+              <Image className={styles.codyImg} src={worldCup4List[1].url} alt="4강 1"/>
+            }
+          </div>
+        </div>
+        <div className={styles.div3__inner}>
+          <div className={styles.box}>
+            {worldCup4List.length >= 3 &&
+              <Image className={styles.codyImg} src={worldCup4List[2].url} alt="4강 1"/>
+            }
+          </div>
+          <div className={styles.box}>
+            {worldCup4List.length >= 4 &&
+              <Image className={styles.codyImg} src={worldCup4List[3].url} alt="4강 1"/>
+            }
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const worldCup2 = () => {
+    return (
+      <div className={styles.div2}>
+        <div className={styles.div2__1}>
+          <div
+            className={styles.box}
+            style={{marginBottom: 55}}
+          >
+            {worldCup2List[0] &&
+              <Image className={styles.codyImg} src={worldCup2List[0].url} alt="결승 1"/>
+            }
+          </div>
+        </div>
+        <div className={styles.div2__1}>
+          <div
+            className={styles.box}
+            style={{marginBottom: 55}}
+          >
+            {worldCup2List[1] &&
+              <Image className={styles.codyImg} src={worldCup2List[1].url} alt="결승 2"/>
+            }
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const worldCup1 = () => {
+    return (
+      <div className={styles.div1}>
+        <div
+          className={styles.top__box}
+          style={{position: "relative"}}
+        >
+          <Image className={styles.top__box__crown} src={iconCrown} alt="왕관 이미지"/>
+          {worldCupResult.url &&
+            <Image
+              className={styles.codyImg__result}
+              src={worldCupResult.url}
+              alt="우승"
+            />
+          }
+        </div>
+      </div>
+    );
+  }
+
+  const goStart = async () => {
+    setIsWorldCup8(true);
+    await useSleep(1000);
+    setIsNext1(true);
+  }
+
+  const goNext2 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+      setIsDone81(true);
+      setIsDone82(true);
+      setIsNext1(false);
+      await useSleep(1000);
+      setIsNext2(true);
+    }
+  }
+
+  const goNext3 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+      setIsDone83(true);
+      setIsDone84(true);
+      setIsNext2(false);
+      await useSleep(1000);
+      setIsNext3(true);
+    }
+  }
+
+  const goNext4 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+      setIsDone85(true);
+      setIsDone86(true);
+      setIsNext3(false);
+      await useSleep(1000);
+      setIsNext4(true);
+    }
+  }
+
+  const goNext41 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+      setIsDone87(true);
+      setIsDone88(true);
+      setIsNext4(false);
+      await useSleep(1000);
+      setIsNext5(true);
+    }
+  }
+
+  const goNext42 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup2List([...worldCup2List, {url: url, index: index}]);
+
+      setIsNext5(false);
+      await useSleep(1000);
+      setIsNext6(true);
+    }
+  }
+  const goNext21 = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCup2List([...worldCup2List, {url: url, index: index}]);
+
+      setIsNext6(false);
+      await useSleep(1000);
+      setIsNext7(true);
+    }
+  }
+
+  const goResult = async ({url, index}: WorldCupProps) => {
+    if (url && index) {
+      setWorldCupResult({url: url, index: index});
+      setIsNext7(false);
+      await useSleep(1000);
+      router.push("/worldcup/result")
+    }
+  }
+
 
   return (
     <div className={styles.container}>
-      <div className={styles.leftDiv}>
-        <div className="mb-2">
-          <h1 className="text-3xl font-bold">Drag Size</h1>
-          <div>
-            <span>resize the element size with boundary</span>
-            <span className="ml-4">
-              x:{Math.floor(x)} y:{Math.floor(y)}
-            </span>
-            <span className="ml-4">
-              w:{Math.floor(w)} h:{Math.floor(h)}
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <label htmlFor="show">show active playground</label>
-            <input id="show" type="checkbox" checked={show} onChange={() => setShow(!show)} />
-          </div>
-        </div>
-        <Boundary ref={boundaryRef}>
-          <div
-            style={{ width: w, height: h, left: x, top: y }}
-            className={styles.boxDiv}
-            {...registDragEvent((deltaX, deltaY) => {
-              if (!boundaryRef.current) return;
+      {!isWorldCup8 &&
+        <StartModal goStart={goStart}/>
+      }
 
-              const boundary = boundaryRef.current.getBoundingClientRect();
-              console.log(boundary.top, boundary.bottom)
-              console.log(-(boundary.top - boundary.height), boundary.top - boundary.height);
-              console.log(y + deltaY)
-              setConfig({
-                x: inrange(x + deltaX, -250, 250),
-                y: inrange(y + deltaY, -300, 300),
-                w,
-                h,
-              });
-            })}
-          >
-            <Box />
+      {isNext1 &&
+        <NextModal goNext={goNext2} left={{url: worldCup8List[0].url, index: worldCup8List[0].index}}
+                   right={{url: worldCup8List[1].url, index: worldCup8List[1].index}}/>
+      }
 
-            {/* 좌상단 */}
-            <div
-              className={styles.box__leftTop}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX, deltaY) => {
-                setConfig({
-                  x: inrange(x + deltaX, BOUNDARY_MARGIN, x + w - MIN_W),
-                  y: inrange(y + deltaY, BOUNDARY_MARGIN, y + h - MIN_H),
-                  w: inrange(w - deltaX, MIN_W, x + w - BOUNDARY_MARGIN),
-                  h: inrange(h - deltaY, MIN_H, y + h - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 우상단 */}
-            <div
-              className={styles.box__rightTop}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX, deltaY) => {
-                if (!boundaryRef.current) return;
+      {isNext2 &&
+        <NextModal goNext={goNext3} left={{url: worldCup8List[2].url, index: worldCup8List[2].index}}
+                   right={{url: worldCup8List[3].url, index: worldCup8List[3].index}}/>
+      }
 
-                const boundary = boundaryRef.current.getBoundingClientRect();
+      {isNext3 &&
+        <NextModal goNext={goNext4} left={{url: worldCup8List[4].url, index: worldCup8List[4].index}}
+                   right={{url: worldCup8List[5].url, index: worldCup8List[5].index}}/>
+      }
 
-                setConfig({
-                  x,
-                  y: inrange(y + deltaY, BOUNDARY_MARGIN, y + h - MIN_H),
-                  w: inrange(w + deltaX, MIN_W, boundary.width - x - BOUNDARY_MARGIN),
-                  h: inrange(h - deltaY, MIN_H, y + h - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 좌하단 */}
-            <div
-              className={styles.box__leftBottom}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX, deltaY) => {
-                if (!boundaryRef.current) return;
+      {isNext4 &&
+        <NextModal goNext={goNext41} left={{url: worldCup8List[6].url, index: worldCup8List[6].index}}
+                   right={{url: worldCup8List[7].url, index: worldCup8List[7].index}}/>
+      }
 
-                const boundary = boundaryRef.current.getBoundingClientRect();
+      {isNext5 &&
+        <NextModal goNext={goNext42} left={{url: worldCup4List[0].url, index: worldCup4List[0].index}}
+                   right={{url: worldCup4List[1].url, index: worldCup4List[1].index}}/>
+      }
 
-                setConfig({
-                  x: inrange(x + deltaX, BOUNDARY_MARGIN, x + w - MIN_W),
-                  y,
-                  w: inrange(w - deltaX, MIN_W, x + w - BOUNDARY_MARGIN),
-                  h: inrange(h + deltaY, MIN_H, boundary.height - y - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 우하단 */}
-            <div
-              className={styles.box__rightBottom}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX, deltaY) => {
-                if (!boundaryRef.current) return;
+      {isNext6 &&
+        <NextModal goNext={goNext21} left={{url: worldCup4List[2].url, index: worldCup4List[2].index}}
+                   right={{url: worldCup4List[3].url, index: worldCup4List[3].index}}/>
+      }
 
-                const boundary = boundaryRef.current.getBoundingClientRect();
+      {isNext7 &&
+        <NextModal goNext={goResult} left={{url: worldCup2List[0].url, index: worldCup2List[0].index}}
+                   right={{url: worldCup2List[1].url, index: worldCup2List[1].index}}/>
+      }
 
-                setConfig({
-                  x,
-                  y,
-                  w: inrange(w + deltaX, MIN_W, boundary.width - x - BOUNDARY_MARGIN),
-                  h: inrange(h + deltaY, MIN_H, boundary.height - y - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 상단 */}
-            <div
-              className={styles.box__top}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((_, deltaY) => {
-                setConfig({
-                  x,
-                  y: inrange(y + deltaY, BOUNDARY_MARGIN, y + h - MIN_H),
-                  w,
-                  h: inrange(h - deltaY, MIN_H, y + h - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 하단 */}
-            <div
-              className={styles.box__bottom}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((_, deltaY) => {
-                if (!boundaryRef.current) return;
+      {worldCup1()}
 
-                const boundary = boundaryRef.current.getBoundingClientRect();
+      {worldCup2()}
 
-                setConfig({
-                  x,
-                  y,
-                  w,
-                  h: inrange(h + deltaY, MIN_H, boundary.height - y - BOUNDARY_MARGIN),
-                });
-              }, true)}
-            />
-            {/* 우측 */}
-            <div
-              className={styles.box__right}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX) => {
-                if (!boundaryRef.current) return;
+      {worldCup4()}
 
-                const boundary = boundaryRef.current.getBoundingClientRect();
+      {worldCup8()}
 
-                setConfig({
-                  x,
-                  y,
-                  w: inrange(w + deltaX, MIN_W, boundary.width - x - BOUNDARY_MARGIN),
-                  h,
-                });
-              }, true)}
-            />
-            {/* 좌측 */}
-            <div
-              className={styles.box__left}
-              style={{ backgroundColor: show ? '#12121250' : 'transparent' }}
-              {...registDragEvent((deltaX) => {
-                setConfig({
-                  x: inrange(x + deltaX, BOUNDARY_MARGIN, x + w - MIN_W),
-                  y,
-                  w: inrange(w - deltaX, MIN_W, x + w - BOUNDARY_MARGIN),
-                  h,
-                });
-              }, true)}
-            />
-          </div>
-        </Boundary>
-      </div>
-
-      <div className={styles.rightDiv}>
-
-      </div>
     </div>
   );
 }
-
-const Box = () => (
-  <div className={styles.box} />
-);

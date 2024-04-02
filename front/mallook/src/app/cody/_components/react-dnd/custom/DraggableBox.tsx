@@ -63,6 +63,7 @@ export const DraggableBox: FC<DraggableBoxProps> = memo(function DraggableBox(
 					role={'Box'}
 				>
 					<Image className={styles.image} src={url} alt="상품이미지"/>
+					<div className={styles.box__leftTop} />
 				</div>
 			}
 		</div>
