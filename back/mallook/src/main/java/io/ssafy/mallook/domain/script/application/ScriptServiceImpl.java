@@ -73,7 +73,7 @@ public class ScriptServiceImpl implements ScriptService {
                 .build();
         String cursor = mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable).content()
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto.hotKeywordList(), cursor, pageable).content()
                 .stream()
                 .map(ScriptProductDto::toScriptProductDto)
                 .collect(toList());
@@ -87,7 +87,7 @@ public class ScriptServiceImpl implements ScriptService {
                 .hotKeywordList(scriptKeyword)
                 .build();
 
-        return productsCustomRepository.findByKeywordList(productHotKeywordDto, cursor, pageable);
+        return productsCustomRepository.findByKeywordList(productHotKeywordDto.hotKeywordList(), cursor, pageable);
     }
 
     @Override

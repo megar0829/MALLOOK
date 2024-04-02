@@ -72,7 +72,7 @@ public class CouponServiceImpl implements CouponService {
                 .type(CouponType.RATIO)
                 .name("선착순 쿠폰")
                 .expiredTime(LocalDateTime.now().plusYears(1))
-                .amount("20")
+                .amount(20L)
                 .stock(couponStock)
                 .build();
         couponRepository.save(coupon);
