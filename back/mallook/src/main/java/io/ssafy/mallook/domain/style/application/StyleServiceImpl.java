@@ -97,12 +97,12 @@ public class StyleServiceImpl implements StyleService {
                         .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT)))
                 .collect(toList());
 
-        return new StyleDetailRes(
-                style.getMember().getNickname(),
-                style.getName(),
-                style.getHeartCount(),
-                productList
-        );
+        return StyleDetailRes.builder()
+                .styleProductResList(productList)
+                .heartCount(style.getHeartCount())
+                .name(style.getName())
+                .imageUrl(style.getImgUrl())
+                .build();
     }
 
     @Override
@@ -137,12 +137,7 @@ public class StyleServiceImpl implements StyleService {
                 .name(style.getName())
                 .heartCount(style.getHeartCount())
                 .memberNickname(style.getMember().getNickname())
-                .urlList(style.getStyleProductList()
-                        .stream()
-                        .map(ele -> productsRepository.findById(ele.getProducts())
-                                .map(Products::getImage)
-                                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_PRODUCT)))
-                        .collect(toList()))
+                .imageUrl(style.getImgUrl())
                 .keywordList(style.getStyleProductList()
                         .stream()
                         .flatMap(ele -> productsRepository.findById(ele.getProducts())
