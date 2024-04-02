@@ -45,8 +45,7 @@ class Mallook extends StatelessWidget {
       ],
       // home: const MainNavigationScreen(),
       // home: const SignUpScreen(),
-      // home: const LoginScreen(),
-      home: const InterestsScreen(),
+      home: const LoginScreen(),
     );
   }
 }

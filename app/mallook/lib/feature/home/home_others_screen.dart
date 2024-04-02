@@ -16,7 +16,7 @@ class HomeOthersScreen extends StatefulWidget {
 class _HomeOthersScreenState extends State<HomeOthersScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Script> _scripts = [];
-  int _scriptPage = 0;
+  int _scriptCursor = 999999999999;
   bool _isScriptLoading = false;
 
   @override
@@ -48,12 +48,14 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
       }
 
       try {
-        List<Script> loadedScripts =
-            await HomeApiService.getRankingScripts(_scriptPage);
+        var cursorScript =
+            await HomeApiService.getRankingScripts(_scriptCursor);
         if (mounted) {
           setState(() {
-            _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-            _scriptPage++;
+            _scripts.addAll(cursorScript.content ?? []);
+            if (cursorScript.content!.isNotEmpty) {
+              _scriptCursor = cursorScript.content!.last.id! - 1;
+            }
           });
         }
       } finally {

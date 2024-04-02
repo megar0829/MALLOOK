@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:mallook/config/dio_service.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/model/product_page_response.dart';
+import 'package:mallook/feature/script/model/cursor_script.dart';
 import 'package:mallook/feature/script/model/script.dart';
 
 class HomeApiService {
@@ -85,15 +86,10 @@ class HomeApiService {
   ];
 
   static Future<Script> getMySingleScript() async {
-    Script script = Script(
-      id: Random().nextInt(200),
-      name: "하늘하늘 한 봄 나들이 패션",
-      heartCount: Random().nextInt(10000),
-      imageUrl:
-          "https://image.msscdn.net/images/goods_img/20240125/3823573/3823573_17089046754777_500.jpg",
+    return await _dio.baseGet<Script>(
+      path: "/api/scripts/my-latest",
+      fromJsonT: (json) => Script.fromJson(json),
     );
-
-    return script;
   }
 
   static Future<ProductPageResponse> getPopularProducts(int page) async {
@@ -108,14 +104,13 @@ class HomeApiService {
 
   /// 랭킹에 따른 스크립트
   /// TODO: 스크립트 작성자 정보 추가 필요
-  static Future<List<Script>> getRankingScripts(int page) async {
-    List<Script> scriptInstances = [];
-
-    for (int i = 0; i < 10; i++) {
-      scriptInstances.add(sampleScripts[i % sampleScripts.length]);
-    }
-
-    await Future.delayed(const Duration(milliseconds: 500));
-    return scriptInstances;
+  static Future<CursorScript> getRankingScripts(int cursor) async {
+    return await _dio.baseGet<CursorScript>(
+      path: "/api/scripts/all",
+      queryParameters: <String, num>{
+        "cursor": cursor,
+      },
+      fromJsonT: (json) => CursorScript.fromJson(json),
+    );
   }
 }

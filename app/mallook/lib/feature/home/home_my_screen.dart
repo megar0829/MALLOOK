@@ -19,7 +19,7 @@ class HomeMyScreen extends StatefulWidget {
 
 class _HomeMyScreenState extends State<HomeMyScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Product> _products = []; // Future를 List로 변경합니다.
+  final List<Product> _products = [];
   final Future<Script> _script = HomeApiService.getMySingleScript();
 
   int _productPage = 0;
