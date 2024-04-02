@@ -28,7 +28,6 @@
     overflow: hidden;
     position: relative;
     border-radius: 0.75rem;
-    background-color: #E5E7EB;
 }
 .dragBox {
     position: absolute;
@@ -43,10 +42,6 @@
     height: 100%;
     width: 100%;
     cursor: move;
-    border-radius: 0.75rem; /* rounded-xl */
-    background-color: white; /* bg-white */
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
-    border: 1px solid rgba(156, 163, 175, 0.1); /* ring-1 ring-gray-100 */
     transition: shadow 0.2s ease-in-out, transform 0.2s ease-in-out; /* transition-[shadow,transform] */
     display: flex;
     justify-content: center;
@@ -135,18 +130,79 @@
     height: 80dvh;
     border: 1px solid lightgray;
     border-radius: 0.75rem;
-    padding: 5px 3px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.rightDiv__topDiv {
+    width: 43dvw;
+    height: 14dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
     justify-content: center;
     align-items: center;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 1px;
+}
+.rightDiv__category {
+    width: 40dvw;
+    height: 10dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.category__div {
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    padding: 5px 10px;
+}
+.category__span {
+    font-size: 20px;
+    font-weight: 600;
+    color: #383838;
+}
+.category__div :active {
+    opacity: 0.7;
 }
 
+.rightDiv__bottomDiv {
+    width: 43dvw;
+    height: 66dvh;
+    display: flex;
+}
+.color__container {
+    width: 5dvw;
+    height: 66dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+.color__chip {
+    width: 4dvw;
+    height: 4dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+}
+.product__container {
+    width: 38dvw;
+    height: 66dvh;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
+    padding: 5px 3px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(3, 12dvw);
+    grid-template-rows: repeat(3, 21dvh);
+    gap: 5px;
+}
 .imageDiv {
-    width: 14dvw;
-    height: 25dvh;
+    width: 12dvw;
+    height: 21dvh;
     display: flex;
     justify-content: center;
     align-items: center;

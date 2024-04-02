@@ -7,9 +7,9 @@ import iconCrown from "@/assets/img/icons/crown.png";
 import StartModal from "@/app/worldcup/_components/StartModal";
 import {ProductList} from "@/constants";
 import NextModal from "@/app/worldcup/_components/NextModal";
-import {useSleep} from "@/utils";
 import {rgba} from "color2k";
 import {useRouter} from "next/navigation";
+import UseSleep from "@/utils/delay";
 
 interface WorldCupProps {
   url: string | StaticImageData;
@@ -203,7 +203,7 @@ export default function WorldCupStartPage() {
 
   const goStart = async () => {
     setIsWorldCup8(true);
-    await useSleep(1000);
+    await UseSleep(1000);
     setIsNext1(true);
   }
 
@@ -213,7 +213,7 @@ export default function WorldCupStartPage() {
       setIsDone81(true);
       setIsDone82(true);
       setIsNext1(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext2(true);
     }
   }
@@ -224,7 +224,7 @@ export default function WorldCupStartPage() {
       setIsDone83(true);
       setIsDone84(true);
       setIsNext2(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext3(true);
     }
   }
@@ -235,7 +235,7 @@ export default function WorldCupStartPage() {
       setIsDone85(true);
       setIsDone86(true);
       setIsNext3(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext4(true);
     }
   }
@@ -246,7 +246,7 @@ export default function WorldCupStartPage() {
       setIsDone87(true);
       setIsDone88(true);
       setIsNext4(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext5(true);
     }
   }
@@ -256,7 +256,7 @@ export default function WorldCupStartPage() {
       setWorldCup2List([...worldCup2List, {url: url, index: index}]);
 
       setIsNext5(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext6(true);
     }
   }
@@ -265,7 +265,7 @@ export default function WorldCupStartPage() {
       setWorldCup2List([...worldCup2List, {url: url, index: index}]);
 
       setIsNext6(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       setIsNext7(true);
     }
   }
@@ -274,7 +274,7 @@ export default function WorldCupStartPage() {
     if (url && index) {
       setWorldCupResult({url: url, index: index});
       setIsNext7(false);
-      await useSleep(1000);
+      await UseSleep(1000);
       router.push("/worldcup/result")
     }
   }
