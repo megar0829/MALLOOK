@@ -9,9 +9,15 @@ client = pymongo.MongoClient(f"mongodb+srv://root:{password}@cluster0.stojj99.mo
 db = client["products"]
 collection = db["products"]
 
-# 삭제 로직
-print("삭제할 데이터의 쇼핑몰 이름을 입력하세요.")
-mall_name = input()
-query = { 'mall_name': mall_name }
-result = collection.delete_many(query)
-print(result.deleted_count, "개의 문서가 삭제되었습니다.")
+query = {
+    # "mall_name": "hiver",
+    # "gender": "unisex",
+    "main_category": "가방",
+    "sub_category": "토트백",
+    "keywords": {"$exists": True},
+}
+
+results = collection.find(query)
+
+for result in results:
+    print(result['url'], result['_id'])
