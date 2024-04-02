@@ -14,12 +14,14 @@ public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Long
     @Query("select max(mc.id) from MemberCoupon mc")
     Long getMaxId(UUID memberId);
 
-    @Modifying(clearAutomatically = true)
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             update MemberCoupon mc set mc.status = false
             where mc.id in :memberCouponList and mc.status = true
             """)
     void deleteMyCoupon(@Param("memberCouponList") List<Long> memberCouponList);
+
+
 
     boolean existsByIdAndMember_Id(Long id, UUID memberId);
 }

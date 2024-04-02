@@ -1,11 +1,9 @@
 package io.ssafy.mallook.domain.cart.application;
 
-import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
+import io.ssafy.mallook.domain.cart.dto.request.CartProductDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
-import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.util.UUID;
 
@@ -14,7 +12,7 @@ public interface CartService {
 
     void insertProductInCart(UUID memberId, CartInsertReq cartInsertReq);
 
-    void deleteProductInCart(UUID memberId, CartDeleteReq cartDeleteReq);
+    void deleteProductInCart(UUID memberId, CartProductDeleteReq cartDeleteReq);
 
-    void deleteCart(UUID memberId);
+    void deleteCart(UUID memberId, Long cartId);
 }
