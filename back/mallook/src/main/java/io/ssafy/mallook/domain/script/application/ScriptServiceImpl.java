@@ -10,6 +10,8 @@ import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
+import io.ssafy.mallook.domain.product.entity.Product;
+import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
@@ -27,8 +29,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import static io.ssafy.mallook.domain.script.dto.response.ScriptListDto.toDto;
 import static io.ssafy.mallook.global.common.code.ErrorCode.*;
 import static java.util.stream.Collectors.*;
 
@@ -53,15 +57,20 @@ public class ScriptServiceImpl implements ScriptService {
     @Override
     public Slice<ScriptListDto> getScriptList(Long cursor, UUID id, Pageable pageable) {
         Member proxyMember = memberRepository.getReferenceById(id);
-
         return scriptRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor, proxyMember, pageable)
-                .map(ScriptListDto::toDto);
+                .map(script -> {
+                    String imgUrl = this.findFirstScriptImage(script);
+                    return toDto(script, imgUrl);
+                });
     }
 
     @Override
     public Slice<ScriptListDto> getScriptList(Long cursor, Pageable pageable) {
         return scriptRepository.findByIdLessThanOrderByIdDesc(cursor, pageable)
-                .map(ScriptListDto::toDto);
+                .map(script -> {
+                    String imgUrl = findFirstScriptImage(script);
+                    return toDto(script, imgUrl);
+                });
     }
 
     @Override
@@ -101,7 +110,10 @@ public class ScriptServiceImpl implements ScriptService {
     public ScriptListDto getLatestScript(UUID id) {
         Member proxyMember = memberRepository.getReferenceById(id);
         return scriptRepository.findTopByMemberOrderByIdDesc(proxyMember)
-                .map(ScriptListDto::toDto)
+                .map(script -> {
+                    String imgUrl = findFirstScriptImage(script);
+                    return toDto(script, imgUrl);
+                })
                 .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
     }
 
@@ -134,5 +146,13 @@ public class ScriptServiceImpl implements ScriptService {
     public void deleteScript(ScriptDeleteListDto scriptDeleteListDto) {
         log.info(scriptDeleteListDto.toString());
         scriptRepository.deleteScript(scriptDeleteListDto.toDeleteList());
+    }
+
+    @Override
+    public String findFirstScriptImage(Script script) {
+        List<String> scriptKeyword = script.getKeywordList();
+        Products firstByKeywordsIn = mongoProductsRepository.findFirstByKeywordsIn(scriptKeyword)
+                .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_ERROR));
+        return firstByKeywordsIn.getImage();
     }
 }

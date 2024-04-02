@@ -5,6 +5,7 @@ import io.ssafy.mallook.domain.heart.script_heart.dao.ScriptHeartRepository;
 import io.ssafy.mallook.domain.heart.script_heart.entity.ScriptHeart;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.entity.Script;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+import static io.ssafy.mallook.domain.script.dto.response.ScriptListDto.toDto;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -26,6 +29,7 @@ public class ScriptHeartServiceImpl implements ScriptHeartService {
     private final ScriptHeartRepository scriptHeartRepository;
     private final MemberRepository memberRepository;
     private final ScriptRepository scriptRepository;
+    private final ScriptService scriptService;
 
     @Override
     public Slice<ScriptListDto> getLikeScriptList(Long cursor, UUID id, Pageable pageable) {
@@ -33,7 +37,10 @@ public class ScriptHeartServiceImpl implements ScriptHeartService {
 
         return scriptHeartRepository.findByIdLessThanAndMemberOrderByIdDesc(cursor + 1, proxyMember, pageable)
                 .map(ScriptHeart::getScript)
-                .map(ScriptListDto::toDto);
+                .map(script -> {
+                    String imgUrl = scriptService.findFirstScriptImage(script);
+                    return toDto(script, imgUrl);
+                });
     }
 
     @Override
