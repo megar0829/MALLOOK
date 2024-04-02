@@ -32,6 +32,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto.toDto;
+import static io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto.toDtoNotLogin;
 import static io.ssafy.mallook.domain.script.dto.response.ScriptListDto.toDto;
 import static io.ssafy.mallook.global.common.code.ErrorCode.*;
 import static java.util.stream.Collectors.*;
@@ -99,10 +101,12 @@ public class ScriptServiceImpl implements ScriptService {
         return productsCustomRepository.findByKeywordList(productHotKeywordDto.hotKeywordList(), cursor, pageable);
     }
 
-    @Override
     public ScriptDetailDto getScriptDetail(Long scriptId) {
         return scriptRepository.findById(scriptId)
-                .map(ScriptDetailDto::toDtoNotLogin)
+                .map(script -> {
+                    String imgUrl = findFirstScriptImage(script);
+                    return toDtoNotLogin(script, imgUrl);
+                })
                 .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
     }
 
@@ -123,7 +127,10 @@ public class ScriptServiceImpl implements ScriptService {
         Script proxyScript = scriptRepository.getReferenceById(scriptId);
         boolean hasLike = scriptHeartRepository.findByMemberAndScript(proxyMember, proxyScript).isPresent();
         return scriptRepository.findById(scriptId)
-                .map((Script script) -> ScriptDetailDto.toDto(script, hasLike))
+                .map(script -> {
+                    String imgUrl = findFirstScriptImage(script);
+                    return toDto(script, hasLike, imgUrl);
+                })
                 .orElseThrow(() -> new BaseExceptionHandler(NOT_FOUND_SCRIPT));
     }
 
