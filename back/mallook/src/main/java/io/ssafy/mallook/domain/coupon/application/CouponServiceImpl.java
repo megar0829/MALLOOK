@@ -14,6 +14,7 @@ import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +39,9 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public Slice<CouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId) {
         Long maxId = memberCouponRepository.getMaxId(memberId);
+        if (Objects.isNull(maxId)) {
+            return new SliceImpl<>(List.of(), pageable, false);
+        }
         return couponRepository.findAllByMemberId(pageable, memberId, maxId + 1);
     }
 

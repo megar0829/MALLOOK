@@ -50,6 +50,8 @@ public class CouponController {
             @RequestParam(required = false) Long cursor) {
         var result = Objects.nonNull(cursor) ? couponService.findMyCouponList(pageable, userSecurityDTO.getId(), cursor)
                 : couponService.findMyCouponListFirst(pageable, userSecurityDTO.getId());
+        log.info(result);
+        log.info(result.getContent().get(0).expiredTime().getClass().getName());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result

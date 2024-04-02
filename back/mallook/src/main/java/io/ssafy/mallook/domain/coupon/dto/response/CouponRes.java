@@ -6,7 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 
 
-@Schema(description = "회원 정보 조회시 응답 DTO")
+@Schema(description = "쿠폰 조회시 응답 DTO")
 public record CouponRes(
         @Schema(description = "내 쿠폰 id")
         Long myCouponId,
@@ -17,6 +17,6 @@ public record CouponRes(
         @Schema(description = "할인 금액 또는 할인비율")
         String amount,
         @Schema(description = "만료일")
-        LocalDateTime expiredTime
+        Object expiredTime
 ) {
 }

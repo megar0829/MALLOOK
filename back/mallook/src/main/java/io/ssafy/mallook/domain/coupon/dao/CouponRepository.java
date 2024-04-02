@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("""
                 SELECT new io.ssafy.mallook.domain.coupon.dto.response.CouponRes(
-                        mc.id, c.name, c.type, c.amount, c.expiredTime
+                        mc.id, c.name, c.type, c.amount, FUNCTION('DATE_FORMAT', c.expiredTime, '%Y-%m-%d %H:%m:%s')
                     )
                     FROM MemberCoupon mc
                     JOIN mc.coupon c
