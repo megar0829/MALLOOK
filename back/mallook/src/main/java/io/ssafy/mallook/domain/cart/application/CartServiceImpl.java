@@ -1,8 +1,9 @@
 package io.ssafy.mallook.domain.cart.application;
 
 import io.ssafy.mallook.domain.cart.dao.CartRepository;
-import io.ssafy.mallook.domain.cart.dto.request.CartProductDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
+import io.ssafy.mallook.domain.cart.dto.request.CartProductDeleteReq;
+import io.ssafy.mallook.domain.cart.dto.response.CartDetailRes;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
@@ -14,10 +15,10 @@ import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -30,9 +31,9 @@ public class CartServiceImpl implements CartService {
     private final ProductsRepository productsRepository;
 
     @Override
-    public CartPageRes findProductsInCart(Pageable pageable, UUID memberId) {
-        var result = cartRepository.findProductsInCart(pageable, memberId);
-        return new CartPageRes(result.getContent(), result.getNumber(), result.getTotalPages());
+    public List<CartDetailRes> findProductsInCart(UUID memberId) {
+        return cartRepository.findProductsInCart(memberId);
+
 
     }
 
@@ -90,7 +91,7 @@ public class CartServiceImpl implements CartService {
     @Transactional
     public void deleteCart(UUID memberId) {
         var cart = cartRepository.findMyCartByMember(Member.builder().id(memberId).build())
-                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
         cartRepository.deleteMyCart(memberId);
         cartProductRepository.deleteByCart(cart.getId());
     }
