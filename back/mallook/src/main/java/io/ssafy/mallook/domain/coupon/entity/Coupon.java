@@ -33,8 +33,8 @@ public class Coupon extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CouponType type;
 
-    @NotBlank
-    private String amount;
+    @NotNull
+    private Long amount;
 
     @NotNull
     @Column(name = "expired_time")

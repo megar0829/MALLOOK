@@ -4,8 +4,12 @@ import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
+import io.ssafy.mallook.domain.coupon.entity.Coupon;
+import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
+import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
+import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import io.ssafy.mallook.domain.orders.dao.OrderRepository;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
@@ -21,16 +25,22 @@ import io.ssafy.mallook.domain.product_history.entity.ProductHistory;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.UUID;
+import java.util.List;
+
+import static java.lang.Math.max;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
+@Log4j2
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
@@ -39,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
     private final ProductsRepository productsRepository;
     private final CartProductRepository cartProductRepository;
     private final CartRepository cartRepository;
+    private final MemberCouponRepository memberCouponRepository;
 
     @Override
     public Slice<OrderListDto> getOrderList(Long cursor, UUID id, Pageable pageable) {
@@ -66,12 +77,25 @@ public class OrderServiceImpl implements OrderService {
     public void insertDirectOrder(UUID id, OrderDirectInsertReq orderDirectInsertReq) {
         Member proxyMember = memberRepository.getReferenceById(id);
         // order 저장
-        var order = orderRepository.save(Orders.builder()
+        var order = Orders.builder()
                 .totalFee(orderDirectInsertReq.totalFee())
                 .totalCount(orderDirectInsertReq.totalCount())
                 .totalPrice(orderDirectInsertReq.totalPrice())
                 .member(proxyMember)
-                .build());
+                .build();
+        // 쿠폰 적용
+        if (Objects.nonNull(orderDirectInsertReq.memberCouponId())) {
+            Coupon memberCoupon = memberCouponRepository.findById(orderDirectInsertReq.memberCouponId())
+                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
+            var type = memberCoupon.getType();
+            switch (type) {
+                case MONEY -> order.setTotalPrice(orderDirectInsertReq.totalPrice() - memberCoupon.getAmount());
+                case RATIO -> order.setTotalPrice(orderDirectInsertReq.totalPrice() * memberCoupon.getAmount() / 100);
+            }
+
+            memberCouponRepository.deleteMyCoupon(List.of(orderDirectInsertReq.memberCouponId()));
+        }
+        var orderResult = orderRepository.save(order);
         // producthistory 저장, 장바구니 삭제
         var productInfo = orderDirectInsertReq.products();
         Products product = productsRepository.findById(productInfo.productId())
@@ -83,7 +107,7 @@ public class OrderServiceImpl implements OrderService {
                 .productImage(product.getImage())
                 .productSize(productInfo.size())
                 .productColor(productInfo.color())
-                .orders(order)
+                .orders(orderResult)
                 .build());
 
     }
@@ -94,15 +118,29 @@ public class OrderServiceImpl implements OrderService {
         Member proxyMember = memberRepository.getReferenceById(id);
 
         // order 저장
-        var order = orderRepository.save(Orders.builder()
+        var order = Orders.builder()
                 .totalFee(orderInsertReq.totalFee())
                 .totalCount(orderInsertReq.totalCount())
                 .totalPrice(orderInsertReq.totalPrice())
                 .member(proxyMember)
-                .build());
+                .build();
+
+        // 쿠폰 적용
+        if (Objects.nonNull(orderInsertReq.memberCouponId())) {
+            Coupon memberCoupon = memberCouponRepository.findById(orderInsertReq.memberCouponId())
+                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
+            var type = memberCoupon.getType();
+            switch (type) {
+                case MONEY -> order.setTotalPrice(orderInsertReq.totalPrice() - memberCoupon.getAmount());
+                case RATIO -> order.setTotalPrice(orderInsertReq.totalPrice() * memberCoupon.getAmount() / 100);
+            }
+
+            memberCouponRepository.deleteMyCoupon(List.of(orderInsertReq.memberCouponId()));
+        }
+        var orderResult = orderRepository.save(order);
+
         // producthistory 저장
         orderInsertReq.cartProductList().forEach((cartProductId) -> {
-
             CartProduct cartProduct = cartProductRepository.findById(cartProductId)
                     .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
             productHistoryRepository.save(ProductHistory.builder()
@@ -112,7 +150,7 @@ public class OrderServiceImpl implements OrderService {
                     .productImage(cartProduct.getProductImage())
                     .productSize(cartProduct.getProductSize())
                     .productColor(cartProduct.getProductColor())
-                    .orders(order)
+                    .orders(orderResult)
                     .build());
             // cartProduct 삭제
             cartProductRepository.deleteCartProduct(cartProductId);

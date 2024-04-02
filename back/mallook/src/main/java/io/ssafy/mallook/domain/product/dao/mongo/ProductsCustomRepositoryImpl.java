@@ -50,6 +50,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .map(ProductsListDto::toDto)
                 .collect(Collectors.toList());
         boolean hasNext = mongoTemplate.count(query, Products.class) >= pageable.getPageSize();
+        System.out.println(productsList.size());
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
         productsList.remove(productsList.size() - 1);
         return ProductsPageRes.builder()
@@ -80,9 +81,8 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     }
 
     @Override
-    public ProductsPageRes findByKeywordList(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
-        List<String> keywords = hotKeywordDto.hotKeywordList();
-        Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords));
+    public ProductsPageRes findByKeywordList(List<String> keywords, String cursor, Pageable pageable) {
+        Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords)).with(pageable);
 
         if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
@@ -91,7 +91,15 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         List<ProductsListDto> productsList = mongoTemplate.find(query, Products.class)
                 .stream()
                 .map(ProductsListDto::toDto)
-                .toList();
+                .collect(Collectors.toList());
+
+        if (productsList.isEmpty()) {
+            return ProductsPageRes.builder()
+                    .content(List.of())
+                    .nextCursor(null)
+                    .build();
+        }
+
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
         productsList.remove(productsList.size() - 1);
