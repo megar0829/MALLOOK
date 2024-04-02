@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductsRepository extends MongoRepository<Products, String> {
-    Products findFirstByOrderByIdDesc();
+    Products findFirstByOrderById();
 }

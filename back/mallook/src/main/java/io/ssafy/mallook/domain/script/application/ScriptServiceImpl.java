@@ -71,7 +71,7 @@ public class ScriptServiceImpl implements ScriptService {
         ProductHotKeywordDto productHotKeywordDto = ProductHotKeywordDto.builder()
                 .hotKeywordList(scriptKeyword)
                 .build();
-        String cursor = mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
+        String cursor = mongoProductsRepository.findFirstByOrderById().getId().toString();
 
         return productsCustomRepository.findByKeywordList(productHotKeywordDto.hotKeywordList(), cursor, pageable).content()
                 .stream()

@@ -35,7 +35,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     @Override
     public ProductsPageRes getProductsListByCategory(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
-        Query query = new Query().addCriteria(Criteria.where("id").lt(cursor))
+        Query query = new Query().addCriteria(Criteria.where("id").gt(cursor))
                 .with(pageable);
 
         if (!isNull(mainCategory)) {
