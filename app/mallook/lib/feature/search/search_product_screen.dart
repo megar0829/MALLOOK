@@ -4,9 +4,9 @@ import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
-import 'package:mallook/feature/search/models/popular_keyword.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
@@ -40,8 +40,7 @@ class _SearchProductScreenState extends State<SearchProductScreen>
     end: 0.5,
   ).animate(_animationController);
   final ScrollController _scrollController = ScrollController();
-  final Future<List<PopularKeyword>> _hotKeywords =
-      SearchApiService.getHotKeywords();
+  final Future<List<Keyword>> _hotKeywords = SearchApiService.getHotKeywords();
   final List<Product> _products = [];
   int _productPage = 0;
   int _totalPage = 0;

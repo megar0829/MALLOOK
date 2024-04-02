@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/search/models/popular_keyword.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 
 class HotKeywordGridWidget extends StatelessWidget {
-  final List<PopularKeyword> hotKeywords;
+  final List<Keyword> hotKeywords;
   final Function addKeyword;
 
   const HotKeywordGridWidget({

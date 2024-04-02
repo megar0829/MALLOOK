@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
-import 'package:mallook/feature/search/models/popular_keyword.dart';
 import 'package:mallook/feature/search/search_product_screen.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
@@ -18,8 +18,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _appBarScrollController = ScrollController();
-  final Future<List<PopularKeyword>> _hotKeywords =
-      SearchApiService.getHotKeywords();
+  final Future<List<Keyword>> _hotKeywords = SearchApiService.getHotKeywords();
   final Set<String> _searchKeywords = {};
 
   String _searchWord = "";
