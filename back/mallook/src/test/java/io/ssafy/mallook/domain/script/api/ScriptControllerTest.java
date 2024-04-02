@@ -82,7 +82,7 @@ class ScriptControllerTest {
         UUID principalId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
         Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Direction.DESC, "id"));
         List<ScriptListDto> scriptList = List.of(
-                new ScriptListDto(1L, "스크립트1", 100, "작성자1")
+                new ScriptListDto(1L, "스크립트1", 100, "작성자1", "img")
         );
         Slice<ScriptListDto> expectedSlice = new SliceImpl<>(scriptList, pageable, false);
 
@@ -105,7 +105,7 @@ class ScriptControllerTest {
     @WithMockCustomUser(id = "123e4567-e89b-12d3-a456-426614174000", role = "USER")
     void getLatestScriptTest() throws Exception {
         UUID principalId = UUID.fromString("123e4567-e89b-12d3-a456-426614174000");
-        ScriptListDto mockScriptListDto = new ScriptListDto(1L, "스크립트1", 100, "작성자1");
+        ScriptListDto mockScriptListDto = new ScriptListDto(1L, "스크립트1", 100, "작성자1", "이미지");
 
         given(scriptService.getLatestScript(principalId)).willReturn(mockScriptListDto);
 
