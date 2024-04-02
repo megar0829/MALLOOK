@@ -6,19 +6,24 @@ import MallookImg from "@/assets/img/icons/land_mallook.png";
 
 export default function ComponentOne() {
     return (
-        <div className={styles.oneTwoThreeContainer}>
+        <div className={styles.oneContainer}>
             <div className={styles.oneDiv}>
                 <div className={styles.oneLeftDiv}>
                     <Image
                         src={MirrowImg}
                         alt="mirrow"
                         style={{
+                            width: "30%",
+                            height: "auto",
+                            marginBottom: "35px"
                         }}
                     />
                     <Image
                         src={BeforeImg}
                         alt="before"
                         style={{
+                            width: "30%",
+                            height: "auto"
                         }}
                     />
                 </div>
@@ -26,9 +31,6 @@ export default function ComponentOne() {
                     <Image
                         src={MallookImg}
                         alt="mallook"
-                        style={{
-
-                        }}
                     />
                 </div>
             </div>

@@ -34,7 +34,7 @@
 }
 
 .bottomContainer a {
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 600;
   color: black;
 }
@@ -45,10 +45,10 @@
   top: 1rem;
   display: flex;
   justify-content: space-around;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .rightContainerIcon {
   color: black;
-  font-size: 25px;
+  font-size: 30px;
 }
