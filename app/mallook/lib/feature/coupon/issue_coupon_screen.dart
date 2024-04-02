@@ -41,7 +41,7 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
         });
       }
       try {
-        var loadedCoupons = await CouponApiService.getCoupons(_couponPage);
+        var loadedCoupons = await CouponApiService.getIssueCoupon(_couponPage);
 
         if (mounted) {
           setState(() {

@@ -1,40 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 
-class InterestButton extends StatefulWidget {
-  const InterestButton({
+class KeywordButton extends StatefulWidget {
+  const KeywordButton({
     super.key,
-    required this.interest,
+    required this.keyword,
     required this.add,
     required this.remove,
+    required this.selected,
   });
 
-  final String interest;
+  final Keyword keyword;
+  final Set<Keyword> selected;
   final Function add;
   final Function remove;
 
-  void addInterest() {
-    add(interest);
+  void addKeyword() {
+    add(keyword);
   }
 
-  void removeInterest() {
-    remove(interest);
+  void removeKeyword() {
+    remove(keyword);
   }
 
   @override
-  State<InterestButton> createState() => _InterestButtonState();
+  State<KeywordButton> createState() => _KeywordButtonState();
 }
 
-class _InterestButtonState extends State<InterestButton> {
+class _KeywordButtonState extends State<KeywordButton> {
   bool _isSelected = false;
 
   void _onTap() {
+    if (widget.selected.length >= 4) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(title: "최대 4개 까지 선택 가능합니다."),
+      );
+      return;
+    }
     setState(() {
       // 선택되지 않았던 경우
       if (!_isSelected) {
-        widget.addInterest();
+        widget.addKeyword();
       } else {
-        widget.removeInterest();
+        widget.removeKeyword();
       }
       _isSelected = !_isSelected;
     });
@@ -70,7 +80,7 @@ class _InterestButtonState extends State<InterestButton> {
         ),
         duration: const Duration(milliseconds: 300),
         child: Text(
-          widget.interest,
+          widget.keyword.name!,
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: _isSelected

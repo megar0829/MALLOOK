@@ -8,7 +8,7 @@ class CouponApiService {
     return coupons;
   }
 
-  static Future<List<Coupon>> getCoupons(int page) async {
+  static Future<List<Coupon>> getIssueCoupon(int page) async {
     List<Coupon> coupons = [];
 
     await Future.delayed(const Duration(seconds: 4));

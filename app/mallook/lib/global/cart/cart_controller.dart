@@ -21,6 +21,12 @@ class CartController extends GetxController {
     _updatePriceAndQuantity(items);
   }
 
+  void clearCartItems() async {
+    var response = await CartApiService.removeAllCartItems(
+      data: <String, num>{"cartId": 0},
+    );
+  }
+
   void _updatePriceAndQuantity(List<CartItem> items) {
     _totalPrice.value = 0;
     _totalCount.value = 0;

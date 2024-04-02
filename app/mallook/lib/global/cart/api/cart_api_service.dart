@@ -24,4 +24,11 @@ class CartApiService {
       postData: data,
     );
   }
+
+  static Future<String> removeAllCartItems({required dynamic data}) async {
+    return await _dio.baseDelete(
+      path: "/api/carts/carts",
+      deleteData: data,
+    );
+  }
 }

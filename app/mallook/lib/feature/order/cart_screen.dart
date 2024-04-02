@@ -21,8 +21,8 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  late List<CartItem> _cartItems;
   final CartController cartController = Get.put(CartController());
+  late List<CartItem> _cartItems;
   static NumberFormat numberFormat = NumberFormat.currency(
     locale: 'ko_KR',
     symbol: '',
