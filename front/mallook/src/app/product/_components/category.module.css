@@ -23,19 +23,19 @@
     width: 75px;
     height: 75px;
     border-radius: 100%;
-    border: 1px solid lightgray;
-    box-shadow: 0 0 5px;
+    border: 0.5px solid lightgray;
+    box-shadow: 0 0 3px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .category__image {
-    width: 60px;
-    height: 60px;
-    border-radius: 100%;
+    width: 55px;
+    height: auto;
+    /*border-radius: 100%;*/
 }
 .category__spanDiv {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 600;
     margin-top: 10px;
 }

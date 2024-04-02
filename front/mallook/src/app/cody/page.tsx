@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "./cody.module.css";
 
-import icon from "@/assets/img/icons/logo_sm.png";
+import icon from "@/assets/img/icons/hanger.png";
 
 export const metadata:{title: string} = {
   title: "코디",

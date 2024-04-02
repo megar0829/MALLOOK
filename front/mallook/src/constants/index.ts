@@ -56,15 +56,67 @@ import imgProduct10 from "@/assets/img/product/product10.jpg";
 
 import {StaticImageData} from "next/image";
 
-import iconTop from "@/assets/img/category/top.jpg";
-import iconBottom from "@/assets/img/category/bottom.jpg";
-import iconOuter from "@/assets/img/category/outer.jpg";
-import iconOnepiece from "@/assets/img/category/onepiece.jpg";
-import iconBag from "@/assets/img/category/bag.jpg";
-import iconShoe from "@/assets/img/category/shoe.jpg";
-import iconHat from "@/assets/img/category/hat.jpg";
 import {CodyBookData, CodyData, MainCategoryData, Product, ProfileSampleData, ReviewData, SampleProduct} from "@/types";
 
+import bagBackpack from "@/assets/img/category/bags_backpack.jpg"
+import bagClutch from "@/assets/img/category/bags_clutch.jpg"
+import bagCross from "@/assets/img/category/bags_cross.jpg"
+import bagEco from "@/assets/img/category/bags_eco.jpg"
+import bagOther from "@/assets/img/category/bags_other.jpg"
+import bagShoulder from "@/assets/img/category/bags_shoulder.jpg"
+import bagTote from "@/assets/img/category/bags_tote.jpg"
+import bottomCotton from "@/assets/img/category/bottoms_cotton.jpg"
+import bottomDenim from "@/assets/img/category/bottoms_denim.png"
+import bottomLeggings from "@/assets/img/category/bottoms_leggings.jpg"
+import bottomOther from "@/assets/img/category/bottoms_other.jpg"
+import bottomShorts from "@/assets/img/category/bottoms_shorts.png"
+import bottomSkirt from "@/assets/img/category/bottoms_skirt.jpg"
+import bottomSlacks from "@/assets/img/category/bottoms_slacks.jpg"
+import bottomTraining from "@/assets/img/category/bottoms_training.jpg"
+import bottomWide from "@/assets/img/category/bottoms_wide.jpg"
+import dressLong from "@/assets/img/category/dresses_long.jpg"
+import dressMini from "@/assets/img/category/dresses_mini.jpg"
+import dressOther from "@/assets/img/category/dresses_other.jpg"
+import hatBaseballCap from "@/assets/img/category/hats_baseball-cap.jpg"
+import hatBeanie from "@/assets/img/category/hats_beanie.jpg"
+import hatBeret from "@/assets/img/category/hats_beret.jpg"
+import hatBucketHat from "@/assets/img/category/hats_bucket-hat.jpg"
+import hatFedora from "@/assets/img/category/hats_fedora.jpg"
+import hatOther from "@/assets/img/category/hats_other.jpg"
+import hatSnapback from "@/assets/img/category/hats_snapback.jpg"
+import outerBlazer from "@/assets/img/category/outer_blazer.jpg"
+import outerCardigan from "@/assets/img/category/outer_cardigan.jpg"
+import outerFleece from "@/assets/img/category/outer_fleece.jpg"
+import outerHoodedZipup from "@/assets/img/category/outer_hooded-zipup.jpg"
+import outerJacket from "@/assets/img/category/outer_jacket.jpg"
+import outerJumper from "@/assets/img/category/outer_jumper.jpg"
+import outerLongCoat from "@/assets/img/category/outer_long-coat.jpg"
+import outerLongPadding from "@/assets/img/category/outer_long-padding.jpg"
+import outerMustard from "@/assets/img/category/outer_mustard.jpg"
+import outerOther from "@/assets/img/category/outer_other.jpg"
+import outerRiderJacket from "@/assets/img/category/outer_rider-jacket.jpg"
+import outerShortCoat from "@/assets/img/category/outer_short-coat.jpg"
+import outerShortPadding from "@/assets/img/category/outer_short-padding.jpg"
+import outerWindbreaker from "@/assets/img/category/outer_windbreaker.jpg"
+import shoesBoots from "@/assets/img/category/shoes_boots.jpg"
+import shoesDress from "@/assets/img/category/shoes_dress.jpg"
+import shoesFlat from "@/assets/img/category/shoes_flat.jpg"
+import shoesHeels from "@/assets/img/category/shoes_heels.jpg"
+import shoesMules from "@/assets/img/category/shoes_mules.jpg"
+import shoesOther from "@/assets/img/category/shoes_other.jpg"
+import shoesRunning from "@/assets/img/category/shoes_running.jpg"
+import shoesSandals from "@/assets/img/category/shoes_sandals.jpg"
+import shoesSneakers from "@/assets/img/category/shoes_sneakers.jpg"
+import shoesSports from "@/assets/img/category/shoes_sports.jpg"
+import shoesLofer from "@/assets/img/category/shoes_loafer.png"
+import topHoddie from "@/assets/img/category/tops_hoodie.jpg"
+import topKnitwear from "@/assets/img/category/tops_knitwear.jpg"
+import topLongSleeve from "@/assets/img/category/tops_long-sleeve.jpg"
+import topOther from "@/assets/img/category/tops_other.jpg"
+import topShirt from "@/assets/img/category/tops_shirt.jpg"
+import topShortSleeve from "@/assets/img/category/tops_short-sleeve.jpg"
+import topSleeveless from "@/assets/img/category/tops_sleeveless.jpg"
+import topSweatshirt from "@/assets/img/category/tops_sweatshirt.jpg"
 
 
 export const API_URL = "https://j10a606.p.ssafy.io";
@@ -475,287 +527,279 @@ export const CodyBookList: CodyBookData[] = [
 export const MainCategory : MainCategoryData[] = [
     {
         name: "상의",
-        url: iconTop,
+        url: topLongSleeve,
         detailCategory: [
             {
                 categoryName: "긴팔티",
-                categoryUrl: iconTop
-            },
-            {
-                categoryName: "카라티",
-                categoryUrl: iconTop
+                categoryUrl: topLongSleeve
             },
             {
                 categoryName: "반팔티",
-                categoryUrl: iconTop
+                categoryUrl: topShortSleeve
             },
             {
                 categoryName: "민소매",
-                categoryUrl: iconTop
+                categoryUrl: topSleeveless
             },
             {
                 categoryName: "후드티",
-                categoryUrl: iconTop
+                categoryUrl: topHoddie
             },
             {
                 categoryName: "맨투맨",
-                categoryUrl: iconTop
+                categoryUrl: topSweatshirt
             },
             {
-                categoryName: "니트 / 스웨터",
-                categoryUrl: iconTop
+                categoryName: "니트/스웨터",
+                categoryUrl: topKnitwear
             },
             {
-                categoryName: "셔츠 / 블라우스",
-                categoryUrl: iconTop
+                categoryName: "셔츠/블라우스",
+                categoryUrl: topShirt
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconTop
+                categoryUrl: topOther
             }
         ]
     },
     {
         name: "하의",
-        url: iconBottom,
+        url: bottomDenim,
         detailCategory: [
             {
                 categoryName: "데님",
-                categoryUrl: iconBottom
+                categoryUrl: bottomDenim
             },
             {
                 categoryName: "면",
-                categoryUrl: iconBottom
+                categoryUrl: bottomCotton
             },
             {
                 categoryName: "슬랙스",
-                categoryUrl: iconBottom
+                categoryUrl: bottomSlacks
             },
             {
-                categoryName: "트레이닝 / 조거 팬츠",
-                categoryUrl: iconBottom
+                categoryName: "트레이닝",
+                categoryUrl: bottomTraining
+            },
+            {
+                categoryName: "와이드",
+                categoryUrl: bottomWide
             },
             {
                 categoryName: "스커트",
-                categoryUrl: iconBottom
+                categoryUrl: bottomSkirt
             },
             {
                 categoryName: "레깅스",
-                categoryUrl: iconBottom
+                categoryUrl: bottomLeggings
             },
             {
-                categoryName: "숏 팬츠",
-                categoryUrl: iconBottom
+                categoryName: "숏팬츠",
+                categoryUrl: bottomShorts
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconBottom
+                categoryUrl: bottomOther
             }
         ]
     },
     {
         name: "아우터",
-        url: iconOuter,
+        url: outerShortPadding,
         detailCategory: [
             {
-                categoryName: "숏패딩 / 패딩조끼",
-                categoryUrl: iconOuter
+                categoryName: "숏패딩",
+                categoryUrl: outerShortPadding
             },
             {
                 categoryName: "롱패딩",
-                categoryUrl: iconOuter
+                categoryUrl: outerLongPadding
             },
             {
                 categoryName: "숏코트",
-                categoryUrl: iconOuter
+                categoryUrl: outerShortCoat
             },
             {
                 categoryName: "롱코트",
-                categoryUrl: iconOuter
+                categoryUrl: outerLongCoat
             },
             {
-                categoryName: "라이더 재킷",
-                categoryUrl: iconOuter
+                categoryName: "라이더재킷",
+                categoryUrl: outerRiderJacket
             },
             {
                 categoryName: "블레이저",
-                categoryUrl: iconOuter
+                categoryUrl: outerBlazer
             },
             {
                 categoryName: "무스탕",
-                categoryUrl: iconOuter
+                categoryUrl: outerMustard
             },
             {
                 categoryName: "재킷",
-                categoryUrl: iconOuter
+                categoryUrl: outerJacket
             },
             {
                 categoryName: "점퍼",
-                categoryUrl: iconOuter
+                categoryUrl: outerJumper
             },
             {
                 categoryName: "플리스",
-                categoryUrl: iconOuter
+                categoryUrl: outerFleece
             },
             {
                 categoryName: "가디건",
-                categoryUrl: iconOuter
+                categoryUrl: outerCardigan
             },
             {
                 categoryName: "후드집업",
-                categoryUrl: iconOuter
+                categoryUrl: outerHoodedZipup
             },
             {
                 categoryName: "바람막이",
-                categoryUrl: iconOuter
+                categoryUrl: outerWindbreaker
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconOuter
+                categoryUrl: outerOther
             }
         ]
     },
     {
         name: "원피스",
-        url: iconOnepiece,
+        url: dressLong,
         detailCategory: [
             {
                 categoryName: "롱원피스",
-                categoryUrl: iconOnepiece
+                categoryUrl: dressLong
             },
             {
                 categoryName: "미니원피스",
-                categoryUrl: iconOnepiece
+                categoryUrl: dressMini
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconOnepiece
+                categoryUrl: dressOther
             }
         ]
     },
     {
         name: "가방",
-        url: iconBag,
+        url: bagCross,
         detailCategory: [
             {
                 categoryName: "크로스백",
-                categoryUrl: iconBag
+                categoryUrl: bagCross
             },
             {
                 categoryName: "숄더백",
-                categoryUrl: iconBag
+                categoryUrl: bagShoulder
             },
             {
                 categoryName: "토트백",
-                categoryUrl: iconBag
+                categoryUrl: bagTote
             },
             {
                 categoryName: "클러치",
-                categoryUrl: iconBag
+                categoryUrl: bagClutch
             },
             {
-                categoryName: "에코 / 캔버스 백",
-                categoryUrl: iconBag
+                categoryName: "에코/캔버스백",
+                categoryUrl: bagEco
             },
             {
                 categoryName: "백팩",
-                categoryUrl: iconBag
-            },
-            {
-                categoryName: "웨이스트백",
-                categoryUrl: iconBag
+                categoryUrl: bagBackpack
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconBag
+                categoryUrl: bagOther
             }
         ]
     },
     {
         name: "신발",
-        url: iconShoe,
+        url: shoesSneakers,
         detailCategory: [
             {
                 categoryName: "스니커즈",
-                categoryUrl: iconShoe
+                categoryUrl: shoesSneakers
             },
             {
-                categoryName: "러닝화 / 워킹화",
-                categoryUrl: iconShoe
+                categoryName: "러닝화/워킹화",
+                categoryUrl: shoesRunning
             },
             {
                 categoryName: "스포츠화",
-                categoryUrl: iconShoe
+                categoryUrl: shoesSports
             },
             {
                 categoryName: "구두",
-                categoryUrl: iconShoe
+                categoryUrl: shoesDress
             },
             {
-                categoryName: "힐 / 펌프스",
-                categoryUrl: iconShoe
+                categoryName: "힐/펌프스",
+                categoryUrl: shoesHeels
             },
             {
                 categoryName: "로퍼",
-                categoryUrl: iconShoe
+                categoryUrl: shoesLofer
             },
             {
-                categoryName: "뮬 / 블로퍼",
-                categoryUrl: iconShoe
-            },
-            {
-                categoryName: "플랫 슈즈",
-                categoryUrl: iconShoe
+                categoryName: "뮬/블로퍼",
+                categoryUrl: shoesMules
             },
             {
                 categoryName: "플랫 슈즈",
-                categoryUrl: iconShoe
+                categoryUrl: shoesFlat
             },
             {
                 categoryName: "부츠",
-                categoryUrl: iconShoe
+                categoryUrl: shoesBoots
             },
             {
-                categoryName: "샌들 / 슬리퍼",
-                categoryUrl: iconShoe
+                categoryName: "샌들/슬리퍼",
+                categoryUrl: shoesSandals
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconShoe
+                categoryUrl: shoesOther
             }
         ]
     },
     {
         name: "모자",
-        url: iconHat,
+        url: hatBaseballCap,
         detailCategory: [
             {
-                categoryName: "볼캡 / 야구모자",
-                categoryUrl: iconHat
+                categoryName: "볼캡/야구모자",
+                categoryUrl: hatBaseballCap
             },
             {
                 categoryName: "스냅백",
-                categoryUrl: iconHat
+                categoryUrl: hatSnapback
             },
             {
                 categoryName: "비니",
-                categoryUrl: iconHat
+                categoryUrl: hatBeanie
             },
             {
                 categoryName: "버킷햇",
-                categoryUrl: iconHat
+                categoryUrl: hatBucketHat
             },
             {
                 categoryName: "베레모",
-                categoryUrl: iconHat
+                categoryUrl: hatBeret
             },
             {
                 categoryName: "페도라",
-                categoryUrl: iconHat
+                categoryUrl: hatFedora
             },
             {
                 categoryName: "기타",
-                categoryUrl: iconHat
+                categoryUrl: hatOther
             }
         ]
     }

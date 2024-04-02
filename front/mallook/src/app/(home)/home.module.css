@@ -1,19 +1,22 @@
 .container {
-  width: 120dvw;
-  height: 100dvh;
+  width: 100dvw;
+  height: calc(100vh - 150px);
   display: flex;
-  background-color: black;
+  flex-direction: column;
+  background-color: white;
   justify-content: space-between;
+  padding: 0 3rem;
 }
 
-.leftDiv {
+.rightDiv {
   width: 38dvw;
   height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-.leftDivTopDiv {
+
+.rightDivTopDiv {
   width: 80%;
   height: 300px;
   display: flex;
@@ -24,19 +27,21 @@
   margin-top: 120px;
   padding-left: 80px;
 }
-.leftDivTopText {
+
+.rightDivTopText {
   font-size: 60px;
   font-weight: 900;
   color: #836BFF;
   margin-bottom: 10px;
 }
-.leftDivMiddleText {
+
+.rightDivMiddleText {
   font-size: 50px;
   font-weight: 900;
-  color: white;
-
+  color: black;
 }
-.leftDivBottomDiv {
+
+.rightDivBottomDiv {
   width: 80%;
   height: 200px;
   margin-top: 20px;
@@ -44,6 +49,7 @@
   justify-content: center;
   align-items: center;
 }
+
 .QRDiv {
   width: 110px;
   height: 120px;
@@ -52,27 +58,43 @@
   align-items: center;
   margin-right: 50px;
 }
+
 .QRDiv img {
   width: 110px;
   height: 110px;
 }
+
 .leftDivBottomText {
-  color: white;
+  color: black;
   font-size: 18px;
 }
 
-.rightDiv {
-  width: 78dvw;
-  height: 100dvh;
-  padding-top: 20dvh;
+.oneTwoThreeContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.oneDiv {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.oneLeftDiv {
+  display: flex;
+}
+
+.oneRightDiv {
+}
+
+.oneText {
   display: flex;
   justify-content: center;
+  font-size: 35px;
 }
-.phoneDiv {
-  width: 58dvw;
-  height: 700px;
-}
-.phoneDiv img {
+
+.threeDiv {
+  display: flex;
+  height: 100%;
   width: 100%;
-  height: 700px;
 }
