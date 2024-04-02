@@ -5,6 +5,7 @@ import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/script/model/script.dart';
+import 'package:mallook/feature/script/model/script_detail.dart';
 import 'package:mallook/feature/script/widget/script_img_widget.dart';
 import 'package:mallook/feature/script/widget/script_product_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -23,7 +24,7 @@ class ScriptScreen extends StatefulWidget {
 class _ScriptScreenState extends State<ScriptScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  late final Future<Script> _script =
+  late final Future<ScriptDetail> _script =
       ScriptService.getScriptDetail(widget.script.id!);
   final List<Product> _products = [];
   int _productPage = 0;
@@ -128,10 +129,10 @@ class _ScriptScreenState extends State<ScriptScreen>
                               ),
                             ),
                             Gaps.h4,
-                            const Text(
-                              "아바타",
+                            Text(
+                              snapshot.data!.nickname ?? "",
                               maxLines: 2,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size18,
                                 fontWeight: FontWeight.bold,
@@ -141,14 +142,16 @@ class _ScriptScreenState extends State<ScriptScreen>
                         ),
                         Row(
                           children: [
-                            const FaIcon(
-                              FontAwesomeIcons.heart,
+                            FaIcon(
+                              snapshot.data!.hasLiked ?? false
+                                  ? FontAwesomeIcons.solidHeart
+                                  : FontAwesomeIcons.heart,
                               color: Colors.red,
                               size: Sizes.size24,
                             ),
                             Gaps.h8,
                             Text(
-                              '${snapshot.data!.heartCount!}',
+                              '${snapshot.data!.heartCount ?? 0}',
                               style: const TextStyle(
                                 color: Colors.black87,
                                 fontSize: Sizes.size18,
