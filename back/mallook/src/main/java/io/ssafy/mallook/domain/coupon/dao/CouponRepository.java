@@ -19,8 +19,8 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
         )
         FROM Coupon c
         left join MemberCoupon mc
-        on c.id = mc.coupon.id or  mc.member.id != :memberId
-        WHERE c.id < :cursor
+        on c.id = mc.coupon.id
+        WHERE (mc.member.id != :memberId or mc.member is null) and c.id < :cursor
        """)
     Slice<CouponRes> findCouponBy(Pageable pageable, @Param("cursor") Long cursor, @Param("memberId") UUID memberId);
     @Query("""

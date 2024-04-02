@@ -42,14 +42,12 @@ public class CouponServiceImpl implements CouponService {
         if (Objects.isNull(maxId)) {
             return new SliceImpl<>(List.of(), pageable, false);
         }
-//        return couponRepository.findCouponBy(pageable, maxId);
-        return null;
+        return couponRepository.findCouponBy(pageable, maxId, memberId);
     }
 
     @Override
     public Slice<CouponRes> findCouponList(Pageable pageable, Long cursor, UUID memberId) {
-//        return couponRepository.findCouponBy(pageable, cursor);
-        return null;
+        return couponRepository.findCouponBy(pageable, cursor, memberId);
     }
 
     @Override

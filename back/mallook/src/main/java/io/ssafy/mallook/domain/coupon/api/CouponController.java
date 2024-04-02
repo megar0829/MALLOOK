@@ -2,6 +2,7 @@ package io.ssafy.mallook.domain.coupon.api;
 
 import io.ssafy.mallook.domain.coupon.application.CouponService;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponDeleteReq;
+import io.ssafy.mallook.domain.coupon.dto.request.CouponInsertReq;
 import io.ssafy.mallook.domain.coupon.dto.request.CouponReq;
 import io.ssafy.mallook.domain.coupon.dto.response.CouponRes;
 import io.ssafy.mallook.domain.coupon.dto.response.MemberCouponRes;
@@ -65,8 +66,6 @@ public class CouponController {
             @RequestParam(required = false) Long cursor) {
         var result = Objects.nonNull(cursor) ? couponService.findMyCouponList(pageable, userSecurityDTO.getId(), cursor)
                 : couponService.findMyCouponListFirst(pageable, userSecurityDTO.getId());
-        log.info(result);
-        log.info(result.getContent().get(0).expiredTime().getClass().getName());
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 result
@@ -103,8 +102,8 @@ public class CouponController {
     @PostMapping
     public ResponseEntity<BaseResponse<String>> saveMyCoupon(
             @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @Valid @NotNull @RequestBody Long couponId) {
-        memberCouponService.saveMyCoupon(userSecurityDTO.getId(), couponId);
+            @Valid @NotNull @RequestBody CouponInsertReq couponInsertReq) {
+        memberCouponService.saveMyCoupon(userSecurityDTO.getId(), couponInsertReq.couponId());
         return BaseResponse.success(
                 SuccessCode.INSERT_SUCCESS,
                 "쿠폰 등록 완료"
