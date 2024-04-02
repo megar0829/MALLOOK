@@ -6,6 +6,7 @@ import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptProductDto;
+import io.ssafy.mallook.domain.script.entity.Script;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -33,4 +34,6 @@ public interface ScriptService {
     void createScript(ScriptCreatDto scriptCreateDto, UUID id);
 
     void deleteScript(ScriptDeleteListDto scriptDeleteListDto);
+
+    String findFirstScriptImage(Script script);
 }

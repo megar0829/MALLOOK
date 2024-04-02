@@ -14,14 +14,17 @@ public record ScriptListDto(
         @Schema(description = "좋아요 수")
         Integer heartCount,
         @Schema(description = "작성자 닉네임")
-        String nickname)
-{
-    public static ScriptListDto toDto(Script script) {
+        String nickname,
+        @Schema(description = "스크립트 대표 이미지")
+        String imageUrl
+) {
+    public static ScriptListDto toDto(Script script, String imageUrl) {
         return ScriptListDto.builder()
                 .id(script.getId())
                 .name(script.getName())
                 .nickname(script.getMember().getNickname())
                 .heartCount(script.getHeartCount())
+                .imageUrl(imageUrl)
                 .build();
     }
 }
