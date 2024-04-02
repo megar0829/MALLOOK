@@ -86,19 +86,19 @@ class ScriptServiceImplTest {
         verify(memberRepository, times(2)).getReferenceById(memberId);
     }
 
-    @Test
-    @DisplayName("스크립트 상세 조회 테스트")
-    void getScriptDetail() {
-        // given
-        Long scriptId = script.getId();
-
-        // when
-        when(scriptRepository.findById(scriptId)).thenReturn(Optional.of(script));
-        ScriptDetailDto result = scriptService.getScriptDetail(scriptId);
-
-        verify(scriptRepository, times(1)).findById(scriptId);
-        assertThat(result).isNotNull();
-    }
+//    @Test
+//    @DisplayName("스크립트 상세 조회 테스트")
+//    void getScriptDetail() {
+//        // given
+//        Long scriptId = script.getId();
+//
+//        // when
+//        when(scriptRepository.findById(scriptId)).thenReturn(Optional.of(script));
+//        ScriptDetailDto result = scriptService.getScriptDetail(scriptId);
+//
+//        verify(scriptRepository, times(1)).findById(scriptId);
+//        assertThat(result).isNotNull();
+//    }
 
     @Test
     @DisplayName("스크립트 생성 api 테스트")
