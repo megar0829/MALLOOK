@@ -9,8 +9,8 @@ import org.springframework.data.domain.Slice;
 import java.util.UUID;
 
 public interface CouponService {
-    Slice<CouponRes> findCouponListFirst(Pageable pageable);
-    Slice<CouponRes> findCouponList(Pageable pageable, Long cursor);
+    Slice<CouponRes> findCouponListFirst(Pageable pageable, UUID memberId);
+    Slice<CouponRes> findCouponList(Pageable pageable, Long cursor, UUID memberId);
     Slice<MemberCouponRes> findMyCouponListFirst(Pageable pageable, UUID memberId);
 
     Slice<MemberCouponRes> findMyCouponList(Pageable pageable, UUID memberId, Long cursor);

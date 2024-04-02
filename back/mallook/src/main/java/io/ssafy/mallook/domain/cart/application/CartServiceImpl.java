@@ -88,8 +88,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional
-    public void deleteCart(UUID memberId, Long cartId) {
-        cartRepository.deleteMyCart(memberId, cartId);
-        cartProductRepository.deleteByCart(cartId);
+    public void deleteCart(UUID memberId) {
+        var cart = cartRepository.findMyCartByMember(Member.builder().id(memberId).build())
+                .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR));
+        cartRepository.deleteMyCart(memberId);
+        cartProductRepository.deleteByCart(cart.getId());
     }
 }

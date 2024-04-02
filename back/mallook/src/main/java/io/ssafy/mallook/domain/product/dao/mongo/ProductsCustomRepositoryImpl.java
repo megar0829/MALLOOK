@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.product.dao.mongo;
 
-import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductImgRes;
 import io.ssafy.mallook.domain.product.dto.response.ProductsDetailDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
@@ -156,15 +155,16 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     @Override
     public Page<ProductImgRes> getProductImg(Pageable pageable, String mainCategory, String subCategory) {
+        System.out.println(mainCategory);
         Query query = new Query().addCriteria(Criteria.where("crop").exists(true))
                 .with(pageable);
-        log.info(query);
         if (!isNull(mainCategory)) {
-            query.addCriteria(Criteria.where("mainCategory").is(mainCategory));
+            query.addCriteria(Criteria.where("main_category").is(mainCategory));
         }
         if (!isNull(subCategory)) {
-            query.addCriteria(Criteria.where("subCategory").is(subCategory));
+            query.addCriteria(Criteria.where("sub_category").is(subCategory));
         }
+        log.info(query);
         var result = mongoTemplate.find(query, Products.class);
         List<ProductImgRes> productsList = result
                 .stream()

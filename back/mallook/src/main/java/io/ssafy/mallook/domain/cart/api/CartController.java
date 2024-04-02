@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.cart.api;
 
 import io.ssafy.mallook.domain.cart.application.CartService;
-import io.ssafy.mallook.domain.cart.dto.request.CartDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartProductDeleteReq;
 import io.ssafy.mallook.domain.cart.dto.request.CartInsertReq;
 import io.ssafy.mallook.domain.cart.dto.response.CartPageRes;
@@ -81,11 +80,10 @@ public class CartController {
                     @ApiResponse(responseCode = "200", description = "장바구니 전체 삭제 성공"),
                     @ApiResponse(responseCode = "404", description = "장바구니 전체 삭제 실패")
             })
-    @DeleteMapping("/carts")
+    @DeleteMapping("/all")
     public ResponseEntity<BaseResponse<String>> deleteCart(
-            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO,
-            @RequestBody CartDeleteReq cartDeleteReq) {
-        cartService.deleteCart(userSecurityDTO.getId(), cartDeleteReq.cartId());
+            @AuthenticationPrincipal UserSecurityDTO userSecurityDTO) {
+        cartService.deleteCart(userSecurityDTO.getId());
         return BaseResponse.success(
                 SuccessCode.DELETE_SUCCESS,
                 "장바구니 삭제 성공"

@@ -18,9 +18,11 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
             c.id, c.name, function('DATE_FORMAT', c.createdAt, '%Y-%m-%d %H:%m:%s'), function('DATE_FORMAT', c.expiredTime, '%Y-%m-%d %H:%m:%s'), c.type
         )
         FROM Coupon c
-        WHERE c.id < :cursor
+        left join MemberCoupon mc
+        on c.id = mc.coupon.id
+        WHERE (mc.member.id != :memberId or mc.member is null) and c.id < :cursor
        """)
-    Slice<CouponRes> findCouponBy(Pageable pageable, @Param("cursor") Long cursor);
+    Slice<CouponRes> findCouponBy(Pageable pageable, @Param("cursor") Long cursor, @Param("memberId") UUID memberId);
     @Query("""
                 SELECT new io.ssafy.mallook.domain.coupon.dto.response.MemberCouponRes(
                         mc.id, c.name, c.type, c.amount, FUNCTION('DATE_FORMAT', c.expiredTime, '%Y-%m-%d %H:%m:%s')

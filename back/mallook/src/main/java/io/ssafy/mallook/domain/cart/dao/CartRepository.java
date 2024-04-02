@@ -37,9 +37,9 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             """
             update Cart c
             set c.status = false
-            where c.member.id = :memberId and c.id = :cartId
+            where c.member.id = :memberId
             """)
-    void deleteMyCart(@Param("memberId") UUID memberId, @Param("cartId") Long cartId);
+    void deleteMyCart(@Param("memberId") UUID memberId);
 
 
 }
