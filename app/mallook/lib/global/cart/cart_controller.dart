@@ -42,6 +42,8 @@ class CartController extends GetxController {
         "fee": item.fee,
       });
     }
+
+    loadCartItems(); // 카트 내 데이터 재로딩
   }
 
   void addItem({
