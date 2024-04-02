@@ -39,6 +39,11 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
     super.dispose();
   }
 
+  void _onSubmit() {
+    var winner = _selected.first;
+    print('$winner');
+  }
+
   void _selectLeft() {
     if (_itemCount == 1) return;
     _selected.add(_codies[_index]);
@@ -87,7 +92,7 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
       return "우승!!";
     }
     if (_itemCount == 2) {
-      return '결승전 입니다.}';
+      return '결승전 입니다.';
     }
     return '$_itemCount 강 입니다.';
   }
@@ -278,6 +283,27 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                   ],
                 ),
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
+        surfaceTintColor: Colors.white,
+        child: Visibility(
+          visible: _itemCount == 1 ? true : false,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
+            onPressed: () {},
+            child: const Text(
+              '저장하기',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: Sizes.size18,
+              ),
+            ),
           ),
         ),
       ),
