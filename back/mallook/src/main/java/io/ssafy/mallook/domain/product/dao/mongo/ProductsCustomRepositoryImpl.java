@@ -65,7 +65,7 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
         Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
 
         if (!isNull(cursor) && !cursor.isEmpty()) {
-            query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
+            query.addCriteria(Criteria.where("id").gt(new ObjectId(cursor)));
         }
 
         List<ProductsListDto> productsList = mongoTemplate.find(query, Products.class)
@@ -84,9 +84,9 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
     @Override
     public ProductsPageRes findByKeywordList(List<String> keywords, String cursor, Pageable pageable) {
         Query query = new Query().addCriteria(Criteria.where("keywords").in(keywords)).with(pageable);
-
+        log.info(keywords);
         if (!isNull(cursor) && !cursor.isEmpty()) {
-            query.addCriteria(Criteria.where("id").lt(new ObjectId(cursor)));
+            query.addCriteria(Criteria.where("id").gt(new ObjectId(cursor)));
         }
 
         List<ProductsListDto> productsList = mongoTemplate.find(query, Products.class)
