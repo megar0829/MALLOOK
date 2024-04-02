@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.*;
@@ -37,6 +38,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
+@Log4j2
 @Tag(name = "상품", description = "상품 관련 API")
 public class ProductController {
 
@@ -86,7 +88,7 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "상품 검색 실패")
             })
     @GetMapping("/search")
-    public ResponseEntity<?> getProductDetail(
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
             @RequestParam(required = false) List<String> keywords,
@@ -101,6 +103,7 @@ public class ProductController {
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         final Pageable page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         String finalCursor = cursor;
+        log.info(cursor);
         Supplier<ProductsPageRes> methodToCall = isNullOrEmpty(keywords)
                 ? () -> productService.getProductDetail(name, finalCursor, page)
                 : () -> productService.getProductDetail(keywords, finalCursor, page);

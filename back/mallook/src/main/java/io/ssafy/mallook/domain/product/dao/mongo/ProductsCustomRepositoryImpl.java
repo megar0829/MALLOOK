@@ -62,8 +62,8 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
 
     @Override
     public ProductsPageRes findByProductName(String name, String cursor, Pageable pageable) {
-        Query query = new Query().addCriteria(Criteria.where("name").regex(name, "i"));
-
+        Query query = new Query().addCriteria(Criteria.where("name").regex("phone", "i"));
+        log.info(name);
         if (!isNull(cursor) && !cursor.isEmpty()) {
             query.addCriteria(Criteria.where("id").gt(new ObjectId(cursor)));
         }
@@ -74,7 +74,10 @@ public class ProductsCustomRepositoryImpl implements ProductsCustomRepository {
                 .toList();
         boolean hasNext = mongoTemplate.count(query, Products.class) > ((pageable.getPageNumber() + 1) * pageable.getPageSize());
         var nextCursor = hasNext ? productsList.get(productsList.size() - 1).id() : null;
-        productsList.remove(productsList.size() - 1);
+
+        if (productsList.size() > 1) {
+            productsList.remove(productsList.size() - 1);
+        }
         return ProductsPageRes.builder()
                 .content(productsList)
                 .nextCursor(nextCursor)
