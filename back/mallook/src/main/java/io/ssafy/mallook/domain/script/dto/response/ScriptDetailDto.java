@@ -16,7 +16,9 @@ public record ScriptDetailDto(
         @Schema(description = "내가 좋아요 했는지 여부")
         boolean hasLiked,
         @Schema(description = "스크립트 대표 이미지")
-        String imageUrl
+        String imageUrl,
+        @Schema(description = "회원 등급 레벨")
+        String memberGrade
         )
 {
     public static ScriptDetailDto toDtoNotLogin(Script script, String imageUrl) {
@@ -26,6 +28,7 @@ public record ScriptDetailDto(
                 .nickname(script.getMember().getNickname())
                 .hasLiked(false)
                 .imageUrl(imageUrl)
+                .memberGrade(script.getMember().getGrade().getLevel().toString())
                 .build();
     }
 
