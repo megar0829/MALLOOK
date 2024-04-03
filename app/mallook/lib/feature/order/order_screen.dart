@@ -283,23 +283,23 @@ class _OrderScreenState extends State<OrderScreen> {
               Gaps.v12,
               const Divider(),
               Gaps.v12,
-              Row(
-                children: [
-                  FaIcon(
-                    FontAwesomeIcons.cashRegister,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Gaps.h10,
-                  const Text(
-                    '결재 방법',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size18,
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     FaIcon(
+              //       FontAwesomeIcons.cashRegister,
+              //       color: Theme.of(context).primaryColor,
+              //     ),
+              //     Gaps.h10,
+              //     const Text(
+              //       '결재 방법',
+              //       style: TextStyle(
+              //         color: Colors.black,
+              //         fontWeight: FontWeight.bold,
+              //         fontSize: Sizes.size18,
+              //       ),
+              //     ),
+              //   ],
+              // ),
               Gaps.v12,
             ],
           ),
