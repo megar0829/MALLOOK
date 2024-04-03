@@ -1,6 +1,8 @@
 import Image, {StaticImageData} from "next/image";
 import styles from "./nextModal.module.css";
-import { WorldCupData} from "@/types";
+import { WorldCupData } from "@/types";
+import VsImage from "@/assets/img/icons/vs.png"
+
 
 export default function NextModal(props: {
 	left: WorldCupData, right: WorldCupData, goNext: (data: WorldCupData) => void
@@ -20,24 +22,28 @@ export default function NextModal(props: {
 						height={200}
 						unoptimized={true}
 					/>
-					<div className={styles.spanDiv}>
-						{
-							props.left.keywordList.length &&
-							props.left.keywordList.slice(0, 3).map((keyword, index) => {
-								return (
-									<div className={styles.keywordDiv} key={index}>
-										<span className={styles.span}># {keyword}</span>
-									</div>
-								);
-							})
-						}
-					</div>
+					{/*<div className={styles.spanDiv}>*/}
+					{/*	{*/}
+					{/*		props.left.keywordList.length &&*/}
+					{/*		props.left.keywordList.slice(0, 3).map((keyword, index) => {*/}
+					{/*			return (*/}
+					{/*				<div className={styles.keywordDiv} key={index}>*/}
+					{/*					<span className={styles.span}># {keyword}</span>*/}
+					{/*				</div>*/}
+					{/*			);*/}
+					{/*		})*/}
+					{/*	}*/}
+					{/*</div>*/}
 				</div>
 
 				<div className={styles.middle__container}>
-					<div className={styles.line} />
-					<span className={styles.vs}>VS</span>
-					<div className={styles.line} />
+					<Image
+						src={VsImage}
+						alt="VsImage"
+						width={200}
+						height={200}
+						unoptimized={true}
+					/>
 				</div>
 
 				<div
@@ -52,18 +58,18 @@ export default function NextModal(props: {
 						height={200}
 						unoptimized={true}
 					/>
-					<div className={styles.spanDiv}>
-						{
-							props.right.keywordList.length &&
-							props.right.keywordList.slice(0, 3).map((keyword, index) => {
-								return (
-									<div className={styles.keywordDiv} key={index}>
-										<span className={styles.span}># {keyword}</span>
-									</div>
-								);
-							})
-						}
-					</div>
+					{/*<div className={styles.spanDiv}>*/}
+					{/*	{*/}
+					{/*		props.right.keywordList.length &&*/}
+					{/*		props.right.keywordList.slice(0, 3).map((keyword, index) => {*/}
+					{/*			return (*/}
+					{/*				<div className={styles.keywordDiv} key={index}>*/}
+					{/*					<span className={styles.span}># {keyword}</span>*/}
+					{/*				</div>*/}
+					{/*			);*/}
+					{/*		})*/}
+					{/*	}*/}
+					{/*</div>*/}
 				</div>
 			</div>
 		</div>

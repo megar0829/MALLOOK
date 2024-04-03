@@ -34,7 +34,7 @@ export default function Scripts() {
 		} else {
 			return (
 				<div className={styles.scripts__noneDiv}>
-					<span className={styles.scripts__none}>아직 좋아요한 코디가 없습니다.</span>
+					<span className={styles.scripts__none}>아직 좋아요를 누른 코디가 없습니다.</span>
 				</div>
 			);
 		}
