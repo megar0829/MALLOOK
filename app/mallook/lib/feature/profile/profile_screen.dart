@@ -39,6 +39,14 @@ class ProfileScreen extends StatelessWidget {
             fontSize: Sizes.size18,
             fontWeight: FontWeight.bold,
           ),
+          leading: Padding(
+            padding: const EdgeInsets.only(
+              left: Sizes.size20,
+            ),
+            child: Image.asset(
+              "assets/images/app_logo/logo_sm.png",
+            ),
+          ),
           title: const Text(
             "프로필",
             style: TextStyle(

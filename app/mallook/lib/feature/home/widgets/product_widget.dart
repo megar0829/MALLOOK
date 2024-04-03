@@ -43,7 +43,7 @@ class ProductWidget extends StatelessWidget {
             child: AspectRatio(
               aspectRatio: 1,
               child: FadeInImage.assetNetwork(
-                placeholder: "assets/images/ssafy_logo.png",
+                placeholder: "assets/images/app_logo/logo_sm.png",
                 image: _product.image!,
                 fit: BoxFit.fill,
                 filterQuality: FilterQuality.low,

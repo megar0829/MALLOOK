@@ -32,7 +32,7 @@ class MyScriptListBox extends StatelessWidget {
               BlendMode.srcOver,
             ),
             child: FadeInImage.assetNetwork(
-              placeholder: "assets/images/ssafy_logo.png",
+              placeholder: "assets/images/app_logo/logo_sm.png",
               image: script.imageUrl!,
               fit: BoxFit.cover,
               filterQuality: FilterQuality.low,
