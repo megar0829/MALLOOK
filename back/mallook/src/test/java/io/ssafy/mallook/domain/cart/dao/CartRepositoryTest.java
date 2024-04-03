@@ -23,7 +23,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -51,7 +51,8 @@ class CartRepositoryTest {
                 .totalFee(1000L)
                 .build();
     }
-    private Product buildProduct(ShoppingMall shoppingMall){
+
+    private Product buildProduct(ShoppingMall shoppingMall) {
         return Product.builder()
                 .mainCategory(MainCategory.TOP)
                 .subCategory(SubCategory.FORMAL)
@@ -64,6 +65,7 @@ class CartRepositoryTest {
                 .shopingmall(shoppingMall)
                 .build();
     }
+
     private CartProduct buildCartProduct(Cart cart) {
         return CartProduct.builder()
                 .cart(cart)
@@ -76,7 +78,8 @@ class CartRepositoryTest {
                 .productColor("red")
                 .build();
     }
-    private ShoppingMall buildShoppingMall(){
+
+    private ShoppingMall buildShoppingMall() {
         return ShoppingMall.builder()
                 .name("testshop")
                 .url("www.test.com")
@@ -100,8 +103,9 @@ class CartRepositoryTest {
     @Test
     @DisplayName("카트 안의 상품 조회")
     void findProductsInCartTest() {
-        
+
     }
+
     @Test
     @DisplayName("회원의 활성화된 카트 조회")
     void findMyCartByMemberTest() {

@@ -28,7 +28,7 @@ public class AuthService {
     public boolean authorizeToReadScriptDetail(UUID memberId, Long scriptId) {
         log.info("내가 쓴 글인지 확인 시작");
         return scriptRepository.findById(scriptId)
-                .orElseThrow(() ->new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT))
+                .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_SCRIPT))
                 .isWrittenByTargetMember(memberId);
     }
 
@@ -53,7 +53,6 @@ public class AuthService {
         return memberCouponRepository.existsByIdAndMember_Id(memberCouponId, memberId);
 
     }
-
 
 
     public boolean authorizeToDeleteOrder(UUID memberId, OrderDeleteDto orderDeleteDto) {

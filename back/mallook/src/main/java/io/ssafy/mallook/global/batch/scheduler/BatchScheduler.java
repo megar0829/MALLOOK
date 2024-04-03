@@ -30,7 +30,7 @@ public class BatchScheduler {
     private final JobLauncher jobLauncher;
     private final JobRegistry jobRegistry;
 
-//    @Scheduled(cron = "* * * * * *")
+    //    @Scheduled(cron = "* * * * * *")
     @Scheduled(cron = "0 0 0 * * 1")
     @SchedulerLock(name = "couponSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runJob() {
@@ -46,7 +46,7 @@ public class BatchScheduler {
         }
     }
 
-//    @Scheduled(cron = "* * * * * *")
+    //    @Scheduled(cron = "* * * * * *")
     @Scheduled(cron = "0 0/30 * * * *") // 매 30분마다 실행
     @SchedulerLock(name = "heartSchedule", lockAtLeastFor = "50s", lockAtMostFor = "10m")
     public void runSecondJob() {

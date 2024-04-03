@@ -5,10 +5,7 @@ import io.ssafy.mallook.config.security.WithMockCustomUser;
 import io.ssafy.mallook.domain.keyword.application.KeywordService;
 import io.ssafy.mallook.domain.keyword.dto.response.KeywordListRes;
 import io.ssafy.mallook.global.common.code.SuccessCode;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -20,7 +17,8 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(KeywordController.class)
 public class KeywordControllerTest {

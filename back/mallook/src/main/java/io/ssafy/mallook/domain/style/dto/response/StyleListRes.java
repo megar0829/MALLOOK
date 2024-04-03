@@ -9,7 +9,7 @@ import lombok.Builder;
 public record StyleListRes(
         @Schema(description = "스타일 id")
         Long id,
-        @Schema(description="스타일 제목")
+        @Schema(description = "스타일 제목")
         String name,
         @Schema(description = "스타일 이미지")
         String imgUrl

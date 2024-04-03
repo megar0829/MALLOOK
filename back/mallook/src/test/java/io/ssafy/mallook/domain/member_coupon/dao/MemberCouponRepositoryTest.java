@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.member_coupon.dao;
 
-import io.ssafy.mallook.domain.cart.dao.CartRepository;
 import io.ssafy.mallook.domain.coupon.dao.CouponRepository;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
@@ -12,15 +11,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -35,18 +33,21 @@ class MemberCouponRepositoryTest {
     @BeforeEach
     void setUp() {
     }
+
     private Member buildMember(String nickname) {
         return Member.builder()
                 .nickname(nickname)
                 .build();
     }
+
     private MemberCoupon buildMemberCoupon(Coupon coupon, Member member) {
         return MemberCoupon.builder()
                 .coupon(coupon)
                 .member(member)
                 .build();
     }
-    private Coupon buildCoupon (){
+
+    private Coupon buildCoupon() {
         return Coupon.builder()
                 .name("test 쿠폰")
                 .type(CouponType.MONEY)
@@ -54,13 +55,14 @@ class MemberCouponRepositoryTest {
                 .expiredTime(LocalDateTime.now())
                 .build();
     }
+
     @Test
     @DisplayName("나에게 등록된 쿠폰 삭제 테스트")
     void deleteMyCouponTest() {
         Member member = Mockito.mock(Member.class);
         memberRepository.save(member);
         List<Long> deleteList = new ArrayList<>();
-        for (int i = 0; i < 3 ; i ++) {
+        for (int i = 0; i < 3; i++) {
             Coupon coupon = buildCoupon();
             couponRepository.save(coupon);
             var memberCoupon = buildMemberCoupon(coupon, member);
