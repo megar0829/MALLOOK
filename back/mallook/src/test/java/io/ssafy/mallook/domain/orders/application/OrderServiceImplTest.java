@@ -4,7 +4,6 @@ import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.orders.dao.OrderRepository;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
-import io.ssafy.mallook.domain.orders.dto.request.OrderInsertReq;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
 import io.ssafy.mallook.domain.orders.dto.response.OrderDetailDto;
 import io.ssafy.mallook.domain.orders.entity.Orders;

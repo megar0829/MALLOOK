@@ -3,7 +3,6 @@ package io.ssafy.mallook.domain.shoppingmall.application;
 import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
 import io.ssafy.mallook.domain.shoppingmall.dto.response.ShoppingMallListDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;

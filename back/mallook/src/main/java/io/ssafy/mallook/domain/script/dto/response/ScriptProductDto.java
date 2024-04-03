@@ -20,8 +20,8 @@ public record ScriptProductDto(
         List<String> detailImages,
         String code,
         String url,
-        String image)
-{
+        String image
+) {
     public static ScriptProductDto toScriptProductDto(ProductsListDto productsListDto) {
         return ScriptProductDto.builder()
                 .id(productsListDto.id())

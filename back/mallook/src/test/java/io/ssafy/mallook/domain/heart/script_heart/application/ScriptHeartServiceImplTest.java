@@ -6,7 +6,6 @@ import io.ssafy.mallook.domain.heart.script_heart.entity.ScriptHeart;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
-import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +14,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 

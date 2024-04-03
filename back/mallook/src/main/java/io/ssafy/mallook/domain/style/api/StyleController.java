@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
-
 @RestController
 @RequestMapping("/api/styles")
 @RequiredArgsConstructor
@@ -57,6 +56,7 @@ public class StyleController {
                 result
         );
     }
+
     @Operation(
             summary = "월드컵 리스트 조회",
             responses = {
@@ -126,6 +126,7 @@ public class StyleController {
                 "스타일 삭제 성공"
         );
     }
+
     @Operation(
             summary = "몰룩북 누끼 이미지 리스트 조회",
             responses = {
@@ -135,7 +136,7 @@ public class StyleController {
     )
     @GetMapping("/mallook-books")
     public ResponseEntity<BaseResponse<Page<ProductImgRes>>> getMallookBookImages(
-            @PageableDefault(size=20, sort="id", direction = Sort.Direction.DESC) Pageable pageable,
+            @PageableDefault(size = 20, sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(name = "primary", required = false) String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
@@ -144,5 +145,4 @@ public class StyleController {
                 styleService.getMallookBookImages(pageable, mainCategory, subCategory)
         );
     }
-
 }

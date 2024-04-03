@@ -10,7 +10,6 @@ import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
-import io.ssafy.mallook.domain.product.entity.Product;
 import io.ssafy.mallook.domain.product.entity.Products;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
@@ -19,11 +18,9 @@ import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptProductDto;
 import io.ssafy.mallook.domain.script.entity.Script;
-import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -31,14 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto.toDto;
 import static io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto.toDtoNotLogin;
 import static io.ssafy.mallook.domain.script.dto.response.ScriptListDto.toDto;
-import static io.ssafy.mallook.global.common.code.ErrorCode.*;
-import static java.util.stream.Collectors.*;
+import static io.ssafy.mallook.global.common.code.ErrorCode.NOT_FOUND_SCRIPT;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @RequiredArgsConstructor

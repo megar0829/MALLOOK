@@ -11,12 +11,18 @@ import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.UUID;
+
 public interface StyleService {
     Slice<StyleRes> findStyleListFirst(Pageable pageable);
+
     Slice<StyleRes> findStyleList(Pageable pageable, Long cursor);
+
     List<StyledWorldCupDto> getWorldCupList();
+
     StyleDetailRes findStyleDetail(Long id);
+
     void saveStyle(UUID memberId, StyleInsertReq styleInsertRes);
+
     void DeleteStyle(UUID memberId, List<Long> styleIdList);
 
     Page<ProductImgRes> getMallookBookImages(Pageable pageable, String mainCategory, String subCategory);

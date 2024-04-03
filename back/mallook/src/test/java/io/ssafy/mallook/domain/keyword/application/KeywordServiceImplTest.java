@@ -1,12 +1,10 @@
 package io.ssafy.mallook.domain.keyword.application;
 
-import io.ssafy.mallook.domain.keyword.application.KeywordServiceImpl;
 import io.ssafy.mallook.domain.keyword.dto.response.KeywordListRes;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.global.batch.dao.Top50RedisDao;
 import io.ssafy.mallook.global.batch.dto.TopScriptDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -5,7 +5,6 @@ import io.ssafy.mallook.domain.shoppingmall.dto.response.ShoppingMallListDto;
 import io.ssafy.mallook.global.common.BaseResponse;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -13,7 +12,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,10 +24,10 @@ public class ShoppingMallController {
     @GetMapping
     public ResponseEntity<BaseResponse<Slice<ShoppingMallListDto>>> getAllShoppingMallList(
             @PageableDefault(
-            size = 20,
-            sort = "name", direction =
-            Sort.Direction.ASC) Pageable pageable
-            ) {
+                    size = 20,
+                    sort = "name", direction =
+                    Sort.Direction.ASC) Pageable pageable
+    ) {
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 shoppingMallService.getAllMallList(pageable)

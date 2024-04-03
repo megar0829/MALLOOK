@@ -1,13 +1,10 @@
 package io.ssafy.mallook.domain.script.api;
 
-import com.theokanning.openai.service.OpenAiService;
 import io.ssafy.mallook.domain.product.application.ProductService;
-import io.ssafy.mallook.domain.product.dto.response.ProductsListDto;
 import io.ssafy.mallook.domain.product.dto.response.ProductsPageRes;
 import io.ssafy.mallook.domain.script.application.ScriptService;
 import io.ssafy.mallook.domain.script.dto.request.ScriptCreatDto;
 import io.ssafy.mallook.domain.script.dto.request.ScriptDeleteListDto;
-import io.ssafy.mallook.domain.script.dto.request.ScriptKeywordDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptDetailDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptProductDto;

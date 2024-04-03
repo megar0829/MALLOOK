@@ -6,9 +6,6 @@ import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
-import io.ssafy.mallook.domain.product.entity.MainCategory;
-import io.ssafy.mallook.domain.product.entity.Product;
-import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
 import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import jakarta.persistence.EntityManager;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")

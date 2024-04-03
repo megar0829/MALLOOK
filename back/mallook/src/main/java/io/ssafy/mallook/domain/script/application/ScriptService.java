@@ -29,7 +29,7 @@ public interface ScriptService {
 
     ScriptListDto getLatestScript(UUID id);
 
-    ScriptDetailDto getScriptDetail(UUID memberId,Long scriptId);
+    ScriptDetailDto getScriptDetail(UUID memberId, Long scriptId);
 
     void createScript(ScriptCreatDto scriptCreateDto, UUID id);
 
