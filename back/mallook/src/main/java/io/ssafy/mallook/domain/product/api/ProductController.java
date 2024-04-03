@@ -16,6 +16,8 @@ import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Supplier;
@@ -43,6 +45,7 @@ import static java.util.Objects.*;
 public class ProductController {
 
     private final ProductService productService;
+
     @Operation(summary = "상품 리스트 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "상품 리스트 조회 성공"),
@@ -66,6 +69,7 @@ public class ProductController {
                 productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
         );
     }
+
     @Operation(
             summary = "리뷰순 top100 상품 조회",
             responses = {
@@ -114,7 +118,20 @@ public class ProductController {
         );
     }
 
-
+    @Operation(summary = "서브 카테고리 별 추천상품 조회",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "상품 상세 정보 조회 성공"),
+                    @ApiResponse(responseCode = "404", description = "상품 상세 정보 조회 실패")
+            })
+    @GetMapping("/category-recommend")
+    public ResponseEntity<BaseResponse<ProductPageRes>> getRecommendedProducts(
+            @RequestParam("secondary") @NotBlank String subCategory
+    ) {
+        return BaseResponse.success(
+                SuccessCode.SELECT_SUCCESS,
+                productService.getRecommendedProducts(subCategory)
+        );
+    }
 
 
     @Operation(summary = "상품 상세 정보 조회",
