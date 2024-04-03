@@ -7,7 +7,7 @@ import styles from "./login.module.css";
 import Image from "next/image";
 import Link from "next/link";
 
-import imgLogo from "@/assets/img/icons/logo.png";
+import imgLogo from "@/assets/img/icons/logo_lg.png";
 import iconGoogle from "@/assets/img/icons/google.png";
 import iconKakao from "@/assets/img/icons/kakao.png";
 import iconNaver from "@/assets/img/icons/naver.png";
