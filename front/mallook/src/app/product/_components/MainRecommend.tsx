@@ -27,7 +27,7 @@ export type ProductList = {
 const productList: ProductList[] = [
   {
     productImg: imgProduct1,
-    name: "상품 1",
+    name: "[3차 / 5월 3일 예약발송] Moire Knit Sleeveless (Deep Navy)",
     brand: "mallook",
     price: 120000,
   },
@@ -100,8 +100,8 @@ export default function MainRecommend() {
               </div>
 
               <div className={styles.recommend__textDiv}>
-                <span className={styles.recommend__product__name}>{product.name}</span>
                 <span className={styles.recommend__product__brand}>{product.brand}</span>
+                <span className={styles.recommend__product__name}>{product.name}</span>
                 <span className={styles.recommend__product__price}>{product.price.toLocaleString()} 원</span>
               </div>
             </div>
@@ -113,11 +113,12 @@ export default function MainRecommend() {
 
   return (
     <div className={styles.recommend__container}>
-      <span className={styles.recommend__title}>추천 상품</span>
-
-      <div className={styles.recommend__carousel} ref={emblaRef}>
-        <div className={styles.recommend__carousel__container}>
-          {recommendList()}
+      <div>
+        <span className={styles.recommend__title}>추천 상품</span>
+        <div className={styles.recommend__carousel} ref={emblaRef}>
+          <div className={styles.recommend__carousel__container}>
+            {recommendList()}
+          </div>
         </div>
       </div>
     </div>

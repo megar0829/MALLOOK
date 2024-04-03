@@ -5,22 +5,25 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    margin-top: 30px;
 }
 .recommend__title {
-    font-size: 30px;
+    font-size: 20px;
     font-weight: 700;
     color: #434343;
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    padding-left: 10px;
 }
 .recommend__carousel {
     width: 80dvw;
-    height: 300px;
+    height: 320px;
     overflow: hidden;
     background-color: #eeeeee;
     padding: 10px 20px;
-    border: 1px solid #434343;
+    /*border: 1px solid #434343;*/
     border-radius: 15px;
+    margin-top: 10px;
 
 }
 .recommend__carousel__container {
@@ -28,13 +31,18 @@
     align-items: center;
 }
 .recommend__productListDiv {
-    width: 160px;
-    height: 280px;
+    width: 300px;
+    height: 300px;
     background-color: white;
     margin-right: 10px;
+    border-radius: 10px;
+}
+
+.recommend__productListDiv:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.25); /* active:shadow-lg */
 }
 .recommend__innerDiv {
-    width: 160px;
+    width: 200px;
     height: 280px;
     display: flex;
     flex-direction: column;
@@ -42,29 +50,38 @@
     padding: 5px 2px;
 }
 .recommend__product__imageDiv {
-    width: 140px;
-    height: 180px;
+    padding-top: 5px;
+    width: 170px;
+    height: 200px;
 }
 .recommend__product__image {
-    width: 140px;
-    height: 180px;
+    width: 170px;
+    height: 200px;
 }
 .recommend__textDiv {
-    width: 140px;
+    width: 160px;
     height: 90px;
     display: flex;
+    padding-top: 15px ;
     flex-direction: column;
     align-items: flex-start;
+
 }
 .recommend__product__name {
-    font-size: 18px;
+    width: 160px;
+    font-size: 15px;
     font-weight: 600;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
 }
 .recommend__product__brand {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
+    color: #777777;
 }
 .recommend__product__price {
     font-size: 17px;
     font-weight: 700;
+    color: #777777;
 }
