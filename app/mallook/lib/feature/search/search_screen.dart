@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 import 'package:mallook/feature/search/api/search_api_service.dart';
-import 'package:mallook/feature/search/models/hot_keyword.dart';
 import 'package:mallook/feature/search/search_product_screen.dart';
 import 'package:mallook/feature/search/widget/hot_keyword_grid_widget.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
@@ -18,9 +18,8 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _textEditingController = TextEditingController();
   final ScrollController _appBarScrollController = ScrollController();
-  final Future<List<HotKeyword>> _hotKeywords =
-      SearchApiService.getHotKeywords();
-  final Set<String> _searchKeywords = {};
+  final Future<List<Keyword>> _hotKeywords = SearchApiService.getHotKeywords();
+  final Set<Keyword> _searchKeywords = {};
 
   String _searchWord = "";
 
@@ -55,7 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void addSearchKeyword(String keyword) {
+  void addSearchKeyword(Keyword keyword) {
     setState(() {
       _appBarScrollController.animateTo(
         _appBarScrollController.position.maxScrollExtent,
@@ -67,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
     });
   }
 
-  void _removeSearchKeyword(String keyword) {
+  void _removeSearchKeyword(Keyword keyword) {
     setState(() {
       _searchKeywords.remove(keyword);
     });
@@ -174,49 +173,29 @@ class _SearchScreenState extends State<SearchScreen> {
               child: ListView.separated(
                 controller: _appBarScrollController,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: Sizes.size4,
-                    horizontal: Sizes.size10,
+                itemBuilder: (context, index) => GestureDetector(
+                  onTap: () => _removeSearchKeyword(
+                    _searchKeywords.elementAt(index),
                   ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColorDark,
-                    borderRadius: BorderRadius.circular(
-                      Sizes.size20,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size6,
+                      horizontal: Sizes.size16,
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        '# ${_searchKeywords.elementAt(index)}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: Sizes.size14,
-                        ),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColorDark,
+                      borderRadius: BorderRadius.circular(
+                        Sizes.size20,
                       ),
-                      Gaps.h4,
-                      GestureDetector(
-                        onTap: () => _removeSearchKeyword(
-                            _searchKeywords.elementAt(index)),
-                        child: Container(
-                          padding: const EdgeInsets.all(
-                            Sizes.size2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).primaryColorLight,
-                            borderRadius: BorderRadius.circular(
-                              Sizes.size10,
-                            ),
-                          ),
-                          child: FaIcon(
-                            FontAwesomeIcons.xmark,
-                            color: Colors.grey.shade700,
-                            size: Sizes.size14,
-                          ),
-                        ),
-                      )
-                    ],
+                    ),
+                    child: Text(
+                      '# ${_searchKeywords.elementAt(index).name ?? ""}',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Sizes.size14,
+                      ),
+                    ),
                   ),
                 ),
                 separatorBuilder: (context, index) => Gaps.h10,

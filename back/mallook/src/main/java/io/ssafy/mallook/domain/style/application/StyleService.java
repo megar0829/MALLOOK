@@ -1,9 +1,11 @@
 package io.ssafy.mallook.domain.style.application;
 
+import io.ssafy.mallook.domain.product.dto.response.ProductImgRes;
 import io.ssafy.mallook.domain.style.dto.request.StyleInsertReq;
 import io.ssafy.mallook.domain.style.dto.response.StyleDetailRes;
 import io.ssafy.mallook.domain.style.dto.response.StyleRes;
 import io.ssafy.mallook.domain.style.dto.response.StyledWorldCupDto;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
@@ -16,4 +18,6 @@ public interface StyleService {
     StyleDetailRes findStyleDetail(Long id);
     void saveStyle(UUID memberId, StyleInsertReq styleInsertRes);
     void DeleteStyle(UUID memberId, List<Long> styleIdList);
+
+    Page<ProductImgRes> getMallookBookImages(Pageable pageable, String mainCategory, String subCategory);
 }

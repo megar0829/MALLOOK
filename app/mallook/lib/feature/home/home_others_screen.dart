@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/rank_script_box.dart';
+import 'package:mallook/feature/script/model/script.dart';
 import 'package:mallook/feature/script/script_screen.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
@@ -16,7 +16,7 @@ class HomeOthersScreen extends StatefulWidget {
 class _HomeOthersScreenState extends State<HomeOthersScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Script> _scripts = [];
-  int _scriptPage = 0;
+  int _scriptCursor = 999999999999;
   bool _isScriptLoading = false;
 
   @override
@@ -46,13 +46,20 @@ class _HomeOthersScreenState extends State<HomeOthersScreen> {
           _isScriptLoading = true;
         });
       }
-      var loadedScripts = await HomeApiService.getRankingScripts(_scriptPage);
-      if (mounted) {
-        setState(() {
-          _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-          _scriptPage++;
-          _isScriptLoading = false;
-        });
+
+      try {
+        var cursorScript =
+            await HomeApiService.getRankingScripts(_scriptCursor);
+        if (mounted) {
+          setState(() {
+            _scripts.addAll(cursorScript.content ?? []);
+            if (cursorScript.content!.isNotEmpty) {
+              _scriptCursor = cursorScript.content!.last.id! - 1;
+            }
+          });
+        }
+      } finally {
+        _isScriptLoading = false;
       }
     }
   }

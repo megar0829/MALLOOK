@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/coupon/issue_coupon_screen.dart';
 import 'package:mallook/feature/coupon/my_coupon_screen.dart';
 
 class CouponIconButton extends StatelessWidget {
   const CouponIconButton({
     super.key,
+    required this.couponCnt,
   });
+
+  final int couponCnt;
 
   void _moveToMyCouponScreen(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const MyCouponScreen(),
+        builder: (context) => const IssueCouponScreen(),
       ),
     );
   }
@@ -44,10 +48,10 @@ class CouponIconButton extends StatelessWidget {
                 width: 0.5,
               ),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                '2',
-                style: TextStyle(
+                '$couponCnt',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: Sizes.size12,
                   fontWeight: FontWeight.w800,

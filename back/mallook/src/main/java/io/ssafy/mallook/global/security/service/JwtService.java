@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -115,7 +114,8 @@ public class JwtService {
         return new TokenDto(
                 newAccessToken,
                 newRefreshToken,
-                userSecurityDTO.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()
+                userSecurityDTO.getAuthorities().stream().map(grantedAuthority ->
+                        grantedAuthority.getAuthority().replaceAll("ROLE_", "")).toList()
         );
     }
 

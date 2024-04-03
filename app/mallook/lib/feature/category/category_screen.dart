@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/category/api/category_api_service.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_cursor_response.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 Map<String, List<String>> categorys = {
-  "베스트": ["전체"],
-  "상의": ["전체", "긴팔", "반팔", "민소매", "후드티", "맨투맨", "니트/스웨터", "셔츠/블라우스", "기타"],
-  "하의": ["전체", "데님", "면", "슬랙스", "트레이닝/조커팬츠", "스커트", "레깅스", "숏팬츠", "와이드", "기타"],
+  "상의": ["전체", "긴팔티", "반팔티", "민소매", "후드티", "맨투맨", "니트/스웨터", "셔츠/블라우스", "기타"],
+  "하의": ["전체", "데님", "면", "슬랙스", "트레이닝/조거팬츠", "스커트", "레깅스", "숏팬츠", "와이드", "기타"],
   "아우터": [
     "전체",
     "숏패딩/패딩조끼",
     "롱패딩",
     "숏코트",
     "롱코트",
-    "라이더 재킷",
+    "라이더재킷",
     "블레이저",
     "무스탕",
     "재킷",
@@ -29,7 +29,7 @@ Map<String, List<String>> categorys = {
     "기타"
   ],
   "원피스": ["전체", "롱원피스", "미니원피스", "기타"],
-  "가방": ["전체", "크로스백", "숄더백", "토트백", "클러치", "에코/캔버스 백", "백팩", "웨이스트백", "기타"],
+  "가방": ["전체", "크로스백", "숄더백", "토트백", "클러치", "에코/캔버스 백", "백팩", "기타"],
   "신발": [
     "전체",
     "스니커즈",
@@ -47,6 +47,16 @@ Map<String, List<String>> categorys = {
   "모자": ["전체", "볼캡/야구모자", "스냅백", "비니", "버킷햇", "베레모", "페도라", "기타"]
 };
 
+Map<String, String> titleImage = {
+  "상의": "assets/images/tops_shirt.jpg",
+  "하의": "assets/images/bottoms_slacks.jpg",
+  "아우터": "assets/images/outer_short-padding.jpg",
+  "원피스": "assets/images/dresses_mini.jpg",
+  "가방": "assets/images/bags_tote.jpg",
+  "신발": "assets/images/shoes_running.jpg",
+  "모자": "assets/images/hats_bucket-hat.jpg",
+};
+
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
 
@@ -57,15 +67,15 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Product> _products = [];
-  int _productPage = 0;
   bool _isProductLoading = false;
-  String primary = categorys.keys.first;
-  late String secondary = "";
+  String _primary = categorys.keys.first;
+  late String _secondary = "";
+  String? _cursor = "";
 
   @override
   void initState() {
     super.initState();
-    secondary = categorys[primary]!.first;
+    _secondary = categorys[_primary]!.first;
 
     _loadMoreProducts();
     _scrollController.addListener(() {
@@ -84,6 +94,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
   }
 
   void _loadMoreProducts() async {
+    if (_cursor == null) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
@@ -91,27 +102,47 @@ class _CategoryScreenState extends State<CategoryScreen> {
         });
       }
 
-      var loadedProducts = await HomeApiService.getProducts(_productPage);
-      if (mounted) {
-        setState(() {
-          _products.addAll(loadedProducts);
-          _productPage++;
-          _isProductLoading = false;
-        });
+      print("================cursor================");
+      print(_cursor ?? "XXXX");
+
+      try {
+        ProductCursorResponse loadedProducts =
+            await CategoryApiService.getCategoryProducts(
+          cursor: _cursor ?? '',
+          primary: _primary,
+          secondary: _secondary,
+        );
+
+        if (mounted) {
+          setState(() {
+            if (loadedProducts.content != null) {
+              _products.addAll(loadedProducts.content!);
+            }
+            _cursor = loadedProducts.nextCursor;
+            print("================next cursor================");
+            print(_cursor ?? "XXXX");
+          });
+        }
+      } finally {
+        _isProductLoading = false;
       }
     }
   }
 
-  void _onTapPrimaryCategory(int primaryIdx) {
-    primary = categorys.keys.toList()[primaryIdx];
-    secondary = categorys[primary]!.first;
+  void _onTapPrimaryCategory(int primaryIdx) async {
+    _isProductLoading = false;
+    _cursor = "";
+    _primary = categorys.keys.toList()[primaryIdx];
+    _secondary = categorys[_primary]!.first;
     _products.clear();
     _loadMoreProducts();
     setState(() {});
   }
 
-  void _onTapSecondaryCategory(int secondaryIdx) {
-    secondary = categorys[primary]![secondaryIdx];
+  void _onTapSecondaryCategory(int secondaryIdx) async {
+    _isProductLoading = false;
+    _cursor = "";
+    _secondary = categorys[_primary]![secondaryIdx];
     _products.clear();
     _loadMoreProducts();
     setState(() {});
@@ -130,7 +161,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           shadowColor: Colors.grey.shade400,
           centerTitle: true,
           title: Text(
-            secondary.isNotEmpty ? '$primary · $secondary' : primary,
+            _secondary.isNotEmpty ? '$_primary · $_secondary' : _primary,
             style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -169,8 +200,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   ),
                                   shape: BoxShape.circle,
                                 ),
-                                child:
-                                    Image.asset("assets/images/ssafy_logo.png"),
+                                child: Image.asset(titleImage[
+                                    categorys.keys.toList()[index]]!),
                               ),
                               Text(
                                 categorys.keys.toList()[index],
@@ -201,12 +232,13 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               horizontal: Sizes.size8,
                             ),
                             decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(
-                                  Sizes.size16,
-                                )),
+                              color: Colors.grey.shade200,
+                              borderRadius: BorderRadius.circular(
+                                Sizes.size16,
+                              ),
+                            ),
                             child: Text(
-                              categorys[primary]!.toList()[index],
+                              categorys[_primary]!.toList()[index],
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size14,
@@ -216,7 +248,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           ),
                         ),
                         separatorBuilder: (context, index) => Gaps.h8,
-                        itemCount: categorys[primary]!.length,
+                        itemCount: categorys[_primary]!.length,
                       ),
                     )
                   ],

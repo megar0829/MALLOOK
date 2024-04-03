@@ -10,13 +10,12 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: 'image.brandi.me',
+                hostname: 'zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com',
                 port: '',
-                pathname: '/common/**',
+                pathname: '/mallook/**',
             },
         ],
     },
 };
-
 export default nextConfig;
 

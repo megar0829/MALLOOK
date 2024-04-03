@@ -8,6 +8,8 @@ public record OrderDirectInsertReq(
         Long totalPrice,
         @Schema(description = "배송비")
         Long totalFee,
+        @Schema(description = "사용할 쿠폰 id")
+        Long memberCouponId,
         @Schema(description = "개수")
         Long totalCount,
         @Schema(description = "상품 정보")

@@ -14,6 +14,8 @@ public record OrderInsertReq(
         Long totalCount,
         @Schema(description = "장바구니 id")
         Long cartId,
+        @Schema(description = "사용할 쿠폰 id")
+        Long memberCouponId,
         @Schema(description = "장바구니 내 상품 번호 리스트")
         List<Long> cartProductList
 ) {

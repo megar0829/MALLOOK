@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/script/model/script.dart';
 
 class RankScriptBox extends StatelessWidget {
   final Script script;
@@ -72,7 +73,9 @@ class RankScriptBox extends StatelessWidget {
                           ),
                           Gaps.h12,
                           Text(
-                            "아바타",
+                            script.nickname != null
+                                ? script.nickname!.trim().replaceAll('"', '')
+                                : "",
                             maxLines: 2,
                             style: TextStyle(
                               color: Colors.white.withOpacity(0.8),
@@ -103,7 +106,7 @@ class RankScriptBox extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    script.name!,
+                    script.name!.trim().replaceAll('"', ''),
                     maxLines: 5,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(

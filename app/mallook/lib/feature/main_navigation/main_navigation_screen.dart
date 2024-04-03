@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/category/category_screen.dart';
 import 'package:mallook/feature/home/home_screen.dart';
+import 'package:mallook/feature/profile/model/member_detail.dart';
 import 'package:mallook/feature/profile/profile_screen.dart';
 import 'package:mallook/feature/search/search_screen.dart';
 import 'package:mallook/feature/style/style_screen.dart';
@@ -43,9 +44,11 @@ class MainNavigationScreen extends StatefulWidget {
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  var i = ProfileApiService.getMemberDetail();
   DateTime? _currentBackPressTime;
   int _selectedIndex = 0;
+  Future<MemberDetail> memberDetail = ProfileApiService.getMemberDetail();
+
+  // Future<List<String>> hotKeywords = SearchApiService.getHotKeywords();
 
   void _onItemTapped(int index) {
     setState(() {
@@ -93,7 +96,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
             ),
             Offstage(
               offstage: _selectedIndex != 4,
-              child: ProfileScreen(),
+              child: ProfileScreen(
+                member: memberDetail,
+              ),
             ),
           ],
         ),

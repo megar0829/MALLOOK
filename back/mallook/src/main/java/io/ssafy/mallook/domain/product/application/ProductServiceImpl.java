@@ -4,23 +4,21 @@ import io.ssafy.mallook.domain.product.dao.jpa.ProductCustomRepository;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsCustomRepository;
 import io.ssafy.mallook.domain.product.dao.mongo.ProductsRepository;
-import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
-import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -44,8 +42,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductsPageRes getProductDetail(ProductHotKeywordDto hotKeywordDto, String cursor, Pageable pageable) {
-        return productsCustomRepository.findByKeywordList(hotKeywordDto, cursor, pageable);
+    public ProductsPageRes getProductDetail(List<String> keywords, String cursor, Pageable pageable) {
+        return productsCustomRepository.findByKeywordList(keywords, cursor, pageable);
     }
 
     @Override
@@ -61,7 +59,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String getLastMongoProductsId() {
-        return mongoProductsRepository.findFirstByOrderByIdDesc().getId().toString();
+        return mongoProductsRepository.findFirstByOrderById().getId().toString();
     }
 
     @Override

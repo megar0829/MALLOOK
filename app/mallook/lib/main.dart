@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
 import 'package:mallook/feature/login/LoginScreen.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
+import 'package:mallook/feature/onboarding/interests_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

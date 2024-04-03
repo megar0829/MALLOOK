@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/home/models/script.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
+import 'package:mallook/feature/script/model/script.dart';
+import 'package:mallook/feature/script/model/script_detail.dart';
 import 'package:mallook/feature/script/widget/script_img_widget.dart';
 import 'package:mallook/feature/script/widget/script_product_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -24,10 +24,11 @@ class ScriptScreen extends StatefulWidget {
 class _ScriptScreenState extends State<ScriptScreen>
     with SingleTickerProviderStateMixin {
   final ScrollController _scrollController = ScrollController();
-  late final Future<Script> _script =
+  late final Future<ScriptDetail> _script =
       ScriptService.getScriptDetail(widget.script.id!);
   final List<Product> _products = [];
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
 
   @override
@@ -51,23 +52,26 @@ class _ScriptScreenState extends State<ScriptScreen>
   }
 
   void _loadMoreProducts() async {
-    List<String> keywords = ["예쁜", "섹시"]; // TODO: script keyword
-    if (!_isProductLoading && keywords.isNotEmpty) {
-      if (mounted) {
-        setState(() {
-          _isProductLoading = true;
-        });
-
-        var loadedProducts = await HomeApiService.getProducts(_productPage);
-        if (mounted) {
-          setState(() {
-            _products.addAll(loadedProducts);
-            _productPage++;
-            _isProductLoading = false;
-          });
-        }
-      }
-    }
+    return;
+    // if (!_isProductLoading && keywords.isNotEmpty) {
+    //   if (mounted) {
+    //     setState(() {
+    //       _isProductLoading = true;
+    //     });
+    //
+    //     var loadedProducts =
+    //     await HomeApiService.getPopularProducts(_productPage);
+    //     if (mounted) {
+    //       setState(() {
+    //         _productPage = loadedProducts.currentPage! + 1;
+    //         _totalPage = loadedProducts.totalPage!;
+    //         _products.addAll(loadedProducts.content!);
+    //         _productPage++;
+    //         _isProductLoading = false;
+    //       });
+    //     }
+    //   }
+    // }
   }
 
   @override
@@ -125,10 +129,10 @@ class _ScriptScreenState extends State<ScriptScreen>
                               ),
                             ),
                             Gaps.h4,
-                            const Text(
-                              "아바타",
+                            Text(
+                              snapshot.data!.nickname ?? "",
                               maxLines: 2,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size18,
                                 fontWeight: FontWeight.bold,
@@ -138,14 +142,16 @@ class _ScriptScreenState extends State<ScriptScreen>
                         ),
                         Row(
                           children: [
-                            const FaIcon(
-                              FontAwesomeIcons.heart,
+                            FaIcon(
+                              snapshot.data!.hasLiked ?? false
+                                  ? FontAwesomeIcons.solidHeart
+                                  : FontAwesomeIcons.heart,
                               color: Colors.red,
                               size: Sizes.size24,
                             ),
                             Gaps.h8,
                             Text(
-                              '${snapshot.data!.heartCount!}',
+                              '${snapshot.data!.heartCount ?? 0}',
                               style: const TextStyle(
                                 color: Colors.black87,
                                 fontSize: Sizes.size18,

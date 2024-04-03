@@ -1,6 +1,7 @@
 package io.ssafy.mallook.domain.product.api;
 
 import com.amazonaws.util.CollectionUtils;
+import com.amazonaws.util.StringUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
 import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.*;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.*;
@@ -36,6 +38,7 @@ import static java.util.Objects.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/products")
+@Log4j2
 @Tag(name = "상품", description = "상품 관련 API")
 public class ProductController {
 
@@ -48,14 +51,16 @@ public class ProductController {
     @GetMapping
     public ResponseEntity<BaseResponse<ProductsPageRes>> getProductsList(
             @PageableDefault(size = 20,
-                    sort = "id",
+                    sort = "_id",
                     direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false) String cursor,
-            @RequestParam(name = "primary", required = false) String mainCategory,
+            @RequestParam(name = "primary", required = false, defaultValue = "상의") String mainCategory,
             @RequestParam(name = "secondary", required = false) String subCategory
     ) {
-        cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
+//        cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
+        cursor = !StringUtils.isNullOrEmpty(cursor) ? cursor : productService.getLastMongoProductsId();
+
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1, Sort.by(Sort.Direction.DESC, "reviews.count"));
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,
                 productService.getMongoProductsList(new ObjectId(cursor), pageable, mainCategory, subCategory)
@@ -83,35 +88,25 @@ public class ProductController {
                     @ApiResponse(responseCode = "404", description = "상품 검색 실패")
             })
     @GetMapping("/search")
-    public ResponseEntity<?> getProductDetail(
+    public ResponseEntity<BaseResponse<ProductsPageRes>> getProductDetail(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String cursor,
-            @RequestParam(required = false) ProductHotKeywordDto hotKeywordDto,
+            @RequestParam(required = false) List<String> keywords,
             @PageableDefault(size = 20,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable
     ) {
-        if (isNull(name) && isNull(hotKeywordDto)) {
-            List<FieldError> errors = new ArrayList<>();
-            FieldError fieldError = new FieldError("검색어", "name", "FAIL");
-            errors.add(fieldError);
-            ErrorResponse errorResponse = ErrorResponse.of()
-                    .code(BAD_REQUEST_ERROR)
-                    .message("검색어를 입력해야 합니다.")
-                    .errors(errors)
-                    .build();
-
-            return ResponseEntity
-                    .badRequest()
-                    .body(errorResponse);
+        if (isNull(name) && isNullOrEmpty(keywords)) {
+            throw new NullPointerException("Both name and keywords are null or empty");
         }
 
         cursor = !isNull(cursor) ? cursor : productService.getLastMongoProductsId();
         final Pageable page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize() + 1);
         String finalCursor = cursor;
-        Supplier<ProductsPageRes> methodToCall = (isNull(hotKeywordDto) || isNullOrEmpty(hotKeywordDto.hotKeywordList()))
+        log.info(cursor);
+        Supplier<ProductsPageRes> methodToCall = isNullOrEmpty(keywords)
                 ? () -> productService.getProductDetail(name, finalCursor, page)
-                : () -> productService.getProductDetail(hotKeywordDto, finalCursor, page);
+                : () -> productService.getProductDetail(keywords, finalCursor, page);
 
         return BaseResponse.success(
                 SuccessCode.SELECT_SUCCESS,

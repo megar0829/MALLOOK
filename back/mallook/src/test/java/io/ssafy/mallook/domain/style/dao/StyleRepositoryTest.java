@@ -63,7 +63,7 @@ class StyleRepositoryTest {
     private StyleProduct buildStyleProduct(Style style){
         return StyleProduct.builder()
                 .style(style)
-                .product(product)
+                .products(product)
                 .build();
     }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
-import 'package:mallook/feature/coupon/model/coupon_model.dart';
+import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -40,13 +40,17 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
           _isCouponLoading = true;
         });
       }
-      var loadedCoupons = await CouponApiService.getMyCoupons(_couponPage);
-      if (mounted) {
-        setState(() {
-          coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
-          _couponPage++;
-          _isCouponLoading = false;
-        });
+
+      try {
+        var loadedCoupons = await CouponApiService.getMyCoupons(_couponPage);
+        if (mounted) {
+          setState(() {
+            coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
+            _couponPage++;
+          });
+        }
+      } finally {
+        _isCouponLoading = false;
       }
     }
   }
@@ -125,27 +129,18 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              coupons[index].name,
+                              coupons[index].name!,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                                 fontSize: Sizes.size16,
                               ),
                             ),
-                            Gaps.v4,
-                            Text(
-                              coupons[index].name,
-                              style: const TextStyle(
-                                color: Colors.black54,
-                                fontWeight: FontWeight.bold,
-                                fontSize: Sizes.size14,
-                              ),
-                            ),
                             Gaps.v10,
                             Text(
-                              coupons[index].type == 'amount'
-                                  ? '${coupons[index].discount} ₩'
-                                  : '${coupons[index].discount} %',
+                              coupons[index].type == 'MONEY'
+                                  ? '${coupons[index].amount} ₩'
+                                  : '${coupons[index].amount} %',
                               style: const TextStyle(
                                 color: Colors.pink,
                                 fontSize: Sizes.size28,

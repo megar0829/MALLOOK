@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/my-script-box.dart';
+import 'package:mallook/feature/script/model/script.dart';
 import 'package:mallook/feature/script/script_screen.dart';
 
 class MyMainScriptWidget extends StatelessWidget {

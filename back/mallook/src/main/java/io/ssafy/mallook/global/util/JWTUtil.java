@@ -53,7 +53,7 @@ public class JWTUtil {
         // refresh token 발급시 redis에 저장
         tokenRedisDao.save(userSecurityDTO.getId(), refreshToken, refreshTokenExpireTime);
         log.info("==============refresh token status==============");
-        log.info(userSecurityDTO.getId() + tokenRedisDao.get(userSecurityDTO.getId()));
+        log.info(userSecurityDTO.getId() + "   " + tokenRedisDao.get(userSecurityDTO.getId()));
         return refreshToken;
     }
 

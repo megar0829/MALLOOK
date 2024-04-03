@@ -35,6 +35,7 @@
     "sass": "^1.71.1",
     "typeit": "^8.8.3",
     "typeit-react": "^2.7.1",
+    "sharp": "^0.33.3",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

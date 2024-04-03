@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/coupon/model/coupon_model.dart';
+import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
 import 'package:mallook/feature/order/ordered_screen.dart';
 import 'package:mallook/feature/order/widget/cart_coupon_dropdown_widget.dart';
 import 'package:mallook/feature/order/widget/order_product_widget.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/custom_circular_wait_bold_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
@@ -26,8 +27,8 @@ class _OrderScreenState extends State<OrderScreen> {
   final CartController cartController = Get.put(CartController());
   Coupon? _selectedCoupon;
   final List<Coupon> _coupons = [
-    Coupon(name: '세진 요정', type: "ratio", discount: 20),
-    Coupon(name: '윤정 뚱땡이', type: "ratio", discount: 5),
+    // Coupon(name: '세진 요정', type: "ratio", discount: 20),
+    // Coupon(name: '윤정 뚱땡이', type: "ratio", discount: 5),
   ];
   static NumberFormat numberFormat = NumberFormat.currency(
     locale: 'ko_KR',
@@ -56,7 +57,7 @@ class _OrderScreenState extends State<OrderScreen> {
   int _getTotalQuantity() {
     int total = 0;
     for (var item in widget.orderItems) {
-      total += item.quantity;
+      total += item.count!;
     }
     return total;
   }
@@ -66,14 +67,14 @@ class _OrderScreenState extends State<OrderScreen> {
     if (_selectedCoupon == null) {
       return totalPrice;
     }
-    if (_selectedCoupon!.type == 'amount') {
-      if (totalPrice >= _selectedCoupon!.discount) {
-        return totalPrice - _selectedCoupon!.discount;
-      }
+    if (_selectedCoupon!.type == 'MONEY') {
+      // if (totalPrice >= _selectedCoupon!.discount) {
+      //   return totalPrice - _selectedCoupon!.discount;
+      // }
       return 0;
     }
-    if (_selectedCoupon!.type == 'ratio') {
-      return totalPrice * (100 - _selectedCoupon!.discount) ~/ 100;
+    if (_selectedCoupon!.type == 'RATIO') {
+      // return totalPrice * (100 - _selectedCoupon!.discount) ~/ 100;
     }
     return 0;
   }
@@ -81,7 +82,7 @@ class _OrderScreenState extends State<OrderScreen> {
   int _getTotalPrice() {
     int total = 0;
     for (var item in widget.orderItems) {
-      total += item.quantity * item.product.price;
+      total += item.price ?? 0 * (item.count ?? 0);
     }
     return total;
   }

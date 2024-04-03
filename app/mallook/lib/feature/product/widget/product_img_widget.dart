@@ -1,15 +1,13 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductImgWidget extends StatefulWidget {
-  final Product product;
+  final List<String> images;
 
-  const ProductImgWidget({super.key, required this.product});
+  const ProductImgWidget({
+    super.key,
+    required this.images,
+  });
 
   @override
   State<ProductImgWidget> createState() => _ProductImgWidgetState();
@@ -18,7 +16,6 @@ class ProductImgWidget extends StatefulWidget {
 class _ProductImgWidgetState extends State<ProductImgWidget> {
   final PageController _imageController = PageController();
   int _currentPageIndex = 0;
-  final int _pageLength = Random().nextInt(5) + 3;
 
   @override
   void dispose() {
@@ -58,57 +55,57 @@ class _ProductImgWidgetState extends State<ProductImgWidget> {
                     controller: _imageController,
                     itemBuilder: (context, index) => Image.network(
                       filterQuality: FilterQuality.high,
-                      widget.product.image!, // TODO: 상품 이미지 리스트
+                      widget.images[index], // TODO: 상품 이미지 리스트
                       fit: BoxFit.cover,
                     ),
-                    itemCount: _pageLength,
+                    itemCount: widget.images.length,
                     onPageChanged: (value) {
                       setState(() {
                         _currentPageIndex = value;
                       });
                     },
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: Sizes.size4,
-                      horizontal: Sizes.size12,
-                    ),
-                    margin: const EdgeInsets.all(
-                      Sizes.size10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.8),
-                      borderRadius: BorderRadius.circular(Sizes.size52),
-                    ),
-                    child: Text(
-                      '${_currentPageIndex + 1}/$_pageLength',
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(
+                  //     vertical: Sizes.size4,
+                  //     horizontal: Sizes.size12,
+                  //   ),
+                  //   margin: const EdgeInsets.all(
+                  //     Sizes.size10,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.8),
+                  //     borderRadius: BorderRadius.circular(Sizes.size52),
+                  //   ),
+                  //   child: Text(
+                  //     '${_currentPageIndex + 1}/${widget.images.length}',
+                  //     style: const TextStyle(
+                  //       color: Colors.white,
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
           ),
-          Gaps.v6,
-          Container(
-            height: Sizes.size24,
-            padding: const EdgeInsets.symmetric(
-              horizontal: Sizes.size32,
-            ),
-            child: SmoothPageIndicator(
-              controller: _imageController,
-              count: _pageLength,
-              effect: ScrollingDotsEffect(
-                dotHeight: Sizes.size12,
-                dotWidth: Sizes.size12,
-                activeDotScale: 1.4,
-                dotColor: Theme.of(context).primaryColorLight,
-                activeDotColor: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
+          // Gaps.v6,
+          // Container(
+          //   height: Sizes.size24,
+          //   padding: const EdgeInsets.symmetric(
+          //     horizontal: Sizes.size32,
+          //   ),
+          //   child: SmoothPageIndicator(
+          //     controller: _imageController,
+          //     count: widget.images.length,
+          //     effect: ScrollingDotsEffect(
+          //       dotHeight: Sizes.size12,
+          //       dotWidth: Sizes.size12,
+          //       activeDotScale: 1.4,
+          //       dotColor: Theme.of(context).primaryColorLight,
+          //       activeDotColor: Theme.of(context).primaryColor,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

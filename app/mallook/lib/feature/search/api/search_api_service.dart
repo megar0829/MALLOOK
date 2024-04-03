@@ -1,25 +1,42 @@
-import 'dart:math';
-
-import 'package:mallook/feature/search/models/hot_keyword.dart';
+import 'package:get/get.dart';
+import 'package:mallook/config/dio_service.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
+import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_cursor_response.dart';
 
 class SearchApiService {
-  static Future<List<HotKeyword>> getHotKeywords() async {
-    List<HotKeyword> hotKeywords = [];
+  static final _dio = DioService();
 
-    for (int i = 0; i < 10; i++) {
-      hotKeywords.add(
-        HotKeyword(
-          id: Random().nextInt(1000),
-          rank: i + 1,
-          change: Random().nextInt(100) - 50,
-          name: "핫 키워드 $i",
-        ),
-      );
+  static Future<List<Keyword>> getHotKeywords() async {
+    List<Keyword> popluarKeywords = [];
+    var result = await _dio.baseGet(
+      path: '/api/keywords/top-ten',
+    );
+
+    for (var r in result) {
+      popluarKeywords.add(Keyword.fromJson(r));
     }
 
-    hotKeywords.sort((a, b) => a.rank.compareTo(b.rank));
-    Future.delayed(const Duration(milliseconds: 500));
+    return popluarKeywords;
+  }
 
-    return hotKeywords;
+  static Future<ProductCursorResponse> getSearchedProducts(
+      {String? name, String? cursor, required List<Keyword> keywords}) async {
+    Map<String, dynamic> query = {};
+    if (name != null && name.trim().isNotEmpty) {
+      query['name'] = name;
+    }
+    if (cursor != null && cursor.trim().isNotEmpty) {
+      query['cursor'] = cursor;
+    }
+    if (keywords.isNotEmpty) {
+      query['keywords'] = keywords.map((e) => e.name).toList();
+    }
+
+    return await _dio.baseGet<ProductCursorResponse>(
+      path: "/api/products/search",
+      queryParameters: query,
+      fromJsonT: (json) => ProductCursorResponse.fromJson(json),
+    );
   }
 }

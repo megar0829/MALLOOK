@@ -2,8 +2,37 @@
 class Assets {
   Assets._();
 
+  static const String imagesBagsBackpack = 'assets/images/bags_backpack.jpg';
+  static const String imagesBagsClutch = 'assets/images/bags_clutch.jpg';
+  static const String imagesBagsCross = 'assets/images/bags_cross.jpg';
+  static const String imagesBagsEco = 'assets/images/bags_eco.jpg';
+  static const String imagesBagsOther = 'assets/images/bags_other.jpg';
+  static const String imagesBagsShoulder = 'assets/images/bags_shoulder.jpg';
+  static const String imagesBagsTote = 'assets/images/bags_tote.jpg';
+  static const String imagesBottomsCotton = 'assets/images/bottoms_cotton.jpg';
+  static const String imagesBottomsDenim = 'assets/images/bottoms_denim.png';
+  static const String imagesBottomsLeggings =
+      'assets/images/bottoms_leggings.jpg';
+  static const String imagesBottomsOther = 'assets/images/bottoms_other.jpg';
+  static const String imagesBottomsShorts = 'assets/images/bottoms_shorts.png';
+  static const String imagesBottomsSkirt = 'assets/images/bottoms_skirt.jpg';
+  static const String imagesBottomsSlacks = 'assets/images/bottoms_slacks.jpg';
+  static const String imagesBottomsTraining =
+      'assets/images/bottoms_training.jpg';
+  static const String imagesBottomsWide = 'assets/images/bottoms_wide.jpg';
   static const String imagesCodySamplePage =
       'assets/images/cody_sample_page.png';
+  static const String imagesDressesLong = 'assets/images/dresses_long.jpg';
+  static const String imagesDressesMini = 'assets/images/dresses_mini.jpg';
+  static const String imagesDressesOther = 'assets/images/dresses_other.jpg';
+  static const String imagesHatsBaseballCap =
+      'assets/images/hats_baseball-cap.jpg';
+  static const String imagesHatsBeanie = 'assets/images/hats_beanie.jpg';
+  static const String imagesHatsBeret = 'assets/images/hats_beret.jpg';
+  static const String imagesHatsBucketHat = 'assets/images/hats_bucket-hat.jpg';
+  static const String imagesHatsFedora = 'assets/images/hats_fedora.jpg';
+  static const String imagesHatsOther = 'assets/images/hats_other.jpg';
+  static const String imagesHatsSnapback = 'assets/images/hats_snapback.jpg';
   static const String imagesKakaoLoginLarge =
       'assets/images/kakao_login_large.png';
   static const String imagesKakaoLoginMedium =
@@ -12,9 +41,52 @@ class Assets {
       'assets/images/kakao_login_small.png';
   static const String imagesMypageSamplePage =
       'assets/images/mypage_sample_page.jpg';
+  static const String imagesOuterBlazer = 'assets/images/outer_blazer.jpg';
+  static const String imagesOuterCardigan = 'assets/images/outer_cardigan.jpg';
+  static const String imagesOuterFleece = 'assets/images/outer_fleece.jpg';
+  static const String imagesOuterHoodedZipup =
+      'assets/images/outer_hooded-zipup.jpg';
+  static const String imagesOuterJacket = 'assets/images/outer_jacket.jpg';
+  static const String imagesOuterJumper = 'assets/images/outer_jumper.jpg';
+  static const String imagesOuterLongCoat = 'assets/images/outer_long-coat.jpg';
+  static const String imagesOuterLongPadding =
+      'assets/images/outer_long-padding.jpg';
+  static const String imagesOuterMustard = 'assets/images/outer_mustard.jpg';
+  static const String imagesOuterOther = 'assets/images/outer_other.jpg';
+  static const String imagesOuterRiderJacket =
+      'assets/images/outer_rider-jacket.jpg';
+  static const String imagesOuterShortCoat =
+      'assets/images/outer_short-coat.jpg';
+  static const String imagesOuterShortPadding =
+      'assets/images/outer_short-padding.jpg';
+  static const String imagesOuterWindbreaker =
+      'assets/images/outer_windbreaker.jpg';
   static const String imagesProductSamplePage =
       'assets/images/product_sample_page.png';
-  static const String imagesScriptDefault = 'assets/images/ssafy_logo.png';
+  static const String imagesShoesBoots = 'assets/images/shoes_boots.jpg';
+  static const String imagesShoesDress = 'assets/images/shoes_dress.jpg';
+  static const String imagesShoesFlat = 'assets/images/shoes_flat.jpg';
+  static const String imagesShoesHeels = 'assets/images/shoes_heels.jpg';
+  static const String imagesShoesLoafer = 'assets/images/shoes_loafer.png';
+  static const String imagesShoesMules = 'assets/images/shoes_mules.jpg';
+  static const String imagesShoesOther = 'assets/images/shoes_other.jpg';
+  static const String imagesShoesRunning = 'assets/images/shoes_running.jpg';
+  static const String imagesShoesSandals = 'assets/images/shoes_sandals.jpg';
+  static const String imagesShoesSneakers = 'assets/images/shoes_sneakers.jpg';
+  static const String imagesShoesSports = 'assets/images/shoes_sports.jpg';
+  static const String imagesSsafyLogo = 'assets/images/ssafy_logo.png';
   static const String imagesStyleSamplePage =
       'assets/images/style_sample_page.png';
+  static const String imagesTopsHoodie = 'assets/images/tops_hoodie.jpg';
+  static const String imagesTopsKnitwear = 'assets/images/tops_knitwear.jpg';
+  static const String imagesTopsLongSleeve =
+      'assets/images/tops_long-sleeve.jpg';
+  static const String imagesTopsOther = 'assets/images/tops_other.jpg';
+  static const String imagesTopsShirt = 'assets/images/tops_shirt.jpg';
+  static const String imagesTopsShortSleeve =
+      'assets/images/tops_short-sleeve.jpg';
+  static const String imagesTopsSleeveless =
+      'assets/images/tops_sleeveless.jpg';
+  static const String imagesTopsSweatshirt =
+      'assets/images/tops_sweatshirt.jpg';
 }

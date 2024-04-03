@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/my_script/api/my_script_api_service.dart';
 import 'package:mallook/feature/my_script/widget/my_script_list_box.dart';
+import 'package:mallook/feature/script/model/script.dart';
 import 'package:mallook/feature/script/script_screen.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
@@ -17,7 +17,7 @@ class MyScriptScreen extends StatefulWidget {
 class _MyScriptScreenState extends State<MyScriptScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Script> _scripts = [];
-  int _scriptPage = 0;
+  int _scriptCursor = 9999999999999999;
   bool _isScriptLoading = false;
 
   @override
@@ -41,20 +41,26 @@ class _MyScriptScreenState extends State<MyScriptScreen> {
   }
 
   void _loadMoreScripts() async {
+    if (_scriptCursor == 0) return;
     if (!_isScriptLoading) {
       if (mounted) {
         setState(() {
           _isScriptLoading = true;
         });
       }
-      var loadedScripts = await MyScriptApiService.getMyScripts(_scriptPage);
+      try {
+        var data = await MyScriptApiService.getMyScripts(_scriptCursor);
 
-      if (mounted) {
-        setState(() {
-          _scripts.addAll(loadedScripts); // 기존 _products List에 새로운 제품 추가
-          _scriptPage++;
-          _isScriptLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _scripts.addAll(data.content ?? []);
+            if ((data.content ?? []).isNotEmpty) {
+              _scriptCursor = data.content!.last.id! - 1;
+            }
+          });
+        }
+      } finally {
+        _isScriptLoading = false;
       }
     }
   }
