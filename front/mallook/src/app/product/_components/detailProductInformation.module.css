@@ -14,6 +14,7 @@
     position: sticky;
     top: 10px;
     margin-bottom: 30px;
+    z-index: 1000;
 }
 .detailProductInformation__button {
     width: 18.25dvw;
