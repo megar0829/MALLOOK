@@ -1,78 +1,142 @@
 .container {
-  width: 120dvw;
-  height: 100dvh;
+  width: 100dvw;
+  height: 100vh;
   display: flex;
-  background-color: black;
+  flex-direction: column;
+  background-color: white;
   justify-content: space-between;
 }
 
-.leftDiv {
-  width: 38dvw;
-  height: 100dvh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.leftDivTopDiv {
-  width: 80%;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  margin-left: 70px;
-  margin-top: 120px;
-  padding-left: 80px;
-}
-.leftDivTopText {
-  font-size: 60px;
-  font-weight: 900;
-  color: #836BFF;
-  margin-bottom: 10px;
-}
-.leftDivMiddleText {
-  font-size: 50px;
-  font-weight: 900;
-  color: white;
-
-}
-.leftDivBottomDiv {
-  width: 80%;
-  height: 200px;
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.QRDiv {
-  width: 110px;
-  height: 120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 50px;
-}
-.QRDiv img {
-  width: 110px;
-  height: 110px;
-}
-.leftDivBottomText {
-  color: white;
-  font-size: 18px;
-}
-
-.rightDiv {
-  width: 78dvw;
-  height: 100dvh;
-  padding-top: 20dvh;
-  display: flex;
-  justify-content: center;
-}
-.phoneDiv {
-  width: 58dvw;
-  height: 700px;
-}
-.phoneDiv img {
+.oneContainer {
   width: 100%;
-  height: 700px;
+  min-height: calc(100vh - 150px);
+}
+
+.oneDiv {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+}
+
+.oneLeftDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.oneRightDiv {
+  display: flex;
+  align-items: center;
+}
+
+.oneText {
+  display: flex;
+  justify-content: center;
+  font-size: 35px;
+}
+
+.twoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #292929;
+  color: white;
+  font-weight: 600;
+}
+
+.twoTextTop {
+  font-size: 50px;
+}
+
+.twoTextBottom {
+  font-size: 70px;
+}
+
+.twoTextBottom span {
+  color: #7C88C8;
+}
+
+.threeContainer {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.threeLeftDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5rem;
+  width: 40dvw;
+  padding-left: 10%;
+}
+
+.threeLeftDivText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.threeRightDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60dvw;
+  gap: 3rem;
+}
+
+.qrDiv {
+  display: flex;
+  gap: 2rem;
+  width: 300px;
+}
+
+.qrDivItem {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.appIcon {
+  border: 1px solid lightgray;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  border-radius: 20%;
+  padding: 10px;
+  width: 100px;
+}
+
+.appText {
+  display: flex;
+  align-items: center;
+  font-size: 35px;
+  font-weight: 600;
+}
+
+.recommendButton {
+  display: flex;
+  align-items: center;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+  background-color: #292929;
+  color: white;
+  font-size: 30px;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.recommendButton:hover {
+  background-color: #1c1c1c;
 }

@@ -16,7 +16,7 @@ import iconOnepiece from "@/assets/img/category/onepiece.jpg";
 import iconHat from "@/assets/img/category/hat.jpg";
 import iconShoe from "@/assets/img/category/shoe.jpg";
 import iconBag from "@/assets/img/category/bag.jpg";
-import iconTop100 from "@/assets/img/product/top100.jpg";
+import iconTop100 from "@/assets/img/icons/logo_sm.png";
 import iconBack from "@/assets/img/product/back.png";
 import iconLeft from "@/assets/img/product/left.png"
 import iconRight from "@/assets/img/product/right.png"

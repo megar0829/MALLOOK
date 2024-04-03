@@ -1,16 +1,15 @@
 "use client";
 
 import styles from "@/app/(home)/home.module.css";
-import LeftDiv from "@/app/(home)/_components/LeftDiv";
-import RightDiv from "@/app/(home)/_components/RightDiv";
 import {useRouter, useSearchParams} from "next/navigation";
 import LoginState, {Token} from "@/states/login";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import ComponentOne from "@/app/(home)/_components/ComponentOne";
+import ComponentTwo from "@/app/(home)/_components/ComponentTwo";
+import ComponentThree from "@/app/(home)/_components/ComponentThree";
 export default function MainComponent() {
 	const params = useSearchParams();
 	const router = useRouter();
-
-
 	const { userToken, setUserToken } = LoginState();
 
 	useEffect(() => {
@@ -28,11 +27,12 @@ export default function MainComponent() {
 		router.push("/")
 	}, [userToken]);
 
-
 	return (
 		<div className={styles.container}>
-			<LeftDiv />
-			<RightDiv />
+			<ComponentOne />
+			<ComponentTwo />
+			<ComponentThree />
+
 		</div>
 	);
 }
