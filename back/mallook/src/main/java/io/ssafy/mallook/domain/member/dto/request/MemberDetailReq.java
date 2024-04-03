@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-
 @Schema(description = "회원 정보 저장시 요청 DTO")
 public record MemberDetailReq(
         @Schema(description = "닉네임")

@@ -17,11 +17,16 @@ import {Product, Script, ScriptProducts} from "@/types";
 import UseSleep from "@/utils/delay";
 import update from "immutability-helper";
 
+
 export default function RecommendPage() {
   const {userToken} = LoginState();
   const [scripts, setScripts] = useState<Script[]>([]);
+
+  const [isScripts, setIsScripts] = useState(false);
+
   const [scriptProducts, setScriptProducts] = useState<ScriptProducts[]>([]);
 
+  const [isScriptProducts, setIsScriptProducts] = useState(false);
 
   useEffect(() => {
     const getScrips = () => {
@@ -33,9 +38,13 @@ export default function RecommendPage() {
           }
         }
       ).then((res) => {
-        setScripts([...scripts, ...res.data.result.content])
-        console.log(res.data.range.content)}
-      )
+        console.log("두번째 데이터 완료")
+          setScripts([...scripts, ...res.data.result.content])
+        }
+      ).then(() => {
+        console.log(("스크립트 상품 받으러 가기"))
+        setIsScripts(true)
+      })
     }
 
     if (scripts && !scripts.length) {
@@ -52,8 +61,10 @@ export default function RecommendPage() {
           }
         }
       ).then((res) => {
+        console.log("첫번째 데이터 완료")
         setScripts(res.data.result.content)
       }).then(() => {
+        console.log("두번째 데이터 받으러 가기")
         getScrips();
       })
     } else {
@@ -61,6 +72,50 @@ export default function RecommendPage() {
       console.log(scripts)
     }
   }, []);
+
+  useEffect(() => {
+    const getScriptProducts = (id: number) => {
+      axios.get(
+        `${API_URL}/api/scripts/${id}/product-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${userToken.accessToken}`
+          }
+        }
+      ).then((res) => {
+        console.log(`상품 추출 ${id}`)
+        setScriptProducts([...scriptProducts, { id: id, products: res.data.result}])
+      })
+    }
+
+    if (isScripts) {
+      let lst:ScriptProducts[] = [];
+
+      scripts.map(async (item) => {
+        await axios.get(
+        `${API_URL}/api/scripts/${item.id}/product-list`,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken.accessToken}`
+            }
+          }
+        ).then((res) => {
+          lst.push({id: item.id, products:res.data.result})
+        })
+      })
+
+
+      console.log(lst)
+      setScriptProducts(lst);
+      setIsScriptProducts(true);
+      console.log("상품 추출 완료")
+    }
+  }, [isScripts]);
+
+  useEffect(() => {
+    console.log("상품 데이터")
+    console.log(scriptProducts)
+  }, [scriptProducts]);
 
   const codyList = () => {
     return (
@@ -75,11 +130,11 @@ export default function RecommendPage() {
               }
             </div>
 
-            {/*<div className={styles.rightDiv}>*/}
-            {/*  { productList &&*/}
-            {/*    <MainProductList scriptProduct={productList}/>*/}
-            {/*  }*/}
-            {/*</div>*/}
+            <div className={styles.rightDiv}>
+              { productList &&
+                <MainProductList scriptProduct={productList}/>
+              }
+            </div>
           </div>
         );
       })

@@ -1,12 +1,12 @@
 package io.ssafy.mallook.domain.member.dto.response;
 
-
 import io.ssafy.mallook.domain.grade.entity.Level;
 import io.ssafy.mallook.domain.member.entity.Address;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.util.List;
+
 @Builder
 @Schema(description = "회원 정보 조회시 응답 DTO")
 public record MemberDetailRes(

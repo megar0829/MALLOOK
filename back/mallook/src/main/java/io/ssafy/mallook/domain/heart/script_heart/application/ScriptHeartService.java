@@ -2,7 +2,6 @@ package io.ssafy.mallook.domain.heart.script_heart.application;
 
 import io.ssafy.mallook.domain.heart.dto.request.LikeDto;
 import io.ssafy.mallook.domain.script.dto.response.ScriptListDto;
-import io.ssafy.mallook.domain.style.dto.response.StyleListRes;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

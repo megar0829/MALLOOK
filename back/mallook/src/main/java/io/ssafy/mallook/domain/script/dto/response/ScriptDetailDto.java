@@ -19,8 +19,7 @@ public record ScriptDetailDto(
         String imageUrl,
         @Schema(description = "회원 등급 레벨")
         String memberGrade
-        )
-{
+) {
     public static ScriptDetailDto toDtoNotLogin(Script script, String imageUrl) {
         return ScriptDetailDto.builder()
                 .name(script.getName())

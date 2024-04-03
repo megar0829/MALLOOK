@@ -122,7 +122,7 @@ public class HeartBatchConfig {
     }
 
     @Bean
-    public ItemProcessor<? super Script,? extends Script> scriptProcessor() {
+    public ItemProcessor<? super Script, ? extends Script> scriptProcessor() {
         return script -> {
             script.resetTotalLike();
             return script;
@@ -155,7 +155,7 @@ public class HeartBatchConfig {
         return jpaPagingItemReader;
     }
 
-    private ItemProcessor<? super Style,? extends Style> styleProcessor() {
+    private ItemProcessor<? super Style, ? extends Style> styleProcessor() {
         return style -> {
             style.resetTotalLike();
             return style;

@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.script.entity;
 
 import io.ssafy.mallook.domain.BaseEntity;
-import io.ssafy.mallook.domain.keyword.entity.Keyword;
 import io.ssafy.mallook.domain.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

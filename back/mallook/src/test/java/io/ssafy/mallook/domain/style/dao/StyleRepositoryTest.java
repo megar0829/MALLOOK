@@ -3,11 +3,7 @@ package io.ssafy.mallook.domain.style.dao;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.product.dao.jpa.ProductRepository;
-import io.ssafy.mallook.domain.product.entity.MainCategory;
-import io.ssafy.mallook.domain.product.entity.Product;
-import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.domain.shoppingmall.dao.ShoppingMallRepository;
-import io.ssafy.mallook.domain.shoppingmall.entity.ShoppingMall;
 import io.ssafy.mallook.domain.style.entity.Style;
 import io.ssafy.mallook.domain.style_product.dao.StyleProductRepository;
 import io.ssafy.mallook.domain.style_product.entity.StyleProduct;
@@ -25,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")
@@ -60,7 +56,8 @@ class StyleRepositoryTest {
                 .totalLike(0)
                 .build();
     }
-    private StyleProduct buildStyleProduct(Style style){
+
+    private StyleProduct buildStyleProduct(Style style) {
         return StyleProduct.builder()
                 .style(style)
                 .products(product)
@@ -70,12 +67,12 @@ class StyleRepositoryTest {
     @Test
     @DisplayName("페이지를 적용하여 스타일 전체 조회")
     void findAllTest() {
-        for (int i = 0; i < 20; i ++) {
+        for (int i = 0; i < 20; i++) {
             // 스타일
             Style style = buildStyle(member);
             styleRepository.save(style);
             // style product 저장
-            for (int j = 0 ; j < 2; j ++) {
+            for (int j = 0; j < 2; j++) {
                 StyleProduct sp = buildStyleProduct(style);
                 styleProductRepository.save(sp);
             }
@@ -84,18 +81,19 @@ class StyleRepositoryTest {
         var result = styleRepository.findAll(pageable);
         assertThat(Objects.nonNull(result)).isTrue();
     }
+
     @Test
     @DisplayName("내가 등록한 스타일 삭제")
     void deleteMyStyleTest() {
         List<Long> deleteList = new ArrayList<>();
         // 스타일 작성 멤버
-        for (int i = 0; i < 20; i ++) {
+        for (int i = 0; i < 20; i++) {
             // 스타일
             Style style = buildStyle(member);
             var rs = styleRepository.save(style);
             deleteList.add(rs.getId());
             // 스타일에 속하는 상품 리스트
-            for (int j = 0 ; j < 2; j ++) {
+            for (int j = 0; j < 2; j++) {
                 StyleProduct sp = buildStyleProduct(style);
                 styleProductRepository.save(sp);
             }

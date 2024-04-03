@@ -4,10 +4,9 @@ import styles from "./recommend.detail.module.css";
 import Image from "next/image";
 import DetailCody from "@/app/recommend/_components/DetailCody";
 import ProductListComponent from "@/app/_components/ProductList";
+import DetailProductList from "@/app/recommend/_components/DetailProductList";
 
-export const metadata = {
-  title: `추천 상세`,
-};
+
 
 interface IParams {
   params: {scriptId: string};
@@ -18,9 +17,9 @@ export default async function RecommendDetailPage({params: {scriptId}} : IParams
   return (
     <div className={styles.background}>
       <div className={styles.container}>
-        <DetailCody codyId={scriptId} />
+        <DetailCody scriptId={scriptId} />
 
-        <ProductListComponent productList={[]} />
+        <DetailProductList scriptId={scriptId} />
       </div>
     </div>
   );

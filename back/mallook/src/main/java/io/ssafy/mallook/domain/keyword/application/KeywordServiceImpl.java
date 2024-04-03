@@ -4,7 +4,6 @@ import io.ssafy.mallook.domain.keyword.dto.response.KeywordListRes;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.entity.Script;
 import io.ssafy.mallook.global.batch.dao.Top50RedisDao;
-import io.ssafy.mallook.global.batch.dto.TopScriptDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +12,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import static java.util.stream.Collectors.*;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class KeywordServiceImpl implements KeywordService {
 
         return shuffledKeywords.stream()
                 .map(KeywordListRes::toDto)
-                .limit(8)
+                .limit(50)
                 .collect(toList());
     }
 

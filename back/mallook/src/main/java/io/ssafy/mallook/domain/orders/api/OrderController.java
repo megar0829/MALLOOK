@@ -24,10 +24,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Objects;
 import java.util.UUID;
 
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,6 +56,7 @@ public class OrderController {
                 orderService.getOrderList(cursor, id, pageable)
         );
     }
+
     @Operation(summary = "주문 상세 정보 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "주문 정보 리스트 조회 성공"),
@@ -98,6 +98,7 @@ public class OrderController {
                 "성공적으로 주문되었습니다."
         );
     }
+
     @Operation(summary = "직접 주문 요청",
             responses = {
                     @ApiResponse(responseCode = "200", description = "직접 주문 성공"),
@@ -105,7 +106,7 @@ public class OrderController {
             })
     @PostMapping("/direct")
     public ResponseEntity<BaseResponse<String>> insertDirectOrder(@AuthenticationPrincipal UserSecurityDTO principal,
-                                                            @RequestBody @Valid OrderDirectInsertReq insertReq) {
+                                                                  @RequestBody @Valid OrderDirectInsertReq insertReq) {
         UUID id = principal.getId();
         orderService.insertDirectOrder(id, insertReq);
         return BaseResponse.success(
@@ -113,6 +114,7 @@ public class OrderController {
                 "성공적으로 주문되었습니다."
         );
     }
+
     @Operation(summary = "주문 정보 삭제",
             responses = {
                     @ApiResponse(responseCode = "200", description = "주문 정보 삭제 성공"),

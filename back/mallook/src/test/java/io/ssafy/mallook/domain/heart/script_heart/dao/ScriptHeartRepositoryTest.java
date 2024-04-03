@@ -6,7 +6,6 @@ import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.dao.ScriptRepository;
 import io.ssafy.mallook.domain.script.entity.Script;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,8 +18,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles(profiles = "test")

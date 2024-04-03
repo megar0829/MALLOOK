@@ -44,7 +44,6 @@ class StyleProductRepositoryTest {
     private ShoppingMall shoppingMall;
 
     @BeforeEach
-
     void setUp() {
         member = new Member();
         memberRepository.save(member);

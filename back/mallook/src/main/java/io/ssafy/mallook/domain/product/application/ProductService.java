@@ -7,6 +7,7 @@ import io.ssafy.mallook.domain.product.entity.SubCategory;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+
 import java.util.List;
 
 public interface ProductService {
@@ -29,6 +30,6 @@ public interface ProductService {
     Slice<Products> findByName(Pageable pageable);
 
     String getLastMongoProductsId();
-    ProductPageRes getRecommendedProducts(String subCategory);
 
+    ProductPageRes getRecommendedProducts(String subCategory);
 }

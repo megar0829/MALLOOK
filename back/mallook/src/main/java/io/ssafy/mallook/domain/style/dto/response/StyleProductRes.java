@@ -8,11 +8,11 @@ public record StyleProductRes(
         String productsId,
         @Schema(description="상품명")
         String name,
-        @Schema(description="상품 가격")
+        @Schema(description = "상품 가격")
         Integer price,
-        @Schema(description="브랜드명")
+        @Schema(description = "브랜드명")
         String brandName,
-        @Schema(description="이미지")
+        @Schema(description = "이미지")
         String image
 ) {
 }

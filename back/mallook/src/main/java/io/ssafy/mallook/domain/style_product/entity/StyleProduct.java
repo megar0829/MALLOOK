@@ -13,7 +13,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="style_product")
+@Table(name = "style_product")
 @SQLRestriction("status= TRUE")
 public class StyleProduct extends BaseEntity {
     @Id

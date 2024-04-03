@@ -46,7 +46,6 @@ public class Coupon extends BaseEntity {
     @Builder.Default
     private List<MemberCoupon> memberCouponList = new ArrayList<>();
 
-
     public Coupon(Long id) {
         this.id = id;
     }   //todo: 수정

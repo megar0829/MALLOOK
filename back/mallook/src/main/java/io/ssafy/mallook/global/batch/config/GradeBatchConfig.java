@@ -28,7 +28,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static io.ssafy.mallook.global.common.code.ErrorCode.*;
+import static io.ssafy.mallook.global.common.code.ErrorCode.NOT_FOUND_ERROR;
 
 @Configuration
 @Slf4j
@@ -71,7 +71,6 @@ public class GradeBatchConfig {
                 .build();
     }
 
-
     private ItemReader<? extends Member> loadMemberData() throws Exception {
         JpaPagingItemReader<Member> jpaPagingItemReader = new JpaPagingItemReaderBuilder<Member>()
                 .name(JOB_NAME + "_loadMemberData")
@@ -98,8 +97,8 @@ public class GradeBatchConfig {
                 .parameterValues(Collections.singletonMap("createdAt", LocalDateTime.now().minusMonths(6)))
                 .build();
         jpaPagingItemReader.afterPropertiesSet();
-        return jpaPagingItemReader;
 
+        return jpaPagingItemReader;
     }
 
     private ItemProcessor<? super Member, ? extends Member> checkMemberGradeData() {
@@ -107,6 +106,7 @@ public class GradeBatchConfig {
             if (member.availableLevelUp()) {
                 return member;
             }
+
             return null;
         };
     }
@@ -127,5 +127,4 @@ public class GradeBatchConfig {
             gradeRepository.save(grade);
         });
     }
-
 }

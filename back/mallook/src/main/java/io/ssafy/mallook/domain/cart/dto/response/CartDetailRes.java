@@ -24,6 +24,5 @@ public record CartDetailRes(
         String color,
         @Schema(description = "상품 배송료")
         Integer fee
-
 ) {
 }
