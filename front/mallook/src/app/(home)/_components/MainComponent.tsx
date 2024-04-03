@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import ComponentOne from "@/app/(home)/_components/ComponentOne";
 import ComponentTwo from "@/app/(home)/_components/ComponentTwo";
 import ComponentThree from "@/app/(home)/_components/ComponentThree";
+
 export default function MainComponent() {
 	const params = useSearchParams();
 	const router = useRouter();
@@ -32,7 +33,6 @@ export default function MainComponent() {
 			<ComponentOne />
 			<ComponentTwo />
 			<ComponentThree />
-
 		</div>
 	);
 }

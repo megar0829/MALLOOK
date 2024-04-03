@@ -1,53 +1,51 @@
 .scripts__container {
-    width: 100dvw;
+    width: 80dvw;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .scripts__topDiv {
-    width: 90%;
-    height: 60px;
+    width: 100%;
     display: flex;
     align-items: center;
+    gap: 2rem;
+    margin: 1rem 0 0 0.5rem;
 }
+
 .scripts__topDiv__textDiv {
-    height: 45px;
-    margin-left: 10px;
+    height: 70px;
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 .scripts__topDiv__textSpan {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 600;
-}
-.scripts__topDiv__middleLine {
-    width: 2px;
-    height: 25px;
-    background-color: gray;
-    margin-left: 10px;
 }
 
 .scripts__bottomDiv {
-    width: 100dvw;
-    display: flex;
-    flex-direction: column;
+    width: 80vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 자동으로 그리드 크기 조정 */
+    gap: 1rem;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 3rem;
 }
+
 .scripts__bottomDiv__container {
-    width: 80%;
-    height: 400px;
-    background-color: red;
-    margin-bottom: 20px;
+    width: 100%;
+    height: 300px;
     border: 1px solid lightgray;
-    border-radius: 30px;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
 }
+
 .scripts__bottomDiv__cover {
     width: 100%;
     height: 100%;
@@ -58,20 +56,25 @@
 .scripts__bottomDiv__image {
     width: 100%;
 }
+
 .scripts__bottomDiv__nameDiv {
     position: absolute;
 }
+
 .scripts__bottomDiv__name {
-    font-size: 50px;
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 600;
     color: white;
 }
 
 .scripts__noneDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-top: 100px;
 }
 
 .scripts__none {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 600;
 }

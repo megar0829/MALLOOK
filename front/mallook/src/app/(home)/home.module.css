@@ -29,6 +29,7 @@
 .oneRightDiv {
   display: flex;
   align-items: center;
+  width: 50vh;
 }
 
 .oneText {
@@ -139,4 +140,27 @@
 
 .recommendButton:hover {
   background-color: #1c1c1c;
+}
+
+.loadingComponent {
+  width: 100%;
+  min-height: calc(100vh - 150px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rotatingImage {
+  animation: rotate 2s linear infinite;
 }
