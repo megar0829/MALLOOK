@@ -13,11 +13,18 @@ import java.util.UUID;
 
 public interface OrderService {
     Slice<OrderListDto> getOrderList(Long cursor, UUID id, Pageable pageable);
+
     OrderDetailDto getOrderDetail(Long id);
+
     void createOrder(UUID id, OrderCreateDto createDto);
+
     void insertDirectOrder(UUID id, OrderDirectInsertReq orderDirectInsertReq);
+
     void insertOrder(UUID id, OrderInsertReq orderCreateReq);
+
     void deletedOrder(OrderDeleteDto orderDeleteDto);
+
     void removeOrder(OrderDeleteDto orderDeleteDto);
+
     Long findMaxOrderId();
 }

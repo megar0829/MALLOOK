@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "grade")
 @SQLRestriction("status=TRUE")
 public class Grade extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,7 +28,6 @@ public class Grade extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
-
 
     public Grade(Level level) {
         super();

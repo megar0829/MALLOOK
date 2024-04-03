@@ -1,41 +1,33 @@
 package io.ssafy.mallook.domain.product.api;
 
-import com.amazonaws.util.CollectionUtils;
 import com.amazonaws.util.StringUtils;
 import io.ssafy.mallook.domain.product.application.ProductService;
-import io.ssafy.mallook.domain.product.dto.request.ProductHotKeywordDto;
 import io.ssafy.mallook.domain.product.dto.response.*;
 import io.ssafy.mallook.domain.product.entity.MainCategory;
 import io.ssafy.mallook.domain.product.entity.Products;
-import io.ssafy.mallook.domain.product.entity.ReviewObject;
 import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.BaseResponse;
-import io.ssafy.mallook.global.common.ErrorResponse;
-import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.common.code.SuccessCode;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.logging.log4j.util.Supplier;
 import org.bson.types.ObjectId;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import static com.amazonaws.util.CollectionUtils.*;
-import static io.ssafy.mallook.global.common.code.ErrorCode.*;
-import static io.ssafy.mallook.global.common.code.ErrorCode.BAD_REQUEST_ERROR;
-import static java.util.Objects.*;
+import static com.amazonaws.util.CollectionUtils.isNullOrEmpty;
+import static java.util.Objects.isNull;
 
 @RestController
 @RequiredArgsConstructor

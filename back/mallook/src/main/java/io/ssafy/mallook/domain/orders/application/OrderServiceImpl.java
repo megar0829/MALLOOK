@@ -5,11 +5,9 @@ import io.ssafy.mallook.domain.cart.entity.Cart;
 import io.ssafy.mallook.domain.cart_product.dao.CartProductRepository;
 import io.ssafy.mallook.domain.cart_product.entity.CartProduct;
 import io.ssafy.mallook.domain.coupon.entity.Coupon;
-import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.ssafy.mallook.domain.member.dao.MemberRepository;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.member_coupon.dao.MemberCouponRepository;
-import io.ssafy.mallook.domain.member_coupon.entity.MemberCoupon;
 import io.ssafy.mallook.domain.orders.dao.OrderRepository;
 import io.ssafy.mallook.domain.orders.dto.request.OrderCreateDto;
 import io.ssafy.mallook.domain.orders.dto.request.OrderDeleteDto;
@@ -31,11 +29,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.List;
-
-import static java.lang.Math.max;
 
 @Service
 @RequiredArgsConstructor
@@ -86,7 +82,7 @@ public class OrderServiceImpl implements OrderService {
         // 쿠폰 적용
         if (Objects.nonNull(orderDirectInsertReq.memberCouponId())) {
             Coupon memberCoupon = memberCouponRepository.findById(orderDirectInsertReq.memberCouponId())
-                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
+                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
             var type = memberCoupon.getType();
             switch (type) {
                 case MONEY -> order.setTotalPrice(orderDirectInsertReq.totalPrice() - memberCoupon.getAmount());
@@ -109,7 +105,6 @@ public class OrderServiceImpl implements OrderService {
                 .productColor(productInfo.color())
                 .orders(orderResult)
                 .build());
-
     }
 
     @Override
@@ -128,7 +123,7 @@ public class OrderServiceImpl implements OrderService {
         // 쿠폰 적용
         if (Objects.nonNull(orderInsertReq.memberCouponId())) {
             Coupon memberCoupon = memberCouponRepository.findById(orderInsertReq.memberCouponId())
-                    .orElseThrow(()-> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
+                    .orElseThrow(() -> new BaseExceptionHandler(ErrorCode.NOT_FOUND_ERROR)).getCoupon();
             var type = memberCoupon.getType();
             switch (type) {
                 case MONEY -> order.setTotalPrice(orderInsertReq.totalPrice() - memberCoupon.getAmount());
@@ -178,11 +173,8 @@ public class OrderServiceImpl implements OrderService {
         productHistoryRepository.deleteProductHistory(orderDeleteDto.deleteList());
     }
 
-
     @Override
     public Long findMaxOrderId() {
         return orderRepository.findMaxOrderId();
     }
-
-
 }

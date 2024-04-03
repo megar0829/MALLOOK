@@ -54,6 +54,7 @@ public class CouponController {
                 result
         );
     }
+
     @Operation(summary = "내 쿠폰 리스트 조회",
             responses = {
                     @ApiResponse(responseCode = "200", description = "쿠폰 조회 성공"),
@@ -72,7 +73,7 @@ public class CouponController {
         );
     }
 
-//    @Scheduled(cron = "0 0/5 * * * *")    //todo: 수정 - 선착순 쿠폰 발급
+    //    @Scheduled(cron = "0 0/5 * * * *")    //todo: 수정 - 선착순 쿠폰 발급
     public void saveCoupon() {
         couponService.saveNewCoupon();
     }
@@ -92,7 +93,6 @@ public class CouponController {
                 "쿠폰 등록 완료"
         );
     }
-
 
     @Operation(summary = "내 쿠폰 등록",
             responses = {
@@ -126,5 +126,4 @@ public class CouponController {
                 "쿠폰 삭제 완료"
         );
     }
-
 }

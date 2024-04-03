@@ -14,14 +14,14 @@ import java.util.UUID;
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
 
     @Query("""
-        SELECT new io.ssafy.mallook.domain.coupon.dto.response.CouponRes(
-            c.id, c.name, function('DATE_FORMAT', c.createdAt, '%Y-%m-%d %H:%m:%s'), function('DATE_FORMAT', c.expiredTime, '%Y-%m-%d %H:%m:%s'), c.type
-        )
-        FROM Coupon c
-        left join MemberCoupon mc
-        on c.id = mc.coupon.id
-        WHERE (mc.member.id != :memberId or mc.member is null) and c.id < :cursor
-       """)
+             SELECT new io.ssafy.mallook.domain.coupon.dto.response.CouponRes(
+                 c.id, c.name, function('DATE_FORMAT', c.createdAt, '%Y-%m-%d %H:%m:%s'), function('DATE_FORMAT', c.expiredTime, '%Y-%m-%d %H:%m:%s'), c.type
+             )
+             FROM Coupon c
+             left join MemberCoupon mc
+             on c.id = mc.coupon.id
+             WHERE (mc.member.id != :memberId or mc.member is null) and c.id < :cursor
+            """)
     Slice<CouponRes> findCouponBy(Pageable pageable, @Param("cursor") Long cursor, @Param("memberId") UUID memberId);
     @Query("""
                 SELECT new io.ssafy.mallook.domain.coupon.dto.response.MemberCouponRes(
@@ -36,5 +36,4 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("select max(c.id) from Coupon c")
     Long getMaxId();
     Long countBy();
-
 }

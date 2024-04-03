@@ -6,7 +6,6 @@ import lombok.Builder;
 public record KeywordListRes(
         String name
 ) {
-
     public static KeywordListRes toDto(String name) {
         return KeywordListRes.builder()
                 .name(name)

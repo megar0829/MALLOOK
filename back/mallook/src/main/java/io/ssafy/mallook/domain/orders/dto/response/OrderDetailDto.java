@@ -14,7 +14,6 @@ public record OrderDetailDto(
         @Schema(description = "배송비")
         Long totalFee
 ) {
-
     public static OrderDetailDto toDto(Orders order) {
         return OrderDetailDto.builder()
                 .totalPrice(order.getTotalPrice())

@@ -5,5 +5,8 @@ public enum MainCategory {
     BOTTOM("하의"),
     ;
     final String korean;
-    MainCategory(String korean) {this.korean = korean;}
+
+    MainCategory(String korean) {
+        this.korean = korean;
+    }
 }

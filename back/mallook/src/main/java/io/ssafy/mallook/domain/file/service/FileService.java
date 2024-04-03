@@ -9,7 +9,10 @@ import java.util.UUID;
 
 public interface FileService {
     FileRes upload(String path, MultipartFile file) throws IOException;
+
     void remove(UUID id);
+
     File findById(UUID id);
+
     Object[] getObject(UUID id) throws IOException;
 }

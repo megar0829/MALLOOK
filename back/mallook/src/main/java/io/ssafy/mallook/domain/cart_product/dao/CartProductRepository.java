@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.UUID;
-
 public interface CartProductRepository extends JpaRepository<CartProduct, Long> {
 
     @Query("select max(cp.id) from CartProduct cp where cp.cart = :cart")
@@ -31,12 +29,11 @@ public interface CartProductRepository extends JpaRepository<CartProduct, Long> 
             """)
     void deleteCartProduct(@Param("cartProductId") Long cartProductId);
 
-
     @Query(
             """
-            update CartProduct c set c.status = false
-            where c.cart.id = :cart
-        """
+                        update CartProduct c set c.status = false
+                        where c.cart.id = :cart
+                    """
     )
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     void deleteByCart(@Param("cart") Long cartId);

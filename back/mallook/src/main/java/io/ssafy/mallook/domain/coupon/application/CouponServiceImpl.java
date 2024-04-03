@@ -19,10 +19,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -84,8 +84,8 @@ public class CouponServiceImpl implements CouponService {
         if (Objects.isNull(stock)) {
             return 0;
         }
-        return (int)stock;
 
+        return (int)stock;
     }
 
     public void setCouponStock(String key, Integer quantity) {
