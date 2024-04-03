@@ -35,15 +35,8 @@ export default function Navigation() {
               <Link href="https://j10a606.p.ssafy.io/oauth2/authorization/kakao">
                 <IoIosSearch className={styles.rightContainerIcon}/>
               </Link>
-              {/*<Link href="/login">*/}
-              {/*  <Image*/}
-              {/*    src={iconSearch}*/}
-              {/*    alt="search Image"*/}
-              {/*    style={{*/}
-              {/*      width: "30px",*/}
-              {/*      height:"30px"*/}
-              {/*    }}*/}
-              {/*  />*/}
+              {/*<Link href="/signup">*/}
+              {/*  <IoIosSearch className={styles.rightContainerIcon}/>*/}
               {/*</Link>*/}
             </li>
             <li>
