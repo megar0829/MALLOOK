@@ -1,10 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/product_screen.dart';
 
 class ProductWidget extends StatelessWidget {
@@ -49,6 +47,7 @@ class ProductWidget extends StatelessWidget {
                 image: _product.image!,
                 fit: BoxFit.fill,
                 filterQuality: FilterQuality.low,
+                fadeInDuration: const Duration(milliseconds: 100),
               ),
             ),
           ),
@@ -64,17 +63,18 @@ class ProductWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+                  // // 할인율
+                  // Text(
+                  //   "${Random().nextInt(100)}%",
+                  //   style: const TextStyle(
+                  //     color: Color(0xfffc3e75),
+                  //     fontSize: Sizes.size14,
+                  //     fontWeight: FontWeight.bold,
+                  //   ),
+                  // ),
+                  // Gaps.h10,
                   Text(
-                    "${Random().nextInt(100)}%",
-                    style: const TextStyle(
-                      color: Color(0xfffc3e75),
-                      fontSize: Sizes.size14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Gaps.h10,
-                  Text(
-                    numberFormat.format(_product.price),
+                    '${numberFormat.format(_product.price)} ₩',
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: Sizes.size14,
@@ -85,7 +85,7 @@ class ProductWidget extends StatelessWidget {
               ),
               Gaps.v2,
               Text(
-                _product.name,
+                _product.name!,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: Colors.black,
@@ -96,12 +96,12 @@ class ProductWidget extends StatelessWidget {
               Gaps.v1,
               Row(
                 children: [
-                  CircleAvatar(
-                    radius: Sizes.size10,
-                    foregroundImage: NetworkImage(_product.image!),
-                    child: Container(),
-                  ),
-                  Gaps.h10,
+                  // CircleAvatar(
+                  //   radius: Sizes.size10,
+                  //   foregroundImage: NetworkImage(_product.image!),
+                  //   child: Container(),
+                  // ),
+                  // Gaps.h10,
                   Text(
                     _product.brandName!,
                     overflow: TextOverflow.fade,

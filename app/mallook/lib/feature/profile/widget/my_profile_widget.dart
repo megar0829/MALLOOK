@@ -9,16 +9,24 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 class MyProfileWidget extends StatelessWidget {
   const MyProfileWidget({
     super.key,
-    required this.username,
-    required this.hashcode,
+    required this.nickname,
+    required this.nicknameTag,
     required this.level,
-    required this.percentage,
+    required this.exp,
+    required this.expRange,
   });
 
-  final String username;
-  final String hashcode;
-  final String level;
-  final double percentage;
+  final String nickname;
+  final String nicknameTag;
+  final int level;
+  final int exp;
+  final List<int> expRange;
+
+  double _getPercentage() {
+    int range = expRange[1] - expRange[0];
+    int ex = exp - expRange[0];
+    return ex * 100 / range;
+  }
 
   Future<void> _showConfirmationDialog(BuildContext context) async {
     return showDialog<void>(
@@ -97,20 +105,20 @@ class MyProfileWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: Sizes.size64,
-                clipBehavior: Clip.hardEdge,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  shape: BoxShape.circle,
-                ),
-                child: FadeInImage.assetNetwork(
-                  placeholder: "assets/images/ssafy_logo.png",
-                  image: "https://avatars.githubusercontent.com/u/86183856?v=4",
-                  fit: BoxFit.fill,
-                  filterQuality: FilterQuality.low,
-                ),
-              ),
+              // Container(
+              //   width: Sizes.size64,
+              //   clipBehavior: Clip.hardEdge,
+              //   decoration: BoxDecoration(
+              //     color: Theme.of(context).primaryColor,
+              //     shape: BoxShape.circle,
+              //   ),
+              //   child: FadeInImage.assetNetwork(
+              //     placeholder: "assets/images/ssafy_logo.png",
+              //     image: "https://avatars.githubusercontent.com/u/86183856?v=4",
+              //     fit: BoxFit.fill,
+              //     filterQuality: FilterQuality.low,
+              //   ),
+              // ),
               Gaps.h12,
               Expanded(
                 child: Column(
@@ -119,27 +127,12 @@ class MyProfileWidget extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        RichText(
-                          maxLines: 2,
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: username,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: Sizes.size24,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              TextSpan(
-                                text: "님 안녕하세요!",
-                                style: TextStyle(
-                                  color: Colors.grey.shade700,
-                                  fontSize: Sizes.size18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                        Text(
+                          nickname,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: Sizes.size24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         GestureDetector(
@@ -154,7 +147,7 @@ class MyProfileWidget extends StatelessWidget {
                     ),
                     Gaps.v4,
                     Text(
-                      '#$hashcode',
+                      '#$nicknameTag',
                       style: TextStyle(
                         color: Theme.of(context).primaryColorDark,
                         fontSize: Sizes.size18,
@@ -188,9 +181,9 @@ class MyProfileWidget extends StatelessWidget {
                   animation: true,
                   lineHeight: Sizes.size20,
                   animationDuration: 3000,
-                  percent: percentage.toDouble() / 100,
+                  percent: _getPercentage(),
                   center: Text(
-                    '${percentage.toInt()}%',
+                    '${_getPercentage().toInt()}%',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

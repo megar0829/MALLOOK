@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/home/api/home_api_service.dart';
-import 'package:mallook/feature/home/models/product.dart';
-import 'package:mallook/feature/home/models/script.dart';
 import 'package:mallook/feature/home/widgets/my_main_script_widget.dart';
 import 'package:mallook/feature/home/widgets/product_widget.dart';
+import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/script/model/script.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class HomeMyScreen extends StatefulWidget {
@@ -19,10 +19,11 @@ class HomeMyScreen extends StatefulWidget {
 
 class _HomeMyScreenState extends State<HomeMyScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Product> _products = []; // Future를 List로 변경합니다.
+  final List<Product> _products = [];
   final Future<Script> _script = HomeApiService.getMySingleScript();
 
   int _productPage = 0;
+  int _totalPage = 0;
   bool _isProductLoading = false;
 
   @override
@@ -46,19 +47,27 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
   }
 
   void _loadMoreProducts() async {
+    if (_productPage > _totalPage) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
           _isProductLoading = true;
         });
       }
-      var loadedProducts = await HomeApiService.getProducts(_productPage);
-      if (mounted) {
-        setState(() {
-          _products.addAll(loadedProducts); // 기존 _products List에 새로운 제품 추가
-          _productPage++;
-          _isProductLoading = false;
-        });
+
+      try {
+        var loadedProducts =
+            await HomeApiService.getPopularProducts(_productPage);
+        if (mounted) {
+          setState(() {
+            _productPage = loadedProducts.currentPage! + 1;
+            _totalPage = loadedProducts.totalPage!;
+            _products.addAll(
+                loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
+          });
+        }
+      } finally {
+        _isProductLoading = false;
       }
     }
   }
@@ -92,8 +101,9 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
                   mainAxisSpacing: Sizes.size10,
                   childAspectRatio: 0.73,
                 ),
-                itemBuilder: (context, index) =>
-                    ProductWidget(product: _products[index]),
+                itemBuilder: (context, index) => ProductWidget(
+                  product: _products[index],
+                ),
                 itemCount: _products.length, // itemCount 수정
               ),
               if (_isProductLoading) CustomCircularWaitWidget(),

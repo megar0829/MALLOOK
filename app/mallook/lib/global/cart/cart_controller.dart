@@ -1,25 +1,6 @@
 import 'package:get/get.dart';
-import 'package:mallook/feature/home/models/product.dart';
-
-class CartItem {
-  Product product;
-  int quantity;
-  String size;
-  String color;
-  bool selected = true;
-
-  CartItem({
-    required this.product,
-    required this.quantity,
-    required this.size,
-    required this.color,
-  });
-
-  @override
-  String toString() {
-    return 'CartItem{product: $product, quantity: $quantity, size: $size, color: $color}';
-  }
-}
+import 'package:mallook/global/cart/api/cart_api_service.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 
 class CartController extends GetxController {
   final _items = <CartItem>[].obs;
@@ -32,20 +13,58 @@ class CartController extends GetxController {
 
   RxInt get totalPrice => _totalPrice;
 
+  void loadCartItems() async {
+    var pageCartItem = await CartApiService.getCartItems();
+
+    _items.clear();
+    _items.addAll(pageCartItem.content ?? []);
+    _updatePriceAndQuantity(items);
+  }
+
+  void clearCartItems() async {
+    var response = await CartApiService.removeAllCartItems(
+      data: <String, num>{"cartId": 0},
+    );
+  }
+
+  void _updatePriceAndQuantity(List<CartItem> items) {
+    _totalPrice.value = 0;
+    _totalCount.value = 0;
+
+    for (var item in items) {
+      _totalCount.value += item.count!;
+      _totalPrice.value += item.price! * item.count!;
+    }
+  }
+
+  void updateAllCartItems() async {
+    for (var item in items) {
+      await CartApiService.addCartItem(data: <String, dynamic>{
+        "productId": item.productId,
+        "count": item.count,
+        "size": item.size,
+        "price": item.price,
+        "color": item.color,
+        "fee": item.fee,
+      });
+    }
+
+    loadCartItems(); // 카트 내 데이터 재로딩
+  }
+
   void addItem({
-    required String productId,
     required CartItem cartItem,
-  }) {
+  }) async {
     _items.add(cartItem);
     totalQuantity.value += 1;
-    totalPrice.value += cartItem.product.price * cartItem.quantity;
+    totalPrice.value += cartItem.price! * cartItem.count!;
     update(); // 상태 업데이트
   }
 
-  void removeItem({required CartItem cartItem}) {
+  void removeItem({required CartItem cartItem}) async {
     var removedCartItem = _items.remove(cartItem);
     totalQuantity.value -= 1;
-    totalPrice.value -= cartItem.product.price * cartItem.quantity;
+    totalPrice.value -= cartItem.price! * cartItem.count!;
     update(); // 상태 업데이트
   }
 }

@@ -3,14 +3,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
 import 'package:mallook/feature/order/cart_screen.dart';
+import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/product/widget/option_selector.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
+import 'package:mallook/global/cart/model/page_cart_item.dart';
 import 'package:mallook/global/mallook_snackbar.dart';
 
 class OrderSheet extends StatefulWidget {
-  final Product product; // TODO: API를 통해 상품 정보 로딩 필요
+  final Product product;
   final String? title;
   final List<String> sizes;
   final List<String> colors;
@@ -46,9 +47,14 @@ class _OrderSheetState extends State<OrderSheet> {
       if (_selectedSize == null || _selectedColor == null) return;
       CartItem cartItem = CartItem(
         product: widget.product,
-        quantity: 1,
+        productId: widget.product.id,
+        price: widget.product.price,
+        count: 1,
+        name: widget.product.name,
+        image: widget.product.image,
         size: _selectedSize!,
-        color: _selectedColor!,
+        color: _selectedColor,
+        fee: widget.product.fee,
       );
       _cartItems.add(cartItem);
       _selectedSize = null;
@@ -87,7 +93,6 @@ class _OrderSheetState extends State<OrderSheet> {
     }
     for (var cartItem in _cartItems) {
       cartController.addItem(
-        productId: cartItem.product.name,
         cartItem: cartItem,
       );
     }
@@ -183,7 +188,7 @@ class _OrderSheetState extends State<OrderSheet> {
                     ),
                     Gaps.v6,
                     OptionSelector(
-                      items: widget.sizes,
+                      items: widget.sizes.isNotEmpty ? widget.sizes : ['FREE'],
                       hintText: "사이즈 선택!",
                       onChanged: _updateSize,
                       selectedItem: _selectedSize,
@@ -210,7 +215,8 @@ class _OrderSheetState extends State<OrderSheet> {
                     ),
                     Gaps.v6,
                     OptionSelector(
-                      items: widget.colors,
+                      items:
+                          widget.colors.isNotEmpty ? widget.colors : ['FREE'],
                       hintText: "컬러 선택!",
                       onChanged: _updateColor,
                       selectedItem: _selectedColor,
@@ -228,7 +234,7 @@ class _OrderSheetState extends State<OrderSheet> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          _cartItems[index].size,
+                          _cartItems[index].size!,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: Sizes.size16,
@@ -236,7 +242,7 @@ class _OrderSheetState extends State<OrderSheet> {
                           ),
                         ),
                         Text(
-                          _cartItems[index].color,
+                          _cartItems[index].color!,
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: Sizes.size16,
@@ -260,9 +266,10 @@ class _OrderSheetState extends State<OrderSheet> {
                           ),
                           child: InkWell(
                             onTap: () {
-                              if (_cartItems[index].quantity > 1) {
+                              if (_cartItems[index].count! > 1) {
                                 setState(() {
-                                  _cartItems[index].quantity -= 1;
+                                  _cartItems[index].count =
+                                      _cartItems[index].count! - 1;
                                 });
                               } else {
                                 setState(() {
@@ -283,7 +290,7 @@ class _OrderSheetState extends State<OrderSheet> {
                               horizontal: Sizes.size10,
                             ), // Sizes.size12 대신 사용
                             child: Text(
-                              '${_cartItems[index].quantity}',
+                              '${_cartItems[index].count}',
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontSize: Sizes.size14,
@@ -305,7 +312,8 @@ class _OrderSheetState extends State<OrderSheet> {
                           child: InkWell(
                             onTap: () {
                               setState(() {
-                                _cartItems[index].quantity += 1;
+                                _cartItems[index].count =
+                                    _cartItems[index].count! + 1;
                               });
                             },
                             child: const Icon(

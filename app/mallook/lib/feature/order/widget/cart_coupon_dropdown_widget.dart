@@ -2,7 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/coupon/model/coupon_model.dart';
+import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
 
 class CartCouponDropdownWidget extends StatefulWidget {
   final List<Coupon> coupons;
@@ -30,22 +30,23 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
   );
 
   String _showCouponName(Coupon coupon) {
-    if (coupon.name.length <= 6) {
-      return coupon.name;
+    if (coupon.name!.length <= 6) {
+      return coupon.name!;
     }
-    return '${coupon.name.substring(0, 6)}...';
+    return '${coupon.name!.substring(0, 6)}...';
   }
 
   int _discountPrice(Coupon coupon) {
-    if (coupon.type == 'amount') {
-      if (widget.totalPrice >= coupon.discount) {
-        return -coupon.discount;
-      }
-      return 0;
-    }
-    if (coupon.type == 'ratio') {
-      return -widget.totalPrice * coupon.discount ~/ 100;
-    }
+    // TODO: coupon dto update
+    // if (coupon.type == 'MONEY') {
+    //   if (widget.totalPrice >= coupon.amount.) {
+    //     return -coupon.discount;
+    //   }
+    //   return 0;
+    // }
+    // if (coupon.type == 'ratio') {
+    //   return -widget.totalPrice * coupon.discount ~/ 100;
+    // }
 
     return 0;
   }
@@ -69,16 +70,17 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    item.type == 'amount'
-                        ? '${numberFormat.format(item.discount)}₩'
-                        : '${numberFormat.format(item.discount)}%',
-                    style: const TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size14,
-                    ),
-                  ),
+                  // TODO: Coupon dto update
+                  // Text(
+                  //   item.type == 'amount'
+                  //       ? '${numberFormat.format(item.discount)}₩'
+                  //       : '${numberFormat.format(item.discount)}%',
+                  //   style: const TextStyle(
+                  //     color: Colors.blue,
+                  //     fontWeight: FontWeight.bold,
+                  //     fontSize: Sizes.size14,
+                  //   ),
+                  // ),
                   Text(
                     '${numberFormat.format(_discountPrice(item))} ₩',
                     style: const TextStyle(

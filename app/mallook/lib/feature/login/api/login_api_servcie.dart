@@ -40,9 +40,9 @@ class LoginApiService {
     final token = AuthTokenModel.fromJson(jsonDecode(storageToken));
     final response = await dio.post(
       "/api/auth/token/refresh",
-      data: jsonEncode(<String, String>{'refresh-token': token.refreshToken!}),
+      data: jsonEncode(<String, String>{'refreshToken': token.refreshToken!}),
     );
-
+    print(response);
     if (response.statusCode == HttpStatus.SELECT_SUCCESS) {
       final baseResponse = response.data;
       final int status = baseResponse['status'];

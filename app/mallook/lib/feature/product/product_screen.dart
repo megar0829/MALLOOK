@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/home/models/product.dart';
+import 'package:mallook/feature/product/api/product_api_service.dart';
+import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/product/model/product_detail.dart';
 import 'package:mallook/feature/product/widget/order_sheet.dart';
 import 'package:mallook/feature/product/widget/product_img_widget.dart';
 import 'package:mallook/global/widget/cart_icon_button.dart';
@@ -19,28 +21,22 @@ class ProductScreen extends StatefulWidget {
   State<ProductScreen> createState() => _ProductScreenState();
 }
 
-class _ProductScreenState extends State<ProductScreen> {
-  final ScrollController _storeController = ScrollController();
-  final List<String> sizes = [
-    'XS',
-    'S',
-    'M',
-    'L',
-    'XL',
-  ];
+class _ProductScreenState extends State<ProductScreen>
+    with SingleTickerProviderStateMixin {
+  late Future<ProductDetail> _productDetail;
+  late TabController _tabController;
 
-  final List<String> colors = [
-    'red',
-    'yellow',
-    'blue',
-    'green',
-    'orange',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _productDetail = ProductApiService.getProductDetail(widget.product.id!);
+  }
 
   @override
   void dispose() {
     super.dispose();
-    _storeController.dispose();
+    _tabController.dispose();
   }
 
   void _onClosePressed() {
@@ -49,7 +45,7 @@ class _ProductScreenState extends State<ProductScreen> {
 
   void _clickHeartIcon() {}
 
-  void _showOrderBottomSheet() async {
+  void _showOrderBottomSheet(List<String> sizes, List<String> colors) async {
     await showModalBottomSheet(
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -79,36 +75,195 @@ class _ProductScreenState extends State<ProductScreen> {
           Gaps.h24,
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ProductImgWidget(
-              product: widget.product,
-            ),
-            Gaps.v10,
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size8,
-                horizontal: Sizes.size32,
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    widget.product.name,
-                    maxLines: 5,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: Sizes.size18,
+      body: FutureBuilder<ProductDetail>(
+        future: _productDetail,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var product = snapshot.data!;
+            return NestedScrollView(
+              headerSliverBuilder: (context, value) {
+                return [
+                  SliverToBoxAdapter(
+                      child: Column(
+                    children: [
+                      ProductImgWidget(
+                        images: [
+                          product.image ??
+                              "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Sizes.size10,
+                          horizontal: Sizes.size24,
+                        ),
+                        child: Text(
+                          product.name ?? "",
+                          maxLines: 5,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size18,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                  SliverToBoxAdapter(
+                    child: TabBar(
+                      controller: _tabController,
+                      labelStyle: const TextStyle(
+                        fontSize: Sizes.size16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      labelColor: Theme.of(context).primaryColorDark,
+                      indicatorColor: Theme.of(context).primaryColorDark,
+                      tabs: const [
+                        Tab(
+                          height: Sizes.size36,
+                          text: "상세보기",
+                        ),
+                        Tab(
+                          height: Sizes.size36,
+                          text: "리뷰",
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ];
+              },
+              body: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: Sizes.size10,
+                  horizontal: Sizes.size20,
+                ),
+                child: TabBarView(
+                  controller: _tabController,
+                  children: <Widget>[
+                    ListView.separated(
+                      itemBuilder: (context, index) => Image.network(
+                        product.detailImages![index],
+                        filterQuality: FilterQuality.low,
+                      ),
+                      separatorBuilder: (context, index) => Gaps.v8,
+                      itemCount: (product.detailImages ?? []).length,
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.size32,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              if (product.review != null &&
+                                  product.review!.count != null)
+                                Text(
+                                  '리뷰 ${product.review!.count!}개',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                ),
+                              if (product.review != null &&
+                                  product.review!.averagePoint != null)
+                                Text(
+                                  '평점 ${product.review!.averagePoint!}점',
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColorDark,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size18,
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                        Gaps.v12,
+                        Expanded(
+                          child: ListView.separated(
+                            itemBuilder: (context, index) => Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size10,
+                                horizontal: Sizes.size14,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: Sizes.size1,
+                                ),
+                                borderRadius: BorderRadius.circular(
+                                  Sizes.size14,
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product
+                                        .review!.reviewList![index].createdAt!,
+                                    style: TextStyle(
+                                      color: Colors.grey.shade600,
+                                      fontSize: Sizes.size12,
+                                    ),
+                                  ),
+                                  const Divider(),
+                                  Text(
+                                    product
+                                        .review!.reviewList![index].contents!,
+                                    maxLines: 5,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: Sizes.size14,
+                                    ),
+                                  ),
+                                  const Divider(),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      if (product.review!.reviewList![index]
+                                              .userSize!.height !=
+                                          null)
+                                        Text(
+                                          "신장 ${product.review!.reviewList![index].userSize!.height}",
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Sizes.size12,
+                                          ),
+                                        ),
+                                      if (product.review!.reviewList![index]
+                                              .userSize!.weight !=
+                                          null)
+                                        Text(
+                                          "체중 ${product.review!.reviewList![index].userSize!.weight}",
+                                          style: const TextStyle(
+                                            color: Colors.black87,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: Sizes.size12,
+                                          ),
+                                        ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                            separatorBuilder: (context, index) => Gaps.v8,
+                            itemCount:
+                                (product.review?.reviewList ?? []).length,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            );
+          }
+          return const CircularProgressIndicator();
+        },
       ),
       bottomNavigationBar: BottomAppBar(
         padding: const EdgeInsets.symmetric(
@@ -116,17 +271,21 @@ class _ProductScreenState extends State<ProductScreen> {
         color: Colors.white,
         surfaceTintColor: Colors.white,
         elevation: 1,
-        child: Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
+        child: FutureBuilder<ProductDetail>(
+          future: _productDetail,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Theme.of(context).primaryColorDark,
                   padding: const EdgeInsets.symmetric(
                     vertical: Sizes.size12,
                   ),
                 ),
-                onPressed: _showOrderBottomSheet,
+                onPressed: () => _showOrderBottomSheet(
+                  snapshot.data!.size ?? [],
+                  snapshot.data!.color ?? [],
+                ),
                 child: const Text(
                   '구매하기',
                   style: TextStyle(
@@ -135,9 +294,10 @@ class _ProductScreenState extends State<ProductScreen> {
                     color: Colors.white,
                   ),
                 ),
-              ),
-            ),
-          ],
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

@@ -1,8 +1,9 @@
 class Script {
   Script({
-    required this.id,
-    required this.name,
+    this.id,
+    this.name,
     this.heartCount,
+    this.nickname,
     this.imageUrl,
   });
 
@@ -10,12 +11,14 @@ class Script {
     id = json['id'];
     name = json['name'];
     heartCount = json['heartCount'];
+    nickname = json['nickname'];
     imageUrl = json['imageUrl'];
   }
 
   int? id;
   String? name;
   int? heartCount;
+  String? nickname;
   String? imageUrl;
 
   Map<String, dynamic> toJson() {
@@ -23,7 +26,13 @@ class Script {
     map['id'] = id;
     map['name'] = name;
     map['heartCount'] = heartCount;
+    map['nickname'] = nickname;
     map['imageUrl'] = imageUrl;
     return map;
+  }
+
+  @override
+  String toString() {
+    return 'Script{id: $id, name: $name, heartCount: $heartCount, nickname: $nickname, imageUrl: $imageUrl}';
   }
 }

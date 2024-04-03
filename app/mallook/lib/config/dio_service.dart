@@ -115,17 +115,16 @@ class DioService {
     }
   }
 
-  Future<T> baseGet<T>(
-    String path, {
+  Future<dynamic> baseGet<T>({
+    required String path,
     Map<String, dynamic>? queryParameters,
     T Function(Map<String, dynamic>)? fromJsonT,
   }) async {
     try {
       final response =
           await _authDio!.get(path, queryParameters: queryParameters);
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        print(response.data);
-        int status = response.data['status'];
+      if ((response.statusCode == 200 || response.statusCode == 201) &&
+          response.data['status'] == 200) {
         String message = response.data['message'];
 
         T result;
@@ -134,6 +133,7 @@ class DioService {
         } else {
           result = response.data['result'];
         }
+        print(result);
         return result;
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');
@@ -143,8 +143,8 @@ class DioService {
     }
   }
 
-  Future<T> basePost<T>(
-    String path, {
+  Future<dynamic> basePost<T>({
+    required String path,
     Map<String, dynamic>? queryParameters,
     dynamic postData,
     T Function(Map<String, dynamic>)? fromJsonT,
@@ -167,6 +167,70 @@ class DioService {
         } else {
           result = response.data['result'];
         }
+        print(result);
+        return result;
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> baseDelete<T>({
+    required String path,
+    Map<String, dynamic>? queryParameters,
+    dynamic deleteData,
+    T Function(Map<String, dynamic>)? fromJsonT,
+  }) async {
+    try {
+      final response = await _authDio!.delete(
+        path,
+        data: deleteData,
+        queryParameters: queryParameters,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        int status = response.data['status'];
+        String message = response.data['message'];
+
+        T result;
+        if (fromJsonT != null) {
+          result = fromJsonT(response.data['result']);
+        } else {
+          result = response.data['result'];
+        }
+        print(result);
+        return result;
+      } else {
+        throw Exception('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<T> pageGet<T>(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+    T Function(Map<String, dynamic>)? fromJsonT,
+  }) async {
+    try {
+      final response =
+          await _authDio!.get(path, queryParameters: queryParameters);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        print(response.data);
+        int status = response.data['status'];
+        String message = response.data['message'];
+
+        T result;
+        if (fromJsonT != null) {
+          result = fromJsonT(response.data['result']);
+        } else {
+          result = response.data['result'];
+        }
+        print(result);
         return result;
       } else {
         throw Exception('Request failed with status: ${response.statusCode}');

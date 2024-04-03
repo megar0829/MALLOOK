@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/search/models/hot_keyword.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 
 class HotKeywordGridWidget extends StatelessWidget {
-  final List<HotKeyword> hotKeywords;
+  final List<Keyword> hotKeywords;
   final Function addKeyword;
 
-  const HotKeywordGridWidget(
-      {super.key, required this.hotKeywords, required this.addKeyword});
+  const HotKeywordGridWidget({
+    super.key,
+    required this.hotKeywords,
+    required this.addKeyword,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +24,13 @@ class HotKeywordGridWidget extends StatelessWidget {
       ),
       itemCount: hotKeywords.length,
       itemBuilder: (context, index) => GestureDetector(
-        onTap: () => addKeyword(hotKeywords[index].name),
+        onTap: () => addKeyword(hotKeywords[index]),
         child: Row(
           children: [
             Flexible(
               flex: 1,
               child: Text(
-                '${hotKeywords[index].rank}.'.padLeft(3, '  '),
+                '${index + 1}.'.padLeft(3, '  '),
                 style: const TextStyle(
                   color: Colors.black,
                   fontSize: Sizes.size12,
@@ -37,38 +39,38 @@ class HotKeywordGridWidget extends StatelessWidget {
               ),
             ),
             Gaps.h8,
-            FaIcon(
-              hotKeywords[index].change == 0
-                  ? FontAwesomeIcons.minus
-                  : hotKeywords[index].change > 0
-                      ? FontAwesomeIcons.caretUp
-                      : FontAwesomeIcons.caretDown,
-              color: hotKeywords[index].change == 0
-                  ? Colors.black
-                  : hotKeywords[index].change > 0
-                      ? Colors.red
-                      : Colors.blue,
-              size: Sizes.size18,
-              shadows: [
-                BoxShadow(
-                  color: Colors.grey.shade400,
-                  blurRadius: Sizes.size3,
-                  offset: const Offset(Sizes.size1, Sizes.size1),
-                )
-              ],
-            ),
-            Gaps.h5,
+            // FaIcon(
+            //   hotKeywords[index].change == 0
+            //       ? FontAwesomeIcons.minus
+            //       : hotKeywords[index].change > 0
+            //           ? FontAwesomeIcons.caretUp
+            //           : FontAwesomeIcons.caretDown,
+            //   color: hotKeywords[index].change == 0
+            //       ? Colors.black
+            //       : hotKeywords[index].change > 0
+            //           ? Colors.red
+            //           : Colors.blue,
+            //   size: Sizes.size18,
+            //   shadows: [
+            //     BoxShadow(
+            //       color: Colors.grey.shade400,
+            //       blurRadius: Sizes.size3,
+            //       offset: const Offset(Sizes.size1, Sizes.size1),
+            //     )
+            //   ],
+            // ),
+            // Gaps.h5,
+            // Text(
+            //   '${hotKeywords[index].change.abs()}'.padLeft(3, '  '),
+            //   style: const TextStyle(
+            //     color: Colors.black,
+            //     fontSize: Sizes.size12,
+            //     fontWeight: FontWeight.bold,
+            //   ),
+            // ),
+            // Gaps.h12,
             Text(
-              '${hotKeywords[index].change.abs()}'.padLeft(3, '  '),
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: Sizes.size12,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Gaps.h12,
-            Text(
-              hotKeywords[index].name,
+              hotKeywords[index].name ?? "",
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Colors.black,

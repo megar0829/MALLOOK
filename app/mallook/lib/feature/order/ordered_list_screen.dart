@@ -57,20 +57,22 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
 
   void _loadMoreOrderedList() async {
     if (!_isOrderLoading) {
-      print('hihihihihi');
       if (mounted) {
         setState(() {
           _isOrderLoading = true;
         });
 
-        var loadedOrderedList =
-            await OrderApiService.getOrderedList(_orderPage);
-        if (mounted) {
-          setState(() {
-            _orderedList.addAll(loadedOrderedList);
-            _orderPage++;
-            _isOrderLoading = false;
-          });
+        try {
+          var loadedOrderedList =
+              await OrderApiService.getOrderedList(_orderPage);
+          if (mounted) {
+            setState(() {
+              _orderedList.addAll(loadedOrderedList);
+              _orderPage++;
+            });
+          }
+        } finally {
+          _isOrderLoading = false;
         }
       }
     }
@@ -142,7 +144,7 @@ class _OrderedListScreenState extends State<OrderedListScreen> {
                       Row(
                         children: [
                           Image.network(
-                            '${_orderedList[index].items.first.product.image}',
+                            '${_orderedList[index].items.first.image}',
                             fit: BoxFit.cover,
                             height: 120,
                           ),

@@ -1,42 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/onboarding/api/onboarding_api_service.dart';
+import 'package:mallook/feature/onboarding/model/keyword.dart';
 import 'package:mallook/feature/onboarding/tutorial_screen.dart';
-import 'package:mallook/feature/onboarding/widgets/interest_button.dart';
+import 'package:mallook/feature/onboarding/widgets/keyword_button.dart';
+import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
-
-const interests = [
-  "트렌디한",
-  "클래식한",
-  "빈티지한",
-  "스트리트 스타일",
-  "모던한",
-  "캐주얼한",
-  "우아한",
-  "여성스러운",
-  "남성적인",
-  "보헤미안",
-  "편안한",
-  "화려한",
-  "소피스티케이티드한",
-  "엣지 있는",
-  "페미닌한",
-  "마스퀘라인",
-  "차분한",
-  "사파리 스타일",
-  "레트로한",
-  "아티스틱한",
-  "새벽 섹시함",
-  "프레피 스타일",
-  "테일러 메이드",
-  "스포티한",
-  "도시적인",
-  "고급스러운",
-  "자연주의",
-  "힙스터 스타일",
-  "럭셔리한",
-  "부드러운"
-];
+import 'package:mallook/global/mallook_snackbar.dart';
+import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class InterestsScreen extends StatefulWidget {
   const InterestsScreen({super.key});
@@ -49,7 +23,8 @@ class _InterestsScreenState extends State<InterestsScreen> {
   final ScrollController _scrollController = ScrollController();
   bool _showTitle = false;
   bool _isAvailable = false;
-  final Set<String> _selectedInterests = {};
+  Future<List<Keyword>> keywords = OnboardingApiService.getOnboardingKeywords();
+  final Set<Keyword> _selectedKeywords = {};
 
   void _onScroll() {
     if (_scrollController.offset >= 120) {
@@ -76,26 +51,51 @@ class _InterestsScreenState extends State<InterestsScreen> {
     super.dispose();
   }
 
-  void _onNextTap() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const TutorialScreen(),
-      ),
-    );
+  Future<bool> _createScriptByKeyword() async {
+    List<String> selected = [];
+    for (var keyword in _selectedKeywords) {
+      selected.add(keyword.name!);
+    }
+    var data = <String, dynamic>{
+      "keywordsList": selected,
+    };
+    var result = await ScriptService.createScriptByKeywords(data: data);
+
+    if (result.contains("생성")) {
+      return true;
+    }
+
+    return false;
   }
 
-  void _addInterest(String interest) {
+  void _onNextTap() {
+    _createScriptByKeyword().then((value) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(title: value ? "분석 완료" : "다시 시도해 주세요."),
+      );
+      if (value) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const TutorialScreen(),
+          ),
+          (route) => false,
+        );
+      }
+    });
+  }
+
+  void _addInterest(Keyword keyword) {
     setState(() {
-      _selectedInterests.add(interest);
+      _selectedKeywords.add(keyword);
       _isAvailable = true;
     });
   }
 
-  void _removeInterest(String interest) {
+  void _removeInterest(Keyword keyword) {
     setState(() {
-      _selectedInterests.remove(interest);
-      if (_selectedInterests.isEmpty) _isAvailable = false;
+      _selectedKeywords.remove(keyword);
+      if (_selectedKeywords.isEmpty) _isAvailable = false;
     });
   }
 
@@ -149,17 +149,26 @@ class _InterestsScreenState extends State<InterestsScreen> {
                   ),
                 ),
                 Gaps.v44,
-                Wrap(
-                  spacing: 15,
-                  runSpacing: 15,
-                  children: [
-                    for (var interest in interests)
-                      InterestButton(
-                        interest: interest,
-                        add: _addInterest,
-                        remove: _removeInterest,
-                      )
-                  ],
+                FutureBuilder(
+                  future: keywords,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Wrap(
+                        spacing: 15,
+                        runSpacing: 15,
+                        children: [
+                          for (var keyword in snapshot.data ?? [])
+                            KeywordButton(
+                              keyword: keyword,
+                              selected: _selectedKeywords,
+                              add: _addInterest,
+                              remove: _removeInterest,
+                            )
+                        ],
+                      );
+                    }
+                    return CustomCircularWaitWidget();
+                  },
                 ),
               ],
             ),
