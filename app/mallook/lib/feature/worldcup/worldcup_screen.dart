@@ -138,13 +138,24 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text(
-          "내 옷 취향 찾기",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: Sizes.size18,
-            fontWeight: FontWeight.bold,
-          ),
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              "assets/images/app_logo/land_mallook.png",
+              width: Sizes.size32,
+            ),
+            Gaps.h12,
+            const Text(
+              "내 옷 취향 찾기",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: Sizes.size18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
       ),
       body: FutureBuilder<List<WorldcupCody>>(
