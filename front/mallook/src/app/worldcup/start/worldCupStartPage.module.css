@@ -109,6 +109,15 @@
     align-items: center;
     position: relative;
 }
+.boxCover {
+    width: 155px;
+    height: 155px;
+    border-radius: 0.75rem;
+    position: absolute;
+    top: 0;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 .top__box {
     width: 270px;
     height: 270px;
@@ -125,6 +134,7 @@
     top: 0;
     right: 0;
     transform: rotate(30deg);
+    z-index: 9;
 
 }
 .codyImg {

@@ -1,25 +1,37 @@
 import Image, {StaticImageData} from "next/image";
 import styles from "./nextModal.module.css";
-
-interface NextProps {
-	url: string | StaticImageData;
-	index: number | null;
-}
+import { WorldCupData} from "@/types";
 
 export default function NextModal(props: {
-	left: NextProps, right: NextProps, goNext: ({url, index}: NextProps) => void
+	left: WorldCupData, right: WorldCupData, goNext: (data: WorldCupData) => void
 }) {
 	return (
 		<div className={styles.background}>
 			<div className={styles.container}>
 				<div
 					className={styles.left__container}
-					onClick={() => props.goNext({url: props.left.url, index: props.left.index})}
+					onClick={() => props.goNext(props.left)}
 				>
-					<Image className={styles.image} src={props.left.url} alt={`${props.left.index} 번 이미지`} />
-					{/*<div className={styles.spanDiv}>*/}
-					{/*	<span className={styles.span}>{!props.left.index ? 0 : props.left.index  + 1}번 이미지</span>*/}
-					{/*</div>*/}
+					<Image
+						className={styles.image}
+						src={props.left.imageUrl}
+						alt={`${props.left.id} 이미지`}
+						width={200}
+						height={200}
+						unoptimized={true}
+					/>
+					<div className={styles.spanDiv}>
+						{
+							props.left.keywordList.length &&
+							props.left.keywordList.slice(0, 3).map((keyword, index) => {
+								return (
+									<div className={styles.keywordDiv} key={index}>
+										<span className={styles.span}># {keyword}</span>
+									</div>
+								);
+							})
+						}
+					</div>
 				</div>
 
 				<div className={styles.middle__container}>
@@ -30,12 +42,28 @@ export default function NextModal(props: {
 
 				<div
 					className={styles.right__container}
-					onClick={() => props.goNext({url: props.right.url, index: props.right.index})}
+					onClick={() => props.goNext(props.right)}
 				>
-					<Image className={styles.image} src={props.right.url} alt={`${props.right.index} 번 이미지`}/>
-					{/*<div className={styles.spanDiv}>*/}
-					{/*	<span className={styles.span}>{!props.right.index? 0 : props.right.index + 1}번 이미지</span>*/}
-					{/*</div>*/}
+					<Image
+						className={styles.image}
+						src={props.right.imageUrl}
+						alt={`${props.right.id} 이미지`}
+						width={200}
+						height={200}
+						unoptimized={true}
+					/>
+					<div className={styles.spanDiv}>
+						{
+							props.right.keywordList.length &&
+							props.right.keywordList.slice(0, 3).map((keyword, index) => {
+								return (
+									<div className={styles.keywordDiv} key={index}>
+										<span className={styles.span}># {keyword}</span>
+									</div>
+								);
+							})
+						}
+					</div>
 				</div>
 			</div>
 		</div>
