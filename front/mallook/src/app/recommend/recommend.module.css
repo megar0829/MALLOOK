@@ -7,17 +7,15 @@
 }
 
 .cody__container {
-    width: 85dvw;
+    /*width: 80dvw;*/
     height: 50dvh;
-    margin-top: 20px;
+    margin-top: 4rem;
     border: 1px solid lightgray;
-    border-radius: 25px;
-    box-shadow: 0 0 1px gray;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    padding: 2dvh 1dvw;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }
 
 .leftDiv {
@@ -26,6 +24,8 @@
 }
 
 .rightDiv {
+    display: flex;
+    align-items: center;
     width: 50dvw;
     height: 45dvh;
 }

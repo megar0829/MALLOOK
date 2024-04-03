@@ -1,29 +1,27 @@
 .cody {
     width: 25dvw;
-    height: 45dvh;
+    height: 100%;
+    margin: 0.5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
+    justify-content: end;
     position: relative;
     overflow: hidden;
-    border-radius: 25px;
-    padding: 10px;
+    padding: 1rem;
 }
 .codyImg {
     position: absolute;
     object-fit: cover;
     width: 25dvw;
     height: auto;
-    border-radius: 25px;
     z-index: 1;
 }
 .codyImg__cover {
     width: 25dvw;
-    height: 45dvh;
+    height: 46dvh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 25px;
     z-index: 5;
 }
 .cody__topDiv{
@@ -61,7 +59,7 @@
     margin-bottom: 40px;
 }
 .cody__bottomDiv__codyName {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 600;
     color: white;
     text-wrap: normal;

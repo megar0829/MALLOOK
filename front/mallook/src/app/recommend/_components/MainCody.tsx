@@ -16,17 +16,22 @@ export default function MainCody(props: { script: Script } ) {
           width={200}
           height={200}
           unoptimized={true}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+          }}
         />
         <div className={styles.codyImg__cover}></div>
 
-        <div className={styles.cody__topDiv}>
-          <div className={styles.cody__topDiv__profileDiv}>
-            {/*<Image className={styles.cody__topDiv__profileImg} src={GetProfileImage(props.script.memberGrade)} alt="프로필 이미지" />*/}
-          </div>
-          <span className={styles.cody__topDiv__username}>
-            {props.script.nickname}
-          </span>
-        </div>
+        {/*<div className={styles.cody__topDiv}>*/}
+        {/*  <div className={styles.cody__topDiv__profileDiv}>*/}
+        {/*    /!*<Image className={styles.cody__topDiv__profileImg} src={GetProfileImage(props.script.memberGrade)} alt="프로필 이미지" />*!/*/}
+        {/*  </div>*/}
+        {/*  <span className={styles.cody__topDiv__username}>*/}
+        {/*    {props.script.nickname}*/}
+        {/*  </span>*/}
+        {/*</div>*/}
 
         <div className={styles.cody__bottomDiv}>
           <span className={styles.cody__bottomDiv__codyName}>{props.script.name}</span>
