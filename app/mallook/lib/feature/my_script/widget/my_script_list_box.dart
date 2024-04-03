@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/script/model/script.dart';
 
@@ -55,22 +56,19 @@ class MyScriptListBox extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Column(
-                      children: [
-                        const FaIcon(
-                          FontAwesomeIcons.solidHeart,
-                          size: Sizes.size20,
-                          color: Colors.redAccent,
-                        ),
-                        Text(
-                          "${script.heartCount}",
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size16,
-                          ),
-                        )
-                      ],
+                    const FaIcon(
+                      FontAwesomeIcons.solidHeart,
+                      size: Sizes.size20,
+                      color: Colors.yellowAccent,
+                    ),
+                    Gaps.h10,
+                    Text(
+                      "${script.heartCount}",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Sizes.size16,
+                      ),
                     )
                   ],
                 ),

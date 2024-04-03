@@ -32,7 +32,6 @@ String getLevelImage(int level) {
 }
 
 String getStringLevelImage(String level) {
-  print(level);
   switch (level) {
     case 'LEVEL1':
       return "assets/images/level/level1.png";
@@ -50,5 +49,47 @@ String getStringLevelImage(String level) {
       return "assets/images/level/level1.png";
     default:
       return "assets/images/app_logo/logo_sm.png";
+  }
+}
+
+num getLevelDiscountRatio(int level) {
+  switch (level) {
+    case 1:
+      return 1;
+    case 2:
+      return 1;
+    case 3:
+      return 2;
+    case 4:
+      return 2;
+    case 5:
+      return 3;
+    case 6:
+      return 3;
+    case 7:
+      return 4;
+    default:
+      return 0;
+  }
+}
+
+num getStringLevelDiscountRatio(String level) {
+  switch (level) {
+    case 'LEVEL1':
+      return 1;
+    case 'LEVEL2':
+      return 1;
+    case 'LEVEL3':
+      return 2;
+    case 'LEVEL4':
+      return 2;
+    case 'LEVEL5':
+      return 3;
+    case 'LEVEL6':
+      return 3;
+    case 'LEVEL7':
+      return 4;
+    default:
+      return 0;
   }
 }
