@@ -17,9 +17,9 @@ export default function NextModal(props: {
 					onClick={() => props.goNext({url: props.left.url, index: props.left.index})}
 				>
 					<Image className={styles.image} src={props.left.url} alt={`${props.left.index} 번 이미지`} />
-					<div className={styles.spanDiv}>
-						<span className={styles.span}>{!props.left.index ? 0 : props.left.index  + 1}번 이미지</span>
-					</div>
+					{/*<div className={styles.spanDiv}>*/}
+					{/*	<span className={styles.span}>{!props.left.index ? 0 : props.left.index  + 1}번 이미지</span>*/}
+					{/*</div>*/}
 				</div>
 
 				<div className={styles.middle__container}>
@@ -33,9 +33,9 @@ export default function NextModal(props: {
 					onClick={() => props.goNext({url: props.right.url, index: props.right.index})}
 				>
 					<Image className={styles.image} src={props.right.url} alt={`${props.right.index} 번 이미지`}/>
-					<div className={styles.spanDiv}>
-						<span className={styles.span}>{!props.right.index? 0 : props.right.index + 1}번 이미지</span>
-					</div>
+					{/*<div className={styles.spanDiv}>*/}
+					{/*	<span className={styles.span}>{!props.right.index? 0 : props.right.index + 1}번 이미지</span>*/}
+					{/*</div>*/}
 				</div>
 			</div>
 		</div>
