@@ -16,7 +16,10 @@ public record ScriptListDto(
         @Schema(description = "작성자 닉네임")
         String nickname,
         @Schema(description = "스크립트 대표 이미지")
-        String imageUrl
+        String imageUrl,
+
+        @Schema(description = "멤버 등급")
+        String memberGrade
 ) {
     public static ScriptListDto toDto(Script script, String imageUrl) {
         return ScriptListDto.builder()
@@ -25,6 +28,7 @@ public record ScriptListDto(
                 .nickname(script.getMember().getNickname())
                 .heartCount(script.getHeartCount())
                 .imageUrl(imageUrl)
+                .memberGrade(script.getMember().getGrade().getLevel().toString())
                 .build();
     }
 }
