@@ -1,10 +1,76 @@
 import {StaticImageData} from "next/image";
+import * as worker_threads from "worker_threads";
 
 export interface Product {
-	image: string | StaticImageData;
-	name: string;
 	brandName: string;
+	code: string | null;
+	detailImages: string[];
+	fee: string | null;
+	gender: string;
+	id: string;
+	image: string;
+	mainCategory: string;
+	name: string;
+	price: string;
+	size: string | null;
+	subCategory: string;
+	tags: string;
+	url: string;
+}
+
+export interface ProductDetail {
+	brandName: string;
+	code: string | null;
+	color: string[];
+	detailHtml: string;
+	detailImages: string[];
+	fee: string | null;
+	gender: string;
+	id: string;
+	image: string;
+	keywords: string[];
+	mainCategory: string;
+	name: string;
 	price: number;
+	review: ProductReview;
+	size: string[];
+	subCategory: string | null;
+	tags: string | null
+	url: string;
+}
+
+export interface ProductReview {
+	count: number;
+	averagePoint: number;
+	reviewList: Review[];
+}
+
+export interface Review {
+	contents: string;
+	createdAt: string;
+	images: string[];
+	point: number | null;
+	productOption: {
+		color: string;
+		size: string | null;
+	}[]
+	userSize : {
+		height: string;
+		weight: string;
+	}
+}
+
+export interface Script {
+	id: number;
+	name: string;
+	heartCount: number;
+	nickname: string;
+	imageUrl: string;
+}
+
+export interface ScriptProducts {
+	id: number;
+	products: Product[];
 }
 
 export interface SampleProduct {

@@ -7,6 +7,8 @@ import {useEffect, useState} from "react";
 import ComponentOne from "@/app/(home)/_components/ComponentOne";
 import ComponentTwo from "@/app/(home)/_components/ComponentTwo";
 import ComponentThree from "@/app/(home)/_components/ComponentThree";
+import axios from "axios";
+import {API_URL} from "@/constants";
 export default function MainComponent() {
 	const params = useSearchParams();
 	const router = useRouter();
@@ -25,14 +27,15 @@ export default function MainComponent() {
 	useEffect(() => {
 		console.log(userToken)
 		router.push("/")
+
 	}, [userToken]);
+
 
 	return (
 		<div className={styles.container}>
 			<ComponentOne />
 			<ComponentTwo />
 			<ComponentThree />
-
 		</div>
 	);
 }

@@ -11,29 +11,58 @@ import {Product} from "@/types";
 
 // const { userToken } = LoginState();
 
-export default function MainProductList() {
+export default function MainProductList(props: {
+	chooseCategory: string,
+	chooseDetailCategory: string
+}) {
 	const [productList, setProductList] = useState<Product[]>([]);
 
-	useEffect(() => {
-		console.log(productList)
-
-	}, [productList]);
+	const {userToken} = LoginState();
 
 	useEffect(() => {
 		if (!productList.length) {
+			if (!userToken.accessToken) return
 			axios.get(
-				`${API_URL}/api/products?primary=아우터&secondary=재킷&size=30`,
+				`${API_URL}/api/products/popular?size=100`,
 				{
 					headers: {
-						Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtYWxsb29rIiwiZXhwIjoxNzExOTU5OTIyLCJzdWIiOiJmM2I5MzU5Mi04YWM3LTQ3MzQtOGI4MC02YjcwNmRiMDY0M2YiLCJyb2xlcyI6WyJCQVNJQ19VU0VSIl19.miuGMwnxm4LQvwHkuSo1IbV9KxagoNeYenVdJFXMKoc"
+						Authorization: `Bearer ${userToken.accessToken}`
 						,
 					}
 				}
 			).then((res) => {
+				console.log(res.data.result.content)
 				setProductList(res.data.result.content);
-			})
+			}).catch((err) => console.log(err));
 		}
 	}, []);
+
+	useEffect(() => {
+		if (!userToken.accessToken) return
+
+		const categoryName = props.chooseCategory;
+		const detailCategoryName = props.chooseDetailCategory;
+		let apiUrl = '';
+
+		if (detailCategoryName == "top100") {
+			apiUrl = `${API_URL}/api/products/popular`;
+		} else {
+			apiUrl = `${API_URL}/api/products?primary=${categoryName}&secondary=${detailCategoryName}&size=30`;
+		}
+
+		axios.get(
+			apiUrl,
+			{
+				headers: {
+					Authorization: `Bearer ${userToken.accessToken}`
+					,
+				}
+			}
+		).then((res) => {
+			console.log(res.data.result.content)
+			setProductList(res.data.result.content);
+		}).catch((err) => console.log(err));
+	}, [props.chooseDetailCategory]);
 
 	return (
 		<>

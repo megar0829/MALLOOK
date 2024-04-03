@@ -1,44 +1,65 @@
 import styles from "./detailReview.module.css";
-import {ReviewData} from "@/types";
+import {ProductReview} from "@/types";
 import Image from "next/image";
 
+export default function DetailReview(props:{ reviews: ProductReview}) {
 
-function Review(props:{ review: ReviewData}) {
-	return (
-		<div>
-			<div>
-				<Image src={props.review.images} alt="리뷰 이미지" />
-			</div>
-			<div>
+	const reviewList = () => {
+		return (
+			props.reviews.reviewList.map((review, index) => {
+				return (
+					<div className={styles.review__container} key={index}>
+						<div className={styles.review__leftDiv}>
+							{review.images.length
+								?
+								<Image
+										className={styles.review__image}
+										src={review.images[0]}
+										alt="리뷰이미지"
+										width={200}
+										height={200}
+										unoptimized={true}
+								/>
+								:
+								<div className={styles.review__image__blank}>
+									<span>이미지가 없습니다.</span>
+								</div>
+							}
+						</div>
 
-			</div>
-		</div>
-	);
-}
+						<div className={styles.review__line}></div>
 
-export default function DetailReview() {
-	const review = {
-		"content": "품질이 생각보다 좋고,\n만족스러워서 가성비가 좋아요!!",
-		"created_at": "1709521906",
-		"images": "https://image.brandi.me/user/2023/04/12/2745488802_1681270328_L.jpg",
-		"point": null,
-		"product_option": [
-			[
-				"플리츠 긴팔 셔츠_베이지",
-				"2XL",
-				"단품구매"
-			]
-		],
-		"user_size": [
-			174,
-			0
-		]
+						<div className={styles.review__rightDiv}>
+							<div className={styles.review__rightDiv__topDiv}>
+								<span>{review.createdAt}</span>
+							</div>
+							<div className={styles.review__rightDiv__middleDiv}>
+								<span>{review.contents}</span>
+							</div>
+							<div className={styles.review__rightDiv__bottomDiv}>
+								{ review.userSize.height && review.userSize.weight
+									?
+									<div className={styles.review__rightDiv__bottomDiv}>
+										<span>신장 : {review.userSize.height}</span>
+										<span>몸무게 : {review.userSize.weight}</span>
+									</div>
+									:
+									<div className={styles.review__rightDiv__bottomDiv}>
+										<span>사용자 사이즈 정보가 없습니다.</span>
+									</div>
+								}
+							</div>
+						</div>
+					</div>
+				);
+			})
+		);
 	}
 
 
 	return (
-		<div>
-			{Review({review:review})}
+		<div className={styles.reviewList__container}>
+			{reviewList()}
 		</div>
 	);
 }

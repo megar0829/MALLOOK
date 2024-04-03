@@ -1,22 +1,26 @@
 .cody {
-    width: 100%;
-    height: 100%;
+    width: 25dvw;
+    height: 45dvh;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+    align-items: center;
+    justify-content: space-around;
     position: relative;
+    overflow: hidden;
+    border-radius: 25px;
+    padding: 10px;
 }
 .codyImg {
     position: absolute;
     object-fit: cover;
-    height: 100%;
+    width: 25dvw;
+    height: auto;
     border-radius: 25px;
     z-index: 1;
 }
 .codyImg__cover {
-    width: 100%;
-    height: 100%;
+    width: 25dvw;
+    height: 45dvh;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 25px;
@@ -24,7 +28,7 @@
 }
 .cody__topDiv{
     z-index: 10;
-    width: 100%;
+    width: 25dvw;
     display: flex;
     align-items: center;
     margin-left: 10px;
@@ -57,7 +61,8 @@
     margin-bottom: 40px;
 }
 .cody__bottomDiv__codyName {
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 600;
     color: white;
+    text-wrap: normal;
 }

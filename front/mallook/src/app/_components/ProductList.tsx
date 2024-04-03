@@ -9,22 +9,13 @@ export default function ProductListComponent(props: {productList: Product[]}) {
 
 	const productList = () => {
 		if (props.productList.length) {
-			console.log(props.productList)
 			return (
 				props.productList.map((product, index) => {
 					return (
-						<ProductComponent productData={product} key={index} id={index} />
+						<ProductComponent productData={product} key={index} id={product.id}/>
 					);
 				})
 			)
-		// } else {
-		// 	return (
-		// 		ProductList.map((product, index) => {
-		// 			return (
-		// 				<ProductComponent productData={product} key={index} id={index} />
-		// 			);
-		// 		})
-		// 	);
 		}
 	}
 

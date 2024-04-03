@@ -5,7 +5,7 @@ import React from "react";
 import {Product} from "@/types";
 import {inherits} from "node:util";
 
-export default function ProductComponent(props: { productData: Product, id: number }) {
+export default function ProductComponent(props: { productData: Product, id: string }) {
 	return (
 		<Link href={`/product/${props.id}`} >
 			<div className={styles.product}>
