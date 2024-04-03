@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.heart.script_heart.dao;
 
-
 import io.ssafy.mallook.domain.heart.script_heart.entity.ScriptHeart;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.script.entity.Script;

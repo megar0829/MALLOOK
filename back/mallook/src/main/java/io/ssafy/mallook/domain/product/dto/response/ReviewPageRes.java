@@ -1,7 +1,6 @@
 package io.ssafy.mallook.domain.product.dto.response;
 
 import io.ssafy.mallook.domain.product.entity.ReviewObject;
-import io.ssafy.mallook.domain.product.entity.Reviews;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 

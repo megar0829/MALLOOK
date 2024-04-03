@@ -9,8 +9,6 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.SQLRestriction;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -65,12 +63,13 @@ public class Member extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<MemberCoupon> myCouponList = new ArrayList<>();
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
 
     public boolean availableLevelUp() {
-        if (Objects.isNull(this.grade)){
+        if (Objects.isNull(this.grade)) {
             return false;
         }
         return Level.availableLevelUp(this.grade.getLevel(), this.getExp());

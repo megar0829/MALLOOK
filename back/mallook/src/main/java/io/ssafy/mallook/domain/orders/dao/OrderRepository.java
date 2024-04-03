@@ -15,7 +15,6 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-
     Slice<Orders> findByIdLessThanAndMemberOrderByIdDesc(Long id, Member member, Pageable pageable);
 
     Long countByMember(Member member);
@@ -30,5 +29,4 @@ public interface OrderRepository extends JpaRepository<Orders, Long> {
 
     @Query("SELECT max (o.id) from Orders o")
     Long findMaxOrderId();
-
 }

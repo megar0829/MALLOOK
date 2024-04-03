@@ -14,7 +14,6 @@ import java.util.UUID;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-
     @Query(
             """
                     select new io.ssafy.mallook.domain.cart.dto.response.CartDetailRes(
@@ -38,6 +37,4 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
                     where c.member.id = :memberId
                     """)
     void deleteMyCart(@Param("memberId") UUID memberId);
-
-
 }

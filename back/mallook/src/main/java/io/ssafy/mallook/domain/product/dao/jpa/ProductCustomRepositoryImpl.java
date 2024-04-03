@@ -14,11 +14,10 @@ import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static io.ssafy.mallook.domain.product.entity.QProduct.product;
-import static java.util.Objects.*;
+import static java.util.Objects.isNull;
 
 @Repository
 @RequiredArgsConstructor

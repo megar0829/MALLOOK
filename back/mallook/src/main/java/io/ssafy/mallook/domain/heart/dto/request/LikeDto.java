@@ -11,18 +11,17 @@ public record LikeDto(
         @NotNull
         Long targetId
 ) {
+    public ScriptHeart toEntity(Member member, Script script) {
+        return ScriptHeart.builder()
+                .member(member)
+                .script(script)
+                .build();
+    }
 
-        public ScriptHeart toEntity(Member member, Script script) {
-                return ScriptHeart.builder()
-                        .member(member)
-                        .script(script)
-                        .build();
-        }
-
-        public StyleHeart toEntity(Member member, Style style) {
-                return StyleHeart.builder()
-                        .member(member)
-                        .style(style)
-                        .build();
-        }
+    public StyleHeart toEntity(Member member, Style style) {
+        return StyleHeart.builder()
+                .member(member)
+                .style(style)
+                .build();
+    }
 }

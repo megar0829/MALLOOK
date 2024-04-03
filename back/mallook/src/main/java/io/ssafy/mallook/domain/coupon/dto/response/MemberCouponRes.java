@@ -3,7 +3,6 @@ package io.ssafy.mallook.domain.coupon.dto.response;
 import io.ssafy.mallook.domain.coupon.entity.CouponType;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
 @Schema(description = "쿠폰 조회시 응답 DTO")
 public record MemberCouponRes(
         @Schema(description = "내 쿠폰 id")

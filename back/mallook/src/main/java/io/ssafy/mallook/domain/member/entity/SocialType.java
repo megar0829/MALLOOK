@@ -5,6 +5,7 @@ import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 
 public enum SocialType {
     KAKAO, NAVER, GOOGLE;
+
     public static SocialType fromString(String value) {
         for (SocialType socialType : SocialType.values()) {
             if (socialType.name().equalsIgnoreCase(value)) {

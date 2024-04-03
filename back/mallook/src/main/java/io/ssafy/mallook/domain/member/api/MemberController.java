@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.member.api;
 
-
 import io.ssafy.mallook.domain.member.application.MemberService;
 import io.ssafy.mallook.domain.member.dto.request.MemberDetailReq;
 import io.ssafy.mallook.domain.member.dto.request.MemberNicknameReq;
@@ -94,5 +93,4 @@ public class MemberController {
                 "닉네임 변경 성공"
         );
     }
-
 }

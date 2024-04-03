@@ -1,6 +1,5 @@
 package io.ssafy.mallook.domain.heart.style_heart.dao;
 
-
 import io.ssafy.mallook.domain.heart.style_heart.entity.StyleHeart;
 import io.ssafy.mallook.domain.member.entity.Member;
 import io.ssafy.mallook.domain.style.entity.Style;
