@@ -39,7 +39,7 @@ class OrderProductWidget extends StatelessWidget {
             children: [
               Image.network(
                 cartItem.image == null
-                    ? "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                    ? "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/logo_sm.png"
                     : cartItem.image!,
                 height: 120,
                 fit: BoxFit.cover,

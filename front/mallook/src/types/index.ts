@@ -128,9 +128,25 @@ export interface ProfileData {
 
 export interface ProfileSampleData {
 	nickname: string;
+	nicknameTag: string;
+	birth: string;
+	gender: string;
+	phone: string;
+	grade: string;
+	expRange: number[];
+	level: string;
 	point: number;
 	exp: number;
-	profileImg: string | StaticImageData;
+	address: {
+		city: string;
+		district: string;
+		address: string;
+		zipcode: string;
+	}
+	memberCoupon: number;
+	coupon: number;
+	cartProduct: number;
+	orders: number;
 }
 
 export interface ReviewData {

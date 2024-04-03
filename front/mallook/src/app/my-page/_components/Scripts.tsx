@@ -53,7 +53,6 @@ export default function Scripts() {
 						나의 스크립트
 					</span>
 				</div>
-				<div className={styles.scripts__topDiv__middleLine}></div>
 				<div className={styles.scripts__topDiv__textDiv} onClick={() => chooseLikeScripts()}>
 					<span
 						className={styles.scripts__topDiv__textSpan}
@@ -61,7 +60,7 @@ export default function Scripts() {
 							color: !isMine ? "black" : "gray"
 						}}
 					>
-						Like
+						좋아요 누른 코디
 					</span>
 				</div>
 			</div>

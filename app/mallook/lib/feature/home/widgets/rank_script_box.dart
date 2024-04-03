@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/script/model/script.dart';
@@ -33,7 +32,7 @@ class RankScriptBox extends StatelessWidget {
               BlendMode.srcOver,
             ),
             child: FadeInImage.assetNetwork(
-              placeholder: "assets/images/ssafy_logo.png",
+              placeholder: "assets/images/app_logo/logo_sm.png",
               image: script.imageUrl!,
               fit: BoxFit.cover,
               filterQuality: FilterQuality.low,

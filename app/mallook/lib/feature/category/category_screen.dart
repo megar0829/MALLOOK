@@ -160,6 +160,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
           elevation: 1,
           shadowColor: Colors.grey.shade400,
           centerTitle: true,
+          leading: Padding(
+            padding: const EdgeInsets.only(
+              left: Sizes.size20,
+            ),
+            child: Image.asset(
+              "assets/images/app_logo/loading_icon.png",
+            ),
+          ),
           title: Text(
             _secondary.isNotEmpty ? '$_primary · $_secondary' : _primary,
             style: const TextStyle(

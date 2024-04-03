@@ -2,6 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String appLogoLandAfter =
+      'assets/images/app_logo/land_after.png';
+  static const String appLogoLandBefore =
+      'assets/images/app_logo/land_before.png';
+  static const String appLogoLandMallook =
+      'assets/images/app_logo/land_mallook.png';
+  static const String appLogoLoadingIcon =
+      'assets/images/app_logo/loading_icon.png';
+  static const String appLogoLogoLg = 'assets/images/app_logo/logo_lg.png';
+  static const String appLogoLogoSm = 'assets/images/app_logo/logo_sm.png';
   static const String imagesBagsBackpack = 'assets/images/bags_backpack.jpg';
   static const String imagesBagsClutch = 'assets/images/bags_clutch.jpg';
   static const String imagesBagsCross = 'assets/images/bags_cross.jpg';

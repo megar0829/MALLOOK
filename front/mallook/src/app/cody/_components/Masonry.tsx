@@ -5,14 +5,14 @@ import styles from "./masonry.module.css";
 import { MasonryInfiniteGrid } from "@egjs/react-infinitegrid";
 
 import iconDefault from "@/assets/img/icons/defaultUser.png";
-import iconHeart from "@/assets/img/icons/heart.png";
-import iconHeartFilled from "@/assets/img/icons/heart_filled.png";
 import {CodyBookData} from "@/types";
 import {CodyBookList} from "@/constants";
 import Image, {StaticImageData} from "next/image";
 import {useState} from "react";
-import iconDefaultProfile from "@/assets/img/icons/defaultUser.png";
-import imgCody10 from "@/assets/img/recommend/cody10.jpg";
+
+import { GoHeart } from "react-icons/go";
+import { GoHeartFill } from "react-icons/go";
+import { AiOutlineUser } from "react-icons/ai";
 
 export interface GroupData {
 	nextGroupKey: number;
@@ -54,26 +54,24 @@ const Item = (props: { postData:ItemData }) => {
 						style={{
 							width: "100%",
 							height: "auto",
-							borderRadius: 8,
 						}}
 						width={500}
 						height={500}
 					/>
-					<div className={styles.cover}></div>
 				</div>
 				<div className={styles.bottomDiv}>
 					<div className={styles.bottomDiv__topDiv}>
 						<div className={styles.bottomDiv__topDiv__leftDiv}>
-							<div className={styles.bottomDiv__topDiv__leftDiv__profileImageDiv}>
-								<Image className={styles.bottomDiv__topDiv__leftDiv__profileImage} src={props.postData.cody.profileImg} alt="프로필이미지" />
-							</div>
+							<Image className={styles.bottomDiv__topDiv__leftDiv__profileImage} src={props.postData.cody.profileImg} alt="프로필이미지" />
 							<span className={styles.bottomDiv__topDiv__leftDiv__username}>{props.postData.cody.username}</span>
 						</div>
 						<div className={styles.bottomDiv__topDiv__rightDiv}>
-							<div className={styles.bottomDiv__topDiv__rightDiv__likeDiv}>
-								<Image className={styles.bottomDiv__topDiv__rightDiv__like} src={iconHeart} alt="좋아요아이콘" />
-							</div>
 							<span className={styles.bottomDiv__topDiv__rightDiv__likeCnt}>{props.postData.cody.likeCnt}</span>
+							<div className={styles.bottomDiv__topDiv__rightDiv__likeDiv}>
+								<GoHeart className={styles.bottomDiv__topDiv__rightDiv__like} style={{color: "#292929"}}/>
+								{/*active heart*/}
+								{/*<GoHeartFill className={styles.bottomDiv__topDiv__rightDiv__like} style={{color: "#E7707C"}}/>*/}
+							</div>
 						</div>
 					</div>
 

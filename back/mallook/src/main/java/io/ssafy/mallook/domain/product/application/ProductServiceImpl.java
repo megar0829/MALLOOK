@@ -11,16 +11,18 @@ import io.ssafy.mallook.domain.product.entity.SubCategory;
 import io.ssafy.mallook.global.common.code.ErrorCode;
 import io.ssafy.mallook.global.exception.BaseExceptionHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Objects;
 import java.util.List;
+import java.util.Objects;
 
 @Service
+@Log4j2
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
@@ -61,6 +63,18 @@ public class ProductServiceImpl implements ProductService {
     public String getLastMongoProductsId() {
         return mongoProductsRepository.findFirstByOrderById().getId().toString();
     }
+
+    @Override
+    public ProductPageRes getRecommendedProducts(String subCategory) {
+        log.info(subCategory);
+        return ProductPageRes.builder()
+                .content(mongoProductsRepository.getRecommendedProducts(subCategory)
+                        .stream()
+                        .map(ProductsListDto::toDto)
+                        .toList())
+                .build();
+    }
+
 
     @Override
     public ProductsPageRes getMongoProductsList(ObjectId cursor, Pageable pageable, String mainCategory, String subCategory) {
