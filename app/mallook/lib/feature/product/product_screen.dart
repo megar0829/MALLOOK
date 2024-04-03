@@ -89,7 +89,7 @@ class _ProductScreenState extends State<ProductScreen>
                       ProductImgWidget(
                         images: [
                           product.image ??
-                              "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/ssafy_logo.png"
+                              "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/logo_sm.png"
                         ],
                       ),
                       Padding(
