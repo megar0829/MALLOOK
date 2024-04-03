@@ -82,13 +82,27 @@ class ScriptProductWidget extends StatelessWidget {
                       fontSize: Sizes.size16,
                     ),
                   ),
-                  Text(
-                    '${numberFormat.format(product.price)} ₩',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                      fontSize: Sizes.size16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${numberFormat.format(product.price)} ₩',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColorDark,
+                          fontSize: Sizes.size16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        product.brandName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: Colors.grey.shade800,
+                          fontWeight: FontWeight.bold,
+                          fontSize: Sizes.size14,
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),

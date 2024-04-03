@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/product/api/product_api_service.dart';
 import 'package:mallook/feature/product/model/product.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/script/model/script.dart';
@@ -27,8 +29,7 @@ class _ScriptScreenState extends State<ScriptScreen>
   late final Future<ScriptDetail> _script =
       ScriptService.getScriptDetail(widget.script.id!);
   final List<Product> _products = [];
-  int _productPage = 0;
-  int _totalPage = 0;
+  String? _cursorProduct = "";
   bool _isProductLoading = false;
 
   @override
@@ -52,26 +53,30 @@ class _ScriptScreenState extends State<ScriptScreen>
   }
 
   void _loadMoreProducts() async {
-    return;
-    // if (!_isProductLoading && keywords.isNotEmpty) {
-    //   if (mounted) {
-    //     setState(() {
-    //       _isProductLoading = true;
-    //     });
-    //
-    //     var loadedProducts =
-    //     await HomeApiService.getPopularProducts(_productPage);
-    //     if (mounted) {
-    //       setState(() {
-    //         _productPage = loadedProducts.currentPage! + 1;
-    //         _totalPage = loadedProducts.totalPage!;
-    //         _products.addAll(loadedProducts.content!);
-    //         _productPage++;
-    //         _isProductLoading = false;
-    //       });
-    //     }
-    //   }
-    // }
+    if (_cursorProduct == null) return;
+    if (!_isProductLoading) {
+      if (mounted) {
+        setState(() {
+          _isProductLoading = true;
+        });
+      }
+
+      try {
+        var loadedProducts = await ProductApiService.getProductsByScript(
+          scriptId: widget.script.id!,
+          cursor: _cursorProduct,
+        );
+
+        if (mounted) {
+          setState(() {
+            _products.addAll(loadedProducts.content ?? []);
+            _cursorProduct = loadedProducts.nextCursor;
+          });
+        }
+      } finally {
+        _isProductLoading = false;
+      }
+    }
   }
 
   @override
@@ -122,10 +127,11 @@ class _ScriptScreenState extends State<ScriptScreen>
                           children: [
                             CircleAvatar(
                               backgroundColor: Colors.white.withOpacity(0.7),
-                              child: FaIcon(
-                                FontAwesomeIcons.solidUser,
-                                color: Theme.of(context).primaryColorDark,
-                                size: Sizes.size18,
+                              child: Image.asset(
+                                getStringLevelImage(
+                                  snapshot.data!.memberGrade ??
+                                      "assets/images/app_logo/logo_sm.png",
+                                ),
                               ),
                             ),
                             Gaps.h4,

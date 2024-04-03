@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart';
+import 'package:mallook/constants/gaps.dart';
+import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/login/api/login_api_servcie.dart';
 import 'package:mallook/feature/login/models/auth_token_model.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
@@ -130,12 +133,62 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: GestureDetector(
         onTap: () => _kakaoLogin().then(
           (value) => _onLoginSuccess(context, value),
         ),
         child: Center(
-          child: Image.asset("assets/images/kakao_login_large.png"),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 180,
+                padding: const EdgeInsets.all(
+                  Sizes.size36,
+                ),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Image.asset(
+                  "assets/images/app_logo/logo_sm.png",
+                ),
+              ),
+              Gaps.v10,
+              const Text(
+                'Mallook',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: Sizes.size32,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '나를 위한 쇼핑몰',
+                    style: TextStyle(
+                      color: Colors.grey.shade100,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size16,
+                    ),
+                  ),
+                  Gaps.h10,
+                  FaIcon(
+                    FontAwesomeIcons.store,
+                    color: Colors.grey.shade100,
+                  ),
+                ],
+              ),
+              Gaps.v20,
+              Image.asset(
+                "assets/images/kakao_login_large.png",
+                height: 70,
+              ),
+            ],
+          ),
         ),
       ),
     );

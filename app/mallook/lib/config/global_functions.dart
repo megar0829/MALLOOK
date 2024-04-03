@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:mallook/feature/login/LoginScreen.dart';
+import 'package:mallook/feature/login/login_screen.dart';
 import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 
 void moveToLoginScreen() {

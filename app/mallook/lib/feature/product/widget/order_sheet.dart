@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/order/cart_screen.dart';
@@ -29,6 +30,10 @@ class OrderSheet extends StatefulWidget {
 }
 
 class _OrderSheetState extends State<OrderSheet> {
+  NumberFormat numberFormat = NumberFormat.currency(
+    locale: 'ko_KR',
+    symbol: '',
+  );
   final CartController cartController = Get.put(CartController());
   String? _selectedSize;
   String? _selectedColor;
@@ -60,6 +65,14 @@ class _OrderSheetState extends State<OrderSheet> {
       _selectedSize = null;
       _selectedColor = null;
     });
+  }
+
+  int getTotalPrice() {
+    int totalPrice = 0;
+    for (var item in _cartItems) {
+      totalPrice += item.price! * item.count!;
+    }
+    return totalPrice;
   }
 
   void _onOrderBtnTap() {
@@ -350,6 +363,17 @@ class _OrderSheetState extends State<OrderSheet> {
                   ),
                 ),
               ),
+              if (_cartItems.isNotEmpty)
+                Center(
+                  child: Text(
+                    '총액 ${numberFormat.format(getTotalPrice())}₩',
+                    style: const TextStyle(
+                      color: Colors.pink,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size18,
+                    ),
+                  ),
+                )
             ],
           ),
         ),
