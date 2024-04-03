@@ -40,7 +40,7 @@ public class KeywordServiceImpl implements KeywordService {
 
         return shuffledKeywords.stream()
                 .map(KeywordListRes::toDto)
-                .limit(8)
+                .limit(50)
                 .collect(toList());
     }
 
