@@ -92,6 +92,7 @@ public class StyleServiceImpl implements StyleService {
         List<StyleProductRes> productList = style.getStyleProductList().stream()
                 .map(ele -> productsRepository.findById(ele.getProducts())
                         .map(product -> new StyleProductRes(
+                                product.getId().toString(),
                                 product.getName(),
                                 product.getPrice(),
                                 product.getBrandName(),
