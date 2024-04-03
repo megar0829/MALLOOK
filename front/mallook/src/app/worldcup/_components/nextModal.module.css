@@ -19,7 +19,6 @@
 
 .left__container {
     width: 40dvw;
-    height: calc(80dvh - 85px);
     border: 1px solid gray;
     border-radius: 0.75rem;
     display: flex;
@@ -41,7 +40,6 @@
 
 .right__container {
     width: 40dvw;
-    height: calc(80dvh - 85px);
     border: 1px solid gray;
     border-radius: 0.75rem;
     display: flex;
@@ -51,17 +49,29 @@
     position: relative;
 }
 .image {
-    height: 100%;
+    width: 40dvw;
+    border: 1px solid gray;
+    border-radius: 0.75rem;
 }
 .spanDiv {
     width: 90%;
+    height: 35px;
     position: absolute;
     bottom: 10px;
     background-color: rgba(0, 0, 0, 0.5);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.keywordDiv {
+    width: 25%;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .span {
-    font-size: 30px;
+    font-size: 25px;
     font-weight: 700;
     color: white;
 }

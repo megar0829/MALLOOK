@@ -22,26 +22,28 @@ export default function MainProductList(
     return (
       props.scriptProduct.products.length && props.scriptProduct.products.map((product, index) => {
         return (
-          <div className={styles.product} key={index}>
-            <div className={styles.product__leftDiv}>
-              <Image
-                className={styles.product__leftDiv__productImg}
-                src={product.image}
-                alt="상품 이미지"
-                width={200}
-                height={200}
-                unoptimized={true}
-              />
-            </div>
+          <Link style={{color: "black"}} href={`/product/${product.id}`} key={index}>
+            <div className={styles.product}>
+              <div className={styles.product__leftDiv}>
+                <Image
+                  className={styles.product__leftDiv__productImg}
+                  src={product.image}
+                  alt="상품 이미지"
+                  width={200}
+                  height={200}
+                  unoptimized={true}
+                />
+              </div>
 
-            <div className={styles.product__rightDiv}>
-              <span className={styles.product__rightDiv__productName}>{product.name}</span>
-              <span className={styles.product__rightDiv__productBrand}>{product.brandName}</span>
-              <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
-            </div>
+              <div className={styles.product__rightDiv}>
+                <span className={styles.product__rightDiv__productName}>{product.name}</span>
+                <span className={styles.product__rightDiv__productBrand}>{product.brandName}</span>
+                <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
+              </div>
 
-            {line(index)}
-          </div>
+              {line(index)}
+            </div>
+          </Link>
         );
       })
     );

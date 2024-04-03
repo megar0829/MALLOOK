@@ -5,11 +5,16 @@ import styles from './worldCupStartPage.module.css';
 import Image, {StaticImageData} from "next/image";
 import iconCrown from "@/assets/img/icons/crown.png";
 import StartModal from "@/app/worldcup/_components/StartModal";
-import {ProductList} from "@/constants";
+import {API_URL, ProductList} from "@/constants";
 import NextModal from "@/app/worldcup/_components/NextModal";
 import {rgba} from "color2k";
 import {useRouter} from "next/navigation";
 import UseSleep from "@/utils/delay";
+import {Script, WorldCupData} from "@/types";
+import LoginState from "@/states/login";
+import axios from "axios";
+import ResultModal from "@/app/worldcup/_components/ResultModal";
+import LoadingModal from "@/app/worldcup/_components/LoadingModal";
 
 interface WorldCupProps {
   url: string | StaticImageData;
@@ -17,15 +22,11 @@ interface WorldCupProps {
 }
 
 export default function WorldCupStartPage() {
-  const codyData = ProductList.slice(0, 8).map((item, index) => {
-    return {url: item.productImg, index: index}
-  });
+  const {userToken} = LoginState();
 
   const router = useRouter();
 
   const [isWorldCup8, setIsWorldCup8] = useState(false);
-
-  const [isWorldCup4, setIsWorldCup4] = useState(false);
 
   const [isNext1, setIsNext1] = useState(false);
   const [isNext2, setIsNext2] = useState(false);
@@ -35,12 +36,20 @@ export default function WorldCupStartPage() {
   const [isNext6, setIsNext6] = useState(false);
   const [isNext7, setIsNext7] = useState(false);
 
-  const [url1, setUrl1] = useState<WorldCupProps>({url: "", index: null});
+  const [isLoading, setIsLoading] = useState(false);
+  const [isResult, setIsResult] = useState(false);
+  const [isCreate, setIsCreate] = useState(false);
 
-  const [url21, setUrl21] = useState<WorldCupProps>({url: "", index: null});
-  const [url22, setUrl22] = useState<WorldCupProps>({url: "", index: null});
+  const [resultScript, setResultScript] = useState<Script>({
+    id: 0,
+    name: "",
+    heartCount: 0,
+    nickname: "",
+    imageUrl: "",
+  });
 
-  const [worldCup8List, setWorldCup8List] = useState<WorldCupProps[]>(codyData);
+
+  const [worldCup8List, setWorldCup8List] = useState<WorldCupData[]>([]);
 
   const [isDone81, setIsDone81] = useState(false);
   const [isDone82, setIsDone82] = useState(false);
@@ -51,71 +60,160 @@ export default function WorldCupStartPage() {
   const [isDone87, setIsDone87] = useState(false);
   const [isDone88, setIsDone88] = useState(false);
 
+  const [isDone41, setIsDone41] = useState(false);
+  const [isDone42, setIsDone42] = useState(false);
+  const [isDone43, setIsDone43] = useState(false);
+  const [isDone44, setIsDone44] = useState(false);
 
-  const [worldCup4List, setWorldCup4List] = useState<WorldCupProps[]>([]);
+  const [isDone21, setIsDone21] = useState(false);
+  const [isDone22, setIsDone22] = useState(false);
 
-  const [worldCup2List, setWorldCup2List] = useState<WorldCupProps[]>([]);
 
-  const [worldCupResult, setWorldCupResult] = useState<WorldCupProps>({url: "", index: null});
+  const [worldCup4List, setWorldCup4List] = useState<WorldCupData[]>([]);
+
+  const [worldCup2List, setWorldCup2List] = useState<WorldCupData[]>([]);
+
+  const [worldCupResult, setWorldCupResult] = useState<WorldCupData>({
+    id: 0,
+    name: "",
+    heartCount: 0,
+    memberNickname: "",
+    imageUrl: "",
+    keywordList: []
+  });
+
+  useEffect(() => {
+    if (!worldCup8List.length) {
+      if (userToken.accessToken) {
+        axios.get(
+          `${API_URL}/api/styles/world-cup`,
+          {
+            headers: {
+              Authorization: `Bearer ${userToken.accessToken}`
+            }
+          }
+        ).then((res) => {
+          setWorldCup8List(res.data.result)
+          console.log(res.data.result)
+        })
+      }
+    }
+  }, []);
 
   const worldCup8 = () => {
-    if (worldCup8List) {
+    if (worldCup8List.length) {
       return (
         <div className={styles.div4}>
           <div className={styles.box}>
+            {
+              isDone81 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[0].url}
+              src={worldCup8List[0].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone82 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[1].url}
+              src={worldCup8List[1].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone83 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[2].url}
+              src={worldCup8List[2].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone84 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[3].url}
+              src={worldCup8List[3].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone85 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[4].url}
+              src={worldCup8List[4].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone86 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[5].url}
+              src={worldCup8List[5].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone87 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[6].url}
+              src={worldCup8List[6].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
           <div className={styles.box}>
+            {
+              isDone88 &&
+              <div className={styles.boxCover}></div>
+            }
             <Image
               className={styles.codyImg}
-              src={worldCup8List[7].url}
+              src={worldCup8List[7].imageUrl}
               alt="코디 이미지"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
           </div>
         </div>
@@ -128,25 +226,69 @@ export default function WorldCupStartPage() {
       <div className={styles.div3}>
         <div className={styles.div3__inner}>
           <div className={styles.box}>
+            {
+              isDone41 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup4List.length >= 1 &&
-              <Image className={styles.codyImg} src={worldCup4List[0].url} alt="4강 1"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup4List[0].imageUrl}
+                alt="4강 1"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
           <div className={styles.box}>
+            {
+              isDone42 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup4List.length >= 2 &&
-              <Image className={styles.codyImg} src={worldCup4List[1].url} alt="4강 1"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup4List[1].imageUrl}
+                alt="4강 2"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
         </div>
         <div className={styles.div3__inner}>
           <div className={styles.box}>
+            {
+              isDone43 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup4List.length >= 3 &&
-              <Image className={styles.codyImg} src={worldCup4List[2].url} alt="4강 1"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup4List[2].imageUrl}
+                alt="4강 3"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
           <div className={styles.box}>
+            {
+              isDone44 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup4List.length >= 4 &&
-              <Image className={styles.codyImg} src={worldCup4List[3].url} alt="4강 1"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup4List[3].imageUrl}
+                alt="4강 4"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
         </div>
@@ -162,8 +304,19 @@ export default function WorldCupStartPage() {
             className={styles.box}
             style={{marginBottom: 55}}
           >
+            {
+              isDone21 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup2List[0] &&
-              <Image className={styles.codyImg} src={worldCup2List[0].url} alt="결승 1"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup2List[0].imageUrl}
+                alt="결승 1"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
         </div>
@@ -172,8 +325,19 @@ export default function WorldCupStartPage() {
             className={styles.box}
             style={{marginBottom: 55}}
           >
+            {
+              isDone22 &&
+              <div className={styles.boxCover}></div>
+            }
             {worldCup2List[1] &&
-              <Image className={styles.codyImg} src={worldCup2List[1].url} alt="결승 2"/>
+              <Image
+                className={styles.codyImg}
+                src={worldCup2List[1].imageUrl}
+                alt="결승 2"
+                width={200}
+                height={200}
+                unoptimized={true}
+              />
             }
           </div>
         </div>
@@ -189,12 +353,18 @@ export default function WorldCupStartPage() {
           style={{position: "relative"}}
         >
           <Image className={styles.top__box__crown} src={iconCrown} alt="왕관 이미지"/>
-          {worldCupResult.url &&
+          {worldCupResult.id
+            ?
             <Image
               className={styles.codyImg__result}
-              src={worldCupResult.url}
+              src={worldCupResult.imageUrl}
               alt="우승"
+              width={200}
+              height={200}
+              unoptimized={true}
             />
+            :
+            <div></div>
           }
         </div>
       </div>
@@ -207,9 +377,9 @@ export default function WorldCupStartPage() {
     setIsNext1(true);
   }
 
-  const goNext2 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+  const goNext2 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup4List([...worldCup4List, data]);
       setIsDone81(true);
       setIsDone82(true);
       setIsNext1(false);
@@ -218,9 +388,9 @@ export default function WorldCupStartPage() {
     }
   }
 
-  const goNext3 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+  const goNext3 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup4List([...worldCup4List, data]);
       setIsDone83(true);
       setIsDone84(true);
       setIsNext2(false);
@@ -229,9 +399,9 @@ export default function WorldCupStartPage() {
     }
   }
 
-  const goNext4 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+  const goNext4 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup4List([...worldCup4List, data]);
       setIsDone85(true);
       setIsDone86(true);
       setIsNext3(false);
@@ -240,9 +410,9 @@ export default function WorldCupStartPage() {
     }
   }
 
-  const goNext41 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup4List([...worldCup4List, {url: url, index: index}]);
+  const goNext41 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup4List([...worldCup4List, data]);
       setIsDone87(true);
       setIsDone88(true);
       setIsNext4(false);
@@ -251,34 +421,85 @@ export default function WorldCupStartPage() {
     }
   }
 
-  const goNext42 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup2List([...worldCup2List, {url: url, index: index}]);
-
+  const goNext42 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup2List([...worldCup2List, data]);
+      setIsDone41(true);
+      setIsDone42(true);
       setIsNext5(false);
       await UseSleep(1000);
       setIsNext6(true);
     }
   }
-  const goNext21 = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCup2List([...worldCup2List, {url: url, index: index}]);
-
+  const goNext21 = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCup2List([...worldCup2List, data]);
+      setIsDone43(true);
+      setIsDone44(true);
       setIsNext6(false);
       await UseSleep(1000);
       setIsNext7(true);
     }
   }
 
-  const goResult = async ({url, index}: WorldCupProps) => {
-    if (url && index) {
-      setWorldCupResult({url: url, index: index});
+  const getResult = () => {
+    console.log(worldCupResult.keywordList)
+    axios.post(
+      `${API_URL}/api/scripts`,
+      {keywordsList: worldCupResult.keywordList},
+      {
+        headers: {
+          Authorization: `Bearer ${userToken.accessToken}`,
+          "Content-Type": "application/json"
+        }
+      }
+    ).then((res) => {
+      setIsCreate(true);
+    })
+  }
+
+  const getResultScript = () => {
+    axios.get(
+      `${API_URL}/api/scripts`,
+      {
+        headers: {
+          Authorization: `Bearer ${userToken.accessToken}`,
+        }
+      }
+    ).then((res) => {
+      setResultScript(res.data.result.content[0])
+    })
+  }
+
+  const goResult = async (data: WorldCupData) => {
+    if (data.id) {
+      setWorldCupResult(data);
+      setIsDone21(true);
+      setIsDone22(true);
       setIsNext7(false);
-      await UseSleep(1000);
-      router.push("/worldcup/result")
+      await UseSleep(2000);
+      setIsLoading(true);
     }
   }
 
+  useEffect(() => {
+    if (worldCupResult.id) {
+      getResult();
+    }
+  }, [worldCupResult]);
+
+  useEffect(() => {
+    if (isCreate) {
+      getResultScript();
+    }
+  }, [isCreate]);
+
+  useEffect(() => {
+    if (resultScript.id) {
+      setIsLoading(false);
+      setIsResult(true);
+    }
+  }, [resultScript]);
 
   return (
     <div className={styles.container}>
@@ -287,38 +508,46 @@ export default function WorldCupStartPage() {
       }
 
       {isNext1 &&
-        <NextModal goNext={goNext2} left={{url: worldCup8List[0].url, index: worldCup8List[0].index}}
-                   right={{url: worldCup8List[1].url, index: worldCup8List[1].index}}/>
+        <NextModal goNext={goNext2} left={worldCup8List[0]}
+                   right={worldCup8List[1]}/>
       }
 
       {isNext2 &&
-        <NextModal goNext={goNext3} left={{url: worldCup8List[2].url, index: worldCup8List[2].index}}
-                   right={{url: worldCup8List[3].url, index: worldCup8List[3].index}}/>
+        <NextModal goNext={goNext3} left={worldCup8List[2]}
+                   right={worldCup8List[3]}/>
       }
 
       {isNext3 &&
-        <NextModal goNext={goNext4} left={{url: worldCup8List[4].url, index: worldCup8List[4].index}}
-                   right={{url: worldCup8List[5].url, index: worldCup8List[5].index}}/>
+        <NextModal goNext={goNext4} left={worldCup8List[4]}
+                   right={worldCup8List[5]}/>
       }
 
       {isNext4 &&
-        <NextModal goNext={goNext41} left={{url: worldCup8List[6].url, index: worldCup8List[6].index}}
-                   right={{url: worldCup8List[7].url, index: worldCup8List[7].index}}/>
+        <NextModal goNext={goNext41} left={worldCup8List[6]}
+                   right={worldCup8List[7]}/>
       }
 
       {isNext5 &&
-        <NextModal goNext={goNext42} left={{url: worldCup4List[0].url, index: worldCup4List[0].index}}
-                   right={{url: worldCup4List[1].url, index: worldCup4List[1].index}}/>
+        <NextModal goNext={goNext42} left={worldCup4List[0]}
+                   right={worldCup4List[1]}/>
       }
 
       {isNext6 &&
-        <NextModal goNext={goNext21} left={{url: worldCup4List[2].url, index: worldCup4List[2].index}}
-                   right={{url: worldCup4List[3].url, index: worldCup4List[3].index}}/>
+        <NextModal goNext={goNext21} left={worldCup4List[2]}
+                   right={worldCup4List[3]}/>
       }
 
       {isNext7 &&
-        <NextModal goNext={goResult} left={{url: worldCup2List[0].url, index: worldCup2List[0].index}}
-                   right={{url: worldCup2List[1].url, index: worldCup2List[1].index}}/>
+        <NextModal goNext={goResult} left={worldCup2List[0]}
+                   right={worldCup2List[1]}/>
+      }
+
+      {isLoading &&
+        <LoadingModal />
+      }
+
+      {isResult &&
+        <ResultModal resultScript={resultScript} />
       }
 
       {worldCup1()}

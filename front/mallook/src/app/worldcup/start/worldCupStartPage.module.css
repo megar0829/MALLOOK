@@ -37,13 +37,14 @@
     font-weight: 700;
 }
 .modal__button {
-    width: 200px;
-    height: 80px;
+    width: 150px;
+    height: 50px;
     border: 1px solid lightgray;
     border-radius: 0.75rem;
     background-color: #5284fc;
     color: white;
     margin-bottom: 20px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.25); /* active:shadow-lg */
 }
 
 .div1 {
@@ -108,6 +109,15 @@
     align-items: center;
     position: relative;
 }
+.boxCover {
+    width: 155px;
+    height: 155px;
+    border-radius: 0.75rem;
+    position: absolute;
+    top: 0;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.5);
+}
 .top__box {
     width: 270px;
     height: 270px;
@@ -124,6 +134,7 @@
     top: 0;
     right: 0;
     transform: rotate(30deg);
+    z-index: 9;
 
 }
 .codyImg {

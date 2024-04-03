@@ -73,6 +73,15 @@ export interface ScriptProducts {
 	products: Product[];
 }
 
+export interface WorldCupData {
+	id: number;
+	name: string;
+	heartCount: number;
+	memberNickname: string;
+	imageUrl: string;
+	keywordList: string[];
+}
+
 export interface SampleProduct {
 	productImg: string | StaticImageData;
 	name: string;
