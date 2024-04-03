@@ -1,6 +1,6 @@
 .container {
     width: 80dvw;
-    height: 350px;
+    height: 40vh;
     margin-top: 1rem;
     padding: 1rem 0;
     border: 0.5px solid gray;
@@ -17,7 +17,7 @@
 }
 
 .profileImgDiv {
-    width: 40%;
+    width: 35%;
     height: auto;
     border: 1px solid gray;
     border-radius: 100%;

@@ -41,29 +41,29 @@ export default function DetailCody( props:{scriptId: string} ) {
 	}, [script]);
 
 	return (
-		<div className={styles.cody__container}>
-			<div className={styles.cody__leftDiv}>
-				<Image
-					className={styles.cody__leftDiv__image}
-					src={script.imageUrl}
-					alt="코디 이미지"
-					width={200}
-					height={200}
-					unoptimized={true}
-				/>
-			</div>
-.
-			<div className={styles.cody__rightDiv}>
-				<div className={styles.cody__rightDiv__topDiv}>
-					{/*<Image className={styles.cody__rightDiv__topDiv__profileImage} src={cody.profileImg} alt="유저 프로필 이미지"/>*/}
-					<span className={styles.cody__rightDiv__topDiv__username}>{script.nickname}</span>
-				</div>
+		<div className={styles.script__container}>
+			<h1>{script.name}</h1>
+			{/*<div className={styles.cody__leftDiv}>*/}
+			{/*	<Image*/}
+			{/*		className={styles.cody__leftDiv__image}*/}
+			{/*		src={script.imageUrl}*/}
+			{/*		alt="코디 이미지"*/}
+			{/*		width={200}*/}
+			{/*		height={200}*/}
+			{/*		unoptimized={true}*/}
+			{/*	/>*/}
+			{/*</div>*/}
 
-				<div className={styles.cody__rightDiv__bottomDiv}>
-					<span className={styles.cody__rightDiv__bottomDiv__codyName}>{script.name}</span>
-					<span className={styles.cody__rightDiv__bottomDiv__span}># 하늘하늘 #간질간질</span>
-				</div>
-			</div>
+			{/*<div className={styles.cody__rightDiv}>*/}
+			{/*	<div className={styles.cody__rightDiv__topDiv}>*/}
+			{/*		/!*<Image className={styles.cody__rightDiv__topDiv__profileImage} src={cody.profileImg} alt="유저 프로필 이미지"/>*!/*/}
+			{/*		/!*<span className={styles.cody__rightDiv__topDiv__username}>{script.nickname}</span>*!/*/}
+			{/*	</div>*/}
+
+			{/*	<div className={styles.cody__rightDiv__bottomDiv}>*/}
+			{/*		<span className={styles.cody__rightDiv__bottomDiv__codyName}>{script.name}</span>*/}
+			{/*	</div>*/}
+			{/*</div>*/}
 		</div>
 	);
 }

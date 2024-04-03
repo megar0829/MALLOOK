@@ -8,10 +8,6 @@
     position: relative;
 }
 
-
-
-
-
 .codyCreate__container {
     width: 80dvw;
     height: 90dvh;
@@ -59,4 +55,25 @@
     width: 95%;
     height: 95%;
     position: absolute;
+}
+
+.completeButtonDiv {
+    display: flex;
+    justify-content: end;
+    width: 100vw;
+    padding: 1rem;
+    margin-right: 10%;
+}
+
+.completeButton {
+    display: flex;
+    background-color: #7C88C8;
+    height: 60px;
+    width: 300px;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 400;
+    font-size: 25px;
+    cursor: pointer;
 }

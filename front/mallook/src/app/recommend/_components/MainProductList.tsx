@@ -35,13 +35,11 @@ export default function MainProductList(
                 />
               </div>
 
-              <div className={styles.product__rightDiv}>
-                <span className={styles.product__rightDiv__productName}>{product.name}</span>
-                <span className={styles.product__rightDiv__productBrand}>{product.brandName}</span>
-                <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
-              </div>
-
-              {line(index)}
+                <div className={styles.product__rightDiv}>
+                    <span className={styles.product__rightDiv__productBrand}>{product.brandName}</span>
+                    <span className={styles.product__rightDiv__productName}>{product.name}</span>
+                    <span className={styles.product__rightDiv__productPrice}>{product.price.toLocaleString()} 원</span>
+                </div>
             </div>
           </Link>
         );

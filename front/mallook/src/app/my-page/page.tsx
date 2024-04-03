@@ -12,7 +12,7 @@ export default async function MyPagePage() {
   return (
     <div className={styles.container}>
       <Profile />
-      <Scripts/>
+      <Scripts />
     </div>
   );
 }

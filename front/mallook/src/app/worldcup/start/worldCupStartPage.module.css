@@ -20,30 +20,29 @@
 }
 .modal__container {
     width: 40dvw;
-    height: 65dvh;
     border: 1px solid lightgray;
     border-radius: 0.75rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
     background-color: white;
 }
 .modal__image {
-
+    width: 20%;
+    margin: 2rem 0;
 }
 .modal__span {
     font-size: 30px;
-    font-weight: 700;
+    font-weight: 600;
+    margin-bottom: 4rem;
 }
 .modal__button {
-    width: 150px;
+    width: 50%;
     height: 50px;
     border: 1px solid lightgray;
-    border-radius: 0.75rem;
     background-color: #5284fc;
     color: white;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.25); /* active:shadow-lg */
 }
 

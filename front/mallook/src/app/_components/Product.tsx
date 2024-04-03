@@ -12,10 +12,14 @@ export default function ProductComponent(props: { productData: Product, id: stri
 				<Image
 					className={styles.product__image}
 					width={200}
-					height={250}
+					height={200}
 					src={props.productData.image }
 					alt="상품 이미지"
 					unoptimized={true}
+					style={{
+						width: "auto",
+						height: "50%",
+					}}
 				/>
 				<div className={styles.product__textDiv}>
 					<span className={styles.product__brand}>{props.productData.brandName}</span>
