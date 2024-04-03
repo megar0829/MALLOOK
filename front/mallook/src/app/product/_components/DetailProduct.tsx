@@ -21,8 +21,11 @@ export default function DetailProduct(props: {productData:ProductDetail}) {
 
 			<div className={styles.detailProduct__rightDiv}>
 				<div className={styles.detailProduct__rightDiv__topDiv}>
-					<span className={styles.detailProduct__rightDiv__name}>{props.productData.name}</span>
+
 					<span className={styles.detailProduct__rightDiv__brand}>{props.productData.brandName}</span>
+					<hr/>
+
+					<span className={styles.detailProduct__rightDiv__name}>{props.productData.name}</span>
 					<span className={styles.detailProduct__rightDiv__price}>{props.productData.price.toLocaleString()} 원</span>
 				</div>
 
