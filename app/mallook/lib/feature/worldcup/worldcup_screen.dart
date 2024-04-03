@@ -2,11 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
+import 'package:mallook/feature/profile/profile_screen.dart';
+import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/worldcup/api/worldcup_api_service.dart';
 import 'package:mallook/feature/worldcup/model/worldcup_cody.dart';
+import 'package:mallook/global/mallook_snackbar.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 
 class WorldcupScreen extends StatefulWidget {
@@ -35,9 +41,23 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
     super.dispose();
   }
 
-  void _onSubmit() {
-    var winner = _selected.first;
-    print('$winner');
+  void _onSubmit() async {
+    var winner = _codies.first;
+    var data = <String, dynamic>{
+      "keywordsList": winner.keywordList ?? [],
+    };
+
+    var result = await ScriptService.createScriptByKeywords(
+      data: data,
+    );
+
+    if (result.contains("생성")) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        mallookSnackBar(title: '스크립트 생성 완료!'),
+      );
+    }
+
+    moveToNavigationScreen();
   }
 
   void _selectLeft() {
@@ -99,7 +119,7 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
         ),
-        onPressed: () {},
+        onPressed: _onSubmit,
         child: const Text(
           '저장하기',
           style: TextStyle(
@@ -176,61 +196,65 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                    onTap: _selectLeft,
-                                    child: Container(
+                              GestureDetector(
+                                onTap: _selectLeft,
+                                child: Container(
+                                  width: 220,
+                                  height: 250,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: Sizes.size1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      Sizes.size16,
+                                    ),
+                                  ),
+                                  child: Image.network(
+                                    _codies[_index].imageUrl!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Gaps.h10,
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
                                       width: 220,
-                                      height: 250,
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey.shade300,
-                                          width: Sizes.size1,
+                                      child: Text(
+                                        _codies[_index].name!,
+                                        maxLines: 3,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Sizes.size16,
                                         ),
-                                        borderRadius: BorderRadius.circular(
-                                          Sizes.size16,
-                                        ),
-                                      ),
-                                      child: Image.network(
-                                        _codies[_index].imageUrl!,
-                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                  Gaps.v10,
-                                  SizedBox(
-                                    width: 220,
-                                    child: Text(
-                                      _codies[_index].name!,
-                                      maxLines: 3,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Sizes.size16,
-                                      ),
-                                    ),
-                                  ),
-                                  Wrap(
-                                    spacing: Sizes.size4,
-                                    runSpacing: Sizes.size4,
-                                    children: [
-                                      for (var item
-                                          in _codies[_index].keywordList ?? [])
-                                        Text(
-                                          '#$item',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade600,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Sizes.size12,
+                                    Gaps.v12,
+                                    Wrap(
+                                      spacing: Sizes.size4,
+                                      runSpacing: Sizes.size4,
+                                      children: [
+                                        for (var item
+                                            in _codies[_index].keywordList ??
+                                                [])
+                                          Text(
+                                            '#$item',
+                                            style: TextStyle(
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Sizes.size12,
+                                            ),
                                           ),
-                                        ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -252,62 +276,65 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  GestureDetector(
-                                    onTap: _selectRight,
-                                    child: Container(
+                              Expanded(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
                                       width: 220,
-                                      height: 250,
-                                      clipBehavior: Clip.hardEdge,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey.shade300,
-                                          width: Sizes.size1,
+                                      child: Text(
+                                        _codies[_index + 1].name!,
+                                        maxLines: 3,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: Sizes.size16,
                                         ),
-                                        borderRadius: BorderRadius.circular(
-                                          Sizes.size16,
-                                        ),
-                                      ),
-                                      child: Image.network(
-                                        _codies[_index + 1].imageUrl!,
-                                        fit: BoxFit.cover,
                                       ),
                                     ),
-                                  ),
-                                  Gaps.v10,
-                                  SizedBox(
-                                    width: 220,
-                                    child: Text(
-                                      _codies[_index + 1].name!,
-                                      maxLines: 3,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: Sizes.size16,
-                                      ),
-                                    ),
-                                  ),
-                                  Wrap(
-                                    spacing: Sizes.size4,
-                                    runSpacing: Sizes.size4,
-                                    children: [
-                                      for (var item
-                                          in _codies[_index + 1].keywordList ??
-                                              [])
-                                        Text(
-                                          '#$item',
-                                          style: TextStyle(
-                                            color: Colors.grey.shade600,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: Sizes.size12,
+                                    Gaps.v12,
+                                    Wrap(
+                                      spacing: Sizes.size4,
+                                      runSpacing: Sizes.size4,
+                                      children: [
+                                        for (var item in _codies[_index + 1]
+                                                .keywordList ??
+                                            [])
+                                          Text(
+                                            '#$item',
+                                            style: TextStyle(
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: Sizes.size12,
+                                            ),
                                           ),
-                                        ),
-                                    ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Gaps.h10,
+                              GestureDetector(
+                                onTap: _selectRight,
+                                child: Container(
+                                  width: 220,
+                                  height: 250,
+                                  clipBehavior: Clip.hardEdge,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey.shade300,
+                                      width: Sizes.size1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                      Sizes.size16,
+                                    ),
                                   ),
-                                ],
+                                  child: Image.network(
+                                    _codies[_index + 1].imageUrl!,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -317,13 +344,24 @@ class _WorldcupScreenState extends State<WorldcupScreen> {
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Text(
-                            '우승 코디',
-                            style: TextStyle(
-                              color: Colors.lightBlue,
-                              fontWeight: FontWeight.bold,
-                              fontSize: Sizes.size20,
-                            ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              FaIcon(
+                                FontAwesomeIcons.rocket,
+                                color: Colors.blueAccent,
+                                size: Sizes.size24,
+                              ),
+                              Gaps.h10,
+                              Text(
+                                '우승 코디',
+                                style: TextStyle(
+                                  color: Colors.lightBlue,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size20,
+                                ),
+                              ),
+                            ],
                           ),
                           Gaps.v10,
                           GestureDetector(
