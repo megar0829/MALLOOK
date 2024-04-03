@@ -29,4 +29,6 @@ public interface ProductService {
     Slice<Products> findByName(Pageable pageable);
 
     String getLastMongoProductsId();
+    ProductPageRes getRecommendedProducts(String subCategory);
+
 }
