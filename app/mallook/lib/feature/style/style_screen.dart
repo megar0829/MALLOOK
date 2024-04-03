@@ -53,12 +53,13 @@ class _StyleScreenState extends State<StyleScreen> {
 
         try {
           var data = await StyleApiService.getPageStyle(cursor: _styleCursor);
-
           if (mounted) {
-            _styles.addAll(data.content ?? []);
-            if ((data.content ?? []).isNotEmpty) {
-              _styleCursor = data.content!.last.id!;
-            }
+            setState(() {
+              _styles.addAll(data.content ?? []);
+              if ((data.content ?? []).isNotEmpty) {
+                _styleCursor = data.content!.last.id!;
+              }
+            });
           }
         } finally {
           __isStyleLoading = false;
@@ -75,11 +76,11 @@ class _StyleScreenState extends State<StyleScreen> {
     );
   }
 
-  void _moveToStyleDetailScreen(int scriptId) {
+  void _moveToStyleDetailScreen(Style style) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => StyleDetailScreen(
-          scriptId: scriptId,
+          style: style,
         ),
       ),
     );
@@ -174,7 +175,7 @@ class _StyleScreenState extends State<StyleScreen> {
                   ),
                   if (_styles[index].memberNickname != null) const Divider(),
                   GestureDetector(
-                    onTap: () => _moveToStyleDetailScreen(_styles[index].id!),
+                    onTap: () => _moveToStyleDetailScreen(_styles[index]),
                     child: Text(
                       _styles[index].name ?? "",
                       maxLines: 5,
@@ -204,7 +205,7 @@ class _StyleScreenState extends State<StyleScreen> {
                           return Center(
                             child: GestureDetector(
                               onTap: () =>
-                                  _moveToStyleDetailScreen(_styles[index].id!),
+                                  _moveToStyleDetailScreen(_styles[index]),
                               child: Container(
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
