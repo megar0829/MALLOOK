@@ -13,6 +13,7 @@
     border: 1px solid lightgray;
     position: sticky;
     top: 10px;
+    margin-bottom: 30px;
 }
 .detailProductInformation__button {
     width: 18.25dvw;

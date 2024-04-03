@@ -26,7 +26,9 @@ export default function MainComponent() {
 	useEffect(() => {
 		console.log(userToken)
 		router.push("/")
+
 	}, [userToken]);
+
 
 	return (
 		<div className={styles.container}>

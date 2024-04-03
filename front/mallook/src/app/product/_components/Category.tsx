@@ -1,38 +1,31 @@
 "use client";
 
-import React, {SetStateAction, useCallback, useState} from 'react'
+import React, {Dispatch, SetStateAction, useCallback, useState} from 'react'
 import styles from "./category.module.css";
 
 import Image, {StaticImageData} from 'next/image';
 
 import useEmblaCarousel from "embla-carousel-react";
 
-import iconDefault from "@/assets/img/icons/default.png";
 
-import iconTop from "@/assets/img/category/top.jpg";
-import iconBottom from "@/assets/img/category/bottom.jpg";
-import iconOuter from "@/assets/img/category/outer.jpg";
-import iconOnepiece from "@/assets/img/category/onepiece.jpg";
-import iconHat from "@/assets/img/category/hat.jpg";
-import iconShoe from "@/assets/img/category/shoe.jpg";
-import iconBag from "@/assets/img/category/bag.jpg";
 import iconTop100 from "@/assets/img/icons/logo_sm.png";
 import iconBack from "@/assets/img/product/back.png";
-import iconLeft from "@/assets/img/product/left.png"
-import iconRight from "@/assets/img/product/right.png"
-import {number} from "prop-types";
 
 import {MainCategory} from "@/constants";
 
-export default function Category() {
+export default function Category(props: {
+  setChooseCategory: Dispatch<SetStateAction<string>>,
+  setChooseDetailCategory: Dispatch<SetStateAction<string>>
+}) {
   const [isDetail, setIsDetail] = useState(false);
   const [categoryDetail, setCategoryDetail] = useState([]);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
 
-  const openCategory = (detailCategory:any) => {
+  const openCategory = (name: string, detailCategory:any) => {
     setIsDetail(true);
     setCategoryDetail(detailCategory);
+    props.setChooseCategory(name);
     // emblaApi?.scrollTo(0);
   }
 
@@ -40,11 +33,15 @@ export default function Category() {
     setIsDetail(false);
   }
 
+  const onClickCategory =  (name: string) => {
+    props.setChooseDetailCategory(name);
+  }
+
   const leftCircle = () => {
     if (!isDetail) {
       return (
         <div className={styles.category__categoryDiv}>
-          <div className={styles.category__imageDiv}>
+          <div className={styles.category__imageDiv} onClick={() => onClickCategory("top100")}>
             <Image className={styles.category__image} src={iconTop100} alt='몰룩 랭킹'/>
           </div>
           <span className={styles.category__spanDiv}>몰룩 랭킹</span>
@@ -67,7 +64,7 @@ export default function Category() {
       return (
         MainCategory.map(({name, url, detailCategory}, index) => {
           return (
-            <div key={index} className={styles.category__categoryDiv} onClick={() => openCategory(detailCategory)}>
+            <div key={index} className={styles.category__categoryDiv} onClick={() => openCategory(name, detailCategory)}>
               <div className={styles.category__innerDiv}>
                 <div className={styles.category__imageDiv}>
                   <Image className={styles.category__image} src={url} alt='카테고리 이미지' />
@@ -82,7 +79,7 @@ export default function Category() {
       return (
         categoryDetail && categoryDetail.map(({ categoryUrl, categoryName }, index ) => {
           return (
-            <div key={index} className={styles.category__categoryDiv}>
+            <div key={index} onClick={() => onClickCategory(categoryName)} className={styles.category__categoryDiv}>
               <div className={styles.category__innerDiv}>
                 <div className={styles.category__imageDiv}>
                   <Image className={styles.category__image} src={categoryUrl} alt='카테고리 이미지' />

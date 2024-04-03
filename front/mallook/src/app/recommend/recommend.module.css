@@ -14,9 +14,9 @@
     border-radius: 25px;
     box-shadow: 0 0 1px gray;
     display: flex;
-    flex-direction: row;
+    flex-wrap: wrap;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
     padding: 2dvh 1dvw;
 }
 

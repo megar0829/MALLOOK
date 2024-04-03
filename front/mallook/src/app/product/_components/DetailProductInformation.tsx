@@ -4,14 +4,17 @@ import {useState} from "react";
 import DetailProductDetail from "@/app/product/_components/DetailProductDetail";
 import DetailReview from "@/app/product/_components/DetailReview";
 import styles from "./detailProductInformation.module.css";
-export default function DetailProductInformation() {
+import {ProductDetail} from "@/types";
+
+
+export default function DetailProductInformation(props: {productData: ProductDetail} ) {
 	const [isDetail, setIsDetail] = useState(true);
 
 	const information = () => {
 		if (isDetail == true) {
-			return <DetailProductDetail />
+			return <DetailProductDetail productHtml={props.productData.detailHtml} />
 		} else {
-			return <DetailReview />
+			return <DetailReview reviews={props.productData.review} />
 		}
 	}
 
