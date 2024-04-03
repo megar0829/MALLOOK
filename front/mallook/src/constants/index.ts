@@ -806,8 +806,27 @@ export const MainCategory : MainCategoryData[] = [
 ];
 
 export const ProfileSample: ProfileSampleData = {
-    nickname: "무신소리예요?",
+    nickname: "무신소",
+    nicknameTag: "8rYCLR",
+    birth: "1998-02-14",
+    gender: "WOMAN",
+    phone: "010-3923-1da3",
+    grade: "io.ssafy.mallook.domain.grade.entity.Grade@45dba91c",
+    expRange: [
+        0,
+        2000
+    ],
+    level:"LEVEL1",
     point: 2000,
-    exp: 40,
-    profileImg: imgProduct9
+    exp: 500,
+    address: {
+        city: "서울시",
+        district: "서초구",
+        address: "방배3동",
+        zipcode: "11111"
+    },
+    memberCoupon: 0,
+    coupon:3,
+    cartProduct: 0,
+    orders: 0
 };

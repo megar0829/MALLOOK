@@ -1,133 +1,114 @@
 .container {
-    width: 100dvw;
-    height: 35dvh;
-    border-bottom: 2px double gray;
+    width: 80dvw;
+    height: 350px;
+    margin-top: 1rem;
+    padding: 1rem 0;
+    border: 0.5px solid gray;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     display: flex;
     align-items: center;
 }
 .leftDiv {
-    width: 200px;
-    height: 200px;
-    border: 2px solid gray;
-    border-radius: 100%;
-    margin-left: 100px;
+    max-width: 30dvw;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
-.profileImg {
-    width: 195px;
-    height: 195px;
+
+.profileImgDiv {
+    width: 40%;
+    height: auto;
+    border: 1px solid gray;
     border-radius: 100%;
+    padding: 0.5rem;
 }
 
-.middleDiv {
-    width: 60%;
-    height: 90%;
-    margin-left: 20px;
+.leftDiv__nickname {
+    margin-top: 10px;
+    font-size: 25px;
+    font-weight: 600;
+    color: #292929;
+}
+
+.leftDiv__info {
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    padding-bottom: 20px;
-    padding-top: 50px;
-}
-.middleDiv__topDiv {
-    margin-left: 10px;
-}
-.middleDiv__topDiv__nickname {
-    font-size: 30px;
-    font-weight: 800;
-
-}
-
-.middleDiv__middleDiv {
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    height: 30px;
+}
+
+.leftDiv__info__top {
     display: flex;
-    align-items: center;
-}
-.middleDiv__middleDiv__level {
-    height: 30px;
-    font-size: 26px;
-    font-weight: 700;
-    margin-bottom: 10px;
-    margin-left: 10px;
-}
-.middleDiv__middleDiv__expBarDiv {
-    width: 60%;
-    height: 30px;
-    margin-left: 50px;
-    display: flex;
-    align-items: center;
-}
-.middleDiv__middleDiv__expBar {
+    justify-content: space-between;
+    align-items: end;
     width: 70%;
-    height: 20px;
-    border-radius: 10px;
-}
-.middleDiv__middleDiv__exp {
-    font-size: 15px;
-    font-weight: 600;
-    color: gray;
-    margin-left: 10px;
+    margin-bottom: 5px;
 }
 
-.middleDiv__middleDiv__benefitDiv {
-    height: 30px;
-}
-.middleDiv__middleDiv__benefit {
-    font-size: 15px;
+.leftDiv__info__level {
+    font-size: 23px;
     font-weight: 600;
-    color: lightgray;
+    color: #292929;
 }
 
-.middleDiv__bottomDiv {
-    width: 100%;
+.leftDiv__info__bottom {
+    position: relative;
+    width: 70%;
     height: 30px;
     display: flex;
-    margin-left: 15px;
+    align-items: center;
 }
-.middleDiv__bottomDiv__point {
-    font-size: 16px;
+
+.leftDiv__info__exp {
+    position: absolute;
+    right: 10px;
+    font-size: 15px;
+    color: white;
+    font-weight: 600;
+}
+
+.leftDiv__info__expBar {
+    height: 21px;
+    border-radius: 8px;
+}
+
+.leftDiv__info__point {
+    font-size: 18px;
     font-weight: 700;
-    color: #c9c9ca;
-}
-.middleDiv__bottomDiv__couponDiv {
-    height: 30px;
-    margin-left: 70px;
-}
-.middleDiv__bottomDiv__coupon {
-    font-size: 16px;
-    font-weight: 600;
-}
-.middleDiv__bottomDiv__orderListDiv {
-    height: 30px;
-    margin-left: 40px;
-}
-.middleDiv__bottomDiv__orderLisk {
-    font-size: 16px;
-    font-weight: 600;
+    color: #292929;
 }
 
 .rightDiv {
-    width: 15%;
-    height: inherit;
-    display: flex;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
     justify-content: center;
     align-items: center;
+    margin-right: 1rem;
 }
-.worldCupDiv {
-    width: 120px;
-    height: 50px;
-    background-color: lightgray;
-    border: 1px solid gray;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
+.rightDiv__item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    border: 0.5px solid gray;
 }
-.worldCup {
-    font-size: 18px;
+
+.rightDiv__item__cover {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
     font-weight: 600;
 }
