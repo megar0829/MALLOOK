@@ -26,7 +26,7 @@ class ScriptImgWidget extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: 1,
             child: Image.network(
-              script.image ??
+              script.imageUrl ??
                   "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/logo_sm.png",
               filterQuality: FilterQuality.high,
               fit: BoxFit.cover,

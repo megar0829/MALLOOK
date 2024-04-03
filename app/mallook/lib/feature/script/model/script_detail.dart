@@ -4,7 +4,7 @@ class ScriptDetail {
     this.heartCount,
     this.nickname,
     this.hasLiked,
-    this.image,
+    this.imageUrl,
   });
 
   ScriptDetail.fromJson(dynamic json) {
@@ -12,13 +12,13 @@ class ScriptDetail {
     heartCount = json['heartCount'];
     nickname = json['nickname'];
     hasLiked = json['hasLiked'];
-    image = json['image'];
+    imageUrl = json['imageUrl'];
   }
   String? name;
   int? heartCount;
   String? nickname;
   bool? hasLiked;
-  String? image;
+  String? imageUrl;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -26,12 +26,12 @@ class ScriptDetail {
     map['heartCount'] = heartCount;
     map['nickname'] = nickname;
     map['hasLiked'] = hasLiked;
-    map['image'] = image;
+    map['imageUrl'] = imageUrl;
     return map;
   }
 
   @override
   String toString() {
-    return 'ScriptDetail{name: $name, heartCount: $heartCount, nickname: $nickname, hasLiked: $hasLiked, image: $image}';
+    return 'ScriptDetail{name: $name, heartCount: $heartCount, nickname: $nickname, hasLiked: $hasLiked, image: $imageUrl}';
   }
 }

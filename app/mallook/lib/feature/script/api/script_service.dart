@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:mallook/config/dio_service.dart';
-import 'package:mallook/feature/script/model/script.dart';
 import 'package:mallook/feature/script/model/script_detail.dart';
 
 class ScriptService {
