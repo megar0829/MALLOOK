@@ -118,7 +118,7 @@ public class ScriptController {
     @GetMapping("/{scriptId}/product-list")
     public ResponseEntity<BaseResponse<List<ScriptProductDto>>> getScriptRecommend(
             @PathVariable Long scriptId,
-            @PageableDefault(size = 6,
+            @PageableDefault(size = 7,
                     sort = "id",
                     direction = Sort.Direction.DESC) Pageable pageable
     ) {
