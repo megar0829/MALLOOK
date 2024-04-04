@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -87,6 +88,98 @@ class MyProfileWidget extends StatelessWidget {
     moveToLoginScreen();
   }
 
+  void _showLevelDiscountGuide(BuildContext context) async {
+    var size = MediaQuery.of(context).size;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) => Center(
+        child: Container(
+          width: size.width * 2 / 3,
+          height: size.height / 2,
+          padding: const EdgeInsets.symmetric(
+            vertical: Sizes.size16,
+            horizontal: Sizes.size20,
+          ),
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            border: Border.all(
+              color: Colors.grey.shade400,
+              width: Sizes.size1,
+            ),
+            borderRadius: BorderRadius.circular(
+              Sizes.size20,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  '등급 혜택',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Sizes.size18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Gaps.v20,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      '등급',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Sizes.size16,
+                      ),
+                    ),
+                    Text(
+                      '할인율',
+                      style: TextStyle(
+                        color: Colors.grey.shade800,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Sizes.size16,
+                      ),
+                    ),
+                  ],
+                ),
+                const Divider(),
+                for (int i = 1; i <= 7; i++)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: Sizes.size10,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'LEVEL$i',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size16,
+                          ),
+                        ),
+                        Text(
+                          '${getLevelDiscountRatio(i)}% 할인',
+                          style: TextStyle(
+                            color: Colors.grey.shade700,
+                            fontWeight: FontWeight.bold,
+                            fontSize: Sizes.size16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,20 +198,17 @@ class MyProfileWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              // Container(
-              //   width: Sizes.size64,
-              //   clipBehavior: Clip.hardEdge,
-              //   decoration: BoxDecoration(
-              //     color: Theme.of(context).primaryColor,
-              //     shape: BoxShape.circle,
-              //   ),
-              //   child: FadeInImage.assetNetwork(
-              //     placeholder: "assets/images/ssafy_logo.png",
-              //     image: "https://avatars.githubusercontent.com/u/86183856?v=4",
-              //     fit: BoxFit.fill,
-              //     filterQuality: FilterQuality.low,
-              //   ),
-              // ),
+              Container(
+                width: Sizes.size64,
+                clipBehavior: Clip.hardEdge,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Image.asset(
+                  getLevelImage(level),
+                ),
+              ),
               Gaps.h12,
               Expanded(
                 child: Column(
@@ -191,23 +281,26 @@ class MyProfileWidget extends StatelessWidget {
                   linearStrokeCap: LinearStrokeCap.roundAll,
                   progressColor: Theme.of(context).primaryColorDark,
                 ),
-                Row(
-                  children: [
-                    Text(
-                      '등급혜택',
-                      style: TextStyle(
-                        color: Colors.grey.shade400,
-                        fontSize: Sizes.size14,
-                        fontWeight: FontWeight.bold,
+                GestureDetector(
+                  onTap: () => _showLevelDiscountGuide(context),
+                  child: Row(
+                    children: [
+                      Text(
+                        '등급혜택',
+                        style: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: Sizes.size14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Gaps.h2,
-                    FaIcon(
-                      FontAwesomeIcons.angleRight,
-                      color: Colors.grey.shade400,
-                      size: Sizes.size14,
-                    ),
-                  ],
+                      Gaps.h2,
+                      FaIcon(
+                        FontAwesomeIcons.angleRight,
+                        color: Colors.grey.shade400,
+                        size: Sizes.size14,
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

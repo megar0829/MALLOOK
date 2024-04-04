@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
-import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
+import 'package:mallook/feature/coupon/model/page_issue_coupon.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -15,8 +15,8 @@ class IssueCouponScreen extends StatefulWidget {
 
 class _IssueCouponScreenState extends State<IssueCouponScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Coupon> coupons = [];
-  int _couponPage = 0;
+  final List<IssueCoupon> _coupons = [];
+  int _cursor = 999999999999;
   bool _isCouponLoading = false;
 
   @override
@@ -33,7 +33,8 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
     _loadMoreCoupons();
   }
 
-  Future<void> _loadMoreCoupons() async {
+  void _loadMoreCoupons() async {
+    if (_cursor == 0) return;
     if (!_isCouponLoading) {
       if (mounted) {
         setState(() {
@@ -41,12 +42,16 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
         });
       }
       try {
-        var loadedCoupons = await CouponApiService.getIssueCoupon(_couponPage);
+        var loadedCoupons = await CouponApiService.getIssueCoupon(
+          cursor: _cursor,
+        );
 
         if (mounted) {
           setState(() {
-            coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
-            _couponPage++;
+            _coupons.addAll(loadedCoupons.content ?? []);
+            if ((loadedCoupons.content ?? []).isNotEmpty) {
+              _cursor = (loadedCoupons.content ?? []).last.id! - 1;
+            }
           });
         }
       } finally {
@@ -55,9 +60,12 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
     }
   }
 
-  void _issueCoupon(Coupon coupon) {
+  void _issueCoupon(IssueCoupon coupon) async {
+    await CouponApiService.issueCoupon(body: <String, num>{
+      "couponId": coupon.id!,
+    });
     // 발급된 경우 화면에서 해당 쿠폰 삭제
-    coupons.remove(coupon);
+    _coupons.remove(coupon);
     setState(() {});
   }
 
@@ -89,14 +97,14 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
         ),
         child: RefreshIndicator(
           onRefresh: () async {
-            _couponPage = 0;
-            coupons.clear();
+            _cursor = 999999999999;
+            _coupons.clear();
             _loadMoreCoupons();
           },
           child: ListView.separated(
             controller: _scrollController,
             itemBuilder: (context, index) {
-              if (index < coupons.length) {
+              if (index < _coupons.length) {
                 return Container(
                   margin: const EdgeInsets.symmetric(
                     vertical: Sizes.size2,
@@ -130,7 +138,7 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              coupons[index].name!,
+                              _coupons[index].name!,
                               style: const TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -138,15 +146,26 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                               ),
                             ),
                             Gaps.v10,
-                            Text(
-                              coupons[index].type == 'MONEY'
-                                  ? '${coupons[index].amount} ₩'
-                                  : '${coupons[index].amount} %',
-                              style: const TextStyle(
-                                color: Colors.pink,
-                                fontSize: Sizes.size28,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  "만료: ",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size14,
+                                  ),
+                                ),
+                                Gaps.h5,
+                                Text(
+                                  _coupons[index].expiredTime ?? "",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size14,
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),
@@ -154,7 +173,7 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
                       Gaps.h20,
                       Center(
                         child: ElevatedButton(
-                          onPressed: () => _issueCoupon(coupons[index]),
+                          onPressed: () => _issueCoupon(_coupons[index]),
                           child: const Text("쿠폰 발급"),
                         ),
                       )
@@ -168,7 +187,7 @@ class _IssueCouponScreenState extends State<IssueCouponScreen> {
               }
             },
             separatorBuilder: (context, index) => Gaps.v10,
-            itemCount: coupons.length + 1,
+            itemCount: _coupons.length + 1,
           ),
         ),
       ),

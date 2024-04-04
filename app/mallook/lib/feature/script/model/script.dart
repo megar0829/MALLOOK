@@ -5,6 +5,7 @@ class Script {
     this.heartCount,
     this.nickname,
     this.imageUrl,
+    this.memberGrade,
   });
 
   Script.fromJson(dynamic json) {
@@ -13,6 +14,7 @@ class Script {
     heartCount = json['heartCount'];
     nickname = json['nickname'];
     imageUrl = json['imageUrl'];
+    memberGrade = json['memberGrade'];
   }
 
   int? id;
@@ -20,6 +22,7 @@ class Script {
   int? heartCount;
   String? nickname;
   String? imageUrl;
+  String? memberGrade;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -28,6 +31,7 @@ class Script {
     map['heartCount'] = heartCount;
     map['nickname'] = nickname;
     map['imageUrl'] = imageUrl;
+    map['memberGrade'] = memberGrade;
     return map;
   }
 

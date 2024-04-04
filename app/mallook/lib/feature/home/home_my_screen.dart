@@ -23,7 +23,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
   final Future<Script> _script = HomeApiService.getMySingleScript();
 
   int _productPage = 0;
-  int _totalPage = 0;
+  int _totalPage = 9999999999999;
   bool _isProductLoading = false;
 
   @override
@@ -47,7 +47,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
   }
 
   void _loadMoreProducts() async {
-    if (_productPage > _totalPage) return;
+    if (_productPage >= _totalPage) return;
     if (!_isProductLoading) {
       if (mounted) {
         setState(() {
@@ -63,7 +63,7 @@ class _HomeMyScreenState extends State<HomeMyScreen> {
             _productPage = loadedProducts.currentPage! + 1;
             _totalPage = loadedProducts.totalPage!;
             _products.addAll(
-                loadedProducts.content!); // 기존 _products List에 새로운 제품 추가
+                loadedProducts.content ?? []); // 기존 _products List에 새로운 제품 추가
           });
         }
       } finally {

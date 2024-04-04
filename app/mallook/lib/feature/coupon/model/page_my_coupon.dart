@@ -1,5 +1,5 @@
-class CursorCoupons {
-  CursorCoupons({
+class PageMyCoupons {
+  PageMyCoupons({
     this.size,
     this.content,
     this.number,
@@ -11,12 +11,12 @@ class CursorCoupons {
     this.empty,
   });
 
-  CursorCoupons.fromJson(dynamic json) {
+  PageMyCoupons.fromJson(dynamic json) {
     size = json['size'];
     if (json['content'] != null) {
       content = [];
       json['content'].forEach((v) {
-        content?.add(Coupon.fromJson(v));
+        content?.add(MyCoupon.fromJson(v));
       });
     }
     number = json['number'];
@@ -30,7 +30,7 @@ class CursorCoupons {
   }
 
   int? size;
-  List<Coupon>? content;
+  List<MyCoupon>? content;
   int? number;
   Sort? sort;
   bool? first;
@@ -126,8 +126,8 @@ class Sort {
   }
 }
 
-class Coupon {
-  Coupon({
+class MyCoupon {
+  MyCoupon({
     this.myCouponId,
     this.name,
     this.type,
@@ -135,7 +135,7 @@ class Coupon {
     this.expiredTime,
   });
 
-  Coupon.fromJson(dynamic json) {
+  MyCoupon.fromJson(dynamic json) {
     myCouponId = json['myCouponId'];
     name = json['name'];
     type = json['type'];
@@ -146,7 +146,7 @@ class Coupon {
   int? myCouponId;
   String? name;
   String? type;
-  String? amount;
+  num? amount;
   String? expiredTime;
 
   Map<String, dynamic> toJson() {

@@ -3,25 +3,34 @@ import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/product/model/product.dart';
+import 'package:mallook/feature/style/model/style_detail.dart';
 
 import '../../product/product_screen.dart';
 
-class ScriptProductWidget extends StatelessWidget {
-  final Product product;
+class StyleProductWidget extends StatelessWidget {
+  final StyleProduct styleProduct;
   static NumberFormat numberFormat = NumberFormat.currency(
     locale: 'ko_KR',
     symbol: '',
   );
 
-  const ScriptProductWidget({
+  const StyleProductWidget({
     super.key,
-    required this.product,
+    required this.styleProduct,
   });
 
-  void _moveToProductScreen(BuildContext context, Product product) {
+  void _moveToProductScreen(BuildContext context, StyleProduct styleProduct) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => ProductScreen(product: product),
+        builder: (context) => ProductScreen(
+          product: Product(
+            id: styleProduct.productsId,
+            name: styleProduct.name,
+            price: styleProduct.price,
+            brandName: styleProduct.brandName,
+            image: styleProduct.image,
+          ),
+        ),
       ),
     );
   }
@@ -29,7 +38,7 @@ class ScriptProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => _moveToProductScreen(context, product),
+      onTap: () => _moveToProductScreen(context, styleProduct),
       child: Row(
         children: [
           Container(
@@ -46,7 +55,7 @@ class ScriptProductWidget extends StatelessWidget {
               ),
             ),
             child: Image.network(
-              product.image!,
+              styleProduct.image!,
               fit: BoxFit.cover,
             ),
           ),
@@ -73,7 +82,7 @@ class ScriptProductWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product.name!,
+                    styleProduct.name!,
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -86,7 +95,7 @@ class ScriptProductWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '${numberFormat.format(product.price)} ₩',
+                        '${numberFormat.format(styleProduct.price)} ₩',
                         style: TextStyle(
                           color: Theme.of(context).primaryColorDark,
                           fontSize: Sizes.size16,
@@ -94,7 +103,7 @@ class ScriptProductWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        product.brandName ?? "",
+                        styleProduct.brandName ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: Colors.grey.shade800,

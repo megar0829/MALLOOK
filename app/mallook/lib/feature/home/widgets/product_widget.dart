@@ -75,8 +75,8 @@ class ProductWidget extends StatelessWidget {
                   // Gaps.h10,
                   Text(
                     '${numberFormat.format(_product.price)} ₩',
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
                       fontSize: Sizes.size14,
                       fontWeight: FontWeight.bold,
                     ),

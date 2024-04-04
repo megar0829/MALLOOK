@@ -99,4 +99,11 @@ class Assets {
       'assets/images/tops_sleeveless.jpg';
   static const String imagesTopsSweatshirt =
       'assets/images/tops_sweatshirt.jpg';
+  static const String levelLevel1 = 'assets/images/level/level1.png';
+  static const String levelLevel2 = 'assets/images/level/level2.png';
+  static const String levelLevel3 = 'assets/images/level/level3.png';
+  static const String levelLevel4 = 'assets/images/level/level4.png';
+  static const String levelLevel5 = 'assets/images/level/level5.png';
+  static const String levelLevel6 = 'assets/images/level/level6.png';
+  static const String levelLevel7 = 'assets/images/level/level7.png';
 }

@@ -1,4 +1,9 @@
+import 'dart:math';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/product/api/product_api_service.dart';
@@ -25,6 +30,10 @@ class _ProductScreenState extends State<ProductScreen>
     with SingleTickerProviderStateMixin {
   late Future<ProductDetail> _productDetail;
   late TabController _tabController;
+  NumberFormat numberFormat = NumberFormat.currency(
+    locale: 'ko_KR',
+    symbol: '',
+  );
 
   @override
   void initState() {
@@ -84,31 +93,148 @@ class _ProductScreenState extends State<ProductScreen>
               headerSliverBuilder: (context, value) {
                 return [
                   SliverToBoxAdapter(
-                      child: Column(
-                    children: [
-                      ProductImgWidget(
-                        images: [
-                          product.image ??
-                              "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/logo_sm.png"
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Sizes.size10,
-                          horizontal: Sizes.size24,
+                    child: Column(
+                      children: [
+                        ProductImgWidget(
+                          images: [
+                            product.image ??
+                                "https://zooting-s3-bucket.s3.ap-northeast-2.amazonaws.com/logo_sm.png"
+                          ],
                         ),
-                        child: Text(
-                          product.name ?? "",
-                          maxLines: 5,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: Sizes.size18,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.size6,
+                            horizontal: Sizes.size24,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    snapshot.data!.mainCategory ?? "",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade800,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size16,
+                                    ),
+                                  ),
+                                  Text(
+                                    " • ",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade800,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size16,
+                                    ),
+                                  ),
+                                  Text(
+                                    snapshot.data!.subCategory ?? "",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade800,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size16,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  const FaIcon(
+                                    FontAwesomeIcons.store,
+                                    color: Colors.orange,
+                                    size: Sizes.size20,
+                                  ),
+                                  Gaps.h10,
+                                  Text(
+                                    snapshot.data!.brandName ?? "",
+                                    style: TextStyle(
+                                      color: Colors.grey.shade800,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: Sizes.size16,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Sizes.size10,
+                            horizontal: Sizes.size24,
+                          ),
+                          child: Text(
+                            product.name ?? "",
+                            maxLines: 5,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: Sizes.size18,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: Sizes.size32,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text(
+                                '${numberFormat.format(snapshot.data!.price ?? 0)}₩',
+                                style: const TextStyle(
+                                  color: Colors.pink,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size18,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: Sizes.size10,
+                        horizontal: Sizes.size24,
                       ),
-                    ],
-                  )),
+                      child: Wrap(
+                        spacing: Sizes.size5,
+                        runSpacing: Sizes.size3,
+                        children: [
+                          for (var item in (snapshot.data!.keywords ?? [])
+                              .sublist(
+                                  0,
+                                  min((snapshot.data!.keywords ?? []).length,
+                                      10)))
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: Sizes.size2,
+                                horizontal: Sizes.size6,
+                              ),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.grey.shade300,
+                                  width: Sizes.size1,
+                                ),
+                                borderRadius:
+                                    BorderRadius.circular(Sizes.size14),
+                              ),
+                              child: Text(
+                                '#$item',
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: Sizes.size14,
+                                ),
+                              ),
+                            )
+                        ],
+                      ),
+                    ),
+                  ),
                   SliverToBoxAdapter(
                     child: TabBar(
                       controller: _tabController,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/script/model/script.dart';
@@ -63,11 +64,10 @@ class RankScriptBox extends StatelessWidget {
                       Row(
                         children: [
                           CircleAvatar(
-                            backgroundColor: Colors.white.withOpacity(0.7),
-                            child: FaIcon(
-                              FontAwesomeIcons.solidUser,
-                              color: Theme.of(context).primaryColorDark,
-                              size: Sizes.size24,
+                            backgroundColor: Colors.white,
+                            child: Image.asset(
+                              getStringLevelImage(script.memberGrade ??
+                                  "assets/images/app_logo/logo_sm.png"),
                             ),
                           ),
                           Gaps.h12,
