@@ -2,12 +2,12 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
+import 'package:mallook/feature/coupon/model/page_my_coupon.dart';
 
 class CartCouponDropdownWidget extends StatefulWidget {
-  final List<Coupon> coupons;
+  final List<MyCoupon> coupons;
   final Function onChange;
-  final Coupon? selectedCoupon;
+  final MyCoupon? selectedCoupon;
   final int totalPrice;
 
   const CartCouponDropdownWidget({
@@ -29,34 +29,35 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
     symbol: '',
   );
 
-  String _showCouponName(Coupon coupon) {
+  String _showCouponName(MyCoupon coupon) {
     if (coupon.name!.length <= 6) {
       return coupon.name!;
     }
     return '${coupon.name!.substring(0, 6)}...';
   }
 
-  int _discountPrice(Coupon coupon) {
+  int _discountPrice(MyCoupon coupon) {
     // TODO: coupon dto update
-    // if (coupon.type == 'MONEY') {
-    //   if (widget.totalPrice >= coupon.amount.) {
-    //     return -coupon.discount;
-    //   }
-    //   return 0;
-    // }
-    // if (coupon.type == 'ratio') {
-    //   return -widget.totalPrice * coupon.discount ~/ 100;
-    // }
+    if (coupon.type == 'MONEY') {
+      if (widget.totalPrice >= coupon.amount!) {
+        return -(coupon.amount ?? 0).toInt();
+      }
+      return 0;
+    }
+    if (coupon.type == 'RATIO') {
+      return -widget.totalPrice * (coupon.amount ?? 0) ~/ 100;
+    }
 
     return 0;
   }
 
-  List<DropdownMenuItem<Coupon>> _addDividersAfterItems(List<Coupon> items) {
-    final List<DropdownMenuItem<Coupon>> menuItems = [];
+  List<DropdownMenuItem<MyCoupon>> _addDividersAfterItems(
+      List<MyCoupon> items) {
+    final List<DropdownMenuItem<MyCoupon>> menuItems = [];
     for (final item in items) {
       menuItems.addAll(
         [
-          DropdownMenuItem<Coupon>(
+          DropdownMenuItem<MyCoupon>(
             value: item,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -71,16 +72,16 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
                     ),
                   ),
                   // TODO: Coupon dto update
-                  // Text(
-                  //   item.type == 'amount'
-                  //       ? '${numberFormat.format(item.discount)}₩'
-                  //       : '${numberFormat.format(item.discount)}%',
-                  //   style: const TextStyle(
-                  //     color: Colors.blue,
-                  //     fontWeight: FontWeight.bold,
-                  //     fontSize: Sizes.size14,
-                  //   ),
-                  // ),
+                  Text(
+                    item.type == 'MONEY'
+                        ? '${numberFormat.format(item.amount)}₩'
+                        : '${numberFormat.format(item.amount)}%',
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                      fontSize: Sizes.size14,
+                    ),
+                  ),
                   Text(
                     '${numberFormat.format(_discountPrice(item))} ₩',
                     style: const TextStyle(
@@ -95,7 +96,7 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
           ),
           //If it's last item, we will not add Divider after it.
           if (item != items.last)
-            const DropdownMenuItem<Coupon>(
+            const DropdownMenuItem<MyCoupon>(
               enabled: false,
               child: Divider(),
             ),
@@ -123,7 +124,7 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
     return DropdownButtonHideUnderline(
-      child: DropdownButton2<Coupon>(
+      child: DropdownButton2<MyCoupon>(
         isExpanded: true,
         hint: Text(
           '쿠폰 선택',
@@ -135,7 +136,7 @@ class _CartCouponDropdownWidgetState extends State<CartCouponDropdownWidget> {
         ),
         items: _addDividersAfterItems(widget.coupons),
         value: widget.selectedCoupon,
-        onChanged: (Coupon? value) {
+        onChanged: (MyCoupon? value) {
           setState(() {
             widget.onChange(value);
           });

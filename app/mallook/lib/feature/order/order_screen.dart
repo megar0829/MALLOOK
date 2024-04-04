@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mallook/config/global_functions.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
-import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
-import 'package:mallook/feature/order/ordered_screen.dart';
+import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
+import 'package:mallook/feature/coupon/model/page_my_coupon.dart';
 import 'package:mallook/feature/order/widget/cart_coupon_dropdown_widget.dart';
 import 'package:mallook/feature/order/widget/order_product_widget.dart';
 import 'package:mallook/global/cart/cart_controller.dart';
@@ -25,11 +26,8 @@ class OrderScreen extends StatefulWidget {
 
 class _OrderScreenState extends State<OrderScreen> {
   final CartController cartController = Get.put(CartController());
-  Coupon? _selectedCoupon;
-  final List<Coupon> _coupons = [
-    // Coupon(name: '세진 요정', type: "ratio", discount: 20),
-    // Coupon(name: '윤정 뚱땡이', type: "ratio", discount: 5),
-  ];
+  MyCoupon? _selectedCoupon;
+  List<MyCoupon> _coupons = [];
   static NumberFormat numberFormat = NumberFormat.currency(
     locale: 'ko_KR',
     symbol: '',
@@ -38,12 +36,26 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   void initState() {
     super.initState();
+
+    _loadMyCoupons();
     if (widget.orderItems.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         mallookSnackBar(title: '주문 가능한 상품이 없습니다.'),
       );
       Navigator.of(context).pop();
     }
+  }
+
+  void _loadMyCoupons() async {
+    var data = await CouponApiService.getMyCoupons(
+      cursor: 99999999999,
+      size: 100,
+    );
+
+    print(data.content ?? []);
+
+    _coupons.addAll(data.content ?? []);
+    setState(() {});
   }
 
   void _doOrderProcess() {
@@ -68,13 +80,13 @@ class _OrderScreenState extends State<OrderScreen> {
       return totalPrice;
     }
     if (_selectedCoupon!.type == 'MONEY') {
-      // if (totalPrice >= _selectedCoupon!.discount) {
-      //   return totalPrice - _selectedCoupon!.discount;
-      // }
+      if (totalPrice >= (_selectedCoupon!.amount ?? 0).toInt()) {
+        return totalPrice - (_selectedCoupon!.amount ?? 0).toInt();
+      }
       return 0;
     }
     if (_selectedCoupon!.type == 'RATIO') {
-      // return totalPrice * (100 - _selectedCoupon!.discount) ~/ 100;
+      return totalPrice * (100 - (_selectedCoupon!.amount ?? 0).toInt()) ~/ 100;
     }
     return 0;
   }
@@ -87,7 +99,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return total;
   }
 
-  void updateCoupon(Coupon coupon) {
+  void updateCoupon(MyCoupon coupon) {
     setState(() {
       _selectedCoupon = coupon;
     });
@@ -147,15 +159,16 @@ class _OrderScreenState extends State<OrderScreen> {
 
           if (response == 200) {
             removeOrderedItem();
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => OrderedScreen(
-                  orderId: orderId,
-                ),
-              ),
-              (route) => false,
-            );
+            // Navigator.pushAndRemoveUntil(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => OrderedScreen(
+            //       orderId: orderId,
+            //     ),
+            //   ),
+            //   (route) => false,
+            // );
+            moveToNavigationScreen();
           } else {
             Navigator.of(context).pop();
             showAlertModal();

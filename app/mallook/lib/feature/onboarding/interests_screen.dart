@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
+import 'package:mallook/feature/main_navigation/main_navigation_screen.dart';
 import 'package:mallook/feature/onboarding/api/onboarding_api_service.dart';
 import 'package:mallook/feature/onboarding/model/keyword.dart';
-import 'package:mallook/feature/onboarding/tutorial_screen.dart';
 import 'package:mallook/feature/onboarding/widgets/keyword_button.dart';
 import 'package:mallook/feature/script/api/script_service.dart';
 import 'package:mallook/feature/sign_up/widgets/form_button.dart';
@@ -77,7 +75,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
-            builder: (context) => const TutorialScreen(),
+            builder: (context) => const MainNavigationScreen(),
           ),
           (route) => false,
         );

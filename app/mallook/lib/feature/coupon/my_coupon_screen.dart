@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mallook/constants/gaps.dart';
 import 'package:mallook/constants/sizes.dart';
 import 'package:mallook/feature/coupon/api/coupon_api_service.dart';
-import 'package:mallook/feature/coupon/model/cursor_coupons.dart';
+import 'package:mallook/feature/coupon/model/page_my_coupon.dart';
 import 'package:mallook/global/widget/custom_circular_wait_widget.dart';
 import 'package:mallook/global/widget/home_icon_button.dart';
 
@@ -15,8 +15,8 @@ class MyCouponScreen extends StatefulWidget {
 
 class _MyCouponScreenState extends State<MyCouponScreen> {
   final ScrollController _scrollController = ScrollController();
-  final List<Coupon> coupons = [];
-  int _couponPage = 0;
+  final List<MyCoupon> coupons = [];
+  int _cursor = 99999999999;
   bool _isCouponLoading = false;
 
   @override
@@ -34,6 +34,7 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
   }
 
   void _loadMoreCoupons() async {
+    if (_cursor == 0) return;
     if (!_isCouponLoading) {
       if (mounted) {
         setState(() {
@@ -42,11 +43,15 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
       }
 
       try {
-        var loadedCoupons = await CouponApiService.getMyCoupons(_couponPage);
+        var loadedCoupons =
+            await CouponApiService.getMyCoupons(cursor: _cursor);
         if (mounted) {
           setState(() {
-            coupons.addAll(loadedCoupons); // 기존 _products List에 새로운 제품 추가
-            _couponPage++;
+            coupons.addAll(
+                (loadedCoupons.content ?? [])); // 기존 _products List에 새로운 제품 추가
+            if ((loadedCoupons.content ?? []).isNotEmpty) {
+              _cursor = (loadedCoupons.content ?? []).last.myCouponId! - 1;
+            }
           });
         }
       } finally {
@@ -55,7 +60,12 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
     }
   }
 
-  void _deleteCoupon(Coupon coupon) {
+  void _deleteCoupon(MyCoupon coupon) async {
+    Map<String, dynamic> body = {
+      "memberCouponList": [coupon.myCouponId],
+    };
+
+    var result = await CouponApiService.removeCoupon(body: body);
     coupons.remove(coupon);
     setState(() {});
   }
@@ -88,7 +98,7 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
         ),
         child: RefreshIndicator(
           onRefresh: () async {
-            _couponPage = 0;
+            _cursor = 999999999;
             coupons.clear();
             _loadMoreCoupons();
           },
@@ -146,6 +156,28 @@ class _MyCouponScreenState extends State<MyCouponScreen> {
                                 fontSize: Sizes.size28,
                                 fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            Gaps.v5,
+                            Row(
+                              children: [
+                                Text(
+                                  "만료: ",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size14,
+                                  ),
+                                ),
+                                Gaps.h5,
+                                Text(
+                                  coupons[index].expiredTime ?? "",
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: Sizes.size14,
+                                  ),
+                                ),
+                              ],
                             )
                           ],
                         ),
