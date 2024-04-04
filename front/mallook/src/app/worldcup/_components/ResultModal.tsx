@@ -48,9 +48,7 @@ export default function ResultModal(props: {
 							unoptimized={true}
 						/>
 					</Link>
-					<div className={styles.spanDiv}>
-						<span className={styles.span}>{props.resultScript.name}</span>
-					</div>
+
 				</div>
 
 				<div className={styles.middle__container}>

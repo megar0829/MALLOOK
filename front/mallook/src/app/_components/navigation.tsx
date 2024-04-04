@@ -40,7 +40,7 @@ export default function Navigation() {
               {/*</Link>*/}
             </li>
             <li>
-              <Link href="/cart">
+              <Link href="/choose-keyword">
                 <IoCartOutline className={styles.rightContainerIcon}/>
               </Link>
             </li>

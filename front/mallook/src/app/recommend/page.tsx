@@ -89,6 +89,10 @@ export default function RecommendPage() {
     }
 
     if (isScripts) {
+      console.log("=======================")
+      console.log(scripts)
+      console.log("=======================")
+
       let lst:ScriptProducts[] = [];
 
       scripts.map(async (item) => {
@@ -100,11 +104,12 @@ export default function RecommendPage() {
             }
           }
         ).then((res) => {
+          console.log(res.data.result)
           lst.push({id: item.id, products:res.data.result})
         })
       })
 
-
+      console.log("check")
       console.log(lst)
       setScriptProducts(lst);
       setIsScriptProducts(true);
