@@ -2,7 +2,7 @@ import styles from "@/app/(home)/home.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import AfterImg from "@/assets/img/icons/land_after.png";
-import ImgQr from "@/assets/img/icons/qr.png";
+import ImgQr from "@/assets/img/icons/qr.jpg";
 import LogoSm from "@/assets/img/icons/logo_sm.png";
 import { WiDirectionRight } from "react-icons/wi";
 
@@ -23,10 +23,6 @@ export default function ComponentThree() {
                     <div className={styles.qrDivItem}>
                         <Image src={ImgQr} alt="QR"/>
                         <p>Android</p>
-                    </div>
-                    <div className={styles.qrDivItem}>
-                        <Image src={ImgQr} alt="QR"/>
-                        <p>ios</p>
                     </div>
                 </div>
             </div>
