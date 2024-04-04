@@ -2,7 +2,7 @@
 
 import Modal from "@/app/@modal/_components/modal";
 import { useRouter } from "next/navigation";
-import { useCallback } from "react";
+import {useCallback, useState} from "react";
 import styles from "./choose-keyword.module.css";
 import Image from "next/image";
 
@@ -35,6 +35,8 @@ export default function LoginModal() {
 
   const router = useRouter();
 
+  const [chooseList, setChooseList] = useState<number[]>([]);
+
   const onClose = useCallback(() => {
     router.back(); // 라우터 뒤로가기 기능을 이용
   }, [router]);
@@ -54,7 +56,12 @@ export default function LoginModal() {
         <div className={styles.keywordListDiv}>
           {keywordList.map((word, index) => {
             return (
-              <div className={styles.keywordDiv} key={index}>
+              <div
+                className={styles.keywordDiv}
+                key={index}
+                onClick={() => setChooseList([...chooseList, index])}
+                style={{backgroundColor: chooseList.includes(index) ? "red" : ""}}
+              >
                 <span className={styles.keyword}>
                   {word}
                 </span>
