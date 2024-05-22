@@ -28,7 +28,7 @@
 ---
 ## UCC 🎞️
 
-[![Video Label](https://www.youtube.com/watch?v=AOGufeS9SCw)](https://www.youtube.com/watch?v=AOGufeS9SCw)
+[![Video Label](image/ucc_thumb.png)](https://www.youtube.com/watch?v=AOGufeS9SCw)
 
 ---
 # 👕기획 배경
